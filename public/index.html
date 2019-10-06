@@ -43,7 +43,7 @@
             </div>
             
         </div>
-        <div id="app_screen" v-if="logged_in">
+        <div id="app_screen" v-if="logged_in && page == 'home'">
             <div id="avg_screen">
                 <div id="circle_container">
                     <progress-ring id="avg_circle" :stroke-color="rank().color" :radius="120/2" :progress="avg_percent()" :stroke="4"></progress-ring>
@@ -77,6 +77,12 @@
                     </span>
                 </div>
             </div>
+            <div v-if="page=='recent'">
+
+            </div>
+            <div v-if="page=='info'">
+                <h1>{{ fullname }}</h1>
+            </div>
             <ul id="subjects">
                 <li v-for="(subject, index) in subjects" class="subject">
                     <span class="subject_avg">{{ format(subject.average) }}</span>
@@ -84,7 +90,17 @@
                 </li>
             </ul>
         </div>
-
+        <nav v-if="logged_in" id="menu">
+            <span v-bind:class="{ active: page=='home' }" v-on:click="page = 'home'">
+                <i class="material-icons">home</i>
+            </span>
+            <span v-bind:class="{ active: page=='recent' }" v-on:click="page = 'recent'">
+                <i class="material-icons">history</i>
+            </span>
+            <span v-bind:class="{ active: page=='info' }" v-on:click="page = 'info'">
+                <i class="material-icons">account_circle</i>
+            </span>
+        </nav>
         <div v-if="loading" id="loading_screen">
             <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
         </div>

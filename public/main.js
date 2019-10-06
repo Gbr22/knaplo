@@ -46,6 +46,8 @@ function req(url){
             if (this.readyState == 4 && this.status == 200) {
                 
                 resolve(xhttp.responseText);
+            } else if (this.readyState == 4 && this.status == 500){
+                resolve(xhttp.responseText);
             }
         };
         xhttp.open("GET", url, true);
@@ -65,6 +67,7 @@ async function institute(){
 
 
 let data = {
+    page:"home",
     loading:true,
     fullname:'',
     loginerror:{
@@ -100,7 +103,29 @@ let data = {
     ]
 }
 async function getData(){
-    let d = JSON.parse(await req(api_full+"data"));
+    let d;
+
+    let response = await req(api_full+"data");
+
+    async function errored(){
+        console.log("errored");
+        cookies.del("access_token");
+        cookies.del("refresh_token");
+        cookies.del("inst");
+        window.location.href = window.location.href;
+    }
+
+    if (response == "error"){
+        await errored();
+        return;
+    }
+    try {
+        d = JSON.parse(response);
+    } catch(err){
+        console.log(err);
+        await errored();
+        return;
+    }
     data.fullname = d.Name;
 
     let subjects = [];

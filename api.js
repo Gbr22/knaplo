@@ -48,6 +48,25 @@ function login(school,username,password){
     });
     
 }
+function refresh(school,token){
+    return new Promise(function(resolve,reject){
+        req({
+            url:`https://${school}.e-kreta.hu/idp/api/v1/Token`,
+            headers:{
+                "Content-Type":"application/x-www-form-urlencoded"
+            },
+            json:true,
+            body: `refresh_token=${token}&grant_type=refresh_token&client_id=${client_id}`
+        }).then((json)=>{
+            resolve(json);
+        }).catch((err)=>{
+            //reject(json);
+            
+            resolve("error");
+        });
+    });
+}
+
 function getData(school,token){
     return new Promise(function(resolve,reject){
         req({
@@ -59,8 +78,8 @@ function getData(school,token){
         }).then((json)=>{
             resolve(json);
         }).catch((json)=>{
-            //reject(json);
-            resolve(json);
+            reject(json);
+            //resolve(json);
         });
     });
     
@@ -73,5 +92,6 @@ module.exports = {
     full:api_full,
     institute,
     login,
-    getData
+    getData,
+    refresh
 }

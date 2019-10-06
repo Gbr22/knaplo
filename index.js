@@ -16,8 +16,39 @@ const port = 3001;
 app.use(cookieParser());
 
 app.all('/**',async (req, res) => {
-    //res.setHeader("Access-Control-Allow-Origin", "*");
     
+
+    
+    if (req.cookies["access_token"] && req.cookies["inst"] && req.cookies["refresh_token"]){
+        
+        
+        
+        let refresh = true;
+
+        if (refresh){
+            let result = await api.refresh(req.cookies["inst"],req.cookies["refresh_token"])
+            
+            if (result == "error"){
+                let options = {expires: new Date(0)};
+                res.cookie("access_token","", options);
+                res.cookie("refresh_token","", options);    
+                res.cookie("inst","", options);
+                res.send();
+                return;
+            }
+
+            let options = {maxAge: 1000*60*60*24*30*365};
+            res.cookie("access_token",result.access_token, options);
+            res.cookie("refresh_token",result.refresh_token, options);
+        }
+
+        
+    }
+
+    
+
+    
+
 
     let url = req.url.split("?")[0];
     let searchString = req.url.split("?")[1];
@@ -71,6 +102,7 @@ app.all('/**',async (req, res) => {
             loginError(error);
         })
         .then( (result) => {
+            console.log(result);
             if (result.error){
                 console.log(result.error);
                 loginError(result.error.error_description);
@@ -81,6 +113,7 @@ app.all('/**',async (req, res) => {
                 res.cookie("access_token",result.access_token, options);
                 res.cookie("refresh_token",result.refresh_token, options);
                 res.cookie("inst",search.inst, options);
+                res.cookie("time",Date.now(), options);
                 res.redirect("/");
 
             }
@@ -96,9 +129,8 @@ app.all('/**',async (req, res) => {
         api.getData(school,token).then((data)=>{
             res.send(data);
         }).catch((err)=>{
-            console.log(err);
             res.status(500);
-            res.send();
+            res.send("error");
         })
         
 

@@ -5,6 +5,12 @@ html, body {
     margin: 0;
     padding: 0;
 }
+#app {
+    position: relative;
+    display: block;
+    box-sizing: border-box;
+    padding-bottom: 60px;
+}
 
 #login_form {
     text-align: center;
@@ -202,6 +208,43 @@ circle {
 }
 
 
+#menu {
+    display: table;
+    text-align: center;
+
+
+    background-color: white;
+    border-top: 1px solid #e6e6e6;
+    position: fixed;
+    
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    box-shadow: 0 0 5px rgba(0,0,0,.15);
+    
+
+    box-sizing: border-box;
+    padding: 0 50px;
+}
+#menu span.active i {
+    color: #66ceab;
+}
+#menu span i {
+    font-size: 30px;
+    color: #c0c0c0;
+}
+#menu span {
+    display:table-cell;
+    text-align:center;
+    /*display: inline-block;*/
+    width: 33%;
+    padding: 5px 15px;
+    
+    box-sizing: border-box;
+    vertical-align: middle;
+}
+
 
 #loading_screen {
     width: 100%;
@@ -212,7 +255,7 @@ circle {
     bottom: 0;
     right: 0;
     margin: 0;
-    background-color: aquamarine;
+    background-color: #7fffd4;
 }
 #loading_screen .lds-ring {
     position: absolute;
