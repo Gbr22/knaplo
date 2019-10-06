@@ -61,14 +61,11 @@ async function institute(){
     return await req(api_full+"institute");
 }
 
-let institutions = [];
-(async ()=>{
-    institutions = JSON.parse(await institute());
-})()
 
 
 
 let data = {
+    loading:true,
     fullname:'',
     loginerror:{
         error:false,
@@ -122,12 +119,33 @@ async function getData(){
     console.log(d);
 }
 
-(async ()=>{
-    if (cookies.get("access_token")){
-        getData();
-        data.logged_in = true;
-    }
-})();
+
+let institutions = [];
+
+
+if (cookies.get("access_token")){
+    data.logged_in = true;
+    data.loading = true;
+    getData().then(()=>{
+        data.loading = false;
+    }).catch((err)=>{
+        alert(err.message);
+    });
+    
+} else {
+    data.loading = true;
+    institute().then((d)=>{
+        
+        institutions = JSON.parse(d);
+        data.loading = false;
+        
+        
+    }).catch((err)=>{
+        alert(err.message);
+    });
+}
+
+
 
 
 
@@ -152,6 +170,7 @@ function searchSchool(search){
     }
     return found;
 }
+
 var app = new Vue({
     el: '#app',
     components: {
@@ -159,6 +178,12 @@ var app = new Vue({
     },
     data: data,
     methods: {
+        isLoading(){
+            if (!this.logged_in && loading_inst){
+                return true;
+            }
+            return false;
+        },
         searchSchool,
         format(num){
             return Math.round(num*100)/100;

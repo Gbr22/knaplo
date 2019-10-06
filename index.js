@@ -36,11 +36,10 @@ app.all('/**',async (req, res) => {
 
     if (url == "/institute"){
         //res.end(await api.institute());
-        let stream = fs.createReadStream("institute.json");
-        stream.pipe(res);
-        stream.on("end",function(){
-            res.end();
-        })
+        //res.header("Content-Type","application/json");
+        //let stream = fs.createReadStream("institute.json");
+        res.sendFile(__dirname+"/institute.json");
+        //stream.pipe(res);
     }
     else if (url == "/login"){
         console.log(search);
