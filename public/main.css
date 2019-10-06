@@ -1,0 +1,202 @@
+* {
+    font-family: Helvetica, sans-serif;
+}
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+#login_form {
+    text-align: center;
+    display: table;
+    
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+}
+#login_wrap {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+#login_form input[type="text"], #login_form input[type="password"], #login_form input[type="submit"] {
+    display: block;
+    border: 1px solid #cccccc;
+    padding: 10px 20px;
+    margin: 10px auto;
+    border-radius: 8px;
+    outline: none;
+    background-clip: white;
+}
+#login_form input[type="submit"] {
+    background-color: #475ac4;
+    color: white;
+}
+
+#schools {
+    width: 80%;
+    margin: auto;
+    height: 150px;
+    overflow: auto;
+}
+
+.school {
+    box-sizing: border-box;
+    padding: 8px 15px;
+    text-align: left;
+}
+.school i {
+    color: #6d6d6d;
+    font-style: normal;
+}
+.school input {
+    display: none;
+}
+.school label {
+    vertical-align: middle;
+}
+.school .checkmark {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: #b3b3b3;
+    display: inline-block;
+    vertical-align: middle;
+    transition: opacity .3s ease-out;
+    color: green;
+}
+.school .checkmark i {
+    color: inherit;
+}
+.school input:checked ~ .checkmark {
+    background-color: #475ac4;
+}
+
+
+
+
+#avg_screen {
+    padding: 30px 0;
+
+    width: 100%;
+    /*height: 150px;*/
+    display: block;
+    background-color: rgba(232, 238, 243, 0.418);
+    text-align: center;
+}
+#avg_detail_cont {
+    vertical-align: middle;
+}
+#avg_detail_cont i {
+    vertical-align: bottom;
+}
+.section.avg i {
+    color: #475ac4;
+}
+.section.rank i {
+    color: #e7c325;
+}
+.section.avg {
+    text-align: right;
+}
+.section.rank {
+    text-align: left;
+}
+
+#avg_detail_cont .section {
+    
+    vertical-align: middle;
+    display: inline-block;
+    width: 40%;
+
+}
+#avg_detail_cont .left {
+    padding-top: 3px;
+}
+#avg_detail_cont .right, #avg_detail_cont .left {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.divider {
+    width: 0;
+    height: 30px;
+    display: inline-block;
+    border: 0.5px solid #999999;
+    content: '';
+    vertical-align: middle;
+    margin: 0 10px;
+}
+
+#avg_detail_cont .big, #avg_detail_cont .small {
+    display: block;
+    width: max-content;
+    margin: 0;
+}
+#avg_detail_cont .big {
+    font-size: 18px;
+    font-weight: bold;
+    
+}
+#avg_detail_cont .small {
+    font-size: 13px;
+    color: #4d4d4d;
+}
+
+circle {
+    transition: stroke-dashoffset 0.35s, stroke 0.35s;
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+    /*stroke: #00cc66;*/
+
+}
+#circle_container {
+    
+    
+    width: 120px;
+    height: 120px;
+    position: relative;
+    display: inline-block;
+}
+#circle_container #total_avg, #circle_container #avg_circle {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: inline-block;
+}
+#total_avg_text {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    text-align: center;
+    height: max-content;
+    font-size: 30px;
+}
+
+
+#subjects {
+    padding: 0px 10px;
+    box-sizing: border-box;
+}
+.subject {
+    list-style: none;
+    width: 100%;
+    
+    font-size: 16px;
+
+    margin: 8px 0;
+    padding: 8px 12px;
+    box-sizing: border-box;
+    border: 1px solid #e6e6e6;
+    border-radius: 8px;
+}
+.subject_avg {
+    
+}

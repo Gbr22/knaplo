@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Kosz</title>
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+</head>
+<body>
+    <div id="app">
+        <div id="login_form" v-if="!logged_in">
+            <div id="login_wrap">
+                <div id="login_error" v-if="loginerror.error">
+                    <b>Bejelentkezési hiba</b> {{ loginerror.message }}
+                </div>
+                <h1>Jelentkezzen be!</h1>
+                <form action="/api/login">
+                    <input type="text" placeholder="Intézmény keresése" v-model="inst_search">
+                    <div id="schools">
+                        <div v-for="school in searchSchool(inst_search)" class="school">
+                            
+                            <input type="radio" name="inst" :value="school.InstituteCode" :id="school.InstituteCode" checked>
+                            <span class="checkmark">
+                                <!-- <i class="material-icons left">check</i> -->
+                            </span>
+                            <label :for="school.InstituteCode"> {{ school.Name }}
+                                <i>({{ school.City }})</i>
+                            </label>
+                            
+                        </div>
+                        <div v-if="searchSchool(inst_search).length == 0">
+                            A keresett intézményre nincs találat
+                        </div>
+                    </div>
+                    <span id="selected_inst">{{ selected_inst }}</span>
+                    <input name="username" type="text" placeholder="Felhasználónév" autocomplete="username">
+                    <input name="password" type="password" placeholder="Jelszó" autocomplete="current-password">
+                    <input type="submit" value="Bejelentkezés">
+                </form>
+            </div>
+            
+        </div>
+        <div id="app_screen" v-if="logged_in">
+            <div id="avg_screen">
+                <div id="circle_container">
+                    <progress-ring id="avg_circle" :stroke-color="rank().color" :radius="120/2" :progress="avg_percent()" :stroke="4"></progress-ring>
+                    <span id="total_avg"><span id="total_avg_text">{{ name_abbriv() }}</span></span>
+                </div>
+                <div id="avg_detail_cont">
+                    <span class="section avg">
+                        
+                        <i class="material-icons left">equalizer</i>
+                        <span class="right">
+                            <span class="big">
+                                {{ format(average) }}
+                            </span>
+                            <span class="small">Átlag</span>
+                        </span>
+                        
+                    </span>
+
+                    <span class="divider"></span>
+
+                    <span class="section rank">
+                        
+                        <i class="material-icons left">stars</i>
+                        <span class="right">
+                            <span class="big">
+                                {{ rank().name }}
+                            </span>
+                            <span class="small">Rank</span>
+                        </span>
+                        
+                    </span>
+                </div>
+            </div>
+            <ul id="subjects">
+                <li v-for="(subject, index) in subjects" class="subject">
+                    <span class="subject_avg">{{ format(subject.average) }}</span>
+                    {{ subject.name }}
+                </li>
+            </ul>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="node_modules/jaaulde-cookies/lib/jaaulde-cookies.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
