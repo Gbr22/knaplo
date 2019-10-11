@@ -78,6 +78,7 @@ let data = {
     inst_search:'',
     selected_inst:'',
     average:0,
+    grades:[],
     subjects:[
         {
             name:"Történelem",
@@ -129,15 +130,40 @@ async function getData(){
     data.fullname = d.Name;
 
     let subjects = [];
+    let grades = [];
     let sum = 0;
     for (let e of d.SubjectAverages){
-        subjects.push({
+        let obj = {
             name:e.Subject,
             average:e.Value,
             grades:[]
-        })
-        sum += Math.round(e.Value);
+        };
+        subjects.push(obj);
+        sum += roundSubject(obj);
     }
+    subjects.sort(function(a,b){
+        return a.name.localeCompare(b.name);
+    })
+    for (let j=0; j < d.Evaluations.length; j++){
+        let ev = d.Evaluations[j];
+        
+        let obj = {
+            value:ev.NumberValue
+        }
+
+        grades.push(obj);
+        
+        for (let i=0; i < subjects.length; i++){
+            let subject = subjects[i];
+            
+            if (ev.Subject == subject.name){
+                subject.grades.push(obj);
+            }
+    
+        }
+    }
+    
+    data.grades = grades;
     data.subjects = subjects;
     data.average = sum/subjects.length;
 
@@ -195,6 +221,10 @@ function searchSchool(search){
     }
     return found;
 }
+function roundSubject(s){
+    return Math.round(s.average);
+}
+
 
 var app = new Vue({
     el: '#app',
@@ -203,6 +233,16 @@ var app = new Vue({
     },
     data: data,
     methods: {
+        roundSubject,
+        isRoundedUp(s){
+            if (roundSubject(s) == s.average){
+                return true;
+            }
+            if (roundSubject(s) > s.average){
+                return true;
+            }
+            return false;
+        },
         isLoading(){
             if (!this.logged_in && loading_inst){
                 return true;
@@ -254,6 +294,7 @@ var app = new Vue({
                     currentRank = ranks[i];
                 }
             }
+            currentRank.color = "#DCE0D9";
             return Object.assign({},currentRank);
 
         }

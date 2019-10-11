@@ -82,6 +82,9 @@ html, body {
 
 
 
+#home {
+    background-color: #1D1B27;
+}
 
 #avg_screen {
     padding: 30px 0;
@@ -89,8 +92,12 @@ html, body {
     width: 100%;
     /*height: 150px;*/
     display: block;
-    background-color: rgba(232, 238, 243, 0.418);
+    /*background-color: rgba(232, 238, 243, 0.418);*/
+    background: transparent;
     text-align: center;
+
+    color: whitesmoke;
+
 }
 #avg_detail_cont {
     vertical-align: middle;
@@ -99,10 +106,10 @@ html, body {
     vertical-align: bottom;
 }
 .section.avg i {
-    color: #475ac4;
+    color: #8ED081;
 }
 .section.rank i {
-    color: #e7c325;
+    color: #F2DC5D;
 }
 .section.avg {
     text-align: right;
@@ -130,7 +137,7 @@ html, body {
     width: 0;
     height: 30px;
     display: inline-block;
-    border: 0.5px solid #999999;
+    border: 0.5px solid #b4b4b4;
     content: '';
     vertical-align: middle;
     margin: 0 10px;
@@ -148,7 +155,7 @@ html, body {
 }
 #avg_detail_cont .small {
     font-size: 13px;
-    color: #4d4d4d;
+    color: #a8a8a8;
 }
 
 circle {
@@ -188,7 +195,12 @@ circle {
 
 
 #subjects {
-    padding: 0px 10px;
+    border-radius: 15px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    background-color: white;
+    padding: 10px 10px;
+    margin: 0;
     box-sizing: border-box;
 }
 .subject {
@@ -202,7 +214,45 @@ circle {
     box-sizing: border-box;
     border: 1px solid #e6e6e6;
     border-radius: 8px;
+
+    transition: background-color 0.3s ease-out;
 }
+.subject:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+.subject_header {
+    white-space: nowrap;
+}
+.subject_header .left, .subject_header .right {
+    width: 50%;
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0;
+    padding: 0;
+}
+.subject_header .right {
+    text-align: right;
+}
+.subject_header .right * {
+    vertical-align: middle;
+}
+.subject_header .right i {
+    color: rgb(218, 134, 95);    
+}
+
+.subject_header .right i.up {
+    color: #1CAA53;    
+}
+
+.subject .tinygrade:first-child {
+    margin-left: 0;
+}
+.tinygrade {
+    margin-left: 6px;
+    display: inline-block;
+    color: #4d4d4d;
+}
+
 .subject_avg {
     
 }
@@ -221,28 +271,52 @@ circle {
     left: 0;
     right: 0;
     width: 100%;
-    box-shadow: 0 0 5px rgba(0,0,0,.15);
+    /*box-shadow: 0 0 5px rgba(0,0,0,.15);*/
     
 
     box-sizing: border-box;
     padding: 0 50px;
 }
-#menu span.active i {
-    color: #66ceab;
+#menu button.active svg {
+    stroke: #1CAA53;
 }
-#menu span i {
-    font-size: 30px;
-    color: #c0c0c0;
+#menu button.active i {
+    /*color: #66ceab;*/
+    color: #1CAA53;
+
 }
-#menu span {
+#menu button svg {
+    stroke: #2A2D34;
+}
+#menu button i {
+    font-size: 28px;
+    /*color: #c0c0c0;*/
+    /*color: #1D1B27;*/
+    /*color: #565663;*/
+    color: #2A2D34;
+}
+#menu button {
     display:table-cell;
     text-align:center;
     /*display: inline-block;*/
     width: 33%;
-    padding: 5px 15px;
+    padding: 8px 15px;
     
     box-sizing: border-box;
     vertical-align: middle;
+    background: transparent;
+    border: none;
+    outline: none;
+}
+
+.feather {
+    width: 24px;
+    height: 24px;
+    stroke: #000;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
 }
 
 

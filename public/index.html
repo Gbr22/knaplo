@@ -7,6 +7,8 @@
     <title>Kosz</title>
     <link rel="stylesheet" href="main.css">
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+
+    <meta name="theme-color" content="#1D1B27">
 </head>
 <body>
     <div id="app">
@@ -43,63 +45,95 @@
             </div>
             
         </div>
-        <div id="app_screen" v-if="logged_in && page == 'home'">
-            <div id="avg_screen">
-                <div id="circle_container">
-                    <progress-ring id="avg_circle" :stroke-color="rank().color" :radius="120/2" :progress="avg_percent()" :stroke="4"></progress-ring>
-                    <span id="total_avg"><span id="total_avg_text">{{ name_abbriv() }}</span></span>
-                </div>
-                <div id="avg_detail_cont">
-                    <span class="section avg">
-                        
-                        <i class="material-icons left">equalizer</i>
-                        <span class="right">
-                            <span class="big">
-                                {{ format(average) }}
+        <div id="app_screen" v-if="logged_in">
+            <div id="home" v-if="page == 'home'">
+                <div id="avg_screen">
+                    <div id="circle_container">
+                        <progress-ring id="avg_circle" :stroke-color="rank().color" :radius="120/2" :progress="avg_percent()" :stroke="6"></progress-ring>
+                        <span id="total_avg"><span id="total_avg_text">{{ name_abbriv() }}</span></span>
+                    </div>
+                    <div id="avg_detail_cont">
+                        <span class="section avg">
+                            
+                            <i class="material-icons left">equalizer</i>
+                            <span class="right">
+                                <span class="big">
+                                    {{ format(average) }}
+                                </span>
+                                <span class="small">Átlag</span>
                             </span>
-                            <span class="small">Átlag</span>
+                            
                         </span>
-                        
-                    </span>
 
-                    <span class="divider"></span>
+                        <span class="divider"></span>
 
-                    <span class="section rank">
-                        
-                        <i class="material-icons left">stars</i>
-                        <span class="right">
-                            <span class="big">
-                                {{ rank().name }}
+                        <span class="section rank">
+                            
+                            <i class="material-icons left">stars</i>
+                            <span class="right">
+                                <span class="big">
+                                    {{ rank().name }}
+                                </span>
+                                <span class="small">Rank</span>
                             </span>
-                            <span class="small">Rank</span>
+                            
                         </span>
-                        
-                    </span>
+                    </div>
                 </div>
+                <ul id="subjects">
+                    <li v-for="(subject, index) in subjects" class="subject">
+                        <div class="subject_header">
+                            <span class="left">{{ subject.name }}</span>
+                            <span class="right">
+                                <span>{{ format(subject.average) }}</span>
+                                <i class="material-icons" v-bind:class="{ up: isRoundedUp(subject) }">
+                                    arrow_right_alt
+                                </i>
+                                <span>{{ roundSubject(subject) }}</span>
+                            </span>
+                            
+                        </div>
+                        <div class="subject_grades">
+                            <span class="tinygrade" v-for="grade in subject.grades">{{ grade.value }}</span>
+                        </div>
+                    </li>
+                </ul>
             </div>
             <div v-if="page=='recent'">
-
+                <ul id="grades">
+                    <li v-for="(grade, index) in grades" class="subject">
+                        <div class="subject_header">
+                            {{ grade.value }}
+                            
+                        </div>
+                    </li>
+                </ul>
             </div>
             <div v-if="page=='info'">
                 <h1>{{ fullname }}</h1>
             </div>
-            <ul id="subjects">
-                <li v-for="(subject, index) in subjects" class="subject">
-                    <span class="subject_avg">{{ format(subject.average) }}</span>
-                    {{ subject.name }}
-                </li>
-            </ul>
+            
         </div>
         <nav v-if="logged_in" id="menu">
-            <span v-bind:class="{ active: page=='home' }" v-on:click="page = 'home'">
-                <i class="material-icons">home</i>
-            </span>
-            <span v-bind:class="{ active: page=='recent' }" v-on:click="page = 'recent'">
-                <i class="material-icons">history</i>
-            </span>
-            <span v-bind:class="{ active: page=='info' }" v-on:click="page = 'info'">
-                <i class="material-icons">account_circle</i>
-            </span>
+            <button v-bind:class="{ active: page=='home' }" v-on:click="page = 'home'">
+                <svg class="feather">
+                    <use xlink:href="/node_modules/feather-icons/dist/feather-sprite.svg#home"/>
+                </svg>
+                <!-- <i class="material-icons">home</i> -->
+            </button>
+            <button v-bind:class="{ active: page=='recent' }" v-on:click="page = 'recent'">
+                <svg class="feather">
+                    <use xlink:href="/node_modules/feather-icons/dist/feather-sprite.svg#clock"/>
+                </svg>
+                <!-- <i class="material-icons">history</i> -->
+            </button>
+            <button v-bind:class="{ active: page=='info' }" v-on:click="page = 'info'">
+                <svg class="feather">
+                    <use xlink:href="/node_modules/feather-icons/dist/feather-sprite.svg#user"/>
+                </svg>
+                
+                <!-- <i class="material-icons">account_circle</i> -->
+            </button>
         </nav>
         <div v-if="loading" id="loading_screen">
             <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
