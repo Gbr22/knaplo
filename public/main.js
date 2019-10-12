@@ -145,24 +145,42 @@ async function getData(){
         return a.name.localeCompare(b.name);
     })
     for (let j=0; j < d.Evaluations.length; j++){
-        let ev = d.Evaluations[j];
-        
-        let obj = {
-            value:ev.NumberValue
-        }
 
-        grades.push(obj);
-        
-        for (let i=0; i < subjects.length; i++){
-            let subject = subjects[i];
+        let ev = d.Evaluations[j];
+        if (ev.Form == "Mark"){
             
-            if (ev.Subject == subject.name){
-                subject.grades.push(obj);
+        
+            let obj = {
+                value:ev.NumberValue,
+                date:ev.Date,
+                subject:ev.Subject,
+                mode:ev.Mode,
+                teacher:ev.Teacher,
+                theme:ev.Theme
             }
-    
+
+            grades.push(obj);
+            
+            for (let i=0; i < subjects.length; i++){
+                let subject = subjects[i];
+                
+                if (ev.Subject == subject.name){
+                    subject.grades.push(obj);
+                }
+
+            }
         }
+        
     }
-    
+    grades.sort((a,b)=>{
+        if (new Date(a.date) > new Date(b.date)){
+            return -1;
+        }
+        else if (new Date(a.date) < new Date(b.date)){
+            return 1;
+        }
+        return 0;
+    });
     data.grades = grades;
     data.subjects = subjects;
     data.average = sum/subjects.length;

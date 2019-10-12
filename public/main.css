@@ -5,6 +5,12 @@ html, body {
     margin: 0;
     padding: 0;
 }
+
+:root {
+    --color-dark: #1D1B27;
+    --color-light: #DCE0D9;
+}
+
 #app {
     position: relative;
     display: block;
@@ -83,7 +89,7 @@ html, body {
 
 
 #home {
-    background-color: #1D1B27;
+    background-color: var(--color-dark);
 }
 
 #avg_screen {
@@ -193,6 +199,54 @@ circle {
     font-size: 30px;
 }
 
+#recent h1 {
+    text-align: center;
+    font-weight: normal;
+    background-color: var(--color-dark);
+    box-sizing: border-box;
+    color: var(--color-light);
+    border-radius: 15px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    padding: 10px 10px;
+    margin-top: 0;
+    margin: 0 15px;
+    font-size: 25px;
+}
+#grades {
+    padding: 0 10px;
+    box-sizing: border-box;
+}
+.grade {
+    list-style: none;
+    width: 100%;
+    
+    font-size: 16px;
+
+    margin: 8px 0;
+    padding: 8px 12px;
+    box-sizing: border-box;
+    border: 1px solid #e6e6e6;
+    border-radius: 8px;
+
+    transition: background-color 0.3s ease-out;
+}
+.grade .left, .grade .right{
+    display: inline-block;
+    vertical-align: middle;
+}
+.grade .left {
+    
+    padding: 5px;
+    font-size: 28px;
+
+}
+.grade .right .bottom {
+    color: #616161;
+}
+.grade .right {
+    
+}
 
 #subjects {
     border-radius: 15px;
@@ -217,7 +271,7 @@ circle {
 
     transition: background-color 0.3s ease-out;
 }
-.subject:hover {
+.subject:hover, .grade:hover {
     background-color: rgba(0, 0, 0, 0.05);
 }
 .subject_header {

@@ -99,13 +99,19 @@
                     </li>
                 </ul>
             </div>
-            <div v-if="page=='recent'">
+            <div v-if="page=='recent'" id="recent">
+                <h1>Jegyek</h1>
                 <ul id="grades">
-                    <li v-for="(grade, index) in grades" class="subject">
-                        <div class="subject_header">
-                            {{ grade.value }}
-                            
-                        </div>
+                    <li v-for="(grade, index) in grades" class="grade">
+                        
+                            <span class="left">{{ grade.value }}</span>
+                            <span class="right">
+                                <div class="grade_header">
+                                    {{ grade.subject }}
+                                </div>
+                                <span class="bottom">{{ grade.mode }}</span>
+                            </span>
+                        
                     </li>
                 </ul>
             </div>
