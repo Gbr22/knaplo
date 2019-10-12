@@ -7,7 +7,8 @@ html, body {
 }
 
 :root {
-    --color-dark: #1D1B27;
+    --theme-5: #88D498;
+    --color-dark: #0B0C0C;
     --color-light: #DCE0D9;
 }
 
@@ -89,7 +90,9 @@ html, body {
 
 
 #home {
-    background-color: var(--color-dark);
+    /*background-color: var(--color-dark);*/
+    
+    background: linear-gradient(to top left, #34e89e, #0f3443);
 }
 
 #avg_screen {
@@ -108,11 +111,17 @@ html, body {
 #avg_detail_cont {
     vertical-align: middle;
 }
+#avg_detail_cont svg {
+    vertical-align: middle;
+}
 #avg_detail_cont i {
     vertical-align: bottom;
 }
-.section.avg i {
-    color: #8ED081;
+.section.avg svg {
+    stroke: #8ED081;
+}
+.section.rank svg {
+    stroke: #F2DC5D;
 }
 .section.rank i {
     color: #F2DC5D;
@@ -143,7 +152,7 @@ html, body {
     width: 0;
     height: 30px;
     display: inline-block;
-    border: 0.5px solid #b4b4b4;
+    border: 0.5px solid #cfcfcf;
     content: '';
     vertical-align: middle;
     margin: 0 10px;
@@ -161,7 +170,7 @@ html, body {
 }
 #avg_detail_cont .small {
     font-size: 13px;
-    color: #a8a8a8;
+    color: #cccccc;
 }
 
 circle {
@@ -199,19 +208,36 @@ circle {
     font-size: 30px;
 }
 
+
+#recent h1 .left, #recent h1 .right {
+    display: inline-block;
+    vertical-align: middle;
+    width: 50%;
+}
+#recent h1 .right {
+    text-align: right;
+}
+#recent h1 .right svg {
+    vertical-align: middle;
+}
 #recent h1 {
-    text-align: center;
+    white-space: nowrap;
+    text-align: left;
     font-weight: normal;
-    background-color: var(--color-dark);
+    
+    color: var(--color-dark);
+    background-color: rgb(170, 255, 204);
+    background: transparent;
     box-sizing: border-box;
-    color: var(--color-light);
-    border-radius: 15px;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
+    /*color: var(--color-light);*/
+    
+    /*border-top-left-radius: 0;
+    border-top-right-radius: 0;*/
     padding: 10px 10px;
-    margin-top: 0;
-    margin: 0 15px;
+    margin-top: 0px;
+    margin: 10px 15px;
     font-size: 25px;
+    /*box-shadow: 0 3px 15px rgba(0, 0, 0, 0.15);*/
 }
 #grades {
     padding: 0 10px;
@@ -225,6 +251,7 @@ circle {
 
     margin: 8px 0;
     padding: 8px 12px;
+    padding-left: 5px;
     box-sizing: border-box;
     border: 1px solid #e6e6e6;
     border-radius: 8px;
@@ -237,7 +264,7 @@ circle {
 }
 .grade .left {
     
-    padding: 5px;
+    padding: 5px 10px;
     font-size: 28px;
 
 }
@@ -290,12 +317,12 @@ circle {
 .subject_header .right * {
     vertical-align: middle;
 }
-.subject_header .right i {
-    color: rgb(218, 134, 95);    
+.subject_header .right svg {
+    stroke: rgb(218, 134, 95);    
 }
 
-.subject_header .right i.up {
-    color: #1CAA53;    
+.subject_header .right svg.up {
+    stroke: #1CAA53;    
 }
 
 .subject .tinygrade:first-child {
