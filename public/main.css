@@ -256,11 +256,21 @@ circle {
     border: 1px solid #e6e6e6;
     border-radius: 8px;
 
+    white-space: nowrap;
+    overflow-x: auto;
+
+    position: relative;
+
     transition: background-color 0.3s ease-out;
 }
 .grade .left, .grade .right{
     display: inline-block;
     vertical-align: middle;
+    white-space: initial;
+}
+.grade .right {
+    width: 80%;
+    width: calc(calc(100% - 43px) - 80px);
 }
 .grade .left {
     
@@ -268,12 +278,39 @@ circle {
     font-size: 28px;
 
 }
+.grade_header {
+    
+}
+.grade .date {
+    position: absolute;
+    right: 8px;
+    width: 80px;
+    top: 0;
+    bottom: 0;
+    height: min-content;
+    vertical-align: middle;
+    margin: auto;
+    text-align: right;
+    color: #616161;
+}
+.grade .date b {
+    font-weight: normal;
+}
+.grade .date i {
+    font-style: normal;
+    font-size: 15px;
+}
+
+.grade .date .relative {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
 .grade .right .bottom {
     color: #616161;
 }
-.grade .right {
-    
-}
+
 
 #subjects {
     border-radius: 15px;

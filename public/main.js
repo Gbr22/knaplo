@@ -79,30 +79,9 @@ let data = {
     selected_inst:'',
     average:0,
     grades:[],
-    subjects:[
-        {
-            name:"Történelem",
-            average:5,
-            grades: [
-                {
-                    grade:5
-                }
-            ]
-        },
-        {
-            name:"Nyelvtan",
-            average:3.5,
-            grades: [
-                {
-                    grade:3
-                },
-                {
-                    grade:4
-                }
-            ]
-        }
-    ]
+    subjects:[]
 }
+data.page = "recent";
 async function getData(){
     let d;
 
@@ -153,6 +132,7 @@ async function getData(){
             let obj = {
                 value:ev.NumberValue,
                 date:ev.Date,
+                dateRecorded:ev.CreatingTime,
                 subject:ev.Subject,
                 mode:ev.Mode,
                 teacher:ev.Teacher,
@@ -243,6 +223,22 @@ function roundSubject(s){
     return Math.round(s.average);
 }
 
+function getDayOfWeek(d){
+    let days = ["Vasárnap","Hétfő","Kedd","Szerda","Csütörtök","Péntek","Szombat"];
+    //Sunday first is important
+
+
+    return days[d.getDay()];
+}
+function formatDate(d){
+    function f(n){
+        if (n < 10){
+            return "0"+n;
+        }
+        return n;
+    }
+    return `${f(d.getMonth())}/${f(d.getDate())}`;
+}
 
 var app = new Vue({
     el: '#app',
@@ -251,6 +247,8 @@ var app = new Vue({
     },
     data: data,
     methods: {
+        formatDate,
+        getDayOfWeek,
         roundSubject,
         isRoundedUp(s){
             if (roundSubject(s) == s.average){

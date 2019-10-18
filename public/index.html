@@ -127,8 +127,9 @@
                                 <div class="grade_header">
                                     {{ grade.subject }}
                                 </div>
-                                <span class="bottom">{{ grade.mode }}</span>
+                                <span class="bottom">{{ grade.theme ? grade.theme : grade.mode }}</span>
                             </span>
+                            <span class="date"><b>{{ getDayOfWeek(new Date(grade.date)) }}</b><br><i>{{ formatDate(new Date(grade.date)) }}</i></span>
                         
                     </li>
                 </ul>
