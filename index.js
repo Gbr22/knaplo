@@ -51,9 +51,14 @@ app.all('/**',async (req, res) => {
 
 
     let url = req.url.split("?")[0];
-    let searchString = req.url.split("?")[1];
+    let searchString = unescape(req.url.split("?")[1]);
+
+
+
     let search = {};
     console.log(url,searchString);
+
+    
 
     if (searchString != undefined){
         let _search = searchString.split("&");
@@ -73,7 +78,8 @@ app.all('/**',async (req, res) => {
         //stream.pipe(res);
     }
     else if (url == "/login"){
-        console.log(search);
+        
+        
         let needs = {
             inst:"Intézményt",
             username:"Felhasználónevet",
@@ -91,11 +97,20 @@ app.all('/**',async (req, res) => {
 
 
         for (let p in needs){
-            if (search[p] == undefined){
+            if (search.username){
+                search.username = search.username.toString().replace(/\+/g," ").trim()
+            }
+            
+
+            if (search[p] == undefined
+              || search[p] == ""
+              || search[p] == "null"){
+
                 loginError("Nem adott meg "+needs[p]);
                 return;
             }
         }
+        
 
         api.login(search.inst,search.username,search.password)
         .catch((error)=>{
