@@ -33,6 +33,12 @@ html, body {
     height: var(--vh-100);
     width: 100%;
 }
+#login_error {
+    background-color: rgb(255, 212, 195);
+    padding: 5px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
 #login_wrap {
     background-color: rgb(236, 236, 236);
     display: table-cell;

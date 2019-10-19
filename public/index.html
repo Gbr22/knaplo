@@ -2,30 +2,42 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="HandheldFriendly" content="true" />
+
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Kosz</title>
     <link rel="stylesheet" href="main.css">
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
 
     <meta name="theme-color" content="#1D1B27">
+
+    <script>
+        function setVh(){
+            let vh = window.innerHeight / 100;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+        }
+        setVh();
+        //window.addEventListener('load', setVh);
+        window.addEventListener('resize', setVh);
+    </script>
 </head>
 <body>
     <div id="app">
         
         <div id="login_form" v-if="!logged_in">
             <div id="login_wrap">
-                <div id="login_error" v-if="loginerror.error">
-                    <b>Bejelentkezési hiba</b> {{ loginerror.message }}
-                </div>
+                
                 <h1>Bejelentkezés a Krétába</h1>
-                <form action="/api/login">
+                <form action="/api/login" enctype="text/plain">
                     <div id="school_section">
                         <input type="text" placeholder="Intézmény keresése" oninput="data.inst_search = this.value">
                         <div id="schools">
+                            <input type="radio" name="inst" value="null" checked required style="display: none;">
                             <div v-for="school in searchSchool(inst_search)" class="school">
                                 
-                                <input type="radio" name="inst" :value="school.InstituteCode" :id="school.InstituteCode" checked>
+                                <input type="radio" name="inst" :value="school.InstituteCode" :id="school.InstituteCode">
                                 <span class="checkmark">
                                     <!-- <i class="material-icons left">check</i> -->
                                 </span>
@@ -41,9 +53,12 @@
                     </div>
                     
                     <span id="selected_inst">{{ selected_inst }}</span>
-                    <input name="username" type="text" placeholder="Felhasználónév" autocomplete="username">
-                    <input name="password" type="password" placeholder="Jelszó" autocomplete="current-password">
+                    <input name="username" type="text" placeholder="Felhasználónév" autocomplete="username" required>
+                    <input name="password" type="password" placeholder="Jelszó" autocomplete="current-password" required>
                     <input type="submit" value="Bejelentkezés">
+                    <div id="login_error" v-if="loginerror.error">
+                        <b>Bejelentkezési hiba</b><br>{{ loginerror.message }}
+                    </div>
                 </form>
             </div>
             
