@@ -18,25 +18,28 @@
                 <div id="login_error" v-if="loginerror.error">
                     <b>Bejelentkezési hiba</b> {{ loginerror.message }}
                 </div>
-                <h1>Jelentkezzen be!</h1>
+                <h1>Bejelentkezés a Krétába</h1>
                 <form action="/api/login">
-                    <input type="text" placeholder="Intézmény keresése" oninput="data.inst_search = this.value">
-                    <div id="schools">
-                        <div v-for="school in searchSchool(inst_search)" class="school">
-                            
-                            <input type="radio" name="inst" :value="school.InstituteCode" :id="school.InstituteCode" checked>
-                            <span class="checkmark">
-                                <!-- <i class="material-icons left">check</i> -->
-                            </span>
-                            <label :for="school.InstituteCode"> {{ school.Name }}
-                                <i>({{ school.City }})</i>
-                            </label>
-                            
-                        </div>
-                        <div v-if="searchSchool(inst_search).length == 0">
-                            A keresett intézményre nincs találat
+                    <div id="school_section">
+                        <input type="text" placeholder="Intézmény keresése" oninput="data.inst_search = this.value">
+                        <div id="schools">
+                            <div v-for="school in searchSchool(inst_search)" class="school">
+                                
+                                <input type="radio" name="inst" :value="school.InstituteCode" :id="school.InstituteCode" checked>
+                                <span class="checkmark">
+                                    <!-- <i class="material-icons left">check</i> -->
+                                </span>
+                                <label :for="school.InstituteCode"> {{ school.Name }}
+                                    <i>({{ school.City }})</i>
+                                </label>
+                                
+                            </div>
+                            <div v-if="searchSchool(inst_search).length == 0">
+                                A keresett intézményre nincs találat
+                            </div>
                         </div>
                     </div>
+                    
                     <span id="selected_inst">{{ selected_inst }}</span>
                     <input name="username" type="text" placeholder="Felhasználónév" autocomplete="username">
                     <input name="password" type="password" placeholder="Jelszó" autocomplete="current-password">

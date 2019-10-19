@@ -10,6 +10,8 @@ html, body {
     --theme-5: #88D498;
     --color-dark: #0B0C0C;
     --color-light: #DCE0D9;
+    --vh: 1vh;
+    --vh-100: calc(var(--vh) * 100);
 }
 
 #app {
@@ -25,16 +27,33 @@ html, body {
     
     position: absolute;
     top: 0;
+    bottom: 0;
     left: 0;
-    height: 100%;
+    height: 100vh;
+    height: var(--vh-100);
     width: 100%;
 }
 #login_wrap {
+    background-color: rgb(236, 236, 236);
     display: table-cell;
     vertical-align: middle;
+    padding: 0 20px;
 }
-
+#login_form h1 {
+    margin-top: 0;
+}
+button, input {
+    font-family: Helvetica, sans-serif;
+}
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active  {
+    -webkit-box-shadow: 0 0 0 30px rgb(240, 255, 249) inset !important;
+}
 #login_form input[type="text"], #login_form input[type="password"], #login_form input[type="submit"] {
+    box-sizing: border-box;
+    width: 100%;
     display: block;
     border: 1px solid #cccccc;
     padding: 10px 20px;
@@ -42,17 +61,31 @@ html, body {
     border-radius: 8px;
     outline: none;
     background-clip: white;
+    font-size: 16px;
 }
 #login_form input[type="submit"] {
-    background-color: #475ac4;
-    color: white;
+    background-color: #1CAA53;
+    border: none;
+    color: rgb(240, 255, 249);
 }
 
+#school_section {
+    background-color: #2E2D2E;
+    padding: 5px 20px;
+    border-radius: 15px;
+}
+#school_section input[type="text"]{
+    background-color: rgb(59, 59, 59);
+    color: rgb(228, 228, 228);
+    border: none;
+}
 #schools {
-    width: 80%;
+    width: 100%;
     margin: auto;
     height: 150px;
     overflow: auto;
+
+    color: rgb(228, 228, 228);
 }
 
 .school {
@@ -84,7 +117,7 @@ html, body {
     color: inherit;
 }
 .school input:checked ~ .checkmark {
-    background-color: #475ac4;
+    background-color: #1CAA53;
 }
 
 
@@ -439,8 +472,9 @@ circle {
 
 
 #loading_screen {
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
+    height: var(--vh-100);
     position: fixed;
     top: 0;
     left: 0;
