@@ -73,6 +73,10 @@ let data = {
     page:"home",
     loading:true,
     fullname:'',
+    info:{
+        AddressDataList:[],
+        Tutelaries:[],
+    },
     loginerror:{
         error:false,
         message:""
@@ -84,7 +88,7 @@ let data = {
     grades:[],
     subjects:[]
 }
-data.page = "recent";
+
 async function getData(){
     let d;
 
@@ -109,7 +113,15 @@ async function getData(){
         await errored();
         return;
     }
+
     data.fullname = d.Name;
+    let info_list = ["Name","NameOfBirth","PlaceOfBirth","MothersName","AddressDataList","DateOfBirthUtc","InstituteName","InstituteCode","Tutelaries"];
+    let info = {};
+    for (let i=0; i < info_list.length; i++){
+        let p = info_list[i];
+        info[p] = d[p];
+    }
+    data.info = info;
 
     let subjects = [];
     let grades = [];

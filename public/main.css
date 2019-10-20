@@ -535,3 +535,53 @@ circle {
     }
   }
   
+
+
+#info_page {
+    text-align: center;
+}
+#info_page ul {
+    padding: 0;
+    text-align: left;
+}
+#info_page li {
+    list-style: none;
+    border-top: 1px solid #dddddd;
+    margin: 0 30px;
+    padding: 10px 0;
+}
+#info_page li:first-child {
+    border: none;
+}
+#info_page li h2 {
+    margin: 0 0;
+    margin-bottom: 5px;
+    font-size: 22px;
+}
+#info_page h1 {
+    margin: 0;
+}
+#profile_circle_container {
+    margin: 60px 0;
+    
+}
+#profile_circle svg {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    display: inline-block;
+    stroke: #464646;
+}
+#profile_circle {
+    display: inline-block;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #e6e6e6;
+    position: relative;
+}

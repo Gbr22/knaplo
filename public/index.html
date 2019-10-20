@@ -152,8 +152,50 @@
                     </li>
                 </ul>
             </div>
-            <div v-if="page=='info'">
-                <h1>{{ fullname }}</h1>
+            <div v-if="page=='info'" id="info_page">
+                <div id="profile_circle_container">
+                    <span id="profile_circle">
+                        <svg class="feather">
+                            <use xlink:href="/node_modules/feather-icons/dist/feather-sprite.svg#user"/>
+                        </svg>
+                    </span>
+                    <h1 id="fullname">{{ info.Name }}</h1>
+                </div>
+
+                
+                
+                <ul>
+                    <li>
+                        <h2>Születési név</h2>
+                        {{ info.NameOfBirth }}
+                    </li>
+                    <li>
+                        <h2>Születési hely</h2>
+                        {{ info.PlaceOfBirth }}
+                    </li>
+                    <li>
+                        <h2>Anyja neve</h2>
+                        {{ info.MothersName }}
+                    </li>
+
+                    <li>
+                        <h2>Született</h2>
+                        {{ (new Date(info.DateOfBirthUtc)).toLocaleDateString() }}
+                    </li>
+
+
+                    <li>
+                        <h2>Lakcímek</h2>
+                        <div v-for="address in info.AddressDataList">
+                            {{ address }}
+                        </div>
+                    </li>
+
+                    <li>
+                        <h2>Intézmény neve</h2>
+                        {{ info.InstituteName }}
+                    </li>
+                </ul>
             </div>
             
         </div>
