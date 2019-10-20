@@ -70,7 +70,7 @@ async function institute(){
 
 
 let data = {
-    page:"home",
+    page:"recent",
     loading:true,
     fullname:'',
     info:{

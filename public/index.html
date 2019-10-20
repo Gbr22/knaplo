@@ -202,21 +202,23 @@
         <nav v-if="logged_in" id="menu">
             <button v-bind:class="{ active: page=='home' }" v-on:click="page = 'home'">
                 <svg class="feather">
-                    <use xlink:href="/node_modules/feather-icons/dist/feather-sprite.svg#home"/>
+                    <use xlink:href="/node_modules/feather-icons/dist/feather-sprite.svg#bar-chart-2"/>
                 </svg>
+                <b>Átlagok</b>
                 <!-- <i class="material-icons">home</i> -->
             </button>
             <button v-bind:class="{ active: page=='recent' }" v-on:click="page = 'recent'">
                 <svg class="feather">
-                    <use xlink:href="/node_modules/feather-icons/dist/feather-sprite.svg#clock"/>
+                    <use xlink:href="/node_modules/feather-icons/dist/feather-sprite.svg#book"/>
                 </svg>
+                <b>Jegyek</b>
                 <!-- <i class="material-icons">history</i> -->
             </button>
             <button v-bind:class="{ active: page=='info' }" v-on:click="page = 'info'">
                 <svg class="feather">
                     <use xlink:href="/node_modules/feather-icons/dist/feather-sprite.svg#user"/>
                 </svg>
-                
+                <b>Én</b>
                 <!-- <i class="material-icons">account_circle</i> -->
             </button>
         </nav>

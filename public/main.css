@@ -437,6 +437,9 @@ circle {
 #menu button.active svg {
     stroke: #1CAA53;
 }
+#menu button.active b {
+    color: #1CAA53;
+}
 #menu button.active i {
     /*color: #66ceab;*/
     color: #1CAA53;
@@ -444,6 +447,12 @@ circle {
 }
 #menu button svg {
     stroke: #2A2D34;
+}
+#menu button b {
+    color: #2A2D34;
+    display: block;
+    font-weight: bold;
+    font-size: 12px;
 }
 #menu button i {
     font-size: 28px;
