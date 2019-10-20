@@ -140,7 +140,7 @@
                 <ul id="grades">
                     <li v-for="(grade, index) in grades" class="grade">
                         
-                            <span class="left">{{ grade.value }}</span>
+                            <span class="left" :data-grade="grade.value">{{ grade.value }}</span>
                             <span class="right">
                                 <div class="grade_header">
                                     {{ grade.subject }}
