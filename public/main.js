@@ -252,7 +252,7 @@ function formatDate(d){
         }
         return n;
     }
-    return `${f(d.getMonth())}/${f(d.getDate())}`;
+    return `${f(d.getMonth()+1)}/${f(d.getDate())}`;
 }
 
 var app = new Vue({
