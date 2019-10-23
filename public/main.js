@@ -70,6 +70,7 @@ async function institute(){
 
 
 let data = {
+    username:"",
     page:"recent",
     loading:true,
     fullname:'',
@@ -113,6 +114,8 @@ async function getData(){
         await errored();
         return;
     }
+
+    data.username = cookies.get("username");
 
     data.fullname = d.Name;
     let info_list = ["Name","NameOfBirth","PlaceOfBirth","MothersName","AddressDataList","DateOfBirthUtc","InstituteName","InstituteCode","Tutelaries"];
