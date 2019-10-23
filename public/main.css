@@ -399,14 +399,21 @@ circle {
     white-space: nowrap;
 }
 .subject_header .left, .subject_header .right {
-    width: 50%;
+    
     display: inline-block;
     vertical-align: middle;
     margin: 0;
     padding: 0;
 }
+.subject_header .left {
+    width: 80%;
+    width: calc(100% - 85px);
+    white-space: initial;
+}
 .subject_header .right {
+    width: 80px;
     text-align: right;
+    vertical-align: top;
 }
 .subject_header .right * {
     vertical-align: middle;
