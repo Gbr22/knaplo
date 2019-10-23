@@ -612,3 +612,17 @@ circle {
     background-color: #e6e6e6;
     position: relative;
 }
+#logout {
+    display: inline-block;
+    width: 80%;
+    box-sizing: border-box;
+    padding: 8px;
+    border-radius: 8px;
+    border: none;
+    font-size: 16px;
+    font-family: inherit;
+    background-color: rgb(231, 231, 231);
+    margin-top: 40px;
+    margin-bottom: 30px;
+    outline: none;
+}

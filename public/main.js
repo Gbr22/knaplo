@@ -255,6 +255,14 @@ function formatDate(d){
     return `${f(d.getMonth()+1)}/${f(d.getDate())}`;
 }
 
+function logout(){
+    let del = ["access_token","inst","password_encrypted","refresh_token","time","username"];
+    for (let i=0; i < del.length; i++){
+        cookies.del(del[i]);
+    }
+    window.location.href = window.location.href;
+}
+
 var app = new Vue({
     el: '#app',
     components: {
