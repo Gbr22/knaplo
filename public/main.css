@@ -6,6 +6,16 @@ html, body {
     padding: 0;
 }
 
+* {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
 :root {
     --theme-5: #88D498;
     --color-dark: #0B0C0C;
@@ -171,6 +181,70 @@ input:-webkit-autofill:active  {
 .section.rank {
     text-align: left;
 }
+.section.rank a {
+    color: inherit;
+    text-decoration: none;
+}
+
+#ranks_container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    margin: auto;
+    vertical-align: middle;
+    text-align: center;
+    display: flex;
+    align-items: center;
+}
+#ranks {
+    width: 100%;
+    box-sizing: border-box;
+    margin: 30px;
+    padding: 20px;
+    height: max-content;
+    text-align: left;
+    display: inline-block;
+    border-radius: 15px;
+    background-color: whitesmoke;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+    position: relative;
+}
+#ranks .rank {
+
+}
+#ranks .left {
+    border-right: 1px solid #b3b3b3;
+}
+
+#ranks .left span, #ranks .right span {
+    display: block;
+    padding: 1.5px 0;
+}
+#ranks .left, #ranks .right {
+    display: inline-block;
+    width: 50%;
+    box-sizing: border-box;
+    padding: 0 8px;
+}
+#ranks .left {
+    text-align: right;
+}
+#ranks .right {
+    text-align: left;
+}
+
+#ranks h2 {
+    text-align: center;
+    margin: 5px 0;
+}
+#ranks .close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 10px;
+}
 
 #avg_detail_cont .section {
     
@@ -205,6 +279,7 @@ input:-webkit-autofill:active  {
 #avg_detail_cont .big {
     font-size: 18px;
     font-weight: bold;
+    color: whitesmoke;
     
 }
 #avg_detail_cont .small {
@@ -633,3 +708,4 @@ circle {
     margin-bottom: 30px;
     outline: none;
 }
+

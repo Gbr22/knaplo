@@ -67,7 +67,33 @@ async function institute(){
 }
 
 
-
+var ranks = [
+    {
+        min: 4.5,
+        name: "Platinum",
+        color: "#00cc66"
+    },
+    {
+        min:4,
+        name: "Gold",
+        color: "#ccff33"
+    },
+    {
+        min:3,
+        name: "Silver",
+        color: "#e6e600"
+    },
+    {
+        min:2,
+        name: "Bronze",
+        color: "#ff9900"
+    },
+    {
+        min:1,
+        name:"Stone",
+        color: "#cc3300"
+    }
+];
 
 let data = {
     username:"",
@@ -87,7 +113,15 @@ let data = {
     selected_inst:'',
     average:0,
     grades:[],
-    subjects:[]
+    subjects:[],
+    ranksScreen:false,
+    ranks:ranks,
+}
+
+
+
+function showRanks(){
+
 }
 
 async function getData(){
@@ -266,6 +300,8 @@ function logout(){
     window.location.href = window.location.href;
 }
 
+
+
 var app = new Vue({
     el: '#app',
     components: {
@@ -303,41 +339,15 @@ var app = new Vue({
             
         },
         rank(){
-            let ranks = [
-                {
-                    min: 4.5,
-                    name: "Platinum",
-                    color: "#00cc66"
-                },
-                {
-                    min:4,
-                    name: "Gold",
-                    color: "#ccff33"
-                },
-                {
-                    min:3,
-                    name: "Silver",
-                    color: "#e6e600"
-                },
-                {
-                    min:2,
-                    name: "Bronze",
-                    color: "#ff9900"
-                },
-                {
-                    min:1,
-                    name:"Stone",
-                    color: "#cc3300"
-                }
-            ];
+            
             let currentRank = {min:0,name:"Error", color: "#000000"};
             for (let i=0; i < ranks.length; i++){
                 if (ranks[i].min > currentRank.min && this.average >= ranks[i].min){
-                    currentRank = ranks[i];
+                    currentRank = Object.assign({},ranks[i]);
                 }
             }
             currentRank.color = "#DCE0D9";
-            return Object.assign({},currentRank);
+            return currentRank;
 
         }
     }

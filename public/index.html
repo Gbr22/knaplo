@@ -96,7 +96,7 @@
                             <!-- <i class="material-icons left">stars</i> -->
                             <span class="right">
                                 <span class="big">
-                                    {{ rank().name }}
+                                    <a href="javascript:void(0)" onclick="data.ranksScreen = !data.ranksScreen">{{ rank().name }}</a>
                                 </span>
                                 <span class="small">Rank</span>
                             </span>
@@ -125,6 +125,24 @@
                         </div>
                     </li>
                 </ul>
+                <div id="ranks_container" v-show="ranksScreen">
+                    <div id="ranks">
+                        <h2>Rankok</h2>
+                        <span class="left">
+                            <span v-for="rank in ranks">{{ rank.min }}</span>
+                        </span><span
+                        class="right"
+                        >
+                            <span v-for="rank in ranks">{{ rank.name }}</span>
+                        </span>
+                        <span class="close" onclick="data.ranksScreen = false">
+                            <svg class="feather">
+                                <use xlink:href="/node_modules/feather-icons/dist/feather-sprite.svg#x"/>
+                            </svg>
+                        </span>
+                    </div>
+                    
+                </div>
             </div>
             <div v-if="page=='recent'" id="recent">
                 <h1>
