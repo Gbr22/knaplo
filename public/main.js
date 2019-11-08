@@ -244,14 +244,15 @@ async function getData(){
     }
 
     grades.sort((a,b)=>{
-        if (new Date(a.date) > new Date(b.date)){
+        if (new Date(a.dateRecorded) > new Date(b.dateRecorded)){
             return -1;
         }
-        else if (new Date(a.date) < new Date(b.date)){
+        else if (new Date(a.dateRecorded) < new Date(b.dateRecorded)){
             return 1;
         }
         return 0;
     });
+    
     data.grades = grades;
     data.subjects = subjects;
     
