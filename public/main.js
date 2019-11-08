@@ -111,7 +111,6 @@ let data = {
     logged_in:false,
     inst_search:'',
     selected_inst:'',
-    average:0,
     grades:[],
     subjects:[],
     ranksScreen:false,
@@ -162,19 +161,46 @@ async function getData(){
 
     let subjects = [];
     let grades = [];
-    let sum = 0;
-    for (let e of d.SubjectAverages){
-        let obj = {
-            name:e.Subject,
-            average:e.Value,
-            grades:[]
-        };
-        subjects.push(obj);
-        sum += roundSubject(obj);
+    
+
+    
+    let avg_fallback = d.SubjectAverages == undefined || d.SubjectAverages.length == 0;
+    if (!avg_fallback){
+        for (let e of d.SubjectAverages){
+            let obj = {
+                name:e.Subject,
+                average:e.Value,
+                grades:[]
+            };
+            subjects.push(obj);
+            
+        }
+    } else {
+        let subj = {}; //key value pair subjects list
+        for (let i=0; i < d.Evaluations.length; i++){
+            let ev = d.Evaluations[i];
+
+            if (ev.Form == "Mark"){
+                subj[ev.Subject] = "";
+            }
+            
+        }
+        for (let p in subj){
+            subjects.push({
+                name:p,
+                average:null,
+                grades:[]
+            })
+        }
     }
+    
     subjects.sort(function(a,b){
         return a.name.localeCompare(b.name);
     })
+
+
+
+
     for (let j=0; j < d.Evaluations.length; j++){
 
         let ev = d.Evaluations[j];
@@ -198,12 +224,25 @@ async function getData(){
                 
                 if (ev.Subject == subject.name){
                     subject.grades.push(obj);
+
+                    
                 }
 
             }
         }
         
     }
+
+    if (avg_fallback){
+        for (let subject of subjects){
+            let s = 0;
+            for (let grade of subject.grades){
+                s += grade.value;
+            }
+            subject.average = s/subject.grades.length;
+        }
+    }
+
     grades.sort((a,b)=>{
         if (new Date(a.date) > new Date(b.date)){
             return -1;
@@ -215,7 +254,7 @@ async function getData(){
     });
     data.grades = grades;
     data.subjects = subjects;
-    data.average = sum/subjects.length;
+    
 
     console.log(d);
 }
@@ -312,6 +351,14 @@ var app = new Vue({
         formatDate,
         getDayOfWeek,
         roundSubject,
+        average(){
+            let sum = 0;
+            
+            for (let subject of this.subjects){
+                sum += roundSubject(subject);
+            }
+            return sum/this.subjects.length;
+        },
         isRoundedUp(s){
             if (roundSubject(s) == s.average){
                 return true;
@@ -332,17 +379,17 @@ var app = new Vue({
             return Math.round(num*100)/100;
         },
         avg_percent(){
-            return this.average / 5 * 100;
+            return this.average() / 5 * 100;
         },
         name_abbriv(){
             return this.fullname.split(" ").map( (e)=>e[0] ).join("");
             
         },
         rank(){
-            
+            let avg = this.average();
             let currentRank = {min:0,name:"Error", color: "#000000"};
             for (let i=0; i < ranks.length; i++){
-                if (ranks[i].min > currentRank.min && this.average >= ranks[i].min){
+                if (ranks[i].min > currentRank.min && avg >= ranks[i].min){
                     currentRank = Object.assign({},ranks[i]);
                 }
             }
