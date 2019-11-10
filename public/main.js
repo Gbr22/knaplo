@@ -115,6 +115,20 @@ let data = {
     subjects:[],
     ranksScreen:false,
     ranks:ranks,
+    defaultSubject:{
+        "null":true,
+        name:"Subject name",
+        grades:[],
+        average:null,
+        avgCalc:createAvgCalc()
+    },
+    viewedSubject:{
+        "null":true,
+        name:"Subject name",
+        grades:[],
+        average:null,
+        avgCalc:createAvgCalc()
+    }
 }
 
 
@@ -123,7 +137,58 @@ function showRanks(){
 
 }
 
+function calcSubjectAvg(subject,avg_calc){
+
+    let sum = 0;
+
+    let count = subject.grades.length;
+
+    for (let grade of subject.grades){
+        sum += grade.value;
+    }
+
+    if (avg_calc){
+        for (let gradename in subject.avgCalc){
+            let gradecount = subject.avgCalc[gradename];
+            count += gradecount;
+            
+
+            sum += gradename*gradecount;
+            
+        }
+    }
+    
+
+    return sum/count;
+}
+
+var avg_calc_obj = {
+    [1]:0,
+    [2]:0,
+    [3]:0,
+    [4]:0,
+    [5]:0
+}
+function createAvgCalc(){
+    return Object.assign({},avg_calc_obj);
+}
+
+
+function getGradeName(grade){
+    let obj = {
+        [1]:"Elégtelen",
+        [2]:"Elégséges",
+        [3]:"Közepes",
+        [4]:"Jó",
+        [5]:"Jeles"
+    }
+    return obj[grade];
+}
+
 async function getData(){
+
+    
+
     let d;
 
     let response = await req(api_full+"data");
@@ -170,7 +235,8 @@ async function getData(){
             let obj = {
                 name:e.Subject,
                 average:e.Value,
-                grades:[]
+                grades:[],
+                avgCalc:createAvgCalc()
             };
             subjects.push(obj);
             
@@ -189,7 +255,8 @@ async function getData(){
             subjects.push({
                 name:p,
                 average:null,
-                grades:[]
+                grades:[],
+                avgCalc:createAvgCalc()
             })
         }
     }
@@ -235,11 +302,7 @@ async function getData(){
 
     if (avg_fallback){
         for (let subject of subjects){
-            let s = 0;
-            for (let grade of subject.grades){
-                s += grade.value;
-            }
-            subject.average = s/subject.grades.length;
+            subject.average = calcSubjectAvg(subject);
         }
     }
 
@@ -352,6 +415,12 @@ var app = new Vue({
         formatDate,
         getDayOfWeek,
         roundSubject,
+        getGradeName,
+        createAvgCalc,
+        openSubject(subject){
+
+        },
+        calcSubjectAvg,
         average(){
             let sum = 0;
             
@@ -376,8 +445,14 @@ var app = new Vue({
             return false;
         },
         searchSchool,
-        format(num){
-            return Math.round(num*100)/100;
+        format(num,add0){
+            let result = Math.round(num*100)/100;
+
+            if (add0) {
+                return result.toFixed(2);
+            }
+
+            return result;
         },
         avg_percent(){
             return this.average() / 5 * 100;

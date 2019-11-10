@@ -105,7 +105,7 @@
                     </div>
                 </div>
                 <ul id="subjects">
-                    <li v-for="(subject, index) in subjects" class="subject">
+                    <li v-for="(subject, index) in subjects" class="subject" v-on:click="viewedSubject = subject">
                         <div class="subject_header">
                             <span class="left">{{ subject.name }}</span>
                             <span class="right">
@@ -142,6 +142,30 @@
                         </span>
                     </div>
                     
+                </div>
+                <div id="subject_details" v-show="!(viewedSubject['null'])">
+                    <h1>{{ viewedSubject.name }}</h1>
+
+                    <div id="avg_calc">
+                        <div class="avg">
+                            <div class="type"><span class="avgtitle">Jelenlegi átlag</span><span class="num">{{ format(viewedSubject.average,true) }}</span></div>
+                            <div class="type"><span class="avgtitle">Átszámított átlag</span><span class="num">{{ format(calcSubjectAvg(viewedSubject,true),true) }}</span></div>
+                        </div>
+                        <div v-for="(gradecount, grade) in viewedSubject.avgCalc" class="avg_calc_grade">
+                            <div class="gradename">{{ getGradeName(grade) }}</div>
+                            <button v-on:click="viewedSubject.avgCalc[grade]++">
+                                <svg class="feather">
+                                    <use xlink:href="/node_modules/feather-icons/dist/feather-sprite.svg#plus"/>
+                                </svg>
+                            </button>
+                            <div class="gradecount">{{ gradecount }}</div>
+                            <button v-on:click="viewedSubject.avgCalc[grade]-- == 0 ? viewedSubject.avgCalc[grade] = 0 : undefined">
+                                <svg class="feather">
+                                    <use xlink:href="/node_modules/feather-icons/dist/feather-sprite.svg#minus"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div v-if="page=='recent'" id="recent">
@@ -225,7 +249,7 @@
             
         </div>
         <nav v-if="logged_in" id="menu">
-            <button v-bind:class="{ active: page=='home' }" v-on:click="page = 'home'">
+            <button v-bind:class="{ active: page=='home' }" v-on:click="viewedSubject.avgCalc = createAvgCalc(); viewedSubject = defaultSubject; page = 'home'">
                 <svg class="feather">
                     <use xlink:href="/node_modules/feather-icons/dist/feather-sprite.svg#bar-chart-2"/>
                 </svg>
