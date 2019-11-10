@@ -64,7 +64,7 @@
             
         </div>
         <div id="app_screen" v-if="logged_in">
-            <div id="home" v-if="page == 'home'">
+            <div id="home" v-show="page == 'home'">
                 <div id="avg_screen">
                     <div id="circle_container">
                         <progress-ring id="avg_circle" :stroke-color="rank().color" :radius="120/2" :progress="avg_percent()" :stroke="6"></progress-ring>
@@ -168,7 +168,7 @@
                     </div>
                 </div>
             </div>
-            <div v-if="page=='recent'" id="recent">
+            <div v-show="page=='recent'" id="recent">
                 <h1>
                     <span class="left">Jegyek</span>
                     <span class="right">
@@ -194,7 +194,7 @@
                     </li>
                 </ul>
             </div>
-            <div v-if="page=='info'" id="info_page">
+            <div v-show="page=='info'" id="info_page">
                 <div id="profile_circle_container">
                     <span id="profile_circle">
                         <svg class="feather">
