@@ -95,9 +95,25 @@ var ranks = [
     }
 ];
 
+function getLastPage(){
+    let pages = ["home","info","recent"];
+    let lastpage = localStorage.getItem("lastpage");
+    let exists = false;
+    for (let page of pages){
+        if (lastpage == page){
+            exists = true;
+        }
+    }
+    if (exists){
+        return lastpage;
+    } else {
+        return "recent";
+    }
+}
+
 let data = {
     username:"",
-    page:"recent",
+    page:getLastPage(),
     loading:true,
     fullname:'',
     info:{
@@ -428,6 +444,7 @@ var app = new Vue({
                 this.viewedSubject.avgCalc = createAvgCalc(); this.viewedSubject = this.defaultSubject;
             }
             this.page = page;
+            localStorage.setItem("lastpage",page);
         },
         calcSubjectAvg,
         average(){
