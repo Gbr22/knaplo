@@ -423,6 +423,12 @@ var app = new Vue({
         openSubject(subject){
 
         },
+        changePage(page){
+            if (this.page == "home"){
+                this.viewedSubject.avgCalc = createAvgCalc(); this.viewedSubject = this.defaultSubject;
+            }
+            this.page = page;
+        },
         calcSubjectAvg,
         average(){
             let sum = 0;
