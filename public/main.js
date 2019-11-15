@@ -1,47 +1,3 @@
-
-
-
-const ProgressRing = Vue.component('progress-ring', {
-    props: {
-      radius: Number,
-      progress: Number,
-      stroke: Number,
-      strokeColor:String
-    },
-    data() {
-      const normalizedRadius = this.radius - this.stroke * 2;
-      const circumference = normalizedRadius * 2 * Math.PI;
-      
-      return {
-        normalizedRadius,
-        circumference
-      };
-    },
-    computed: {
-      strokeDashoffset() {
-        return this.circumference - this.progress / 100 * this.circumference;
-      }
-    },
-    template: `
-      <svg
-        :height="radius * 2"
-        :width="radius * 2"
-       >
-         <circle
-            
-            :stroke-dasharray="circumference + ' ' + circumference"
-            :style="{ strokeDashoffset: strokeDashoffset }"
-            :stroke-width="stroke"
-            :stroke="strokeColor"
-            fill="transparent"
-            :r="normalizedRadius"
-            :cx="radius"
-            :cy="radius"
-        />
-      </svg>
-    `
-  });
-
 function req(url){
     return new Promise(function(resolve,reject){
         var xhttp = new XMLHttpRequest();
@@ -111,7 +67,8 @@ function getLastPage(){
     }
 }
 
-let data = {
+let fillerdata = {
+    loading_data:false,
     username:"",
     page:getLastPage(),
     loading:true,
@@ -146,11 +103,17 @@ let data = {
         avgCalc:createAvgCalc()
     }
 }
+let data = JSON.parse(JSON.stringify(fillerdata));
 
 
 
 function showRanks(){
 
+}
+
+function updateArray(arr,_new){
+    arr.splice(0)
+    arr.push(..._new);
 }
 
 function calcSubjectAvg(subject,avg_calc){
@@ -201,10 +164,7 @@ function getGradeName(grade){
     return obj[grade];
 }
 
-async function getData(){
-
-    
-
+async function fetchData(){
     let d;
 
     let response = await req(api_full+"data");
@@ -228,6 +188,35 @@ async function getData(){
         await errored();
         return;
     }
+
+    localStorage.setItem("kretadata",response);
+
+    return d;
+}
+async function getData(){
+    let raw = localStorage.getItem("kretadata");
+    if (raw == null){
+        return await fetchData();
+    } else {
+        let json = null;
+        try {
+            json = JSON.parse(raw);
+        } catch(err){
+            return await fetchData();
+        }
+        if (json != null){
+            data.loading_data = true;
+            fetchData().then((d)=>{
+                putData(d);
+                data.loading_data = false;
+            });
+            return json;
+        }
+    }
+}
+function putData(d){
+    
+    
 
     data.username = cookies.get("username");
 
@@ -335,11 +324,18 @@ async function getData(){
         return 0;
     });
     
-    data.grades = grades;
-    data.subjects = subjects;
+    updateArray(data.grades, grades);
+    updateArray(data.subjects, subjects);
     
+    
+}
+async function loadData(){
+    let d = await getData();
+    
+    putData(d);
 
-    console.log(d);
+
+    console.log("data loaded",d);
 }
 
 
@@ -349,7 +345,7 @@ let institutions = [];
 if (cookies.get("access_token")){
     data.logged_in = true;
     data.loading = true;
-    getData().then(()=>{
+    loadData().then(()=>{
         data.loading = false;
     }).catch((err)=>{
         alert(err.message);
@@ -431,6 +427,9 @@ var app = new Vue({
     },
     data: data,
     methods: {
+        getGrades(){
+
+        },
         formatDate,
         getDayOfWeek,
         roundSubject,

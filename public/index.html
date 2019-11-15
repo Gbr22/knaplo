@@ -248,7 +248,7 @@
             </div>
             
         </div>
-        <nav v-if="logged_in" id="menu">
+        <nav v-if="logged_in" id="menu" v-bind:class="{ loading_data: loading_data }">
             <button v-bind:class="{ active: page=='home' }" v-on:click="changePage('home')">
                 <svg class="feather">
                     <use xlink:href="/node_modules/feather-icons/dist/feather-sprite.svg#bar-chart-2"/>
@@ -270,13 +270,18 @@
                 <b>Én</b>
                 <!-- <i class="material-icons">account_circle</i> -->
             </button>
+            <div id="loading_data">
+                
+            </div>
         </nav>
         <div v-if="loading" id="loading_screen">
             <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
         </div>
+        
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="node_modules/jaaulde-cookies/lib/jaaulde-cookies.js"></script>
+    <script src="components/progress-ring.js"></script>
     <script src="main.js"></script>
 </body>
 </html>
