@@ -232,13 +232,16 @@ async function getData(){
     let avg_fallback = d.SubjectAverages == undefined || d.SubjectAverages.length == 0;
     if (!avg_fallback){
         for (let e of d.SubjectAverages){
-            let obj = {
-                name:e.Subject,
-                average:e.Value,
-                grades:[],
-                avgCalc:createAvgCalc()
-            };
-            subjects.push(obj);
+            if (e.Value != 0){
+                let obj = {
+                    name:e.Subject,
+                    average:e.Value,
+                    grades:[],
+                    avgCalc:createAvgCalc()
+                };
+                subjects.push(obj);
+            }
+            
             
         }
     } else {
