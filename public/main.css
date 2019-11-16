@@ -80,9 +80,10 @@ input:-webkit-autofill:active  {
     font-size: 16px;
 }
 #login_form input[type="submit"] {
-    background-color: #1CAA53;
+    background-color: rgb(25, 150, 73);
     border: none;
-    color: rgb(240, 255, 249);
+    /*color: rgb(240, 255, 249);*/
+    color:white;
 }
 
 #school_section {
@@ -110,7 +111,7 @@ input:-webkit-autofill:active  {
     text-align: left;
 }
 .school i {
-    color: #6d6d6d;
+    color: #949494;
     font-style: normal;
 }
 .school input {

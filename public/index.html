@@ -32,7 +32,7 @@
                 <h1>Bejelentkezés a Krétába</h1>
                 <form action="/api/login" enctype="text/plain">
                     <div id="school_section">
-                        <input type="text" placeholder="Intézmény keresése" oninput="data.inst_search = this.value">
+                        <input aria-label="Intézmény neve" type="text" placeholder="Intézmény keresése" oninput="data.inst_search = this.value">
                         <div id="schools">
                             <input type="radio" name="inst" value="null" checked required style="display: none;">
                             <div v-for="school in searchSchool(inst_search)" class="school">
@@ -53,8 +53,8 @@
                     </div>
                     
                     <span id="selected_inst">{{ selected_inst }}</span>
-                    <input name="username" type="text" placeholder="Felhasználónév" autocomplete="username" required>
-                    <input name="password" type="password" placeholder="Jelszó" autocomplete="current-password" required>
+                    <input aria-label="Felhasználónév" name="username" type="text" placeholder="Felhasználónév" autocomplete="username" required>
+                    <input aria-label="Jelszó" name="password" type="password" placeholder="Jelszó" autocomplete="current-password" required>
                     <input type="submit" value="Bejelentkezés">
                     <div id="login_error" v-if="loginerror.error">
                         <b>Bejelentkezési hiba</b><br>{{ loginerror.message }}
