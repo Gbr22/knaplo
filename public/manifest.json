@@ -1,0 +1,8 @@
+{
+    "short_name": "K Napló",
+    "name": "K Napló",
+    "start_url": "/?source=pwa",
+    "display": "standalone",
+    "background_color":"#7fffd4",
+    "theme_color":"#ffffff"
+}
