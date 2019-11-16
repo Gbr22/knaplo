@@ -193,6 +193,7 @@ async function fetchData(){
 
     return d;
 }
+
 async function getData(){
     let raw = localStorage.getItem("kretadata");
     if (raw == null){
@@ -209,6 +210,7 @@ async function getData(){
             fetchData().then((d)=>{
                 putData(d);
                 data.loading_data = false;
+                navigator.vibrate([50,30]);
             });
             return json;
         }
