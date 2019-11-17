@@ -64,7 +64,7 @@
             
         </div>
         <div id="app_screen" v-if="logged_in">
-            <div id="home" v-show="page == 'home'">
+            <div id="home" v-show="page == 'home'" class="screen">
                 <div id="avg_screen">
                     <div id="circle_container">
                         <progress-ring id="avg_circle" :stroke-color="rank().color" :radius="120/2" :progress="avg_percent()" :stroke="6"></progress-ring>
@@ -168,33 +168,53 @@
                     </div>
                 </div>
             </div>
-            <div v-show="page=='recent'" id="recent">
+            <div v-show="page=='recent'" id="recent" class="screen">
                 <h1>
-                    <span class="left">Jegyek</span>
+                    <span class="left" id="recentModeSelector" v-on:click="showRecentModeOptions=!showRecentModeOptions">    
+                        {{ getRecentModeText() }}
+                        <span id="recentModeOptions" v-show="showRecentModeOptions"></span>
+                    </span>
                     <span class="right">
                         <svg class="feather">
-                            <use xlink:href="/node_modules/feather-icons/dist/feather-sprite.svg#book-open"/>
+                            <use :xlink:href="'/node_modules/feather-icons/dist/feather-sprite.svg#'+getRecentIcon(recentMode)"/>
                         </svg>
                     </span>
                     
                     
                 </h1>
-                <ul id="grades">
-                    <li v-for="(grade, index) in grades" class="grade">
-                        
-                            <span class="left" :data-grade="grade.value">{{ grade.value }}</span>
+                <div id="recentsList">
+                    <span v-for="(recent, index) in recents">
+                        <div v-show="checkShowRecent('grades')" v-if="recent.recentType == 'grade'" class="grade recent">
+                            <span class="left" :data-grade="recent.value">
+                                {{ recent.value }}
+                            </span>
                             <span class="right">
                                 <div class="grade_header">
-                                    {{ grade.subject }}
+                                    {{ recent.subject }}
                                 </div>
-                                <span class="bottom">{{ grade.theme ? grade.theme : grade.mode }}</span>
+                                <span class="bottom">{{ recent.theme ? recent.theme : recent.mode }}</span>
                             </span>
-                            <span class="date"><b>{{ getDayOfWeek(new Date(grade.date)) }}</b><br><i>{{ formatDate(new Date(grade.date)) }}</i></span>
-                        
-                    </li>
-                </ul>
+                            <span class="date"><b>{{ getDayOfWeek(new Date(recent.date)) }}</b><br><i>{{ formatDate(new Date(recent.date)) }}</i></span>
+                        </div>
+                        <div v-show="checkShowRecent('absences')" v-if="recent.recentType == 'absence'" class="absence recent">
+                            <h3>{{ recent.TypeName }} - {{ recent.JustificationTypeName }}</h3>
+                            <p>{{ recent.NumberOfLessons }}. Óra - {{ recent.Subject }}<i v-if="recent.Type=='Delay'">, {{ recent.DelayTimeMinutes }} perc</i></p>
+
+                            <span class="date">{{ formatDate(new Date(recent.date)) }} {{ getDayOfWeek(new Date(recent.date)) }}</span>
+                        </div>
+                        <div v-show="checkShowRecent('notes')" v-if="recent.recentType == 'note'" class="note recent">
+                            <h3>{{ recent.Title }}</h3>
+                            <p>{{ recent.Content }}</p>
+
+                            <span class="signoff">{{ recent.Type }}, {{ recent.Teacher }}</span>
+
+                            <span class="date">{{ formatDate(new Date(recent.date)) }} {{ getDayOfWeek(new Date(recent.date)) }}</span>
+                            
+                        </div>
+                    </span>
+                </div>
             </div>
-            <div v-show="page=='info'" id="info_page">
+            <div v-show="page=='info'" id="info_page" class="screen">
                 <div id="profile_circle_container">
                     <span id="profile_circle">
                         <svg class="feather">
@@ -258,9 +278,9 @@
             </button>
             <button v-bind:class="{ active: page=='recent' }" v-on:click="changePage('recent')">
                 <svg class="feather">
-                    <use xlink:href="/node_modules/feather-icons/dist/feather-sprite.svg#book"/>
+                    <use xlink:href="/node_modules/feather-icons/dist/feather-sprite.svg#clock"/>
                 </svg>
-                <b>Jegyek</b>
+                <b>Idővonal</b>
                 <!-- <i class="material-icons">history</i> -->
             </button>
             <button v-bind:class="{ active: page=='info' }" v-on:click="changePage('info')">

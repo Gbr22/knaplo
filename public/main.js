@@ -57,21 +57,40 @@ var ranks = [
 function getLastPage(){
     let pages = ["home","info","recent"];
     let lastpage = localStorage.getItem("lastpage");
-    let exists = false;
+    
     for (let page of pages){
         if (lastpage == page){
             exists = true;
+            return lastpage;
         }
     }
-    if (exists){
-        return lastpage;
-    } else {
-        return "recent";
+    return "recent";
+    
+}
+var recentModes = {
+    "all":"Minden",
+    "grades":"Jegyek",
+    "notes":"Feljegyzések",
+    "absences":"Mulasztások"
+};
+function getLastRecent(){
+    
+    let last = localStorage.getItem("lastrecent");
+    
+    for (let p in recentModes){
+        if (last == p){
+            return last;
+        }
     }
+    
+    return "all";
+    
 }
 
 let fillerdata = {
     loading_data:false,
+    recentMode:getLastRecent(),
+    showRecentModeOptions:false,
     username:"",
     page:getLastPage(),
     loading:true,
@@ -88,6 +107,7 @@ let fillerdata = {
     inst_search:'',
     selected_inst:'',
     grades:[],
+    recents:[],
     subjects:[],
     ranksScreen:false,
     ranks:ranks,
@@ -236,7 +256,7 @@ function putData(d){
 
     let subjects = [];
     let grades = [];
-    
+    let recents = [];
 
     
     let avg_fallback = d.SubjectAverages == undefined || d.SubjectAverages.length == 0;
@@ -284,10 +304,11 @@ function putData(d){
     for (let j=0; j < d.Evaluations.length; j++){
 
         let ev = d.Evaluations[j];
-        if (ev.Form == "Mark"){
-            
         
-            let obj = {
+        let obj = null;
+        if (ev.Form == "Mark"){
+            obj = {
+                recentType:"grade",
                 value:ev.NumberValue,
                 date:ev.Date,
                 dateRecorded:ev.CreatingTime,
@@ -296,7 +317,30 @@ function putData(d){
                 teacher:ev.Teacher,
                 theme:ev.Theme
             }
+        } else if (ev.Form == "Deportment" || ev.Form == "Diligence"){
+            let names = {
+                "Deportment":"Magatartás",
+                "Diligence":"Szorgalom"
+            }
+            let val = ev.Value;
+            if (val.length > 2){
+                val = val.slice(0,2)+".";
+            }
 
+            obj = {
+                recentType:"grade",
+                depDil:true,
+                value:val,
+                date:ev.Date,
+                dateRecorded:ev.CreatingTime,
+                subject:names[ev.Form],
+                mode:ev.Mode,
+                teacher:ev.Teacher,
+                theme:null
+            }
+        }
+            
+        if (obj != null){
             grades.push(obj);
             
             for (let i=0; i < subjects.length; i++){
@@ -304,14 +348,33 @@ function putData(d){
                 
                 if (ev.Subject == subject.name){
                     subject.grades.push(obj);
-
-                    
                 }
 
             }
         }
+    }
+
+    recents.push(...grades);
+
+    for (let i=0; i < d.Absences.length; i++){
+        let abs = d.Absences[i];
+        if (abs.Type == "Delay" || abs.Type == "Absence"){
+            abs.recentType = "absence";
+            abs.date = abs.LessonStartTime;
+            abs.dateRecorded = abs.CreatingTime;
+            recents.push(abs);
+        }
+    }
+    for (let i=0; i < d.Notes.length; i++){
+        let note = d.Notes[i];
+        
+        note.recentType = "note";
+        note.date = note.Date;
+        note.dateRecorded = note.CreatingTime;
+        recents.push(note);
         
     }
+    
 
     if (avg_fallback){
         for (let subject of subjects){
@@ -328,9 +391,20 @@ function putData(d){
         }
         return 0;
     });
+    recents.sort((a,b)=>{
+        if (new Date(a.dateRecorded) > new Date(b.dateRecorded)){
+            return -1;
+        }
+        else if (new Date(a.dateRecorded) < new Date(b.dateRecorded)){
+            return 1;
+        }
+        return 0;
+    });
+
     
     updateArray(data.grades, grades);
     updateArray(data.subjects, subjects);
+    updateArray(data.recents, recents);
     
     
 }
@@ -437,6 +511,21 @@ function closeSubjectDetail(){
     data.viewedSubject.avgCalc = createAvgCalc(); data.viewedSubject = data.defaultSubject;
 }
 
+
+
+
+{
+    let options = document.getElementById("recentModeOptions");
+    for (let mode in recentModes){
+        let elem = document.createElement("button");
+        elem.innerHTML = recentModes[mode];
+        elem.setAttribute("onclick",`
+            data.recentMode = '${mode}'; localStorage.setItem("lastrecent",'${mode}');
+        `);
+        options.appendChild(elem);
+    }
+}
+
 var app = new Vue({
     el: '#app',
     components: {
@@ -444,6 +533,22 @@ var app = new Vue({
     },
     data: data,
     methods: {
+        getRecentIcon(mode){
+            let pairs = {
+                "all":"box",
+                "absences":"watch",
+                "grades":"book",
+                "notes":"clipboard"
+            }
+            return pairs[mode];
+        },
+        checkShowRecent(mode){
+            return this.recentMode == "all" || this.recentMode == mode;
+        },
+        getRecentModeText(){
+            
+            return recentModes[this.recentMode];
+        },
         getGrades(){
 
         },
