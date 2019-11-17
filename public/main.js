@@ -14,6 +14,9 @@ function req(url){
     })
 }
 
+
+
+
 //let api_base = "http://localhost:3001/"
 let api_base = window.location.protocol+"//"+window.location.host;
 let api_full = api_base+"/api/";
@@ -420,7 +423,19 @@ function logout(){
     window.location.href = window.location.href;
 }
 
+window.addEventListener('load', function() {
+    window.history.pushState({}, '')
+})
+  
+window.addEventListener('popstate', function() {
+    window.history.pushState({}, '');
+    closeSubjectDetail();
+    data.ranksScreen = false;
+})
 
+function closeSubjectDetail(){
+    data.viewedSubject.avgCalc = createAvgCalc(); data.viewedSubject = data.defaultSubject;
+}
 
 var app = new Vue({
     el: '#app',
@@ -442,7 +457,8 @@ var app = new Vue({
         },
         changePage(page){
             if (this.page == "home"){
-                this.viewedSubject.avgCalc = createAvgCalc(); this.viewedSubject = this.defaultSubject;
+                closeSubjectDetail();
+                data.ranksScreen = false;
             }
             this.page = page;
             localStorage.setItem("lastpage",page);
