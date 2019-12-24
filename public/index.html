@@ -164,17 +164,20 @@
                         </div>
                         <div v-for="(gradecount, grade) in viewedSubject.avgCalc" class="avg_calc_grade">
                             <div class="gradename">{{ getGradeName(grade) }}</div>
-                            <button v-on:click="viewedSubject.avgCalc[grade]++">
-                                <svg class="feather">
-                                    <use xlink:href="/node_modules/feather-icons/dist/feather-sprite.svg#plus"/>
-                                </svg>
-                            </button>
-                            <div class="gradecount">{{ gradecount }}</div>
+                            
+
                             <button v-on:click="viewedSubject.avgCalc[grade]-- == 0 ? viewedSubject.avgCalc[grade] = 0 : undefined">
                                 <svg class="feather">
                                     <use xlink:href="/node_modules/feather-icons/dist/feather-sprite.svg#minus"/>
                                 </svg>
                             </button>
+                            <div class="gradecount">{{ gradecount }}</div>
+                            <button v-on:click="viewedSubject.avgCalc[grade]++">
+                                <svg class="feather">
+                                    <use xlink:href="/node_modules/feather-icons/dist/feather-sprite.svg#plus"/>
+                                </svg>
+                            </button>
+                            
                         </div>
                     </div>
                 </div>
