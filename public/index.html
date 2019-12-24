@@ -119,7 +119,7 @@
                     <li v-for="(subject, index) in subjects" class="subject" v-on:click="viewedSubject = subject">
                         <div class="subject_header">
                             <span class="left">{{ subject.name }}</span>
-                            <span class="right">
+                            <span class="right" :onclick="'showRoundView(\''+subject.name+'\',event)'">
                                 <span>{{ format(subject.average) }}</span>
                                 <svg class="feather" v-bind:class="{ up: isRoundedUp(subject) }">
                                     <use xlink:href="/node_modules/feather-icons/dist/feather-sprite.svg#chevrons-right"/>
@@ -153,6 +153,17 @@
                         </span>
                     </div>
                     
+                </div>
+                <div id="roundView_cont" v-show="roundView">
+                    <div id="roundView">
+                        <h2>Kerekítés<br>{{ roundView }}</h2>
+                        <p class="example">0.<input id="roundInput" type="number" min="1" max="99" placeholder="50" step="1"></p>
+                        <span class="close" onclick="closeRound()">
+                            <svg class="feather">
+                                <use xlink:href="/node_modules/feather-icons/dist/feather-sprite.svg#x"/>
+                            </svg>
+                        </span>
+                    </div>
                 </div>
                 <div id="subject_details" v-show="!(viewedSubject['null'])">
                     <h1>{{ viewedSubject.name }}</h1>

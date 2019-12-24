@@ -113,6 +113,7 @@ let fillerdata = {
     subjects:[],
     ranksScreen:false,
     ranks:ranks,
+    roundView:null,
     defaultSubject:{
         "null":true,
         name:"Subject name",
@@ -470,8 +471,33 @@ function searchSchool(search){
     }
     return found;
 }
+var subjectRoundings = {
+    "dummy":0.5
+}
+
+if (localStorage.getItem("subjectRoundings")){
+    subjectRoundings = JSON.parse(localStorage.getItem("subjectRoundings"));
+}
+
+function getRound(name){
+    let roundat = 0.5;
+    if (subjectRoundings[name]){
+        roundat = subjectRoundings[name];
+    }
+    return roundat;
+}
+
 function roundSubject(s){
-    return Math.round(s.average);
+    let roundat = getRound(s.name);
+    
+    let base = Math.floor(s.average);
+    let baseround = base+roundat;
+    if (s.average >= baseround){
+        return Math.ceil(s.average);
+    } else {
+        return Math.floor(s.average);
+    }
+
 }
 
 function getDayOfWeek(d){
@@ -513,13 +539,41 @@ window.addEventListener('popstate', function() {
     
 
     window.history.pushState({}, '');
-    closeSubjectDetail();
-    data.ranksScreen = false;
+    if (data.page == "home"){
+        closeSubjectDetail();
+        data.ranksScreen = false;
+        closeRound();
+    }
+    
 
     
     
     
 })
+
+
+
+function domAdded(){
+    let inputs = [];
+    inputs.push(...document.querySelectorAll('input[type="number"]'));
+    inputs.push(...document.querySelectorAll('input[type="text"]'));
+    
+    for (let i=0; i < inputs.length; i++){
+        let input = inputs[i];
+        input.onfocus = function(event){
+            console.log("focus",event);
+            document.body.classList.add("keyboard");
+        }
+        input.onblur = function(event){
+            console.log("blur",event);
+            document.body.classList.remove("keyboard");    
+        }
+    }
+}
+document.body.addEventListener('DOMNodeInserted', function (event) {
+    domAdded();
+});
+domAdded();
 
 onscroll = function(event){
     
@@ -554,7 +608,33 @@ var pageinfos = {
         scrollTop:0
     }
 }
+function showRoundView(name,event){
+    document.getElementById("roundInput").value = getRound(name)*100;
+    data.roundView = name;
+    
+    event.stopPropagation();
+}
+function validateRound(t,event){
+    
+    if (t.value.length > 3){
+        t.value = t.value.slice(0,2);
+    }
+}
+function closeRound(){
+    let subject = data.roundView;
+    let round = 0.5;
+    if (document.getElementById("roundInput").checkValidity() && document.getElementById("roundInput").value){
+        round = parseFloat("0."+document.getElementById("roundInput").value)
+    }
+    
+    console.log("set",subject,round);
+    subjectRoundings[subject] = round;
 
+    localStorage.setItem("subjectRoundings",JSON.stringify(subjectRoundings));
+
+    data.roundView = null;
+    document.getElementById("roundInput").value = "";
+}
 var app = new Vue({
     el: '#app',
     components: {
@@ -562,6 +642,7 @@ var app = new Vue({
     },
     data: data,
     methods: {
+        
         getRecentIcon(mode){
             let pairs = {
                 "all":"box",
@@ -593,6 +674,7 @@ var app = new Vue({
             if (this.page == "home"){
                 closeSubjectDetail();
                 data.ranksScreen = false;
+                closeRound();
             }
             this.page = page;
             if (pageinfos[this.page]){

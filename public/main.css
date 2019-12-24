@@ -187,7 +187,7 @@ input:-webkit-autofill:active  {
     text-decoration: none;
 }
 
-#ranks_container {
+#ranks_container, #roundView_cont {
     position: fixed;
     top: 0;
     left: 0;
@@ -199,7 +199,28 @@ input:-webkit-autofill:active  {
     display: flex;
     align-items: center;
 }
-#ranks {
+#roundView h2 {
+    text-align: center;
+}
+#roundView input[type="number"] {
+    font-size: inherit;
+    margin: 0;
+    border: none;
+    padding: 3px;
+    padding-bottom: 0;
+    outline: none;
+    background-color: transparent;
+    border-bottom: 1px solid black;
+}
+#roundView input[type="number"]:invalid {
+    color: rgb(190, 0, 0);
+}
+#roundView .example {
+    font-size: 30px;
+    text-align: center;
+}
+
+#ranks, #roundView {
     width: 100%;
     box-sizing: border-box;
     margin: 30px;
@@ -240,7 +261,7 @@ input:-webkit-autofill:active  {
     text-align: center;
     margin: 5px 0;
 }
-#ranks .close {
+#ranks .close, #roundView .close {
     position: absolute;
     top: 0;
     right: 0;
@@ -612,6 +633,9 @@ body, #subjects, #recent {
     100%{background-position:0% 50%}
 }
 
+.keyboard #menu {
+    display: none;
+}
 #menu {
     display: table;
     text-align: center;
@@ -810,6 +834,7 @@ body, #subjects, #recent {
     margin-bottom: 30px;
     outline: none;
 }
+
 
 
 #subject_details {
