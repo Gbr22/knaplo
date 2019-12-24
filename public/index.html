@@ -8,12 +8,18 @@
 
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>K Napló</title>
-    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/dark.css" media="(prefers-color-scheme: dark)">
+    <link rel="stylesheet" href="css/light.css" media="(prefers-color-scheme: no-preference), (prefers-color-scheme: light)">
+
     <!-- <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/icon?family=Material+Icons" /> -->
 
     <link rel="manifest" href="/manifest.json">
 
+
     <script>
+        
+
         function setVh(){
             let vh = window.innerHeight / 100;
             document.documentElement.style.setProperty('--vh', `${vh}px`);

@@ -19,10 +19,17 @@ html, body {
 
 :root {
     --theme-5: #88D498;
-    --color-dark: #0B0C0C;
+    
     --color-light: #DCE0D9;
+    
     --vh: 1vh;
     --vh-100: calc(var(--vh) * 100);
+}
+body, button, input {
+    color: var(--text-color);
+}
+body {
+    stroke: var(--text-color);
 }
 
 #app {
@@ -143,7 +150,8 @@ input:-webkit-autofill:active  {
 #home {
     /*background-color: var(--color-dark);*/
     
-    background: linear-gradient(to top left, #34e89e, #0f3443);
+    background: var(--theme-gradient);
+
 }
 
 #avg_screen {
@@ -211,7 +219,7 @@ input:-webkit-autofill:active  {
     padding-bottom: 0;
     outline: none;
     background-color: transparent;
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid var(--text-color);
 }
 #roundView input[type="number"]:invalid {
     color: rgb(190, 0, 0);
@@ -230,15 +238,15 @@ input:-webkit-autofill:active  {
     text-align: left;
     display: inline-block;
     border-radius: 15px;
-    background-color: whitesmoke;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+    background-color: var(--modal-color);
+    box-shadow: var(--modal-shadow);
     position: relative;
 }
 #ranks .rank {
 
 }
 #ranks .left {
-    border-right: 1px solid #b3b3b3;
+    border-right: 1px solid var(--divider-color);
 }
 
 #ranks .left span, #ranks .right span {
@@ -363,7 +371,7 @@ circle {
     text-align: left;
     font-weight: normal;
     
-    color: var(--color-dark);
+    color: var(--text-color);
     background-color: rgb(170, 255, 204);
     background: transparent;
     box-sizing: border-box;
@@ -447,7 +455,7 @@ circle {
     font-size: 14px;
     margin-bottom: 3px;
     font-style: italic;
-    color: #616161;
+    color: var(--text-smol);
     white-space: normal;
 }
 
@@ -468,7 +476,7 @@ circle {
     
 }
 .recent .date {
-    color: #616161;
+    color: var(--text-smol);
 }
 .grade .date b {
     font-weight: normal;
@@ -485,7 +493,7 @@ circle {
 }
 
 .grade .right .bottom, .absence p {
-    color: #616161;
+    color: var(--text-smol);
 }
 
 
@@ -498,7 +506,7 @@ circle {
     box-sizing: border-box;
 }
 body, #subjects, #recent, #subject_details {
-    background-color: rgb(248, 248, 248);
+    background-color: var(--bg-color);
 }
 #subjects, #recent, #subject_grades {
     
@@ -517,7 +525,7 @@ body, #subjects, #recent, #subject_details {
     z-index: 5;
     width: 100%;
     white-space: normal;
-    background-color: rgb(255, 255, 255);
+    background-color: var(--modal-color);
     box-shadow: 0 2px 3px rgba(0, 0, 0, 0.255);
     padding: 8px;
     border-radius: 15px;
@@ -553,8 +561,9 @@ body, #subjects, #recent, #subject_details {
     margin: 8px 0;
     box-sizing: border-box;
 
-    background-color: white;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.10);
+    background-color: var(--element-color);
+    
+    box-shadow: var(--elem-shadow);
     border-radius: 8px;
     /*border: 1px solid #e6e6e6;*/
     transition: background-color 0.3s ease-out;
@@ -565,7 +574,7 @@ body, #subjects, #recent, #subject_details {
 
 }
 .subject:hover, .recent:hover {
-    background-color: rgba(0, 0, 0, 0.055);
+    background-color: var(--elem-active);
 }
 .subject_header {
     white-space: nowrap;
@@ -604,7 +613,7 @@ body, #subjects, #recent, #subject_details {
 .tinygrade {
     margin-left: 6px;
     display: inline-block;
-    color: #4d4d4d;
+    color: var(--text-smol);
 }
 
 .subject_avg {
@@ -642,7 +651,7 @@ body, #subjects, #recent, #subject_details {
     text-align: center;
 
 
-    background-color: white;
+    background-color: var(--element-color);
     /*border-top: 1px solid #e6e6e6;*/
     position: fixed;
     
@@ -650,7 +659,7 @@ body, #subjects, #recent, #subject_details {
     left: 0;
     right: 0;
     width: 100%;
-    box-shadow: 0 0 5px rgba(0,0,0,.25);
+    box-shadow: var(--menu-shadow);
     
 
     box-sizing: border-box;
@@ -672,10 +681,11 @@ body, #subjects, #recent, #subject_details {
 
 }
 #menu button svg {
-    stroke: #2A2D34;
+    /*stroke: #2A2D34;*/
+    stroke: var(--text-color);
 }
 #menu button b {
-    color: #2A2D34;
+    color: var(--text-color);
     display: block;
     font-weight: bold;
     font-size: 12px;
@@ -704,7 +714,7 @@ body, #subjects, #recent, #subject_details {
 .feather {
     width: 24px;
     height: 24px;
-    stroke: #000;
+    stroke: var(--text-color);
     stroke-width: 2;
     stroke-linecap: round;
     stroke-linejoin: round;
@@ -782,7 +792,7 @@ body, #subjects, #recent, #subject_details {
 }
 #info_page li {
     list-style: none;
-    border-top: 1px solid #dddddd;
+    border-top: 1px solid var(--divider-color);
     margin: 0 30px;
     padding: 10px 0;
 }
@@ -811,14 +821,14 @@ body, #subjects, #recent, #subject_details {
     bottom: 0;
     margin: auto;
     display: inline-block;
-    stroke: #464646;
+    stroke: var(--text-smol);
 }
 #profile_circle {
     display: inline-block;
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    background-color: #e6e6e6;
+    background-color: var(--element2-color);
     position: relative;
 }
 #logout {
@@ -830,7 +840,7 @@ body, #subjects, #recent, #subject_details {
     border: none;
     font-size: 16px;
     font-family: inherit;
-    background-color: rgb(231, 231, 231);
+    background-color: var(--element2-color);
     margin-top: 40px;
     margin-bottom: 30px;
     outline: none;
