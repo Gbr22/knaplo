@@ -87,6 +87,8 @@ function getLastRecent(){
     
 }
 
+
+
 let fillerdata = {
     loading_data:false,
     recentMode:getLastRecent(),
@@ -501,11 +503,32 @@ window.addEventListener('load', function() {
     window.history.pushState({}, '')
 })
   
+if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'manual';
+}
+
 window.addEventListener('popstate', function() {
+
+    
+    
+
     window.history.pushState({}, '');
     closeSubjectDetail();
     data.ranksScreen = false;
+
+    
+    
+    
 })
+
+onscroll = function(event){
+    
+    if (!pageinfos[data.page]){
+        pageinfos[data.page] = {};
+    }
+    pageinfos[data.page].scrollTop = document.documentElement.scrollTop;
+    
+}
 
 function closeSubjectDetail(){
     data.viewedSubject.avgCalc = createAvgCalc(); data.viewedSubject = data.defaultSubject;
@@ -523,6 +546,12 @@ function closeSubjectDetail(){
             data.recentMode = '${mode}'; localStorage.setItem("lastrecent",'${mode}');
         `);
         options.appendChild(elem);
+    }
+}
+
+var pageinfos = {
+    "dummy":{
+        scrollTop:0
     }
 }
 
@@ -566,6 +595,14 @@ var app = new Vue({
                 data.ranksScreen = false;
             }
             this.page = page;
+            if (pageinfos[this.page]){
+                app.$nextTick(function () {
+                    document.documentElement.scrollTo(0,pageinfos[this.page].scrollTop);    
+                });
+            } else {
+                document.documentElement.scrollTo(0,0);
+            }
+            
             localStorage.setItem("lastpage",page);
         },
         calcSubjectAvg,
