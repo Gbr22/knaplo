@@ -167,7 +167,7 @@
                 </div>
                 <div id="subject_details" v-show="!(viewedSubject['null'])">
                     <h1>{{ viewedSubject.name }}</h1>
-
+                    
                     <div id="avg_calc">
                         <div class="avg">
                             <div class="type"><span class="avgtitle">Jelenlegi átlag</span><span class="num">{{ format(viewedSubject.average,true) }}</span></div>
@@ -190,6 +190,23 @@
                             </button>
                             
                         </div>
+                    </div>
+                    <h1>Jegyek</h1>
+                    <div id="subject_grades">
+                        <span v-for="(recent, index) in viewedSubject.grades">
+                            <div v-show="checkShowRecent('grades')" v-if="recent.recentType == 'grade'" class="grade recent">
+                                <span class="left" :data-grade="recent.value">
+                                    {{ recent.value }}
+                                </span>
+                                <span class="right">
+                                    <div class="grade_header">
+                                        {{ recent.subject }}
+                                    </div>
+                                    <span class="bottom">{{ recent.theme ? recent.theme : recent.mode }}</span>
+                                </span>
+                                <span class="date"><b>{{ getDayOfWeek(new Date(recent.date)) }}</b><br><i>{{ formatDate(new Date(recent.date)) }}</i></span>
+                            </div>
+                        </span>
                     </div>
                 </div>
             </div>
