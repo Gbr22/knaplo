@@ -36,6 +36,8 @@ body {
     position: relative;
     display: block;
     box-sizing: border-box;
+}
+#app_screen {
     padding-bottom: 60px;
 }
 
@@ -43,7 +45,7 @@ body {
     text-align: center;
     display: table;
     
-    position: absolute;
+    position: relative;
     top: 0;
     bottom: 0;
     left: 0;
@@ -52,13 +54,13 @@ body {
     width: 100%;
 }
 #login_error {
-    background-color: rgb(255, 212, 195);
+    background-color: var(--error-color);
     padding: 5px;
     border-radius: 8px;
     margin-bottom: 20px;
 }
 #login_wrap {
-    background-color: rgb(236, 236, 236);
+    background-color: var(--bg-color);
     display: table-cell;
     vertical-align: middle;
     padding: 0 20px;
@@ -73,18 +75,22 @@ input:-webkit-autofill,
 input:-webkit-autofill:hover, 
 input:-webkit-autofill:focus, 
 input:-webkit-autofill:active  {
-    -webkit-box-shadow: 0 0 0 30px rgb(240, 255, 249) inset !important;
+    font-size: 16px;
+    -webkit-text-fill-color: var(--text-color);
+    transition: "color 9999s ease-out, background-color 9999s ease-out";
+    transition-delay: 9999s;
 }
 #login_form input[type="text"], #login_form input[type="password"], #login_form input[type="submit"] {
     box-sizing: border-box;
     width: 100%;
     display: block;
-    border: 1px solid #cccccc;
+    border: 1px solid var(--divider-color);
     padding: 10px 20px;
     margin: 10px auto;
     border-radius: 8px;
     outline: none;
-    background-clip: white;
+    color: var(--text-color);
+    background-color: var(--element2-color);
     font-size: 16px;
 }
 #login_form input[type="submit"] {
@@ -153,6 +159,7 @@ input:-webkit-autofill:active  {
     background: var(--theme-gradient);
 
 }
+
 
 #avg_screen {
     padding: 30px 0;

@@ -11,4 +11,5 @@
     --elem-shadow: 0 1px 3px rgba(0, 0, 0, 0.10);
     --menu-shadow: 0 0 5px rgba(0,0,0,.25);
     --theme-gradient: linear-gradient(to top left, #34e89e, #0f3443);
+    --error-color: rgb(255, 212, 195);
 }
