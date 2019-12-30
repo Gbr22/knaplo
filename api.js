@@ -2,6 +2,8 @@
 const _request = require('request-promise-native');
 
 
+const fs = require('fs');
+
 //consts
 const api_key = "7856d350-1fda-45f5-822d-e1a2f3f1acf0";
 const api_base = "https://kretaglobalmobileapi.ekreta.hu"
@@ -29,6 +31,24 @@ async function institute(){
         json:false
     }));
 }
+
+
+(async () => {
+    let inst = await institute();
+    fs.writeFileSync("institute.json",inst);
+    let arr = JSON.parse(inst);
+    inst = undefined;
+    let clean = [];
+    for (let i=0; i < arr.length; i++){
+        let e = arr[i];
+        clean.push({
+            Name:e.Name,
+            InstituteCode:e.InstituteCode,
+            City:e.City,
+        });
+    }
+    fs.writeFileSync("inst_clean.json",JSON.stringify(clean));
+})();
 
 function login(school,username,password){
     return new Promise(function(resolve,reject){

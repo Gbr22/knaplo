@@ -11,9 +11,7 @@ const port = 3001;
 
 const crypto = require('crypto');
 
-(async () => {
-    fs.writeFileSync("institute.json",await api.institute());
-})();
+
 
 app.use(cookieParser());
 
@@ -175,12 +173,14 @@ app.all('/**',async (req, res) => {
         }
     }
     
-
-    if (url == "/institute"){
+    if (url == "/inst_full"){
+        res.sendFile(__dirname+"/institute.json");
+    }
+    else if (url == "/institute"){
         //res.end(await api.institute());
         //res.header("Content-Type","application/json");
         //let stream = fs.createReadStream("institute.json");
-        res.sendFile(__dirname+"/institute.json");
+        res.sendFile(__dirname+"/inst_clean.json");
         //stream.pipe(res);
     }
     else if (url == "/login"){
