@@ -130,7 +130,7 @@ function refresh(req,res,setcookie){
     });
 }
 
-app.all('/**',async (req, res) => {
+app.all('/**',async (req, res, next) => {
     
 
     
@@ -147,130 +147,94 @@ app.all('/**',async (req, res) => {
         console.log("Refresh: "+ref);
 
         
+    }    
+
+    next();
+    
+});
+app.all('/health',async (req, res) => {
+    let resp = {
+        time:Date.now(),
+        timeZoneOffset:(new Date()).getTimezoneOffset()
+    };
+    res.send(JSON.stringify(resp));
+});
+app.all('/inst_full',async (req, res) => {
+    res.sendFile(__dirname+"/institute.json");
+});
+app.all('/institute',async (req, res) => {
+    res.sendFile(__dirname+"/inst_clean.json");
+});
+
+app.all('/data',async (req, res) => {
+    let school = req.cookies["inst"];
+    let token = req.cookies["access_token"];
+
+    api.getData(school,token).then((data)=>{
+        res.send(data);
+    }).catch((err)=>{
+        res.status(500);
+        res.send("error");
+    })
+});
+app.all('/login',async (req, res) => {
+     
+    let needs = {
+        inst:"Intézményt",
+        username:"Felhasználónevet",
+        password:"Jelszót"
+    };
+
+    function loginError(message){
+        console.log(message);
+
+        res.cookie("loginerror",message, {maxAge: 10000});
+        res.redirect("/");
+        
+        
     }
 
-    
 
-    
-
-
-    let url = req.url.split("?")[0];
-    let searchString = unescape(req.url.split("?")[1]);
-
-
-
-    let search = {};
-    console.log(url,searchString);
-
-    
-
-    if (searchString != undefined){
-        let _search = searchString.split("&");
+    for (let p in needs){
+        if (req.query.username){
+            req.query.username = req.query.username.toString().replace(/\+/g," ").trim()
+        }
         
-        for (let elem of _search){
-            let arr = elem.split("=");
-            search[arr[0]] = arr[1];
+
+        if (req.query[p] == undefined
+          || req.query[p] == ""
+          || req.query[p] == null){
+
+            loginError("Nem adott meg "+needs[p]);
+            return;
         }
     }
     
-    if (url == "/inst_full"){
-        res.sendFile(__dirname+"/institute.json");
-    }
-    else if (url == "/institute"){
-        //res.end(await api.institute());
-        //res.header("Content-Type","application/json");
-        //let stream = fs.createReadStream("institute.json");
-        res.sendFile(__dirname+"/inst_clean.json");
-        //stream.pipe(res);
-    }
-    else if (url == "/login"){
-        
-        
-        let needs = {
-            inst:"Intézményt",
-            username:"Felhasználónevet",
-            password:"Jelszót"
-        };
 
-        function loginError(message){
-            console.log(message);
+    api.login(req.query.inst,req.query.username,req.query.password)
+    .catch((error)=>{
+        loginError(error);
+    })
+    .then( (result) => {
+        console.log(result);
+        if (result.error){
+            console.log(result.error);
+            loginError(result.error.error_description);
+            return;
+        } else {
+            let options = {maxAge: 1000*60*60*24*30*365};
+            res.cookie("access_token",result.access_token, options);
+            res.cookie("refresh_token",result.refresh_token, options);
+            res.cookie("inst",req.query.inst, options);
 
-            res.cookie("loginerror",message, {maxAge: 10000});
+            res.cookie("password_encrypted",encrypt(req.query.password), options);
+            res.cookie("username",req.query.username, options);
+
+            res.cookie("time",Date.now(), options);
             res.redirect("/");
-            
-            
+
         }
-
-
-        for (let p in needs){
-            if (search.username){
-                search.username = search.username.toString().replace(/\+/g," ").trim()
-            }
-            
-
-            if (search[p] == undefined
-              || search[p] == ""
-              || search[p] == "null"){
-
-                loginError("Nem adott meg "+needs[p]);
-                return;
-            }
-        }
-        
-
-        api.login(search.inst,search.username,search.password)
-        .catch((error)=>{
-            loginError(error);
-        })
-        .then( (result) => {
-            console.log(result);
-            if (result.error){
-                console.log(result.error);
-                loginError(result.error.error_description);
-                return;
-                console.log("failed login");
-            } else {
-                let options = {maxAge: 1000*60*60*24*30*365};
-                res.cookie("access_token",result.access_token, options);
-                res.cookie("refresh_token",result.refresh_token, options);
-                res.cookie("inst",search.inst, options);
-
-                res.cookie("password_encrypted",encrypt(search.password), options);
-                res.cookie("username",search.username, options);
-
-                res.cookie("time",Date.now(), options);
-                res.redirect("/");
-
-            }
-        })
-            
-        
-        
-    }
-    else if (url=="/data"){
-        let school = req.cookies["inst"];
-        let token = req.cookies["access_token"];
-
-        api.getData(school,token).then((data)=>{
-            res.send(data);
-        }).catch((err)=>{
-            res.status(500);
-            res.send("error");
-        })
-        
-
-
-    }
-    else if (url == "/health"){
-        let resp = {
-            time:Date.now(),
-            timeZoneOffset:(new Date()).getTimezoneOffset()
-        };
-        res.send(JSON.stringify(resp));
-    }
-    else {
-        res.end();
-    }
+    })
 });
 
 app.listen(port);
