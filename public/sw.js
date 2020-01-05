@@ -1,7 +1,15 @@
 const cache_name = "cache-v1";
 
-async function preCache(){
-    return;
+let cached_urls = [
+    '/',
+    '/?source=pwa&utm_source=pwa',
+    "/api/institute"
+]
+
+function preCache() {
+    return caches.open(cache_name).then(function (cache) {
+      return cache.addAll(cached_urls);
+    });
 }
 
 self.addEventListener('install', function(e) {
@@ -11,9 +19,10 @@ self.addEventListener('install', function(e) {
 
 function fetchResource(req){
     return new Promise(function(resolve,reject){
+        let time = req.url.indexOf("/api") == -1 ? 400 : 10000;
         let timeout = setTimeout(function(){
             reject("Timed out");
-        },400);
+        },time);
         fetch(req).then(function(response) {
             return caches.open(cache_name).then(function(cache) {
               cache.put(req, response.clone());

@@ -1,7 +1,7 @@
 {
     "short_name": "K Napló",
     "name": "K Napló",
-    "start_url": "/?source=pwa",
+    "start_url": "/?source=pwa&utm_source=pwa",
     "display": "standalone",
     "orientation": "portrait-primary",
     "background_color":"#ffffff",
