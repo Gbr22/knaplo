@@ -208,20 +208,7 @@
                     </div>
                     <h1>Jegyek</h1>
                     <div id="subject_grades">
-                        <span v-for="(recent, index) in viewedSubject.grades">
-                            <div v-show="checkShowRecent('grades')" v-if="recent.recentType == 'grade'" class="grade recent">
-                                <span class="left" :data-grade="recent.value">
-                                    {{ recent.value }}
-                                </span>
-                                <span class="right">
-                                    <div class="grade_header">
-                                        {{ recent.subject }}
-                                    </div>
-                                    <span class="bottom">{{ recent.theme ? recent.theme : recent.mode }}</span>
-                                </span>
-                                <span class="date"><b>{{ getDayOfWeek(new Date(recent.date)) }}</b><br><i>{{ formatDate(new Date(recent.date)) }}</i></span>
-                            </div>
-                        </span>
+                        <k-recent v-for="(recent, index) in viewedSubject.grades" :recent="recent" :ignoremode="true"></k-recent>
                     </div>
                 </div>
             </div>
@@ -240,35 +227,7 @@
                     
                 </h1>
                 <div id="recentsList">
-                    <span v-for="(recent, index) in recents">
-                        <div v-show="checkShowRecent('grades')" v-if="recent.recentType == 'grade'" class="grade recent">
-                            <span class="left" :data-grade="recent.value">
-                                {{ recent.value }}
-                            </span>
-                            <span class="right">
-                                <div class="grade_header">
-                                    {{ recent.subject }}
-                                </div>
-                                <span class="bottom">{{ recent.theme ? recent.theme : recent.mode }}</span>
-                            </span>
-                            <span class="date"><b>{{ getDayOfWeek(new Date(recent.date)) }}</b><br><i>{{ formatDate(new Date(recent.date)) }}</i></span>
-                        </div>
-                        <div v-show="checkShowRecent('absences')" v-if="recent.recentType == 'absence'" class="absence recent">
-                            <h3>{{ recent.TypeName }} - {{ recent.JustificationTypeName }}</h3>
-                            <p>{{ recent.NumberOfLessons }}. Óra - {{ recent.Subject }}<i v-if="recent.Type=='Delay'">, {{ recent.DelayTimeMinutes }} perc</i></p>
-
-                            <span class="date">{{ formatDate(new Date(recent.date)) }} {{ getDayOfWeek(new Date(recent.date)) }}</span>
-                        </div>
-                        <div v-show="checkShowRecent('notes')" v-if="recent.recentType == 'note'" class="note recent">
-                            <h3>{{ recent.Title }}</h3>
-                            <p>{{ recent.Content }}</p>
-
-                            <span class="signoff">{{ recent.Type }}, {{ recent.Teacher }}</span>
-
-                            <span class="date">{{ formatDate(new Date(recent.date)) }} {{ getDayOfWeek(new Date(recent.date)) }}</span>
-                            
-                        </div>
-                    </span>
+                    <k-recent v-for="(recent, index) in recents" :recent="recent"></k-recent>
                 </div>
             </div>
             <div v-show="page=='info'" id="info_page" class="screen">
@@ -359,7 +318,11 @@
     
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="node_modules/jaaulde-cookies/lib/jaaulde-cookies.js"></script>
+    
     <script src="components/progress-ring.js"></script>
+
+    <script src="util.js"></script>
+    <script src="components/k-recent.js"></script>
     <script src="main.js"></script>
 </body>
 </html>

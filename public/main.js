@@ -69,9 +69,9 @@ function getLastPage(){
 }
 var recentModes = {
     "all":"Minden",
-    "grades":"Jegyek",
-    "notes":"Feljegyzések",
-    "absences":"Mulasztások"
+    "grade":"Jegyek",
+    "note":"Feljegyzések",
+    "absence":"Mulasztások"
 };
 function getLastRecent(){
     
@@ -500,22 +500,7 @@ function roundSubject(s){
 
 }
 
-function getDayOfWeek(d){
-    let days = ["Vasárnap","Hétfő","Kedd","Szerda","Csütörtök","Péntek","Szombat"];
-    //Sunday first is important
 
-
-    return days[d.getDay()];
-}
-function formatDate(d){
-    function f(n){
-        if (n < 10){
-            return "0"+n;
-        }
-        return n;
-    }
-    return `${f(d.getMonth()+1)}/${f(d.getDate())}`;
-}
 
 function logout(){
     let del = ["access_token","inst","password_encrypted","refresh_token","time","username"];
@@ -646,9 +631,9 @@ var app = new Vue({
         getRecentIcon(mode){
             let pairs = {
                 "all":"box",
-                "absences":"watch",
-                "grades":"book",
-                "notes":"clipboard"
+                "absence":"watch",
+                "grade":"book",
+                "note":"clipboard"
             }
             return pairs[mode];
         },
