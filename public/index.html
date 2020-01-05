@@ -8,6 +8,15 @@
 
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>K Napló</title>
+
+    <script>
+        if('serviceWorker' in navigator) {
+          navigator.serviceWorker
+                   .register('/sw.js')
+                   .then(function() { console.log("Service Worker Registered"); });
+        }
+    </script>
+
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/dark.css" media="(prefers-color-scheme: dark)">
     <link rel="stylesheet" href="css/light.css" media="(prefers-color-scheme: no-preference), (prefers-color-scheme: light)">
@@ -347,6 +356,7 @@
         </div>
         
     </div>
+    
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="node_modules/jaaulde-cookies/lib/jaaulde-cookies.js"></script>
     <script src="components/progress-ring.js"></script>
