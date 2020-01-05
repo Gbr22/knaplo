@@ -87,6 +87,17 @@ function refresh(school,token){
     });
 }
 
+function pipeData(school,token,p){
+    
+    req({
+        url:`https://${school}.e-kreta.hu/mapi/api/v1/Student?fromDate=null&toDate=null`,
+        headers:{
+            "Authorization":"Bearer "+token,
+        },
+        json:false
+    }).pipe(p);
+    
+}
 function getData(school,token){
     return new Promise(function(resolve,reject){
         req({
@@ -94,7 +105,7 @@ function getData(school,token){
             headers:{
                 "Authorization":"Bearer "+token,
             },
-            json:true
+            json:false
         }).then((json)=>{
             resolve(json);
         }).catch((json)=>{
@@ -113,5 +124,6 @@ module.exports = {
     institute,
     login,
     getData,
+    pipeData,
     refresh
 }

@@ -170,12 +170,13 @@ app.all('/data',async (req, res) => {
     let school = req.cookies["inst"];
     let token = req.cookies["access_token"];
 
-    api.getData(school,token).then((data)=>{
+    api.pipeData(school,token,res);
+    /* api.getData(school,token).then((data)=>{
         res.send(data);
     }).catch((err)=>{
         res.status(500);
         res.send("error");
-    })
+    }) */
 });
 app.all('/login',async (req, res) => {
      
