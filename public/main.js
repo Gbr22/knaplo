@@ -358,16 +358,70 @@ function putData(d){
     }
 
     recents.push(...grades);
-
+    let absences = [];
     for (let i=0; i < d.Absences.length; i++){
         let abs = d.Absences[i];
         if (abs.Type == "Delay" || abs.Type == "Absence"){
             abs.recentType = "absence";
             abs.date = abs.LessonStartTime;
             abs.dateRecorded = abs.CreatingTime;
-            recents.push(abs);
+            abs.justified = abs.JustificationState=="Justified";
+            absences.push(abs);
         }
     }
+    console.log("abs",absences);
+    let newabs = [];
+    for (let abs of absences){
+        let sameabs = [];
+        for (let otherabs of absences){
+            if (abs == otherabs){
+                continue;
+            }
+            if (abs.date == otherabs.date //same day
+                && abs.JustificationType == otherabs.JustificationType //same justification
+                && abs.Type=="Absence" && otherabs.Type=="Absence"){ //is absence
+                //absent day
+                sameabs.push(otherabs);
+                const index = absences.indexOf(otherabs);
+                if (index > -1) {
+                    absences.splice(index, 1);
+                }
+
+            }
+        }
+        if (sameabs.length > 0){
+            sameabs.unshift(abs);
+            const index = absences.indexOf(abs);
+            if (index > -1) {
+                absences.splice(index, 1);
+            }
+            let lessons = [];
+
+            for (let a of sameabs){
+                lessons.push(a.NumberOfLessons);
+            }
+
+            lessons.sort();
+
+            newabs.push({
+                Type:"AbsentDay",
+                recentType: "absence",
+                date: sameabs[0].LessonStartTime,
+                dateRecorded: abs.CreatingTime,
+                absences:sameabs,
+                JustificationState:abs.JustificationState,
+                JustificationType:abs.JustificationType,
+                JustificationTypeName:abs.JustificationTypeName,
+                justified: abs.justified,
+                TypeName: abs.TypeName,
+                lessons,
+            })
+        } else {
+            newabs.push(abs);
+        }
+    }
+    console.log("newabs",newabs);
+    recents.push(...newabs);
     for (let i=0; i < d.Notes.length; i++){
         let note = d.Notes[i];
         
@@ -384,7 +438,7 @@ function putData(d){
             subject.average = calcSubjectAvg(subject);
         }
     }
-
+    
     grades.sort((a,b)=>{
         if (new Date(a.dateRecorded) > new Date(b.dateRecorded)){
             return -1;
