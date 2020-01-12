@@ -14,7 +14,8 @@ const defaultOptions = {
     method: "GET",
     headers: {
         "apiKey":api_key,
-        "charset":"utf-8"
+        "charset":"utf-8",
+        "User-Agent":"Kreta.Ellenorzo/2.9.6.2019121703 (Linux; U; Android 6.0.1)"
     },
     json:true
 }
