@@ -65,7 +65,7 @@ function refresh(req,res,setcookie){
         
 
         if (result == "error"){
-            console.log("Refresh token failed, trying password");
+            //console.log("Refresh token failed, trying password");
 
 
             let _return = false;
@@ -74,7 +74,7 @@ function refresh(req,res,setcookie){
             try {
                 password = decrypt(req.cookies["password_encrypted"]);
             } catch(err){
-                console.log("Failed to decrypt password",err);
+                //console.log("Failed to decrypt password",err);
                 resolve(false);
                 return;
             }
@@ -82,7 +82,7 @@ function refresh(req,res,setcookie){
             
             api.login(req.cookies["inst"],req.cookies["username"],password)
             .catch((error)=>{
-                console.log("Password failed");
+                //console.log("Password failed");
 
                 let options = {expires: new Date(0)};
                 setcookie("access_token","", options);
@@ -97,7 +97,7 @@ function refresh(req,res,setcookie){
                 resolve(false);
             })
             .then( (result) => {
-                console.log("Password auth successful");
+                //console.log("Password auth successful");
 
                 let options = {maxAge: 1000*60*60*24*30*365};
 
@@ -112,11 +112,11 @@ function refresh(req,res,setcookie){
             
             
         } else {
-            console.log("Token auth successfull");
+            //console.log("Token auth successfull");
 
             let options = {maxAge: 1000*60*60*24*30*365};
 
-            console.log("token",result.access_token);
+            //console.log("token",result.access_token);
 
             setcookie("access_token",result.access_token, options);
             setcookie("refresh_token",result.refresh_token, options);
