@@ -707,7 +707,15 @@ var app = new Vue({
         getGradeName,
         createAvgCalc,
         openSubject(subject){
-
+            
+            data.viewedSubject = subject;
+            let g=[];
+            
+            for (let i=0; i < subject.grades.length; i++){
+                g.push(subject.grades[i].value);
+            }
+            g.reverse();
+            avgChartUpdate(g);
         },
         changePage(page){
             if (this.page == "home"){

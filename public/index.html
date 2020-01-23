@@ -131,7 +131,7 @@
                     </div>
                 </div>
                 <ul id="subjects">
-                    <li v-for="(subject, index) in subjects" class="subject" v-on:click="viewedSubject = subject">
+                    <li v-for="(subject, index) in subjects" class="subject" v-on:click="openSubject(subject)">
                         <div class="subject_header">
                             <span class="left">{{ subject.name }}</span>
                             <span class="right" :onclick="'showRoundView(\''+subject.name+'\',event)'">
@@ -183,29 +183,37 @@
                 <div id="subject_details" v-show="!(viewedSubject['null'])">
                     <h1>{{ viewedSubject.name }}</h1>
                     
-                    <div id="avg_calc">
-                        <div class="avg">
-                            <div class="type"><span class="avgtitle">Jelenlegi átlag</span><span class="num">{{ format(viewedSubject.average,true) }}</span></div>
-                            <div class="type"><span class="avgtitle">Átszámított átlag</span><span class="num">{{ format(calcSubjectAvg(viewedSubject,true),true) }}</span></div>
+                    <div id="subj_detail_section">
+                        <div id="avg_calc">
+                            <div class="avg">
+                                <div class="type"><span class="avgtitle">Jelenlegi átlag</span><span class="num">{{ format(viewedSubject.average,true) }}</span></div>
+                                <div class="type"><span class="avgtitle">Átszámított átlag</span><span class="num">{{ format(calcSubjectAvg(viewedSubject,true),true) }}</span></div>
+                            </div>
+                            <div v-for="(gradecount, grade) in viewedSubject.avgCalc" class="avg_calc_grade">
+                                <div class="gradename">{{ getGradeName(grade) }}</div>
+                                
+    
+                                <button v-on:click="viewedSubject.avgCalc[grade]-- == 0 ? viewedSubject.avgCalc[grade] = 0 : undefined">
+                                    <svg class="feather">
+                                        <use xlink:href="/node_modules/feather-icons/dist/feather-sprite.svg#minus"/>
+                                    </svg>
+                                </button>
+                                <div class="gradecount">{{ gradecount }}</div>
+                                <button v-on:click="viewedSubject.avgCalc[grade]++">
+                                    <svg class="feather">
+                                        <use xlink:href="/node_modules/feather-icons/dist/feather-sprite.svg#plus"/>
+                                    </svg>
+                                </button>
+                                
+                            </div>
                         </div>
-                        <div v-for="(gradecount, grade) in viewedSubject.avgCalc" class="avg_calc_grade">
-                            <div class="gradename">{{ getGradeName(grade) }}</div>
-                            
-
-                            <button v-on:click="viewedSubject.avgCalc[grade]-- == 0 ? viewedSubject.avgCalc[grade] = 0 : undefined">
-                                <svg class="feather">
-                                    <use xlink:href="/node_modules/feather-icons/dist/feather-sprite.svg#minus"/>
-                                </svg>
-                            </button>
-                            <div class="gradecount">{{ gradecount }}</div>
-                            <button v-on:click="viewedSubject.avgCalc[grade]++">
-                                <svg class="feather">
-                                    <use xlink:href="/node_modules/feather-icons/dist/feather-sprite.svg#plus"/>
-                                </svg>
-                            </button>
-                            
+                        <div id="avg_graph">
+                            <div class="chart-container">
+                                <canvas id="avg_chart"></canvas>
+                            </div>
                         </div>
                     </div>
+                    
                     <h1>Jegyek</h1>
                     <div id="subject_grades">
                         <k-recent v-for="(recent, index) in viewedSubject.grades" :recent="recent" :ignoremode="true"></k-recent>
@@ -324,5 +332,7 @@
     <script src="util.js"></script>
     <script src="components/k-recent.js"></script>
     <script src="main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+    <script src="chart.js"></script>
 </body>
 </html>
