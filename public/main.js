@@ -55,7 +55,7 @@ var ranks = [
 ];
 
 function getLastPage(){
-    let pages = ["home","info","recent"];
+    let pages = ["home","info","recent","halfyr"];
     let lastpage = localStorage.getItem("lastpage");
     
     for (let page of pages){
@@ -270,6 +270,8 @@ function putData(d){
                     name:e.Subject,
                     average:e.Value,
                     grades:[],
+                    HalfYear:null,
+                    EndYear:null,
                     avgCalc:createAvgCalc()
                 };
                 subjects.push(obj);
@@ -309,7 +311,29 @@ function putData(d){
         let ev = d.Evaluations[j];
         
         let obj = null;
-        if (ev.Form == "Mark"){
+
+        if (ev.Type != "MidYear"){
+
+            for (let i=0; i < subjects.length; i++){
+                let subject = subjects[i];
+                
+                if (ev.Subject == subject.name){
+                    subject[ev.Type] = {
+                        recentType:"grade",
+                        value:ev.NumberValue,
+                        date:ev.Date,
+                        dateRecorded:ev.CreatingTime,
+                        subject:ev.Subject,
+                        mode:ev.Mode,
+                        teacher:ev.Teacher,
+                        theme:ev.Theme
+                    };
+                }
+
+            }
+
+        }
+        else if (ev.Form == "Mark"){
             obj = {
                 recentType:"grade",
                 value:ev.NumberValue,
@@ -674,6 +698,26 @@ function closeRound(){
     data.roundView = null;
     document.getElementById("roundInput").value = "";
 }
+function getAvgHalfyr(type){
+    let sum = 0;
+    let count = 0;
+    for (let i=0; i < data.subjects.length; i++){
+        let s = data.subjects[i];
+        if (s[type]){
+            sum += s[type].value;
+            count++;
+        }
+    }
+    return sum/count;
+}
+function getAvgHalfyrF(type){
+    let num = getAvgHalfyr(type);
+    if (isNaN(num)){
+        return "#";
+    } else {
+        return num.toFixed(2);
+    }
+}
 var app = new Vue({
     el: '#app',
     components: {
@@ -681,7 +725,8 @@ var app = new Vue({
     },
     data: data,
     methods: {
-        
+        getAvgHalfyr,
+        getAvgHalfyrF,
         getRecentIcon(mode){
             let pairs = {
                 "all":"box",

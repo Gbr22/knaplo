@@ -6,6 +6,9 @@ html, body {
     padding: 0;
     overflow: auto;
 }
+h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+}
 
 * {
     -webkit-tap-highlight-color: transparent;
@@ -428,6 +431,9 @@ circle {
 [data-grade="1"] {
     color: #b32400;
 }
+[data-grade="#"] {
+    color: #669999;
+}
 
 .absence .date, .note .date {
     display: block;
@@ -509,15 +515,15 @@ circle {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
     
-    margin: 0;
-    box-sizing: border-box;
+    
 }
-body, #subjects, #recent, #subject_details {
+body, .list, #recent, #subject_details {
     background-color: var(--bg-color);
 }
-#subjects, #recent, #subject_grades {
-    
+.list, #recent, #subject_grades {
+    margin: 0;
     padding: 10px 10px;
+    box-sizing: border-box;
 }
 #recentModeSelector {
     position: relative;
@@ -561,7 +567,7 @@ body, #subjects, #recent, #subject_details {
 
     transition: background-color 0.3s ease-out;
 }
-.subject, .recent {
+.lItem, .recent {
     list-style: none;
     width: 100%;
     font-size: 16px;
@@ -575,12 +581,10 @@ body, #subjects, #recent, #subject_details {
     /*border: 1px solid #e6e6e6;*/
     transition: background-color 0.3s ease-out;
 }
-.subject {
+.lItem {
     padding: 8px 12px;
-    
-
 }
-.subject:hover, .recent:hover {
+.lItem:hover, .recent:hover {
     background-color: var(--elem-active);
 }
 .subject_header {
@@ -708,7 +712,7 @@ body, #subjects, #recent, #subject_details {
     display:table-cell;
     text-align:center;
     /*display: inline-block;*/
-    width: 33%;
+    width: 25%;
     padding: 8px 15px;
     
     box-sizing: border-box;
@@ -967,3 +971,60 @@ body, #subjects, #recent, #subject_details {
     height: 22px;
 }
 
+.halfyr_item {
+    position: relative;
+    font-size: 18px;
+    padding: 15px 0px;
+}
+.halfyr_item .mid {
+    margin: 0 45px;
+    text-align: center;
+}
+.halfyr_item .left, .halfyr_item .right {
+    font-weight: bold;
+    font-size: 28px;
+    position: absolute;
+    margin: auto 18px;
+    top: 0;
+    bottom: 0;
+    height: 30px;
+    display: inline-block;
+    vertical-align: middle;
+}
+.halfyr_item .D {
+    font-size: 13px;
+    vertical-align: top;
+    position: absolute;
+}
+.halfyr_item .grade {
+
+}
+.halfyr_item .left {
+    left: 0;
+}
+.halfyr_item .right {
+    right: 0;
+}
+#halfyr h1 h2 {
+    font-size: 25px;
+}
+#halfyr h1 h2, #halfyr h1 p {
+    margin: 0;
+    padding: 0;
+}
+#halfyr h1 p {
+    font-size: 18px;
+    color: var(--text-smol);
+}
+#halfyr h1 span {
+    display: inline-block;
+    width: 50%;
+    vertical-align: middle;
+    box-sizing: border-box;
+    padding: 20px 20px;
+    padding-bottom: 0;
+    text-align: center;
+}
+#halfyr h1 .right {
+    position: absolute;
+}
