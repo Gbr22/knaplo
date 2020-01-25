@@ -11,7 +11,18 @@ const port = process.env.PORT || 3001;
 
 const crypto = require('crypto');
 
-
+function getLastCommit(){
+    function run(command){
+        return require('child_process').execSync(command).toString().trim()
+    }
+    
+    return {
+        hash:run("git rev-parse HEAD"),
+        time:run(`git log -1 --format="%at"`),
+    };
+}
+let lastcommit = getLastCommit();
+console.log("Running "+lastcommit.hash);
 
 app.use(cookieParser());
 
@@ -57,6 +68,7 @@ function decrypt(data){
     console.log("Matches original: ",original == dec);
     console.log("Took: ",Date.now()- start);
 }
+
 function refresh(req,res,setcookie){
     return new Promise(async function(resolve,reject){
 
@@ -177,6 +189,9 @@ app.all('/data',async (req, res) => {
         res.status(500);
         res.send("error");
     }) */
+});
+app.all('/lastcommit',async (req, res) => {
+    res.send(JSON.stringify(lastcommit));
 });
 app.all('/login',async (req, res) => {
      
