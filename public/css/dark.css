@@ -12,4 +12,8 @@
     --menu-shadow: 0 0 5px rgba(0,0,0,.35);
     --theme-gradient: linear-gradient(to top left, #08422a, #121212);
     --error-color: rgb(90, 16, 16);
+    --link-color: #00cc99;
+}
+#credits img {
+    filter: brightness(90%);
 }

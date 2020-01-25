@@ -6,6 +6,10 @@ html, body {
     padding: 0;
     overflow: auto;
 }
+.link, #credits a {
+    color: var(--link-color);
+    text-decoration: none;
+}
 h1, h2, h3, h4, h5, h6 {
     margin: 0;
 }
@@ -1108,4 +1112,32 @@ input:checked + .slider:before {
 
 .slider:before {
 border-radius: 50%;
+}
+
+#credits {
+    background-color: var(--element2-color);
+    background-color: var(--modal-color);
+    box-shadow: var(--modal-shadow);
+    margin: 0 20px;
+    margin-top: 60px;
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 30px;
+}
+#credits h2 {
+    margin-bottom: 13px;
+}
+#credits img {
+    height: 45px;
+    border-radius: 50%;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.10);
+}
+
+#credits h2 img, #credits h2 span {
+    display: inline-block;
+    vertical-align: middle;
+}
+#credits p {
+    margin: 0;
+    margin-top: 2px;
 }
