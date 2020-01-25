@@ -128,12 +128,26 @@ let fillerdata = {
         grades:[],
         average:null,
         avgCalc:createAvgCalc()
+    },
+    lastcommit:{
+        time:0,
+        hash:"#".repeat(7),
     }
 }
 
+
+
 let data = JSON.parse(JSON.stringify(fillerdata));
 
-
+{
+    
+    req("/api/lastcommit").then(function(data){
+        let d = JSON.parse(data);
+        fillerdata.lastcommit = d;
+        data.lastcommit = d;
+        console.log(d);
+    })
+}
 
 function showRanks(){
 
@@ -245,8 +259,7 @@ async function getData(){
     }
 }
 function putData(d){
-    
-    
+    data.lastcommit = fillerdata.lastcommit;
 
     data.username = cookies.get("username");
 

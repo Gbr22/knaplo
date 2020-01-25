@@ -321,8 +321,14 @@
                     <p>Forráskód <a class="link" href="https://github.com/Gbr22/knaplo"  target="_blank">itt</a> található</p>
                 </div>
 
-                
-            </div>
+                <div id="updateInfo">
+                    <p>
+                        Legutóbbi frissítés: {{ (new Date(lastcommit.time * 1000)).toLocaleString() }}
+                        (<a target="_blank" class="link" :href="'https://github.com/Gbr22/knaplo/commit/'+lastcommit.hash">{{ lastcommit.hash.slice(0,7) }}</a>)
+                    </p>
+                </div>
+            </div
+            >
             
         </div>
         <nav v-if="logged_in" id="menu" v-bind:class="{ loading_data: loading_data }">

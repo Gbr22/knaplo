@@ -1122,7 +1122,7 @@ border-radius: 50%;
     margin-top: 60px;
     padding: 20px;
     border-radius: 15px;
-    margin-bottom: 30px;
+    margin-bottom: 50px;
 }
 #credits h2 {
     margin-bottom: 13px;
@@ -1140,4 +1140,10 @@ border-radius: 50%;
 #credits p {
     margin: 0;
     margin-top: 2px;
+}
+
+#updateInfo p {
+    color: var(--text-smol);
+    text-align: center;
+    padding: 0 20px;
 }
