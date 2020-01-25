@@ -831,6 +831,7 @@ var app = new Vue({
 })
 async function clearCachePopUp(){
     await clearCache();
+    alert("Gyorsítótár törölve");
 }
 async function clearCache(){
     let cache = (await caches.open("cache-v1"));
