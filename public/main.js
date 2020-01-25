@@ -121,7 +121,7 @@ let fillerdata = {
         average:null,
         avgCalc:createAvgCalc()
     },
-    cacheCount:0,
+    cacheCount:"#",
     viewedSubject:{
         "null":true,
         name:"Subject name",
