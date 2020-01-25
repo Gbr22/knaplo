@@ -312,38 +312,32 @@ function putData(d){
         
         let obj = null;
 
+        let defaults = {
+            id:"grade-"+ev.EvaluationId+"-"+ev.Jelleg.Id,
+            recentType:"grade",
+            value:ev.NumberValue,
+            date:ev.Date,
+            dateRecorded:ev.CreatingTime,
+            subject:ev.Subject,
+            mode:ev.Mode,
+            teacher:ev.Teacher,
+            theme:ev.Theme
+        }
+
         if (ev.Type != "MidYear"){
 
             for (let i=0; i < subjects.length; i++){
                 let subject = subjects[i];
                 
                 if (ev.Subject == subject.name){
-                    subject[ev.Type] = {
-                        recentType:"grade",
-                        value:ev.NumberValue,
-                        date:ev.Date,
-                        dateRecorded:ev.CreatingTime,
-                        subject:ev.Subject,
-                        mode:ev.Mode,
-                        teacher:ev.Teacher,
-                        theme:ev.Theme
-                    };
+                    subject[ev.Type] = defaults;
                 }
 
             }
 
         }
         else if (ev.Form == "Mark"){
-            obj = {
-                recentType:"grade",
-                value:ev.NumberValue,
-                date:ev.Date,
-                dateRecorded:ev.CreatingTime,
-                subject:ev.Subject,
-                mode:ev.Mode,
-                teacher:ev.Teacher,
-                theme:ev.Theme
-            }
+            obj = defaults;
         } else if (ev.Form == "Deportment" || ev.Form == "Diligence"){
             let names = {
                 "Deportment":"Magatartás",
@@ -354,17 +348,13 @@ function putData(d){
                 val = val.slice(0,2)+".";
             }
 
-            obj = {
+            obj = Object.assign(defaults,{
                 recentType:"grade",
                 depDil:true,
                 value:val,
-                date:ev.Date,
-                dateRecorded:ev.CreatingTime,
                 subject:names[ev.Form],
-                mode:ev.Mode,
-                teacher:ev.Teacher,
                 theme:null
-            }
+            });
         }
             
         if (obj != null){
@@ -386,6 +376,7 @@ function putData(d){
     for (let i=0; i < d.Absences.length; i++){
         let abs = d.Absences[i];
         if (abs.Type == "Delay" || abs.Type == "Absence"){
+            abs.id = "absence-"+abs.AbsenceId;
             abs.recentType = "absence";
             abs.date = abs.LessonStartTime;
             abs.dateRecorded = abs.CreatingTime;
@@ -449,6 +440,7 @@ function putData(d){
     for (let i=0; i < d.Notes.length; i++){
         let note = d.Notes[i];
         
+        note.id="node-"+note.NoteId;
         note.recentType = "note";
         note.date = note.Date;
         note.dateRecorded = note.CreatingTime;

@@ -216,7 +216,7 @@
                     
                     <h1>Jegyek</h1>
                     <div id="subject_grades">
-                        <k-recent v-for="(recent, index) in viewedSubject.grades" :recent="recent" :ignoremode="true"></k-recent>
+                        <k-recent v-for="(recent, index) in viewedSubject.grades" :recent="recent" :key="recent.id" :ignoremode="true"></k-recent>
                     </div>
                 </div>
             </div>
@@ -235,7 +235,7 @@
                     
                 </h1>
                 <div id="recentsList">
-                    <k-recent v-for="(recent, index) in recents" :recent="recent"></k-recent>
+                    <k-recent v-for="(recent, index) in recents" :recent="recent" :key="recent.id"></k-recent>
                 </div>
             </div>
             <div v-show="page=='halfyr'" class="screen" id="halfyr">
