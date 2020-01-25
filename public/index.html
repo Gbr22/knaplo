@@ -16,10 +16,7 @@
                    .then(function() { console.log("Service Worker Registered"); });
         }
     </script>
-
     <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/dark.css" media="(prefers-color-scheme: dark)">
-    <link rel="stylesheet" href="css/light.css" media="(prefers-color-scheme: no-preference), (prefers-color-scheme: light)">
 
     <!-- <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/icon?family=Material+Icons" /> -->
 
@@ -48,6 +45,7 @@
         gtag('config', 'UA-128493769-1');
     </script>
 
+    <script src="darkmode.js"></script>
 </head>
 <body>
     <div id="app">
@@ -267,47 +265,57 @@
                     <h1 id="fullname">{{ info.Name }}</h1>
                 </div>
 
-                
-                
-                <ul>
+                <ul id="info_action">
                     <li>
-                        <h2>Születési név</h2>
-                        {{ info.NameOfBirth }}
+                        <svg class="feather">
+                            <use xlink:href="/node_modules/feather-icons/dist/feather-sprite.svg#moon"/>
+                        </svg>
+                        <h2>Sötét téma</h2>
+                        <span class="action">
+                            <label class="switch">
+                                <input type="checkbox" :checked="isDark()" onclick="toggleDarkMode()">
+                                <span class="slider"></span>
+                            </label>
+                        </span>
+                        
                     </li>
                     <li>
-                        <h2>Születési hely</h2>
-                        {{ info.PlaceOfBirth }}
+                        <svg class="feather">
+                            <use xlink:href="/node_modules/feather-icons/dist/feather-sprite.svg#user"/>
+                        </svg>
+                        <h2>
+                            <div class="big">Kijelentkezés</div>
+                            <div class="small">{{ username }}</div>
+                        </h2>
+                        <span class="action">
+                            <button class="simplebtn" onclick="logout()">
+                                <svg class="feather">
+                                    <use xlink:href="/node_modules/feather-icons/dist/feather-sprite.svg#log-out"/>
+                                </svg>
+                            </button>        
+                        </span>
+                        
                     </li>
                     <li>
-                        <h2>Anyja neve</h2>
-                        {{ info.MothersName }}
-                    </li>
-
-                    <li>
-                        <h2>Született</h2>
-                        {{ (new Date(info.DateOfBirthUtc)).toLocaleDateString() }}
-                    </li>
-
-
-                    <li>
-                        <h2>Lakcímek</h2>
-                        <div v-for="address in info.AddressDataList">
-                            {{ address }}
-                        </div>
-                    </li>
-
-                    <li>
-                        <h2>Intézmény neve</h2>
-                        {{ info.InstituteName }}
-                    </li>
-
-                    <li>
-                        <h2>Felhasználónév</h2>
-                        {{ username }}
+                        <svg class="feather">
+                            <use xlink:href="/node_modules/feather-icons/dist/feather-sprite.svg#database"/>
+                        </svg>
+                        <h2>
+                            <div class="big">Gyorsítótár törlése</div>
+                            <div class="small">{{ cacheCount }} elem</div>
+                        </h2>
+                        <span class="action">
+                            <button class="simplebtn" onclick="clearCachePopUp()">
+                                <svg class="feather">
+                                    <use xlink:href="/node_modules/feather-icons/dist/feather-sprite.svg#trash-2"/>
+                                </svg>
+                            </button>        
+                        </span>
+                        
                     </li>
                 </ul>
 
-                <button id="logout" onclick="logout()">Kijelentkezés</button>
+                
             </div>
             
         </div>
@@ -335,9 +343,9 @@
             </button>
             <button v-bind:class="{ active: page=='info' }" v-on:click="changePage('info')">
                 <svg class="feather">
-                    <use xlink:href="/node_modules/feather-icons/dist/feather-sprite.svg#user"/>
+                    <use xlink:href="/node_modules/feather-icons/dist/feather-sprite.svg#more-horizontal"/>
                 </svg>
-                <b>Én</b>
+                <b>Több</b>
                 <!-- <i class="material-icons">account_circle</i> -->
             </button>
             <div id="loading_data">
@@ -350,6 +358,7 @@
         
     </div>
     
+
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="node_modules/jaaulde-cookies/lib/jaaulde-cookies.js"></script>
     

@@ -121,6 +121,7 @@ let fillerdata = {
         average:null,
         avgCalc:createAvgCalc()
     },
+    cacheCount:0,
     viewedSubject:{
         "null":true,
         name:"Subject name",
@@ -129,6 +130,7 @@ let fillerdata = {
         avgCalc:createAvgCalc()
     }
 }
+
 let data = JSON.parse(JSON.stringify(fillerdata));
 
 
@@ -717,6 +719,7 @@ var app = new Vue({
     },
     data: data,
     methods: {
+        isDark,
         getAvgHalfyr,
         getAvgHalfyrF,
         getRecentIcon(mode){
@@ -826,3 +829,20 @@ var app = new Vue({
         }
     }
 })
+async function clearCachePopUp(){
+    await clearCache();
+}
+async function clearCache(){
+    let cache = (await caches.open("cache-v1"));
+    let keys = await cache.keys();
+
+    for (let key of keys){
+        await cache.delete(key);
+    }
+}
+setInterval(async function(){
+    let cache = (await caches.open("cache-v1"));
+    let keys = await cache.keys();
+
+    data.cacheCount = keys.length;
+},100);
