@@ -404,17 +404,19 @@ circle {
     box-sizing: border-box;
 }
 
-.grade .left, .grade .right{
+.gradeLike .left, .gradeLike .right{
     display: inline-block;
     vertical-align: middle;
     white-space: initial;
 }
-.grade .right {
+.gradeLike .right {
     width: 80%;
     width: calc(calc(100% - 43px) - 80px);
 }
-.grade .left {
-    
+.gradeLike .left {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
     padding: 5px 10px;
     font-size: 28px;
     font-weight: bold;
@@ -439,32 +441,22 @@ circle {
     color: #669999;
 }
 
-.absence .date, .note .date {
+.note .date {
     display: block;
     width: 100%;
     text-align: right;
     
     
 }
-.absence h3 {
-    color: #009999;
+.absence svg {
+    stroke: #009999;
 }
-.absence.justified h3 {
-    color: #00af58;
+.absence.justified svg {
+    stroke: #00af58;
 }
-.absence h3, .note h3 {
+.note h3 {
     margin: 0;
     text-align: center;
-}
-.absence p {
-    margin: 8px 0;
-    
-    text-align: center;
-    
-    
-}
-.absence i {
-    font-style: normal;
 }
 .note p {
     padding: 0 20px;
@@ -483,10 +475,11 @@ circle {
 }
 
 
-.grade_header {
+.gradeLike .header {
     font-weight: bold;
+    margin-bottom: 3px;
 }
-.grade .date {
+.gradeLike .date {
     position: absolute;
     right: 10px;
     width: 80px;
@@ -501,21 +494,21 @@ circle {
 .recent .date {
     color: var(--text-smol);
 }
-.grade .date b {
+.gradeLike .date b {
     font-weight: normal;
 }
-.grade .date i {
+.gradeLike .date i {
     font-style: normal;
     font-size: 15px;
 }
 
-.grade .date .relative {
+.gradeLike .date .relative {
     position: relative;
     display: inline-block;
     width: 100%;
 }
 
-.grade .right .bottom, .absence p {
+.gradeLike .right .bottom, .absence p {
     color: var(--text-smol);
 }
 
