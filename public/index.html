@@ -233,6 +233,11 @@
                     
                 </h1>
                 <div id="recentsList">
+                    <div v-if="recentMode == 'absence'" id="absenceCount">
+                        <p>Késések összesen: <b>{{ getDelaySum() }} perc</b></p>
+                        <p>Igazolatlan: <b>{{ getUnjustifiedSum() }} óra</b></p>
+                        <p>Igazolt: <b>{{ getJustifiedSum() }} óra</b></p>
+                    </div>
                     <k-recent v-for="(recent, index) in recents" :recent="recent" :key="recent.id"></k-recent>
                 </div>
             </div>

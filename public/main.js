@@ -111,6 +111,8 @@ let fillerdata = {
     grades:[],
     recents:[],
     subjects:[],
+    absences:[],
+    delays:[],
     ranksScreen:false,
     ranks:ranks,
     roundView:null,
@@ -258,6 +260,9 @@ async function getData(){
         }
     }
 }
+function copyObj(obj){
+    return JSON.parse(JSON.stringify(obj));
+}
 function putData(d){
     data.lastcommit = fillerdata.lastcommit;
 
@@ -388,6 +393,7 @@ function putData(d){
 
     recents.push(...grades);
     let absences = [];
+    let delays = [];
     for (let i=0; i < d.Absences.length; i++){
         let abs = d.Absences[i];
         if (abs.Type == "Delay" || abs.Type == "Absence"){
@@ -396,62 +402,43 @@ function putData(d){
             abs.date = abs.LessonStartTime;
             abs.dateRecorded = abs.CreatingTime;
             abs.justified = abs.JustificationState=="Justified";
-            absences.push(abs);
+            
+            if (abs.Type == "Delay") {
+                delays.push(abs);
+            } else {
+                absences.push(abs);
+            }
         }
     }
     console.log("abs",absences);
     let newabs = [];
+    let absMap = {};
     for (let abs of absences){
-        let sameabs = [];
-        for (let otherabs of absences){
-            if (abs == otherabs){
-                continue;
-            }
-            if (abs.date == otherabs.date //same day
-                && abs.JustificationType == otherabs.JustificationType //same justification
-                && abs.Type=="Absence" && otherabs.Type=="Absence"){ //is absence
-                //absent day
-                sameabs.push(otherabs);
-                const index = absences.indexOf(otherabs);
-                if (index > -1) {
-                    absences.splice(index, 1);
-                }
-
-            }
+        let id = abs.JustificationType + abs.Type + abs.date; // same justification, same type, same day
+        let obj = copyObj(abs);
+        obj.Type = "AbsentDay";
+        obj.absences = [];
+        obj.lessons = [];
+        if (!absMap[id]){
+            absMap[id] = obj;   
         }
-        if (sameabs.length > 0){
-            sameabs.unshift(abs);
-            const index = absences.indexOf(abs);
-            if (index > -1) {
-                absences.splice(index, 1);
-            }
-            let lessons = [];
-
-            for (let a of sameabs){
-                lessons.push(a.NumberOfLessons);
-            }
-
-            lessons.sort();
-
-            newabs.push({
-                Type:"AbsentDay",
-                recentType: "absence",
-                date: sameabs[0].LessonStartTime,
-                dateRecorded: abs.CreatingTime,
-                absences:sameabs,
-                JustificationState:abs.JustificationState,
-                JustificationType:abs.JustificationType,
-                JustificationTypeName:abs.JustificationTypeName,
-                justified: abs.justified,
-                TypeName: abs.TypeName,
-                lessons,
-            })
-        } else {
-            newabs.push(abs);
+        absMap[id].lessons.push(abs.NumberOfLessons);
+        absMap[id].absences.push(abs);
+    }
+    newabs = Object.values(absMap);
+    
+    for (let abs of newabs){
+        abs.lessons.sort((a,b)=> a-b);
+        if (abs.lessons.length == 1){
+            abs.Type = "Absence";
         }
     }
+
     console.log("newabs",newabs);
     recents.push(...newabs);
+    recents.push(...delays);
+
+    
     for (let i=0; i < d.Notes.length; i++){
         let note = d.Notes[i];
         
@@ -489,7 +476,8 @@ function putData(d){
         return 0;
     });
 
-    
+    updateArray(data.absences, absences);
+    updateArray(data.delays, delays);
     updateArray(data.grades, grades);
     updateArray(data.subjects, subjects);
     updateArray(data.recents, recents);
@@ -735,6 +723,34 @@ var app = new Vue({
         isDark,
         getAvgHalfyr,
         getAvgHalfyrF,
+        getDelaySum(){
+            let sum = 0;
+            for (let d of this.delays){
+                sum+=d.DelayTimeMinutes;
+            }
+
+            return sum;
+        },
+        getJustifiedSum(){
+            let sum = 0;
+            for (let d of this.absences){
+                if (d.justified){
+                    sum++;
+                }
+            }
+
+            return sum;
+        },
+        getUnjustifiedSum(){
+            let sum = 0;
+            for (let d of this.absences){
+                if (!d.justified){
+                    sum++;
+                }
+            }
+
+            return sum;
+        },
         getRecentIcon(mode){
             let pairs = {
                 "all":"box",
