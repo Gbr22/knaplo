@@ -33,7 +33,7 @@ Vue.component('k-recent', {
             </span>
             <span class="date"><b>{{ getDayOfWeek(new Date(recent.date)) }}</b><br><i>{{ formatDate(new Date(recent.date)) }}</i></span>
         </div>
-        <div v-if="recent.recentType == 'absence'" class="absence recent">
+        <div v-if="recent.recentType == 'absence'" class="absence recent" v-bind:class="{ justified: recent.justified }">
             <h3>
                 {{ recent.TypeName }} - 
                 <span v-if="recent.justified">Igazolt ({{ recent.JustificationTypeName }})</span>

@@ -446,6 +446,12 @@ circle {
     
     
 }
+.absence h3 {
+    color: #009999;
+}
+.absence.justified h3 {
+    color: #00af58;
+}
 .absence h3, .note h3 {
     margin: 0;
     text-align: center;
