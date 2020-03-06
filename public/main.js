@@ -91,6 +91,7 @@ function getLastRecent(){
 
 let fillerdata = {
     loading_data:false,
+    loaded_percent:0,
     recentMode:getLastRecent(),
     showRecentModeOptions:false,
     username:"",
@@ -251,9 +252,23 @@ async function getData(){
         }
         if (json != null){
             data.loading_data = true;
+            let started = new Date();
+            
+            let inter = setInterval(function(){
+                let all = 15;
+                var timeDiff = new Date() - started; //in ms
+                timeDiff /= 1000;
+                let max = 100;
+                let percentpassed = timeDiff / all * 100;
+                data.loaded_percent = percentpassed > max ? max : percentpassed;
+            },1000/60);
             fetchData().then((d)=>{
+                clearInterval(inter);
                 putData(d);
-                data.loading_data = false;
+                data.loaded_percent = 100;
+                setTimeout(function(){
+                    data.loading_data = false;
+                },100);
                 navigator.vibrate([50,30]);
             });
             return json;

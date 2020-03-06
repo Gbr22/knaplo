@@ -366,7 +366,7 @@
                 <!-- <i class="material-icons">account_circle</i> -->
             </button>
             <div id="loading_data">
-                
+                <div id="loading_percent" v-bind:style="{ '--loaded': loaded_percent+'%' }"></div>
             </div>
         </nav>
         <div v-if="loading" id="loading_screen">
