@@ -62,13 +62,26 @@ Vue.component('k-recent', {
             </span>
             <span class="date"><b>{{ getDayOfWeek(new Date(recent.date)) }}</b><br><i>{{ formatDate(new Date(recent.date)) }}</i></span>
         </div>
-        <div v-if="recent.recentType == 'note'" class="note recent">
-            <h3>{{ recent.Title }}</h3>
-            <p>{{ shortenNote(recent.Content) }}</p>
+        <div v-if="recent.recentType == 'note'" class="note gradeLike recent">
+            <span class="left" :data-grade="recent.value">
+                <svg class="feather">
+                    <use xlink:href="/node_modules/feather-icons/dist/feather-sprite.svg#message-square"/>
+                </svg>
+            </span>
+            <span class="right">
+                <div class="header">
+                    {{ recent.Title }}
+                </div>
+                <span class="bottom">
+                    {{ shortenNote(recent.Content) }}        
+                </span>
+            </span>
+            
+            
 
-            <span class="signoff">{{ recent.Type }}, {{ recent.Teacher }}</span>
 
-            <span class="date">{{ formatDate(new Date(recent.date)) }} {{ getDayOfWeek(new Date(recent.date)) }}</span>
+
+            <span class="date"><b>{{ getDayOfWeek(new Date(recent.date)) }}</b><br><i>{{ formatDate(new Date(recent.date)) }}</i></span>
             
         </div>
     </span>
