@@ -13,6 +13,10 @@ Vue.component('k-recent', {
         return {};
     },
     methods: {
+        expandNote(note){
+            data.viewedNote = Object.assign(data.viewedNote, JSON.parse(JSON.stringify(note)));
+            data.viewedNote.show = true;
+        },
         checkShowRecent(mode){
             return data.recentMode == "all" || data.recentMode == mode;
         },
@@ -62,7 +66,7 @@ Vue.component('k-recent', {
             </span>
             <span class="date"><b>{{ getDayOfWeek(new Date(recent.date)) }}</b><br><i>{{ formatDate(new Date(recent.date)) }}</i></span>
         </div>
-        <div v-if="recent.recentType == 'note'" class="note gradeLike recent">
+        <div v-if="recent.recentType == 'note'" class="note gradeLike recent" v-on:click="expandNote(recent)">
             <span class="left" :data-grade="recent.value">
                 <svg class="feather">
                     <use xlink:href="/node_modules/feather-icons/dist/feather-sprite.svg#message-square"/>

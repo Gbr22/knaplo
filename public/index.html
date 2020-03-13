@@ -178,7 +178,7 @@
                         </span>
                     </div>
                 </div>
-                <div id="subject_details" v-show="!(viewedSubject['null'])">
+                <div id="subject_details" class="fullpage_modal" v-show="!(viewedSubject['null'])">
                     <h1>{{ viewedSubject.name }}</h1>
                     
                     <div id="subj_detail_section">
@@ -239,6 +239,18 @@
                         <p>Igazolt: <b>{{ getJustifiedSum() }} óra</b></p>
                     </div>
                     <k-recent v-for="(recent, index) in recents" :recent="recent" :key="recent.id"></k-recent>
+                </div>
+                <div id="note_details" class="fullpage_modal" v-if="viewedNote.show != false">
+                    <h1>
+                        {{ viewedNote.Title }}
+                    </h1>
+                    <p>
+                        {{ viewedNote.Content }}
+                    </p>
+                    <span class="signoff">
+                        {{ viewedNote.Type }}, {{ viewedNote.Teacher }}
+                    </span>
+                    
                 </div>
             </div>
             <div v-show="page=='halfyr'" class="screen" id="halfyr">

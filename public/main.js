@@ -132,6 +132,11 @@ let fillerdata = {
         average:null,
         avgCalc:createAvgCalc()
     },
+    viewedNote:{
+        show:false,
+        Title:"Note title",
+        Content:"Note desc",
+    },
     lastcommit:{
         time:0,
         hash:"#".repeat(7),
@@ -617,6 +622,7 @@ window.addEventListener('popstate', function() {
         data.ranksScreen = false;
         closeRound();
     }
+    data.viewedNote.show = false;
     
 
     
@@ -802,10 +808,13 @@ var app = new Vue({
             avgChartUpdate(g);
         },
         changePage(page){
+            console.log("change page to "+page);
             if (this.page == "home"){
                 closeSubjectDetail();
                 data.ranksScreen = false;
                 closeRound();
+            } else if (this.page == "recent"){
+                data.viewedNote.show = false;
             }
             this.page = page;
             if (pageinfos[this.page]){
