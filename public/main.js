@@ -734,6 +734,19 @@ function getAvgHalfyrF(type){
         return num.toFixed(2);
     }
 }
+function matchURLs(text){
+    let regex = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
+    return text.matchAll(regex);
+}
+function formatURLs(text){
+    let regex = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
+    
+    
+    return text.replace(regex, function(match, token){
+        return /* html */`<a href="${match}" class="link" target="_blank">${match}</a>`;
+    });
+    
+}
 var app = new Vue({
     el: '#app',
     components: {
@@ -742,6 +755,7 @@ var app = new Vue({
     data: data,
     methods: {
         isDark,
+        formatURLs,
         getAvgHalfyr,
         getAvgHalfyrF,
         getDelaySum(){

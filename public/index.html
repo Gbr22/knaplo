@@ -244,8 +244,7 @@
                     <h1>
                         {{ viewedNote.Title }}
                     </h1>
-                    <p>
-                        {{ viewedNote.Content }}
+                    <p v-html="formatURLs(viewedNote.Content)">
                     </p>
                     <span class="signoff">
                         {{ viewedNote.Type }}, {{ viewedNote.Teacher }}
