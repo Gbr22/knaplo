@@ -16,10 +16,20 @@ Vue.component('k-recent', {
         checkShowRecent(mode){
             return data.recentMode == "all" || data.recentMode == mode;
         },
+        shortenNote(text){
+            let limit = 70;
+            if (text.length > limit){
+                let textarr = text.slice(0,limit).split(" ");
+                textarr.pop();
+                return textarr.join(" ")+"...";
+            } else {
+                return text;
+            }
+        },
         formatDate,
         getDayOfWeek,
     },
-    template: `
+    template: /* html */`
     <span v-show="checkShowRecent(recent.recentType) || ignoremode">
         <div v-if="recent.recentType == 'grade'" class="grade gradeLike recent">
             <span class="left" :data-grade="recent.value">
@@ -54,7 +64,7 @@ Vue.component('k-recent', {
         </div>
         <div v-if="recent.recentType == 'note'" class="note recent">
             <h3>{{ recent.Title }}</h3>
-            <p>{{ recent.Content }}</p>
+            <p>{{ shortenNote(recent.Content) }}</p>
 
             <span class="signoff">{{ recent.Type }}, {{ recent.Teacher }}</span>
 
