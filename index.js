@@ -178,11 +178,18 @@ app.all('/institute',async (req, res) => {
     res.sendFile(__dirname+"/inst_clean.json");
 });
 
-app.all('/data',async (req, res) => {
+/* app.all('/data',async (req, res) => {
     let school = req.cookies["inst"];
     let token = req.cookies["access_token"];
 
     api.pipeData(school,token,res);
+}); */
+app.all('/data',async (req, res) => {
+    let school = req.cookies["inst"];
+    let token = req.cookies["access_token"];
+
+    let data = await api.studentAmi(school, token);
+    res.send(data);
     /* api.getData(school,token).then((data)=>{
         res.send(data);
     }).catch((err)=>{

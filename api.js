@@ -15,7 +15,7 @@ const defaultOptions = {
     headers: {
         "apiKey":api_key,
         "charset":"utf-8",
-        "User-Agent":"Kreta.Ellenorzo/2.9.6.2019121703 (Linux; U; Android 6.0.1)"
+        "User-Agent":"Kreta.Ellenorzo/2.9.9.2020022101 (Linux; U; Android 6.0.1)"
     },
     json:true
 }
@@ -28,7 +28,7 @@ function req(options){
 
 async function institute(){
     return await (req({
-        url:api_full+"Institute",
+        url:'https://kretaglobalmobileapi2.ekreta.hu/api/v2/Institute',
         json:false
     }));
 }
@@ -43,9 +43,9 @@ async function institute(){
     for (let i=0; i < arr.length; i++){
         let e = arr[i];
         clean.push({
-            Name:e.Name,
-            InstituteCode:e.InstituteCode,
-            City:e.City,
+            Name:e.name,
+            InstituteCode:e.instituteCode,
+            City:e.city,
         });
     }
     fs.writeFileSync("inst_clean.json",JSON.stringify(clean));
@@ -116,6 +116,22 @@ function getData(school,token){
     });
     
 }
+function studentAmi(school,token){
+    return new Promise(function(resolve,reject){
+        req({
+            url:`https://${school}.e-kreta.hu/mapi/api/v1/StudentAmi`,
+            headers:{
+                "Authorization":"Bearer "+token,
+            },
+            json:false
+        }).then((json)=>{
+            resolve(json);
+        }).catch((json)=>{
+            reject(json);
+            //resolve(json);
+        });
+    });
+}
 
 
 module.exports = {
@@ -126,5 +142,6 @@ module.exports = {
     login,
     getData,
     pipeData,
-    refresh
+    refresh,
+    studentAmi
 }
