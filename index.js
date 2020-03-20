@@ -200,6 +200,7 @@ app.all('/data',async (req, res) => {
 app.all('/lastcommit',async (req, res) => {
     res.send(JSON.stringify(lastcommit));
 });
+
 app.all('/login',async (req, res) => {
      
     let needs = {
@@ -211,9 +212,10 @@ app.all('/login',async (req, res) => {
     function loginError(message){
         console.log(message);
 
-        res.cookie("loginerror",message, {maxAge: 10000});
-        res.redirect("/");
-        
+        /* res.cookie("loginerror",message, {maxAge: 10000});
+        res.redirect("/"); */
+        res.statusCode = 500;
+        res.send(message);
         
     }
 

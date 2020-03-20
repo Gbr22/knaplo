@@ -6,9 +6,24 @@ type RequestResult = {
     data:any,
     message:string
 }
+
+function showError(message: string){
+    alert(message);
+    // TODO: Implement error widget
+}
+
 function makeRequest(mode: string,url: string, data = {}): Promise<RequestResult>{
     let base = "//localhost:83/api/";
-    return new Promise(function(resolve,reject){
+    return new Promise(function(promiseResolve,reject){
+        function resolve(obj: RequestResult){
+
+            if (!obj.success){
+                showError(obj.message)
+            }
+
+            promiseResolve(obj);
+        }
+
 
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
@@ -21,9 +36,25 @@ function makeRequest(mode: string,url: string, data = {}): Promise<RequestResult
                 }
                 
                 
+            } else if (this.readyState == 4) {
+                resolve({success:false, message: xhttp.responseText || `Hiba ${this.status}`, data:null});
             }
         };
-        xhttp.open(mode, base+url, true);
+        let params = "";
+
+        for (let [key,elem] of Object.entries(data)){
+            if (params == ""){
+                params+="?";
+            } else {
+                params+="&";
+            }
+            if (elem == null || elem == undefined){
+                elem = "";
+            }
+            params+=`${key}=${elem}`;
+        }
+
+        xhttp.open(mode, base+url+params, true);
         xhttp.send();
 
     });
