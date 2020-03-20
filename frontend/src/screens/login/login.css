@@ -1,0 +1,97 @@
+.screen.login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+}
+#login_inner {
+    margin: 20px;
+    text-align: center;
+    width: 100%;
+    max-width: 500px;
+}
+
+
+#school_section {
+    background-color: #2E2D2E;
+    padding: 5px 20px;
+    border-radius: 15px;
+    width: 100%;
+    box-sizing: border-box;
+}
+#school_section input[type="text"]{
+    background-color: rgb(59, 59, 59);
+    color: rgb(228, 228, 228);
+    border: none;
+}
+
+.autoSizerParent {
+    display: block;
+    width: 100%;
+    min-height: 150px;
+}
+#schools, .noResult {
+    color: rgb(228, 228, 228);
+}
+
+#schools {
+    width: 100%;
+    margin: auto;
+    height: 150px;
+    overflow: auto;
+    outline: none;
+}
+
+.school {
+    box-sizing: border-box;
+    padding: 8px 15px;
+    text-align: left;
+}
+.school i {
+    color: #949494;
+    font-style: normal;
+}
+.school input {
+    display: none;
+}
+.school label {
+    vertical-align: middle;
+}
+.school .checkmark {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: #b3b3b3;
+    display: inline-block;
+    vertical-align: middle;
+    transition: opacity .3s ease-out;
+    color: green;
+}
+.school .checkmark i {
+    color: inherit;
+}
+.school input:checked ~ .checkmark {
+    background-color: #1CAA53;
+}
+
+
+.screen.login input[type="text"], .screen.login input[type="password"], .screen.login input[type="submit"] {
+    box-sizing: border-box;
+    width: 100%;
+    display: block;
+    border: 1px solid var(--divider-color);
+    padding: 10px 20px;
+    margin: 10px auto;
+    border-radius: 8px;
+    outline: none;
+    color: var(--text-color);
+    background-color: var(--element2-color);
+    font-size: 16px;
+}
+.screen.login input[type="submit"] {
+    background-color: #199649;
+    border: none;
+    /*color: rgb(240, 255, 249);*/
+    color:white;
+}

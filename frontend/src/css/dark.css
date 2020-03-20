@@ -1,0 +1,19 @@
+:root {
+    --bg-color: #121212;
+    --element-color: #1d1d1d;
+    --elem-active: rgba(255, 255, 255, 0.11);
+    --element2-color: rgb(68, 68, 68);
+    --text-color: rgb(216, 216, 216);
+    --text-smol: #969696;
+    --divider-color: #3a3a3a;
+    --modal-color: #2c2c2c;
+    --modal-shadow: 0 0 15px rgba(0, 0, 0, 0.25);
+    --elem-shadow: 0 1px 3px rgba(0, 0, 0, 0.20);
+    --menu-shadow: 0 0 5px rgba(0,0,0,.35);
+    --theme-gradient: linear-gradient(to top left, #08422a, #121212);
+    --error-color: rgb(90, 16, 16);
+    --link-color: #00cc99;
+}
+#credits img {
+    filter: brightness(90%);
+}
