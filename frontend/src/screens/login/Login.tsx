@@ -4,13 +4,13 @@ import  InstItem from '../../data/types';
 import App from "../../App";
 import './login.css';
 
-import { getInst, login } from '../../data/DataHandler';
+import { getInst, login, currentUser } from '../../data/DataHandler';
 import { List, AutoSizer, CellMeasurer, CellMeasurerCache } from "react-virtualized";
 
 type loginState = {
     inst: InstItem[],
     search: string,
-    form:any
+    form:any,
 }
 class LoginScreen extends React.Component<{}, loginState> {
     constructor(props: Object){
@@ -27,7 +27,7 @@ class LoginScreen extends React.Component<{}, loginState> {
                 username:"",
                 password:"",
                 inst: null
-            }
+            },
         }
         this.ChangeHandler = this.ChangeHandler.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -51,7 +51,15 @@ class LoginScreen extends React.Component<{}, loginState> {
         event.preventDefault();
 
         
-        login(this.state.form);
+        login(this.state.form).then((result)=>{
+            if (result.success){
+
+                currentUser.update(result.data);
+                console.log("success");
+                
+                
+            }
+        })
     }
     render(){
         

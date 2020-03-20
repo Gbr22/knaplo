@@ -248,15 +248,18 @@ app.all('/login',async (req, res) => {
             return;
         } else {
             let options = {maxAge: 1000*60*60*24*30*365};
-            res.cookie("access_token",result.access_token, options);
-            res.cookie("refresh_token",result.refresh_token, options);
-            res.cookie("inst",req.query.inst, options);
-
-            res.cookie("password_encrypted",encrypt(req.query.password), options);
-            res.cookie("username",req.query.username, options);
-
-            res.cookie("time",Date.now(), options);
-            res.redirect("/");
+            let obj = {
+                "access_token":result.access_token,
+                "refresh_token":result.refresh_token,
+                "inst":req.query.inst,
+                "password_encrypted":encrypt(req.query.password),
+                "username":req.query.username
+            }
+            for (let [key,elem] of Object.entries(obj)){
+                res.cookie(key,elem, options);
+            }
+            
+            res.send(obj);
 
         }
     })

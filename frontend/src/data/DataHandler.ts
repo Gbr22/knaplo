@@ -67,12 +67,8 @@ function get(url: string): Promise<RequestResult>{
 function post(url: string, data: Object): Promise<RequestResult>{
     return makeRequest("POST",url,data);
 }
-function login(form: LoginCreds): Promise<any>{
-    return new Promise(function(resolve,reject){
-        post("login",form).then((result)=>{
-            console.log(result);
-        })
-    })
+function login(form: LoginCreds): Promise<RequestResult>{
+    return post("login",form);
 
 }
 
@@ -96,13 +92,28 @@ function getInst(callback: Function = ()=>{}): InstItem[]{
 
     return items;
 }
-type User = {
+type UserCreds = {
     username: string,
-    passwordEnc: string,
+    password_encrypted: string,
     inst: string,
-    accessToken: string,
-    refreshToken: string
+    access_token: string,
+    refresh_token: string,
+    loggedIn:boolean
 }
+class User {
+    loggedIn=false;
+    creds: UserCreds | null = null;
+
+    constructor(creds: UserCreds | null){
+        this.update(creds);
+    }
+    update(creds: UserCreds | null){
+        this.creds = creds;
+        this.loggedIn = this.creds ? true : false;
+    }
+}
+let currentUser = new User(null);
+
 type LoginCreds = {
     inst: string,
     username: string,
@@ -111,6 +122,8 @@ type LoginCreds = {
 
 export {
     login,
-    getInst
+    getInst,
+    currentUser,
+    User
 };
 

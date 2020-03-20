@@ -3,6 +3,7 @@ import React from 'react';
 import LoginScreen from './screens/login/Login';
 
 import InstItem from './data/types';
+import { currentUser } from './data/DataHandler';
 
 
 class App extends React.Component {
@@ -14,7 +15,9 @@ class App extends React.Component {
   render(){
     return (
       <div className="App">
-        <LoginScreen />
+        {!currentUser.loggedIn ? (
+          <LoginScreen />
+        ) : ""}
       </div>
     );
   }
