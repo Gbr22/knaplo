@@ -12,7 +12,7 @@
                             :min-item-size="30"
                             key-field="code"
                             class="scroller"
-                            
+                            :buffer="300"
                         >
                             <template v-slot="{ item, index, active }">
                             <DynamicScrollerItem
@@ -20,7 +20,7 @@
                                 :active="active"
                                 :size-dependencies="[
                                     item.inst,
-                                    item.city
+                                    item.city,
                                 ]"
                                 :data-index="index"
                                 :data-active="active"
@@ -72,22 +72,25 @@ export default {
   computed:{
       filtered: function(){
           let filtered = this.inst.filter((i)=>{
+            return this.isShowInSearch(i);
+        })
+        return filtered;
+      }
+  },
+  methods:{
+      isShowInSearch(i){
             let searchProps = ["code","name","city"];
             for (const [key, value] of Object.entries(i)){
                 if (searchProps.includes(key)){
-                    if (value.toLowerCase().indexOf(this.search.toLowerCase()) != -1){    
+                if (value.toLowerCase().indexOf(this.search.trim().toLowerCase()) != -1){    
                         
                         return true;   
                     }
                 }
             }
-            
             return false;
-            
-        })
-        return filtered;
       }
-  },
+      }
   
 }
 </script>
