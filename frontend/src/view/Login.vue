@@ -26,7 +26,7 @@
                                 :data-active="active"
                                 class="instItem"
                             >
-                                <div v-on:click="selected_inst = item.inst">
+                                <div v-on:click="selected_inst = item.inst" class="school">
                                     <input type="radio" name="inst" :value="item.inst" :id="item.inst" :checked="selected_inst == item.inst">
                                     <span class="checkmark">
                                         
