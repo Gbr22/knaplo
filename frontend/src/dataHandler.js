@@ -7,7 +7,7 @@ function showError(message){
 }
 
 function makeRequest(mode,url, data = {}){
-    let base = "//localhost:83/api/";
+    let base = "/api/";
     return new Promise(function(promiseResolve){
         function resolve(obj){
 

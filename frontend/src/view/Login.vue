@@ -8,7 +8,7 @@
                     <input aria-label="Intézmény neve" type="text" placeholder="Intézmény keresése" v-model="search">
                     <div id="schools">
                         <DynamicScroller
-                            :items="searchSchool(search)"
+                            :items="filtered"
                             :min-item-size="30"
                             key-field="code"
                             class="scroller"
@@ -39,7 +39,7 @@
                             </template>
                         </DynamicScroller>
                         
-                        <div v-if="searchSchool(search).length == 0">
+                        <div v-if="filtered.length == 0">
                             A keresett intézményre nincs találat
                         </div>
                     </div>
@@ -68,14 +68,14 @@ export default {
       };
       
       return data;
-  },  
-  methods: {
-      searchSchool(search){
-        let filtered = this.inst.filter((i)=>{
+  },
+  computed:{
+      filtered: function(){
+          let filtered = this.inst.filter((i)=>{
             let searchProps = ["code","name","city"];
             for (const [key, value] of Object.entries(i)){
                 if (searchProps.includes(key)){
-                    if (value.toLowerCase().indexOf(search.toLowerCase()) != -1){    
+                    if (value.toLowerCase().indexOf(this.search.toLowerCase()) != -1){    
                         
                         return true;   
                     }
@@ -87,8 +87,8 @@ export default {
         })
         return filtered;
       }
-
-  }
+  },
+  
 }
 </script>
 
