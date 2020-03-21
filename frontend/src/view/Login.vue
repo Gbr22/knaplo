@@ -7,21 +7,38 @@
                 <div id="school_section">
                     <input aria-label="Intézmény neve" type="text" placeholder="Intézmény keresése" v-model="search">
                     <div id="schools">
+                        <DynamicScroller
+                            :items="searchSchool(search)"
+                            :min-item-size="30"
+                            key-field="code"
+                            class="scroller"
+                            
+                        >
+                            <template v-slot="{ item, index, active }">
+                            <DynamicScrollerItem
+                                :item="item"
+                                :active="active"
+                                :size-dependencies="[
+                                    item.inst,
+                                    item.city
+                                ]"
+                                :data-index="index"
+                                :data-active="active"
+                                class="instItem"
+                            >
+                                <div v-on:click="selected_inst = item.inst">
+                                    <input type="radio" name="inst" :value="item.inst" :id="item.inst" :checked="selected_inst == item.inst">
+                                    <span class="checkmark">
+                                        
+                                    </span>
+                                    <label :for="item.inst"> {{ item.name }}
+                                        <i>({{ item.city }})</i>
+                                    </label>
+                                </div>
+                            </DynamicScrollerItem>
+                            </template>
+                        </DynamicScroller>
                         
-                        <div v-for="school in searchSchool(search)" class="school" :key="school.code">
-                            
-                            <div v-on:click="selected_inst = school.inst">
-                                <input type="radio" name="inst" :value="school.inst" :id="school.inst" :checked="selected_inst == school.inst">
-                                <span class="checkmark">
-                                    
-                                </span>
-                                <label :for="school.inst"> {{ school.name }}
-                                    <i>({{ school.city }})</i>
-                                </label>
-                            </div>
-                            
-                            
-                        </div>
                         <div v-if="searchSchool(search).length == 0">
                             A keresett intézményre nincs találat
                         </div>
@@ -77,5 +94,8 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+    .scroller {
+        height: 150px;
+        overflow-y: auto;
+    }
 </style>
