@@ -211,10 +211,9 @@ app.all('/login',async (req, res) => {
     function loginError(message){
         console.log(message);
 
-        res.cookie("loginerror",message, {maxAge: 10000});
-        res.redirect("/");
-        
-        
+        res.statusCode = "500";
+        res.send(message);
+
     }
 
 
@@ -246,15 +245,16 @@ app.all('/login',async (req, res) => {
             return;
         } else {
             let options = {maxAge: 1000*60*60*24*30*365};
-            res.cookie("access_token",result.access_token, options);
-            res.cookie("refresh_token",result.refresh_token, options);
-            res.cookie("inst",req.query.inst, options);
-
-            res.cookie("password_encrypted",encrypt(req.query.password), options);
-            res.cookie("username",req.query.username, options);
-
-            res.cookie("time",Date.now(), options);
-            res.redirect("/");
+            let info = {
+                "access_token":result.access_token,
+                "refresh_token":result.refresh_token,
+                "inst":req.query.inst,
+                "password_encrypted":encrypt(req.query.password),
+                "username":req.query.username
+            }
+            res.cookie("loginInfo",JSON.stringify(info), options);
+            
+            res.send(info);
 
         }
     })

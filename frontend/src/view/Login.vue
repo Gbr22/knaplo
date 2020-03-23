@@ -3,7 +3,7 @@
         <div id="login_wrap">
             
             <h1>Bejelentkezés a Krétába</h1>
-            <form action="/api/login" enctype="text/plain">
+            <form v-on:submit.prevent="onSubmit" enctype="text/plain">
                 <div id="school_section">
                     <input aria-label="Intézmény neve" type="text" placeholder="Intézmény keresése" v-on:input="setSearch($event.target.value)">
                     <div id="schools">
@@ -26,8 +26,8 @@
                                 :data-active="active"
                                 class="instItem"
                             >
-                                <div v-on:click="selected_inst = item.code" class="school">
-                                    <input type="radio" name="inst" :value="item.inst" :id="item.inst" :checked="selected_inst == item.code" :data-test="item.code">
+                                <div v-on:click="form.inst = item.code" class="school">
+                                    <input type="radio" name="inst" :value="item.inst" :id="item.inst" :checked="form.inst == item.code" :data-test="item.code">
                                     <span class="checkmark">
                                         
                                     </span>
@@ -45,8 +45,8 @@
                     </div>
                 </div>
                 
-                <input aria-label="Felhasználónév" name="username" type="text" placeholder="Felhasználónév" autocomplete="username" required>
-                <input aria-label="Jelszó" name="password" type="password" placeholder="Jelszó" autocomplete="current-password" required>
+                <input v-model="form.username" aria-label="Felhasználónév" name="username" type="text" placeholder="Felhasználónév" autocomplete="username" required>
+                <input v-model="form.password" aria-label="Jelszó" name="password" type="password" placeholder="Jelszó" autocomplete="current-password" required>
                 <input type="submit" value="Bejelentkezés">
                 
             </form>
@@ -56,14 +56,23 @@
 </template>
 
 <script>
+
+import { login } from '../dataHandler';
+
+
+
 export default {
   name: 'Login',
   data: ()=>{
       let data = {
-        selected_inst: "",
         inst:window.GlobalState.inst,
         /* filtered:[].concat(window.GlobalState.inst), */
         search:"",
+        form:{
+            inst:"",
+            username:"",
+            password:""
+        }
       };
       
       return data;
@@ -77,6 +86,11 @@ export default {
       }
   },
   methods:{
+      onSubmit(){
+          login(this.form).then((result)=>{
+              console.log(result);
+          })
+      },
       setSearch(s){
           this.$nextTick(()=>{
               this.search = s;
