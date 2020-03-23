@@ -1,9 +1,12 @@
 import { getInst } from "./dataHandler";
 
-let GlobalState = {
-    inst:getInst()
-};
+import Cookies from 'js-cookie';
 
+let GlobalState = {
+    inst:getInst(),
+    loggedIn:false,
+};
+GlobalState.loggedIn = Cookies.get("loginInfo") != null;
 
 
 

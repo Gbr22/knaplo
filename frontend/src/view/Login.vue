@@ -88,6 +88,10 @@ export default {
   methods:{
       onSubmit(){
           login(this.form).then((result)=>{
+              if(result.success){
+                  window.GlobalState.loggedIn = true;
+                  
+              }
               console.log(result);
           })
       },
