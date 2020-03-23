@@ -5,7 +5,7 @@
             <h1>Bejelentkezés a Krétába</h1>
             <form action="/api/login" enctype="text/plain">
                 <div id="school_section">
-                    <input aria-label="Intézmény neve" type="text" placeholder="Intézmény keresése" v-model="search">
+                    <input aria-label="Intézmény neve" type="text" placeholder="Intézmény keresése" v-on:input="setSearch($event.target.value)">
                     <div id="schools">
                         <DynamicScroller
                             :items="filtered"
@@ -78,6 +78,12 @@ export default {
       }
   },
   methods:{
+      setSearch(s){
+          requestAnimationFrame(()=>{
+              this.search = s;
+          });
+          
+      },
       isShowInSearch(i){
             let searchProps = ["code","name","city"];
             for (const [key, value] of Object.entries(i)){
