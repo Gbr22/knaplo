@@ -57,7 +57,7 @@
 
 <script>
 
-import { login } from '../dataHandler';
+import { login, afterLogin } from '../dataHandler';
 
 
 
@@ -89,8 +89,9 @@ export default {
       onSubmit(){
           login(this.form).then((result)=>{
               if(result.success){
+                  window.GlobalState.user = result.data;
                   window.GlobalState.loggedIn = true;
-                  
+                  afterLogin();
               }
               console.log(result);
           })
