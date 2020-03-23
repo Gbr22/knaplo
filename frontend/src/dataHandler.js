@@ -1,4 +1,4 @@
-
+import GlobalState from './globalState';
 
 
 function showError(message){
@@ -63,7 +63,17 @@ function post(url, data){
 }
 function login(form){
     return post("login",form);
+}
+function getData(){
+    return get("data");
+}
 
+function afterLogin(){
+    getData().then((result)=>{
+        if (result.success){
+            GlobalState.data = result.data;
+        }
+    });
 }
 
 
@@ -105,5 +115,6 @@ export {
     login,
     getInst,
     currentUser,
-    User
+    User,
+    afterLogin,
 };
