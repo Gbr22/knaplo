@@ -5,6 +5,8 @@ html, body {
     margin: 0;
     padding: 0;
     overflow: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 .link, #credits a {
     color: var(--link-color);
