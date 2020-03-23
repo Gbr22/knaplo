@@ -26,8 +26,8 @@
                                 :data-active="active"
                                 class="instItem"
                             >
-                                <div v-on:click="selected_inst = item.inst" class="school">
-                                    <input type="radio" name="inst" :value="item.inst" :id="item.inst" :checked="selected_inst == item.inst">
+                                <div v-on:click="selected_inst = item.code" class="school">
+                                    <input type="radio" name="inst" :value="item.inst" :id="item.inst" :checked="selected_inst == item.code" :data-test="item.code">
                                     <span class="checkmark">
                                         
                                     </span>
@@ -45,7 +45,6 @@
                     </div>
                 </div>
                 
-                <span id="selected_inst">{{ selected_inst }}</span>
                 <input aria-label="Felhasználónév" name="username" type="text" placeholder="Felhasználónév" autocomplete="username" required>
                 <input aria-label="Jelszó" name="password" type="password" placeholder="Jelszó" autocomplete="current-password" required>
                 <input type="submit" value="Bejelentkezés">
@@ -79,7 +78,7 @@ export default {
   },
   methods:{
       setSearch(s){
-          requestAnimationFrame(()=>{
+          this.$nextTick(()=>{
               this.search = s;
           });
           
