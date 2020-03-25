@@ -5,7 +5,7 @@
       <Settings v-if="currentMenu == 'settings'"/>
       <HalfYr v-if="currentMenu == 'halfyr'"/>
     </div>
-    <Nav />
+    <Nav v-if="loggedIn" />
     <MessageDisplay />
   </div>
 </template>

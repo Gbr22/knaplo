@@ -119,10 +119,123 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
+
 <style scoped>
-    .scroller {
-        height: 150px;
-        overflow-y: auto;
-    }
+
+.scroller {
+    height: 150px;
+    overflow-y: auto;
+}
+
+    
+#login_form {
+    text-align: center;
+    display: table;
+    
+    position: relative;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    height: 100vh;
+    height: var(--vh-100);
+    width: 100%;
+}
+#login_error {
+    background-color: var(--error-color);
+    padding: 5px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+#login_wrap {
+    background-color: var(--bg-color);
+    display: table-cell;
+    vertical-align: middle;
+    padding: 0 20px;
+}
+#login_form h1 {
+    margin-top: 0;
+}
+button, input {
+    font-family: Helvetica, sans-serif;
+}
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active  {
+    font-size: 16px;
+    -webkit-text-fill-color: var(--text-color);
+    transition: "color 9999s ease-out, background-color 9999s ease-out";
+    transition-delay: 9999s;
+}
+#login_form input[type="text"], #login_form input[type="password"], #login_form input[type="submit"] {
+    box-sizing: border-box;
+    width: 100%;
+    display: block;
+    border: 1px solid var(--divider-color);
+    padding: 10px 20px;
+    margin: 10px auto;
+    border-radius: 8px;
+    outline: none;
+    color: var(--text-color);
+    background-color: var(--element2-color);
+    font-size: 16px;
+}
+#login_form input[type="submit"] {
+    background-color: #199649;
+    border: none;
+    /*color: rgb(240, 255, 249);*/
+    color:white;
+}
+
+#school_section {
+    background-color: #2E2D2E;
+    padding: 5px 20px;
+    border-radius: 15px;
+}
+#school_section input[type="text"]{
+    background-color: rgb(59, 59, 59);
+    color: rgb(228, 228, 228);
+    border: none;
+}
+#schools {
+    width: 100%;
+    margin: auto;
+    height: 150px;
+    overflow: auto;
+
+    color: rgb(228, 228, 228);
+}
+
+.school {
+    box-sizing: border-box;
+    padding: 8px 15px;
+    text-align: left;
+}
+.school i {
+    color: #949494;
+    font-style: normal;
+}
+.school input {
+    display: none;
+}
+.school label {
+    vertical-align: middle;
+}
+.school .checkmark {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: #b3b3b3;
+    display: inline-block;
+    vertical-align: middle;
+    transition: opacity .3s ease-out;
+    color: green;
+}
+.school .checkmark i {
+    color: inherit;
+}
+.school input:checked ~ .checkmark {
+    background-color: #1CAA53;
+}
+
 </style>
