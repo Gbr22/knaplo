@@ -3,8 +3,8 @@
     <Login v-if="!loggedIn" />
     <div v-if="loggedIn">
       <Settings />
-      <MessageDisplay />
     </div>
+    <MessageDisplay />
   </div>
 </template>
 

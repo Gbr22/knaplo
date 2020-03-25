@@ -1,10 +1,7 @@
 import GlobalState from './globalState';
 
 
-function showError(message){
-    alert(message);
-    // TODO: Implement error widget
-}
+import { pushError } from './components/MessageDisplay';
 
 function makeRequest(mode,url, data = {}){
     let base = "/api/";
@@ -12,7 +9,7 @@ function makeRequest(mode,url, data = {}){
         function resolve(obj){
 
             if (!obj.success){
-                showError(obj.message)
+                pushError(obj.message)
             }
 
             promiseResolve(obj);

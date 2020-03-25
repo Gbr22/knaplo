@@ -61,11 +61,12 @@ export default {
 <style scoped>
     #msg {
         position: fixed;
-        bottom:40px;
+        bottom:30px;
         width:100%;
         text-align: center;
         animation-name: up;
         animation-duration: 0.3s;
+        z-index: 9999;
     }
     .error .inner {
         background-color: lightcoral;
