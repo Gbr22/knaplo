@@ -75,7 +75,7 @@ export default {
 
     background-color: var(--element-color);
     /*border-top: 1px solid #e6e6e6;*/
-    position: fixed;
+    
     
     bottom: 0;
     left: 0;

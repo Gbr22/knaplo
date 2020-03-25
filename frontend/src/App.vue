@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <Login v-if="!loggedIn" />
-    <div v-if="loggedIn">
+    <div v-if="loggedIn" id="pageviewer">
       <Settings v-if="currentMenu == 'settings'"/>
       <HalfYr v-if="currentMenu == 'halfyr'"/>
     </div>

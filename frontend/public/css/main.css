@@ -1,13 +1,30 @@
 * {
     font-family: Helvetica, sans-serif;
 }
-html, body {
+html, body, #app {
     margin: 0;
     padding: 0;
     overflow: auto;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    height: 100%;
 }
+#pageviewer {
+    flex: 1;
+    overflow-y: auto;
+    position: relative;
+}
+#app {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    overflow-y: hidden;
+}
+#menu {
+    flex:0;
+    position: relative;
+}
+
 .link, #credits a {
     color: var(--link-color);
     text-decoration: none;
@@ -41,11 +58,6 @@ body {
     stroke: var(--text-color);
 }
 
-#app {
-    position: relative;
-    display: block;
-    box-sizing: border-box;
-}
 #app_screen {
     padding-bottom: 60px;
 }
