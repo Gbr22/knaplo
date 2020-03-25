@@ -3,6 +3,7 @@
     <Login v-if="!loggedIn" />
     <div v-if="loggedIn">
       <Settings />
+      <MessageDisplay />
     </div>
   </div>
 </template>
@@ -11,12 +12,14 @@
 import Login from './view/Login';
 import Settings from './view/Settings';
 import GlobalState from './globalState';
+import MessageDisplay from './components/MessageDisplay'
 
 export default {
   name: 'App',
   components: {
     Login,
     Settings,
+    MessageDisplay
   },
   data:()=>{
     return GlobalState
