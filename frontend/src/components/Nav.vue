@@ -67,7 +67,9 @@ export default {
     display: none;
 }
 #menu {
-    display: table;
+    display: flex;
+    justify-content: space-around;
+    
     text-align: center;
 
 
@@ -116,10 +118,10 @@ export default {
     color: #2A2D34;
 }
 #menu button {
-    display:table-cell;
+    
     text-align:center;
     /*display: inline-block;*/
-    width: 25%;
+    
     padding: 8px 15px;
     
     box-sizing: border-box;
