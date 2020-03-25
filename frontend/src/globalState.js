@@ -8,6 +8,14 @@ let GlobalState = {
     inst:getInst(),
     loggedIn:false,
     data:null,
+    
+    processedData:{
+        subjects:[],
+        grades:[],
+        notes:[],
+        absences:[]
+    },
+    
     user:null,
     currentMenu:"settings"
 };

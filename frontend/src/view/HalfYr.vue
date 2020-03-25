@@ -30,7 +30,7 @@ export default {
     data:()=>{
         return {
             GlobalState,
-            subjects:[...Array(10).keys()].map((i)=>({name:"Tantárgy "+(i*1+1), HalfYear:{value:Math.floor(Math.random()*3+3)}, EndYear:null}))
+            subjects:GlobalState.processedData.subjects
         }
     },
     components:{

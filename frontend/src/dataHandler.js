@@ -65,10 +65,81 @@ function getData(){
     return get("data");
 }
 
+export class NormalisedItem {
+
+    obj=null;
+
+    getCreateDate = ()=>this.obj.CreatingTime;
+    getDate = ()=>this.obj.Date;
+
+    
+
+    constructor(o) {
+        this.obj = o;
+    }
+}
+  
+export class Grade extends NormalisedItem {
+
+    value;
+    teacher;
+    theme;
+    mode;
+
+    constructor(o) {
+        super(o);
+        this.value = o.NumberValue;
+        this.teacher = o.Teacher;
+        this.subject = o.Subject;
+    }
+    
+}
+
+function updateArray(arr,n){
+    arr.splice(0,arr.length);
+    arr.push(...n);
+}
+
 function afterLogin(){
     getData().then((result)=>{
         if (result.success){
-            GlobalState.data = result.data;
+            let data = GlobalState.data = result.data;
+            let pd = GlobalState.processedData;
+
+            
+
+            let grades = data.Evaluations.filter((e)=>{
+                return e.Form == "Mark" && e.Type == "MidYear";
+            }).map((e)=>{
+                return new Grade(e);
+            });
+
+            let subjects = [];
+            let subject_keys = {};
+
+            for (let g of grades){
+                if (!subject_keys[g.subject]){
+                    let obj = {
+                        name:g.subject,
+                        average:5,
+                        grades:[]
+                    };
+                    subject_keys[g.subject] = obj;
+                    subjects.push(obj)
+                }
+                subject_keys[g.subject].grades.push(g);
+                
+            }
+            subjects.sort(function(a,b){
+                return a.name.localeCompare(b.name);
+            })
+            
+
+            updateArray(pd.grades,grades);
+            updateArray(pd.subjects,subjects);
+
+            
+            
         }
     });
 }
