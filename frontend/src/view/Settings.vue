@@ -185,4 +185,93 @@ export default {
     stroke: var(--text-smol);
     
 }
+
+
+
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 26px;
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--element2-color);
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: #00cc99;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+    transform: translateX(24px);
+}
+
+/* Rounded sliders */
+.slider {
+    border-radius: 26px;
+}
+
+.slider:before {
+border-radius: 50%;
+}
+
+#credits {
+    background-color: var(--element2-color);
+    background-color: var(--modal-color);
+    box-shadow: var(--modal-shadow);
+    margin: 0 20px;
+    margin-top: 60px;
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+}
+#credits h2 {
+    margin-bottom: 13px;
+}
+#credits img {
+    height: 45px;
+    border-radius: 50%;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.10);
+}
+
+#credits h2 img, #credits h2 span {
+    display: inline-block;
+    vertical-align: middle;
+}
+#credits p {
+    margin: 0;
+    margin-top: 2px;
+}
 </style>
