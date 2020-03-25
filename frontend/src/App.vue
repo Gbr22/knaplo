@@ -2,7 +2,8 @@
   <div id="app">
     <Login v-if="!loggedIn" />
     <div v-if="loggedIn">
-      <Settings />
+      <Settings v-if="currentMenu == 'settings'"/>
+      <HalfYr v-if="currentMenu == 'halfyr'"/>
     </div>
     <Nav />
     <MessageDisplay />
@@ -12,6 +13,7 @@
 <script>
 import Login from './view/Login';
 import Settings from './view/Settings';
+import HalfYr from './view/HalfYr';
 import GlobalState from './globalState';
 import MessageDisplay from './components/MessageDisplay';
 import Nav from './components/Nav';
@@ -22,7 +24,8 @@ export default {
     Login,
     Settings,
     MessageDisplay,
-    Nav
+    Nav,
+    HalfYr
   },
   data:()=>{
     return GlobalState

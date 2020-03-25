@@ -8,7 +8,8 @@ let GlobalState = {
     inst:getInst(),
     loggedIn:false,
     data:null,
-    user:null
+    user:null,
+    currentMenu:"settings"
 };
 
 window.Cookies = Cookies;
