@@ -1,5 +1,5 @@
 <template>
-    <div v-if="GlobalState.data != null" id="info_page">
+    <div id="info_page">
         
         <div id="profile_circle_container">
             <span id="profile_circle">
@@ -7,7 +7,7 @@
                     <use xlink:href="fi#user"/>
                 </svg>
             </span>
-            <h1 id="fullname">{{ GlobalState.data.Name }}</h1>
+            <h1 id="fullname">{{ GlobalState.data ? GlobalState.data.Name : "#### ####" }}</h1>
         </div>
 
         <ul id="info_action">
@@ -30,7 +30,7 @@
                 </svg>
                 <h2>
                     <div class="big">Kijelentkezés</div>
-                    <div class="small">{{ GlobalState.user.username }}</div>
+                    <div class="small">{{ GlobalState.user ? GlobalState.user.username : "##########" }}</div>
                 </h2>
                 <span class="action">
                     <button class="simplebtn" v-on:click="logout()">
