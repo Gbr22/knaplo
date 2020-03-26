@@ -17,7 +17,7 @@ let GlobalState = {
     },
     
     user:null,
-    currentMenu:"settings"
+    currentMenu:"timeline"
 };
 
 window.Cookies = Cookies;

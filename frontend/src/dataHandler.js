@@ -69,18 +69,29 @@ export class NormalisedItem {
 
     obj=null;
 
-    getCreateDate = ()=>this.obj.CreatingTime;
-    getDate = ()=>this.obj.Date;
-
+    createDate;
+    date;
     
+    type="normal";
+    
+    key;
+
+    header;
+    icon;
+    desc;
 
     constructor(o) {
         this.obj = o;
+        this.createDate = o.CreatingTime;
+        this.date = o.Date;
+
+        this.key = this.type+this.obj.EvaluationId+this.obj.Jelleg?.Id;
     }
 }
-  
+
 export class Grade extends NormalisedItem {
 
+    type="grade";
     value;
     teacher;
     theme;
@@ -91,6 +102,12 @@ export class Grade extends NormalisedItem {
         this.value = o.NumberValue;
         this.teacher = o.Teacher;
         this.subject = o.Subject;
+        this.theme = o.Theme;
+        this.mode = o.Mode;
+
+        this.header = this.subject;
+        this.desc = this.theme ? this.theme : this.mode;
+        this.icon = this.value;
     }
     
 }

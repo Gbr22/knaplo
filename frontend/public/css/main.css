@@ -396,13 +396,11 @@ circle {
     border-radius: 15px;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
-    
-    
 }
 body, .list, #recent, .fullpage_modal {
     background-color: var(--bg-color);
 }
-.list, #recent, #subject_grades {
+.list, #subject_grades {
     margin: 0;
     padding: 10px 10px;
     box-sizing: border-box;
@@ -453,7 +451,6 @@ body, .list, #recent, .fullpage_modal {
     list-style: none;
     width: 100%;
     font-size: 16px;
-    margin: 8px 0;
     box-sizing: border-box;
 
     background-color: var(--element-color);
@@ -465,8 +462,9 @@ body, .list, #recent, .fullpage_modal {
 }
 .lItem {
     padding: 8px 12px;
+    margin: 8px 0;
 }
-.lItem:hover, .recent:hover {
+.lItem:hover, .hover .recent {
     background-color: var(--elem-active);
 }
 .subject_header {

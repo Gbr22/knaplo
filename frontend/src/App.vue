@@ -2,6 +2,7 @@
   <div id="app">
     <Login v-if="!loggedIn" />
     <div v-if="loggedIn" id="pageviewer">
+      <Timeline v-if="currentMenu == 'timeline'"/>
       <Settings v-if="currentMenu == 'settings'"/>
       <HalfYr v-if="currentMenu == 'halfyr'"/>
     </div>
@@ -17,6 +18,7 @@ import HalfYr from './view/HalfYr';
 import GlobalState from './globalState';
 import MessageDisplay from './components/MessageDisplay';
 import Nav from './components/Nav';
+import Timeline from './view/Timeline';
 
 export default {
   name: 'App',
@@ -25,7 +27,8 @@ export default {
     Settings,
     MessageDisplay,
     Nav,
-    HalfYr
+    HalfYr,
+    Timeline
   },
   data:()=>{
     return GlobalState
