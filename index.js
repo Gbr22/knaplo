@@ -69,137 +69,6 @@ function decrypt(data){
     console.log("Took: ",Date.now()- start);
 }
 
-function refresh(req,res,setcookie){
-    return new Promise(async function(resolve,reject){
-
-    
-        let result = await api.refresh(req.cookies["inst"],req.cookies["refresh_token"])
-        
-
-        if (result == "error"){
-            //console.log("Refresh token failed, trying password");
-
-
-            let _return = false;
-            //try logging in again
-            let password;
-            try {
-                password = decrypt(req.cookies["password_encrypted"]);
-            } catch(err){
-                //console.log("Failed to decrypt password",err);
-                resolve(false);
-                return;
-            }
-
-            
-            api.login(req.cookies["inst"],req.cookies["username"],password)
-            .catch((error)=>{
-                //console.log("Password failed");
-
-                let options = {expires: new Date(0)};
-                setcookie("access_token","", options);
-                setcookie("refresh_token","", options);    
-                setcookie("inst","", options);
-                setcookie("username","", options);
-                setcookie("password_encrypted","", options);
-
-                
-                res.send();
-
-                resolve(false);
-            })
-            .then( (result) => {
-                //console.log("Password auth successful");
-
-                let options = {maxAge: 1000*60*60*24*30*365};
-
-                setcookie("access_token",result.access_token, options);
-                setcookie("refresh_token",result.refresh_token, options);
-                setcookie("time",Date.now(), options);
-
-                resolve(true);
-            });
-
-            
-            
-            
-        } else {
-            //console.log("Token auth successfull");
-
-            let options = {maxAge: 1000*60*60*24*30*365};
-
-            //console.log("token",result.access_token);
-
-            setcookie("access_token",result.access_token, options);
-            setcookie("refresh_token",result.refresh_token, options);
-            setcookie("time",Date.now(), options);
-
-            resolve(true);
-        }
-
-        
-
-    });
-}
-
-app.all('/**',async (req, res, next) => {
-    
-
-    
-    if (req.cookies["access_token"] && req.cookies["inst"] && req.cookies["refresh_token"]){
-        console.log("Refreshing auth");        
-
-        let setcookie = function(cookie_name,value){
-            req.cookies[cookie_name] = value;
-
-            res.cookie(...arguments);
-        }
-
-        let ref = await refresh(req,res,setcookie);
-        console.log("Refresh: "+ref);
-
-        
-    }    
-
-    next();
-    
-});
-app.all('/health',async (req, res) => {
-    let resp = {
-        time:Date.now(),
-        timeZoneOffset:(new Date()).getTimezoneOffset()
-    };
-    res.send(JSON.stringify(resp));
-});
-app.all('/inst_full',async (req, res) => {
-    res.sendFile(__dirname+"/institute.json");
-});
-app.all('/institute',async (req, res) => {
-    res.sendFile(__dirname+"/inst_clean.json");
-});
-
-/* app.all('/data',async (req, res) => {
-    let school = req.cookies["inst"];
-    let token = req.cookies["access_token"];
-
-    api.pipeData(school,token,res);
-}); */
-app.all('/data',async (req, res) => {
-    let school = req.cookies["inst"];
-    let token = req.cookies["access_token"];
-
-    let data = await api.studentAmi(school, token);
-    res.send(data);
-    /* api.getData(school,token).then((data)=>{
-        res.send(data);
-    }).catch((err)=>{
-        res.status(500);
-        res.send("error");
-    }) */
-});
-app.all('/lastcommit',async (req, res) => {
-    res.send(JSON.stringify(lastcommit));
-});
 app.all('/login',async (req, res) => {
      
     let needs = {
@@ -258,6 +127,144 @@ app.all('/login',async (req, res) => {
 
         }
     })
+});
+function refresh(login){
+    return new Promise(async function(resolve,reject){
+
+        console.log("login",login);
+        let result = await api.refresh(login.inst,login.refresh_token);
+        console.log("result for ",login.inst, login.refresh_token, result);
+
+        if (result == "error"){
+            //console.log("Refresh token failed, trying password");
+
+
+            let _return = false;
+            //try logging in again
+            let password;
+            try {
+                password = decrypt(login.password_encrypted);
+            } catch(err){
+                //console.log("Failed to decrypt password",err);
+                resolve(false);
+                return;
+            }
+            console.log("decrypted password");
+            
+            api.login(login.inst,login.username,password)
+            .catch((error)=>{
+                resolve(false);
+            })
+            .then( (result) => {
+                console.log("Password auth successful");
+
+                login.access_token = result.access_token;
+                login.refresh_token = result.refresh_token;
+                
+
+                resolve(true);
+            });
+
+            
+            
+            
+        } else {
+            console.log("Token auth successfull");
+
+            login.access_token = result.access_token;
+            login.refresh_token = result.refresh_token;
+
+            resolve(true);
+        }
+
+        
+
+    });
+}
+app.all('/inst_full',async (req, res) => {
+    res.sendFile(__dirname+"/institute.json");
+});
+app.all('/institute',async (req, res) => {
+    res.sendFile(__dirname+"/inst_clean.json");
+});
+app.all('/**',async (req, res, next) => {
+    let login = null;
+    function tryRefresh(){
+        return new Promise(function(resolve,reject){
+            try {
+                login = JSON.parse(req.cookies["loginInfo"]);
+            } catch(err){
+                reject();
+            }
+            
+
+
+            if (login){
+                console.log("Refreshing auth");
+        
+                refresh(login).then((ref)=>{
+                    console.log("refresh:",ref);
+                    if (ref == true){
+                        resolve();
+                    } else {
+                        reject();
+                    }
+                }).catch(()=>{
+                    reject();
+                })
+            } else {
+                reject();
+            }
+        });
+    }
+    function badLogin(){
+        res.statusCode = 500;
+        res.send("Érvénytelen bejelentkezés");
+    }
+
+    tryRefresh().then((success)=>{
+        req.login = login;
+        res.cookie("loginInfo",JSON.stringify(login));
+        next();
+    }).catch((err)=>{
+        console.log(err);
+        badLogin();
+    })
+});
+app.all('/health',async (req, res) => {
+    let resp = {
+        time:Date.now(),
+        timeZoneOffset:(new Date()).getTimezoneOffset()
+    };
+    res.send(JSON.stringify(resp));
+});
+
+
+/* app.all('/data',async (req, res) => {
+    let school = req.cookies["inst"];
+    let token = req.cookies["access_token"];
+
+    api.pipeData(school,token,res);
+}); */
+app.all('/data',async (req, res) => {
+    let school = req.login.inst;
+    let token = req.login.access_token;
+
+    api.studentAmi(school, token).then((data)=>{
+        res.send(data);
+    }).catch((err)=>{
+        res.send(err.message);
+    })
+    
+    /* api.getData(school,token).then((data)=>{
+        res.send(data);
+    }).catch((err)=>{
+        res.status(500);
+        res.send("error");
+    }) */
+});
+app.all('/lastcommit',async (req, res) => {
+    res.send(JSON.stringify(lastcommit));
 });
 
 app.listen(port);
