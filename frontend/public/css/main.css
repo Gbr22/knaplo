@@ -326,30 +326,30 @@ circle {
     font-weight: bold;
 
 }
-[data-grade="5"] {
+[data-state="5"] .left {
     color: #00cc66;
 }
-[data-grade="4"] {
+[data-state="4"] .left {
     color: #009999;
 }
-[data-grade="3"] {
+[data-state="3"] .left {
     color: #ffcc00;
 }
-[data-grade="2"] {
+[data-state="2"] .left {
     color: #ff6600;
 }
-[data-grade="1"] {
+[data-state="1"] .left {
     color: #b32400;
 }
-[data-grade="#"] {
+[data-state="#"] .left {
     color: #669999;
 }
 
 
-.absence svg {
+[data-item-type="absence"] svg {
     stroke: #009999;
 }
-.absence.justified svg {
+[data-item-type="absence"][data-state="true"] svg {
     stroke: #00af58;
 }
 

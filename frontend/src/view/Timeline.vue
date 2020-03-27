@@ -35,13 +35,13 @@
                     :data-active="active"
                 >
                     <div class="itemWrap">
-                        <div class="gradeLike recent">
+                        <div class="gradeLike recent" :data-item-type="item.type" :data-state="item.displayState">
                             <span v-if="(item.icon+'').startsWith('fi')" class="left">
                                 <svg class="feather">
                                     <use :xlink:href="'/'+item.icon"/>
                                 </svg>
                             </span>
-                            <span v-else class="left" :data-grade="item.icon">
+                            <span v-else class="left">
                                 {{ item.icon }}
                             </span>
                             <span class="right">
@@ -74,7 +74,11 @@ export default {
     }),
     methods:{
         getItemsList(){
-            let arrays = [this.GlobalState.processedData.grades,this.GlobalState.processedData.notes]
+            let arrays = [
+                this.GlobalState.processedData.grades,
+                this.GlobalState.processedData.notes,
+                this.GlobalState.processedData.absences
+            ]
             
             let arr = arrays.flat();
             arr.sort((a,b)=>{

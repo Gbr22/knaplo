@@ -80,6 +80,8 @@ export class NormalisedItem {
     icon;
     desc;
 
+    displayState;
+
     map(map){
         for (let p in map){
             this[p] = this.obj[map[p]];
@@ -93,7 +95,7 @@ export class NormalisedItem {
 
 
 
-        this.key = this.type+this.obj.EvaluationId+this.obj.Jelleg?.Id+this.obj.NoteId;
+        this.key = this.type+this.obj.EvaluationId+this.obj.Jelleg?.Id+this.obj.NoteId+this.obj.AbsenceId;
     }
 }
 
@@ -118,8 +120,39 @@ export class Grade extends NormalisedItem {
         this.header = this.subject;
         this.desc = this.theme ? this.theme : this.mode;
         this.icon = this.value;
+        this.displayState = this.value;
     }
 }
+
+export class Absence extends NormalisedItem {
+
+    type="absence";
+    absenceType;
+    subject;
+    lesson;
+    delayMinutes;
+    justified;
+
+    constructor(o) {
+        super(o);
+        this.map({
+            absenceType:"Type",
+            subject:"Subject",
+            lesson:"NumberOfLessons",
+            delayMinutes:"DelayTimeMinutes",
+        });
+        this.date = o.LessonStartTime;
+        this.justified = o.JustificationState == "Justified";
+        
+        
+
+        this.header = `${o.TypeName} - ${this.justified ? `Igazolt (${o.JustificationTypeName})` : 'Igazolatlan'}`;
+        this.desc = `${this.lesson}. Óra - ${this.subject}${this.absenceType == "Delay" ? `, ${this.delayMinutes} perc`:''}`;
+        this.icon = "fi#clock";
+        this.displayState = this.justified;
+    }
+}
+
 export class Note extends NormalisedItem {
     type="note";
     
@@ -205,7 +238,7 @@ function afterLogin(){
             updateArray(pd.grades,grades);
             updateArray(pd.subjects,subjects);
             updateArray(pd.notes, data.Notes.map((n)=>new Note(n)));
-            
+            updateArray(pd.absences, data.Absences.map((a)=>new Absence(a)));
             
         }
     });
