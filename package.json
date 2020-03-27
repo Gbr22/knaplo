@@ -1,0 +1,21 @@
+{
+  "name": "knaplo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "dependencies": {
+    "cookie-parser": "^1.4.4",
+    "express": "^4.17.1",
+    "jaaulde-cookies": "^3.0.6",
+    "request": "^2.88.0",
+    "request-promise-native": "^1.0.7"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start-prod":"npm run build-front & node index.js",
+    "build-front": "cd frontend && npm i && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Gbr22/knaplo.git"
+  }
+}
