@@ -150,6 +150,14 @@ function afterLogin(){
             subjects.sort(function(a,b){
                 return a.name.localeCompare(b.name);
             })
+            for (let e of data.Evaluations){
+                if (e.Type == "HalfYear" || e.Type == "EndYear"){
+                    if (subject_keys[e.Subject]){
+                        subject_keys[e.Subject][e.Type] = new Grade(e);
+                    }
+                    
+                }
+            }
             
 
             updateArray(pd.grades,grades);

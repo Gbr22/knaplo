@@ -46,7 +46,7 @@ export default {
                     sum+=subj[type].value;
                 }
             }
-            return sum == 0 ? "#" : sum/subjects.length;
+            return sum == 0 ? "#" : (sum/subjects.length).toFixed(2);
         }
     }
     
