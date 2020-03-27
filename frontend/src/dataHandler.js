@@ -80,12 +80,20 @@ export class NormalisedItem {
     icon;
     desc;
 
+    map(map){
+        for (let p in map){
+            this[p] = this.obj[map[p]];
+        }        
+    }
+
     constructor(o) {
         this.obj = o;
         this.createDate = o.CreatingTime;
         this.date = o.Date;
 
-        this.key = this.type+this.obj.EvaluationId+this.obj.Jelleg?.Id;
+
+
+        this.key = this.type+this.obj.EvaluationId+this.obj.Jelleg?.Id+this.obj.NoteId;
     }
 }
 
@@ -99,17 +107,51 @@ export class Grade extends NormalisedItem {
 
     constructor(o) {
         super(o);
-        this.value = o.NumberValue;
-        this.teacher = o.Teacher;
-        this.subject = o.Subject;
-        this.theme = o.Theme;
-        this.mode = o.Mode;
+        this.map({
+            value:"NumberValue",
+            teacher:"Teacher",
+            subject:"Subject",
+            theme:"Theme",
+            mode:"Mode",
+        });
 
         this.header = this.subject;
         this.desc = this.theme ? this.theme : this.mode;
         this.icon = this.value;
     }
+}
+export class Note extends NormalisedItem {
+    type="note";
     
+    title;
+    content;
+    teacher;
+    noteType;
+
+    constructor(o) {
+        super(o);
+        this.map({
+            title:"Title",
+            content:"Content",
+            teacher:"Teacher",
+            noteType:"Type",
+        });
+
+        function shorten(text){
+            let limit = 70;
+            if (text.length > limit){
+                let textarr = text.slice(0,limit).split(" ");
+                textarr.pop();
+                return textarr.join(" ")+"...";
+            } else {
+                return text;
+            }
+        }
+
+        this.header = this.title;
+        this.desc = shorten(this.content);
+        this.icon = "fi#message-square";
+    }
 }
 
 function updateArray(arr,n){
@@ -162,7 +204,7 @@ function afterLogin(){
 
             updateArray(pd.grades,grades);
             updateArray(pd.subjects,subjects);
-
+            updateArray(pd.notes, data.Notes.map((n)=>new Note(n)));
             
             
         }
