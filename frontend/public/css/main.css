@@ -326,22 +326,22 @@ circle {
     font-weight: bold;
 
 }
-[data-state="5"] .left {
+[data-state="5"] .left, [data-grade="5"] {
     color: #00cc66;
 }
-[data-state="4"] .left {
+[data-state="4"] .left, [data-grade="4"] {
     color: #009999;
 }
-[data-state="3"] .left {
+[data-state="3"] .left, [data-grade="3"] {
     color: #ffcc00;
 }
-[data-state="2"] .left {
+[data-state="2"] .left, [data-grade="2"] {
     color: #ff6600;
 }
-[data-state="1"] .left {
+[data-state="1"] .left, [data-grade="1"] {
     color: #b32400;
 }
-[data-state="#"] .left {
+[data-state="#"] .left, [data-grade="#"] {
     color: #669999;
 }
 
