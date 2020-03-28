@@ -1,5 +1,6 @@
 import GlobalState from './globalState';
 
+import { openModal } from './components/Modal';
 
 import { pushError } from './components/MessageDisplay';
 
@@ -81,6 +82,8 @@ export class NormalisedItem {
     desc;
 
     displayState;
+
+    onclick(){}
 
     map(map){
         for (let p in map){
@@ -186,6 +189,21 @@ export class Note extends NormalisedItem {
     content;
     teacher;
     noteType;
+
+    onclick(){
+        function formatURLs(text){
+            let regex = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/g;
+            
+            
+            return text.replace(regex, function(match){
+                return /* html */`<a href="${match}" class="link" target="_blank">${match}</a>`;
+            });
+            
+        }
+
+
+        openModal(this.title,formatURLs(this.content));
+    }
 
     constructor(o) {
         super(o);

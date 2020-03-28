@@ -1,6 +1,6 @@
 <template>
 <div class="itemWrap">
-    <div class="gradeLike recent" :data-item-type="item.type" :data-state="item.displayState">
+    <div class="gradeLike recent" :data-item-type="item.type" :data-state="item.displayState" v-on:click="item.onclick()">
         <span v-if="(item.icon+'').startsWith('fi')" class="left">
             <svg class="feather">
                 <use :xlink:href="'/'+item.icon"/>
