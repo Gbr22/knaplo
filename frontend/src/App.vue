@@ -2,7 +2,7 @@
   <div id="app">
     <Login v-if="!loggedIn" />
     <div v-if="loggedIn" id="pageviewer">
-      <Timeline v-if="currentMenu == 'timeline'"/>
+      <Timeline v-show="currentMenu == 'timeline'"/>
       <Settings v-if="currentMenu == 'settings'"/>
       <HalfYr v-if="currentMenu == 'halfyr'"/>
     </div>
