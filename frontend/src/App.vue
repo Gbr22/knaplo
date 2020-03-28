@@ -5,6 +5,7 @@
       <Timeline v-show="currentMenu == 'timeline'"/>
       <Settings v-if="currentMenu == 'settings'"/>
       <HalfYr v-if="currentMenu == 'halfyr'"/>
+      <Modal />
     </div>
     <Nav v-if="loggedIn" />
     <MessageDisplay />
@@ -19,6 +20,7 @@ import GlobalState from './globalState';
 import MessageDisplay from './components/MessageDisplay';
 import Nav from './components/Nav';
 import Timeline from './view/Timeline';
+import Modal from './components/Modal';
 
 export default {
   name: 'App',
@@ -28,7 +30,8 @@ export default {
     MessageDisplay,
     Nav,
     HalfYr,
-    Timeline
+    Timeline,
+    Modal
   },
   data:()=>{
     return GlobalState
