@@ -4,6 +4,8 @@ import { openModal } from './components/Modal';
 
 import { pushError } from './components/MessageDisplay';
 
+import AbsenceModal from './components/AbsenceModal';
+
 function makeRequest(mode,url, data = {}){
     let base = "/api/";
     return new Promise(function(promiseResolve){
@@ -161,11 +163,16 @@ export class AbsentDay extends Absence {
 
     push(lesson){
         this.absences.push(lesson);
-        let lessons = this.absences.map((e)=>e.lesson);
-        lessons.sort((a,b)=>{
-            return a-b;
+        this.absences.sort((a,b)=>{
+            return a.lesson-b.lesson;
         })
+        let lessons = this.absences.map((e)=>e.lesson);
+        
         this.desc = `Érintett órák: ${lessons.join(", ")}`;
+    }
+
+    onclick(){
+        openModal(`Hiányzások`,AbsenceModal,this);
     }
 
     constructor(o) {

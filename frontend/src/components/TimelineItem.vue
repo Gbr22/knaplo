@@ -38,5 +38,9 @@ export default {
 </script>
 
 <style>
-
+.itemWrap {
+    padding: 0 10px;
+    padding-bottom: 8px;
+    box-sizing: border-box;
+}
 </style>

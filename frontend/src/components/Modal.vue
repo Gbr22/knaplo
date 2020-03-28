@@ -10,9 +10,7 @@
                             <use xlink:href="fi#x"/>
                         </svg>
                     </div>
-                    <div v-html="content" class="content">
-
-                    </div>
+                    <component v-bind:is="contentComponent" :obj="obj" class="content"></component>
                 </div>
             </div>
         </transition>
@@ -22,16 +20,29 @@
 
 <script>
 
+import ModalContent from './ModalContent';
+
+
 let data = {
     open:false,
     title:"Title",
-    content:"Hello"
+    obj:{},
+    contentComponent:null
 };
 
-export function openModal(title,content){
+export function openModal(title,content,obj){
+    let component;
+    if (typeof content == "string"){
+        component = ModalContent;
+        data.obj = {html:content};
+    } else {
+        component = content;
+        data.obj = obj;
+    }
+    
     data.open = true;
     data.title = title;
-    data.content = content;
+    data.contentComponent = component;
 }
 export function closeModal(){
     data.open = false;
@@ -78,7 +89,6 @@ export default {
         position: relative;
         height: 100%;
         width: 100%;
-        padding: 20px;
         box-sizing: border-box;
     }
     .content {
@@ -86,6 +96,7 @@ export default {
         overflow-x: hidden;
         width: 100%;
         word-wrap: break-word;
+        margin-top: 20px;
     }
     .fade-enter-active, .fade-leave-active {
         transition: all .2s;
@@ -97,7 +108,8 @@ export default {
 
     .header {
         display: flex;
-        
+        padding: 20px;
+        padding-bottom: 0;
     }
     .pad {
         width: 60px;
