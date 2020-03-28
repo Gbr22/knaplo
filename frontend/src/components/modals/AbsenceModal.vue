@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import TimelineItem from './TimelineItem';
+import TimelineItem from '../TimelineItem';
 
 export default {
     name:"AbsenceModal",

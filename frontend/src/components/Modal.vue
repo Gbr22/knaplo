@@ -1,5 +1,5 @@
 <template>
-    <div class="wrap" v-show="open">
+    <div class="wrap" v-show="open" @click.self="closeModal()">
         <transition name="fade">
             <div class="modal" v-if="open">
                 <div class="inner">
@@ -10,7 +10,7 @@
                             <use xlink:href="fi#x"/>
                         </svg>
                     </div>
-                    <component v-bind:is="contentComponent" :obj="obj" class="content"></component>
+                    <component v-bind:is="contentComponent" :obj="obj" :close="closeModal" class="content"></component>
                 </div>
             </div>
         </transition>
@@ -112,9 +112,9 @@ export default {
         padding-bottom: 0;
     }
     .pad {
-        width: 60px;
+        width: 20px;
         height: 10px;
-        flex-shrink: 1;
+        flex: 1;
     }
     .close {
         flex-shrink: 0;

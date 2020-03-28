@@ -11,12 +11,12 @@
             >
                 <template #before>
                     <h1 id="header">
-                        <span class="left" id="recentModeSelector">
-                            Idővonal
+                        <span class="left" id="recentModeSelector" @click="selectMode()">
+                            {{ getShowName() }}
                         </span>
                         <span class="right">
                             <svg class="feather">
-                                <use :xlink:href="'fi#'+'box'"/>
+                                <use :xlink:href="'/'+getShowIcon()"/>
                             </svg>
                         </span>
                         
@@ -48,22 +48,65 @@
 <script>
 import GlobalState from '../globalState';
 import TimelineItem from '../components/TimelineItem';
+import { openModal } from '../components/Modal';
+import SelectModal from '../components/modals/SelectModal';
+
+let modes = {
+    all:["Minden", "fi#box"],
+    grades:["Jegyek", "fi#book"],
+    notes:["Feljegyzések", "fi#clipboard"],
+    absences:["Mulasztások","fi#watch"]
+};
 
 export default {
     name:"Timeline",
     data:()=>({
         GlobalState,
+        show:"all",
     }),
     methods:{
+        selectMode(){
+            let options = Object.keys(modes).map((mode)=>{
+                return {
+                    value:mode,
+                    display:modes[mode][0],
+                    icon:modes[mode][1]
+                }
+            })
+
+            openModal("Idővonal",SelectModal, {
+                options,
+                currentValue:this.show,
+                callback: (value)=>{
+                    this.show = value;
+                }
+            })
+        },
+        getShowName(){
+            let map = modes;
+            return map[this.show][0];
+        },
+        getShowIcon(){
+            let map = modes;
+            return map[this.show][1];
+        },
         getItemsList(){
-            let arrays = [
-                this.GlobalState.processedData.grades,
-                this.GlobalState.processedData.notes,
-                this.GlobalState.processedData.absentDays,
-                this.GlobalState.processedData.delays,
-            ]
+            let map = {
+                grades:this.GlobalState.processedData.grades,
+                notes:this.GlobalState.processedData.notes,
+                absences:[this.GlobalState.processedData.absentDays,
+                this.GlobalState.processedData.delays]
+            };
+
+            let arrays = [];
+
+            if (this.show == "all"){
+                arrays = Object.values(map);
+            } else {
+                arrays = map[this.show] || [];
+            }
             
-            let arr = arrays.flat();
+            let arr = arrays.flat().flat();
             arr.sort((a,b)=>{
                 return new Date(b.createDate) - new Date(a.createDate);
             });

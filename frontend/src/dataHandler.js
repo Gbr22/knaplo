@@ -4,7 +4,7 @@ import { openModal } from './components/Modal';
 
 import { pushError } from './components/MessageDisplay';
 
-import AbsenceModal from './components/AbsenceModal';
+import AbsenceModal from './components/modals/AbsenceModal';
 
 function makeRequest(mode,url, data = {}){
     let base = "/api/";
