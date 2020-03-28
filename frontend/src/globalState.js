@@ -13,7 +13,9 @@ let GlobalState = {
         subjects:[],
         grades:[],
         notes:[],
-        absences:[]
+        absentDays:[],
+        absences:[],
+        delays:[]
     },
     
     user:null,

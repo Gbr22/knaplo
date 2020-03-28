@@ -77,7 +77,8 @@ export default {
             let arrays = [
                 this.GlobalState.processedData.grades,
                 this.GlobalState.processedData.notes,
-                this.GlobalState.processedData.absences
+                this.GlobalState.processedData.absentDays,
+                this.GlobalState.processedData.delays,
             ]
             
             let arr = arrays.flat();

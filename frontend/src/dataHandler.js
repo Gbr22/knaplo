@@ -152,6 +152,32 @@ export class Absence extends NormalisedItem {
         this.displayState = this.justified;
     }
 }
+export class AbsentDay extends Absence {
+
+    absences = [];
+
+    push(lesson){
+        this.absences.push(lesson);
+        let lessons = this.absences.map((e)=>e.lesson);
+        lessons.sort((a,b)=>{
+            return a-b;
+        })
+        this.desc = `Érintett órák: ${lessons.join(", ")}`;
+    }
+
+    constructor(o) {
+        super(o);
+        
+
+        this.header = `${o.TypeName} - ${this.justified ? `Igazolt (${o.JustificationTypeName})` : 'Igazolatlan'}`;
+        this.desc="";
+
+        this.icon = "fi#clock";
+        this.displayState = this.justified;
+    }
+
+
+}
 
 export class Note extends NormalisedItem {
     type="note";
@@ -238,7 +264,32 @@ function afterLogin(){
             updateArray(pd.grades,grades);
             updateArray(pd.subjects,subjects);
             updateArray(pd.notes, data.Notes.map((n)=>new Note(n)));
-            updateArray(pd.absences, data.Absences.map((a)=>new Absence(a)));
+
+            {
+                let delays = [];
+                let map = {};
+                for (let e of data.Absences){
+                    if (e.Type == "Delay"){
+                        delays.push(new Absence(e));
+                    } else {
+                        let id = e.JustificationType + e.Type + e.LessonStartTime;
+                        let day = map[id];
+                        if (day){
+                            day;
+                        } else {
+                            day = map[id] = new AbsentDay(e);
+                        }
+                        day.push(new Absence(e));
+                    }
+                }
+                let absentDays = Object.values(map);
+                console.log(absentDays);
+                updateArray(pd.absentDays, absentDays);
+                updateArray(pd.delays, delays);
+            }
+            updateArray(pd.absences, data.Absences.map((e)=>new Absence(e)));
+
+            
             
         }
     });
@@ -257,7 +308,6 @@ function getInst(callback = ()=>{}){
             }));
             items.push(...result.data);
             callback(result.data);
-            console.log(result.data);
         }
     });
     
