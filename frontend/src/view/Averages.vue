@@ -14,7 +14,7 @@
                 <!-- <i class="material-icons left">equalizer</i> -->
                 <span class="right">
                     <span class="big">
-                        {{ format(average()) }}
+                        {{ format(getAverage()) }}
                     </span>
                     <span class="small">Átlag</span>
                 </span>
@@ -69,6 +69,7 @@
 <script>
 import GlobalState from '../globalState';
 import { openModal } from '../components/Modal';
+import { roundSubject, getAverage } from '../dataHandler';
 
 var ranks = [
     {
@@ -113,18 +114,16 @@ export default {
             console.log(name);
             return name.split(" ").map((e)=>e[0]).join("");
         },
-        average(){
-            return 4.53; //TODO calc average
-        },
+        getAverage,
         format(num){
-            return num; //TODO 
+            return parseFloat(num.toFixed(2));
         },
         rank(){
             let highest = ranks[ranks.length-1];
 
             for (let rank of ranks){
                 
-                if (this.average() >= rank.min && rank.min > highest.min){
+                if (this.getAverage() >= rank.min && rank.min > highest.min){
                     highest = rank;
                 }
                 
@@ -145,12 +144,10 @@ export default {
                 </div>
             `);
         },
-        isRoundedUp(){
-            return true; //TODO
+        isRoundedUp(subject){
+            return roundSubject(subject) >= subject.average;
         },
-        roundSubject(subject){
-            return subject.average; //TODO round subject
-        }
+        roundSubject
     }
 }
 </script>

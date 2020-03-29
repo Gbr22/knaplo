@@ -242,6 +242,24 @@ function updateArray(arr,n){
     arr.splice(0,arr.length);
     arr.push(...n);
 }
+export function roundSubject(subject){
+    return Math.round(subject.average); //TODO 
+}
+export function calcAvg(subject){
+    let sum = 0;
+    for (let grade of subject.grades){
+        sum += grade.value;
+    }
+    return sum/subject.grades.length;
+}
+export function getAverage(){
+    let sum = 0;
+    for (let subject of GlobalState.processedData.subjects){
+        sum += roundSubject(subject);
+    }
+    return sum / GlobalState.processedData.subjects.length;
+}
+window.getAverage = getAverage;
 
 function afterLogin(){
     getData().then((result)=>{
@@ -287,6 +305,11 @@ function afterLogin(){
             
 
             updateArray(pd.grades,grades);
+
+            for (let subject of subjects){
+                subject.average = calcAvg(subject);
+            }
+
             updateArray(pd.subjects,subjects);
             updateArray(pd.notes, data.Notes.map((n)=>new Note(n)));
 
