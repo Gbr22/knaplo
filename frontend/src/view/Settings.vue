@@ -18,7 +18,7 @@
                 <h2>Sötét téma</h2>
                 <span class="action">
                     <label class="switch">
-                        <input type="checkbox" :checked="ThemeHandler.isDark()" :click="ThemeHandler.toggleDarkMode()">
+                        <input type="checkbox" :checked="ThemeHandler.isDark()" @click="ThemeHandler.toggleDarkMode()">
                         <span class="slider"></span>
                     </label>
                 </span>
