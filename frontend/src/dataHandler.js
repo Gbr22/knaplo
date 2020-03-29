@@ -6,6 +6,18 @@ import { pushError } from './components/MessageDisplay';
 
 import AbsenceModal from './components/modals/AbsenceModal';
 
+function putCall(call, obj){
+    localStorage.setItem("data_"+call,JSON.stringify(obj));
+}
+function getCall(call){
+    let storage = localStorage.getItem("data_"+call);
+    if (storage){
+        return JSON.parse(storage);
+    } else {
+        return {success:false, message: "Adat nem létezik a gyorsítótárban", data:null, code:"NO_CACHE"}
+    }
+}
+
 function makeRequest(mode,url, data = {}){
     let base = "/api/";
     return new Promise(function(promiseResolve){
@@ -13,11 +25,22 @@ function makeRequest(mode,url, data = {}){
 
             if (!obj.success){
                 pushError(obj.message)
+            } else if (obj.success){
+                putCall(url, obj);
             }
 
             promiseResolve(obj);
         }
-
+        function HTMLtoString(html){
+            let e = document.createElement("div");
+            e.innerHTML = html;
+            let title = e.querySelector("title");
+            if (title){
+                title.innerHTML = "";
+            }
+            console.log("element",e);
+            return e.textContent;
+        }
 
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
@@ -31,7 +54,7 @@ function makeRequest(mode,url, data = {}){
                 
                 
             } else if (this.readyState == 4) {
-                resolve({success:false, message: xhttp.responseText || `Hiba ${this.status}`, data:null});
+                resolve({success:false, message: HTMLtoString(xhttp.responseText) || `Hiba ${this.status}`, data:null});
             }
         };
         let params = "";
@@ -261,85 +284,93 @@ export function getAverage(){
 }
 window.getAverage = getAverage;
 
-function afterLogin(){
-    getData().then((result)=>{
-        if (result.success){
-            let data = GlobalState.data = result.data;
-            let pd = GlobalState.processedData;
+function processData(result){
+    if (result.success){
+        let data = GlobalState.data = result.data;
+        let pd = GlobalState.processedData;
 
-            
+        
 
-            let grades = data.Evaluations.filter((e)=>{
-                return e.Form == "Mark" && e.Type == "MidYear";
-            }).map((e)=>{
-                return new Grade(e);
-            });
+        let grades = data.Evaluations.filter((e)=>{
+            return e.Form == "Mark" && e.Type == "MidYear";
+        }).map((e)=>{
+            return new Grade(e);
+        });
 
-            let subjects = [];
-            let subject_keys = {};
+        let subjects = [];
+        let subject_keys = {};
 
-            for (let g of grades){
-                if (!subject_keys[g.subject]){
-                    let obj = {
-                        name:g.subject,
-                        average:5,
-                        grades:[]
-                    };
-                    subject_keys[g.subject] = obj;
-                    subjects.push(obj)
-                }
-                subject_keys[g.subject].grades.push(g);
-                
+        for (let g of grades){
+            if (!subject_keys[g.subject]){
+                let obj = {
+                    name:g.subject,
+                    average:5,
+                    grades:[]
+                };
+                subject_keys[g.subject] = obj;
+                subjects.push(obj)
             }
-            subjects.sort(function(a,b){
-                return a.name.localeCompare(b.name);
-            })
-            for (let e of data.Evaluations){
-                if (e.Type == "HalfYear" || e.Type == "EndYear"){
-                    if (subject_keys[e.Subject]){
-                        subject_keys[e.Subject][e.Type] = new Grade(e);
-                    }
-                    
-                }
-            }
-            
-
-            updateArray(pd.grades,grades);
-
-            for (let subject of subjects){
-                subject.average = calcAvg(subject);
-            }
-
-            updateArray(pd.subjects,subjects);
-            updateArray(pd.notes, data.Notes.map((n)=>new Note(n)));
-
-            {
-                let delays = [];
-                let map = {};
-                for (let e of data.Absences){
-                    if (e.Type == "Delay"){
-                        delays.push(new Absence(e));
-                    } else {
-                        let id = e.JustificationType + e.Type + e.LessonStartTime;
-                        let day = map[id];
-                        if (day){
-                            day;
-                        } else {
-                            day = map[id] = new AbsentDay(e);
-                        }
-                        day.push(new Absence(e));
-                    }
-                }
-                let absentDays = Object.values(map);
-                console.log(absentDays);
-                updateArray(pd.absentDays, absentDays);
-                updateArray(pd.delays, delays);
-            }
-            updateArray(pd.absences, data.Absences.map((e)=>new Absence(e)));
-
-            
+            subject_keys[g.subject].grades.push(g);
             
         }
+        subjects.sort(function(a,b){
+            return a.name.localeCompare(b.name);
+        })
+        for (let e of data.Evaluations){
+            if (e.Type == "HalfYear" || e.Type == "EndYear"){
+                if (subject_keys[e.Subject]){
+                    subject_keys[e.Subject][e.Type] = new Grade(e);
+                }
+                
+            }
+        }
+        
+
+        updateArray(pd.grades,grades);
+
+        for (let subject of subjects){
+            subject.average = calcAvg(subject);
+        }
+
+        updateArray(pd.subjects,subjects);
+        updateArray(pd.notes, data.Notes.map((n)=>new Note(n)));
+
+        {
+            let delays = [];
+            let map = {};
+            for (let e of data.Absences){
+                if (e.Type == "Delay"){
+                    delays.push(new Absence(e));
+                } else {
+                    let id = e.JustificationType + e.Type + e.LessonStartTime;
+                    let day = map[id];
+                    if (day){
+                        day;
+                    } else {
+                        day = map[id] = new AbsentDay(e);
+                    }
+                    day.push(new Absence(e));
+                }
+            }
+            let absentDays = Object.values(map);
+            console.log(absentDays);
+            updateArray(pd.absentDays, absentDays);
+            updateArray(pd.delays, delays);
+        }
+        updateArray(pd.absences, data.Absences.map((e)=>new Absence(e)));
+
+        
+        
+    }
+}
+
+function afterLogin(){
+    setImmediate(()=>{
+        processData(getCall("data"));
+    });
+    
+    getData().then((result)=>{
+        processData(result);
     });
 }
 
