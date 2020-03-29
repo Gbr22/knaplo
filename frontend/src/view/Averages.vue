@@ -2,7 +2,7 @@
 <div id="home" class="screen">
     <div id="avg_screen">
         <div id="circle_container">
-            <!-- <progress-ring id="avg_circle" :stroke-color="rank().color" :radius="120/2" :progress="avg_percent()" :stroke="6"></progress-ring> -->
+            <ProgressRing id="avg_circle" stroke-color="#DCE0D9" :radius="120/2" :progress="avgPercent()" :stroke="6"></ProgressRing>
             <span id="total_avg"><span id="total_avg_text">{{ GlobalState.data ? nameAbbriv(GlobalState.data.Name) : "##" }}</span></span>
         </div>
         <div id="avg_detail_cont">
@@ -71,6 +71,8 @@ import GlobalState from '../globalState';
 import { openModal } from '../components/Modal';
 import { roundSubject, getAverage } from '../dataHandler';
 
+import ProgressRing from '../components/ProgressRing';
+
 var ranks = [
     {
         min: 4.5,
@@ -105,6 +107,9 @@ export default {
         return {
             GlobalState,
         }
+    },
+    components:{
+        ProgressRing
     },
     methods:{
         openSubject(){
@@ -146,6 +151,9 @@ export default {
         },
         isRoundedUp(subject){
             return roundSubject(subject) >= subject.average;
+        },
+        avgPercent(){
+            return this.getAverage() / 5 * 100;
         },
         roundSubject
     }
