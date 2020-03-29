@@ -147,7 +147,7 @@ body {
     text-align: center;
 }
 
-#ranks, #roundView {
+#roundView {
     width: 100%;
     box-sizing: border-box;
     margin: 30px;

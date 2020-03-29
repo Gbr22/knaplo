@@ -19,7 +19,7 @@ let GlobalState = {
     },
     
     user:null,
-    currentMenu:"timeline"
+    currentMenu:"avgs"
 };
 
 window.Cookies = Cookies;

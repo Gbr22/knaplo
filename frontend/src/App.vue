@@ -2,6 +2,7 @@
   <div id="app">
     <Login v-if="!loggedIn" />
     <div v-if="loggedIn" id="pageviewer">
+      <Averages v-if="currentMenu == 'avgs'" />
       <Timeline v-show="currentMenu == 'timeline'"/>
       <Settings v-if="currentMenu == 'settings'"/>
       <HalfYr v-if="currentMenu == 'halfyr'"/>
@@ -21,6 +22,7 @@ import MessageDisplay from './components/MessageDisplay';
 import Nav from './components/Nav';
 import Timeline from './view/Timeline';
 import Modal from './components/Modal';
+import Averages from './view/Averages';
 
 export default {
   name: 'App',
@@ -31,7 +33,8 @@ export default {
     Nav,
     HalfYr,
     Timeline,
-    Modal
+    Modal,
+    Averages
   },
   data:()=>{
     return GlobalState
