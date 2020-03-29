@@ -224,7 +224,7 @@ app.all('/**',async (req, res, next) => {
 
     tryRefresh().then((success)=>{
         req.login = login;
-        res.cookie("loginInfo",JSON.stringify(login));
+        res.cookie("loginInfo",JSON.stringify(login), {maxAge: 1000*60*60*24*30*365});
         next();
     }).catch((err)=>{
         console.log(err);
