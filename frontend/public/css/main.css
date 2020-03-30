@@ -507,12 +507,7 @@ body, .list, #recent, .fullpage_modal {
     stroke: #1CAA53;    
 }
 
-.subject .tinygrade:first-child {
-    margin-left: 0;
-}
-.tinygrade {
-    margin-left: 6px;
-    display: inline-block;
+.subject_grades {
     color: var(--text-smol);
 }
 

@@ -58,7 +58,7 @@
                 
             </div>
             <div class="subject_grades">
-                <span class="tinygrade" v-for="grade in subject.grades" v-bind:key="grade.key">{{ grade.value }}</span>
+                {{ subject.grades.map((e)=>e.value).join(" ") }}
             </div>
         </li>
     </ul>
