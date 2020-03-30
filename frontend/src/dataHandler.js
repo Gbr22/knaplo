@@ -21,7 +21,9 @@ function getCall(call){
 }
 
 export function openSubject(subject){
-    openModal(subject.name,SubjectModal,subject);
+    openModal(subject.name,SubjectModal,subject,{
+        mode:"wide"
+    });
 }
 
 function makeRequest(mode,url, data = {}){

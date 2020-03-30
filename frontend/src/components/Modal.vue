@@ -1,5 +1,5 @@
 <template>
-    <div class="wrap" v-show="open" @click.self="closeModal()">
+    <div class="wrap" v-show="open" @click.self="closeModal()" :data-mode="settings.mode">
         <transition name="fade">
             <div class="modal" v-if="open">
                 <div class="inner">
@@ -27,10 +27,11 @@ let data = {
     open:false,
     title:"Title",
     obj:{},
-    contentComponent:null
+    contentComponent:null,
+    settings:{}
 };
 
-export function openModal(title,content,obj){
+export function openModal(title,content,obj,settings = {}){
     let component;
     if (typeof content == "string"){
         component = ModalContent;
@@ -43,6 +44,7 @@ export function openModal(title,content,obj){
     data.open = true;
     data.title = title;
     data.contentComponent = component;
+    data.settings = settings;
 }
 export function closeModal(){
     data.open = false;
@@ -80,10 +82,14 @@ export default {
         
         border-radius: 15px;
         overflow-x: hidden;
-        max-width: 100%;
-        max-height: 100%;
+        max-width: min(100%, 500px);
+        max-height: min(100%, 500px);
         position: relative;
     }
+    [data-mode="wide"] .modal{
+        min-width: min(370px, 100%);
+    }
+
     .inner {
         /* overflow-x: hidden; */
         position: relative;
