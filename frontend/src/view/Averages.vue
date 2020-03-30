@@ -1,42 +1,44 @@
 <template>
 <div id="home" class="screen">
     <div id="avg_screen">
-        <div id="circle_container">
-            <ProgressRing id="avg_circle" stroke-color="#DCE0D9" :radius="120/2" :progress="avgPercent()" :stroke="6"></ProgressRing>
-            <span id="total_avg"><span id="total_avg_text">{{ GlobalState.data ? nameAbbriv(GlobalState.data.Name) : "##" }}</span></span>
-        </div>
-        <div id="avg_detail_cont">
-            <span class="section avg">
-                
-                <svg class="feather">
-                    <use xlink:href="/fi#bar-chart-2"/>
-                </svg>
-                <!-- <i class="material-icons left">equalizer</i> -->
-                <span class="right">
-                    <span class="big">
-                        {{ format(getAverage()) }}
+        <div class="inner" v-show="GlobalState.data">
+            <div id="circle_container">
+                <ProgressRing id="avg_circle" stroke-color="#DCE0D9" :radius="120/2" :progress="avgPercent()" :stroke="6"></ProgressRing>
+                <span id="total_avg"><span id="total_avg_text">{{ GlobalState.data ? nameAbbriv(GlobalState.data.Name) : "##" }}</span></span>
+            </div>
+            <div id="avg_detail_cont">
+                <span class="section avg">
+                    
+                    <svg class="feather">
+                        <use xlink:href="/fi#bar-chart-2"/>
+                    </svg>
+                    <!-- <i class="material-icons left">equalizer</i> -->
+                    <span class="right">
+                        <span class="big">
+                            {{ format(getAverage()) }}
+                        </span>
+                        <span class="small">Átlag</span>
                     </span>
-                    <span class="small">Átlag</span>
+                    
                 </span>
-                
-            </span>
 
-            <span class="divider"></span>
+                <span class="divider"></span>
 
-            <span class="section rank">
-                
-                <svg class="feather">
-                    <use xlink:href="/fi#award"/>
-                </svg>
-                <!-- <i class="material-icons left">stars</i> -->
-                <span class="right">
-                    <span class="big">
-                        <a @click="openRanksMenu()">{{ rank().name }}</a>
+                <span class="section rank">
+                    
+                    <svg class="feather">
+                        <use xlink:href="/fi#award"/>
+                    </svg>
+                    <!-- <i class="material-icons left">stars</i> -->
+                    <span class="right">
+                        <span class="big">
+                            <a @click="openRanksMenu()">{{ rank().name }}</a>
+                        </span>
+                        <span class="small">Rang</span>
                     </span>
-                    <span class="small">Rang</span>
+                    
                 </span>
-                
-            </span>
+            </div>
         </div>
     </div>
     <ul id="subjects" class="list">
