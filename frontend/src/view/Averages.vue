@@ -164,4 +164,109 @@ export default {
 
 <style>
 
+#subject_grades {
+    text-align: initial;
+}
+
+#subject_details h1 {
+    margin-top: 80px;
+    
+}
+#subj_detail_section {
+    width: 100%;
+    white-space: nowrap;
+    display: block;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    padding: 10px 0;
+}
+#avg_graph .chart-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    
+}
+#avg_graph .chart-container canvas {
+    display: inline-block;
+    vertical-align: middle;
+}
+#avg_graph, #avg_calc {
+    width: 80%;
+    display: inline-block;
+    margin-left: 10%;
+    scroll-snap-align: center;
+    vertical-align: middle;
+}
+#avg_graph {
+    margin-right: 10%;
+    height: 200px;
+}
+#avg_calc .type {
+    display: flex;
+}
+#avg_calc .type .avgtitle {
+    vertical-align: middle;
+    display: inline-block;
+    width: 60%;
+    text-align: left;
+    flex: 1;
+}
+#avg_calc .type .num {
+    display: inline-block;
+    width: 40px;
+    text-align: left;
+    flex-shrink: 0;
+}
+
+#avg_calc .avg {
+    font-size: 19px;
+    margin-bottom: 25px;
+}
+
+.avg_calc_grade {
+    padding: 3px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+}
+
+.avg_calc_grade .gradename {
+    display: inline-block;
+    text-align: left;
+    width: 50%;
+    font-size: 19px;
+    flex: 1;
+}
+.avg_calc_grade .gradename, .avg_calc_grade .gradecount {
+    vertical-align: middle;
+}
+.avg_calc_grade .gradecount {
+    width: 40px;
+    text-align: center;
+    display: inline-block;
+    font-size: 19px;
+}
+.avg_calc_grade button {
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 50%;
+    outline: none;
+    background-color: var(--element-color);
+    
+    position: relative;
+    vertical-align: middle;
+}
+.avg_calc_grade button svg {
+    stroke: rgb(184, 189, 181);
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    width: 22px;
+    height: 22px;
+}
 </style>
