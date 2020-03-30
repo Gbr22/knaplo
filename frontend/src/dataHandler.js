@@ -5,6 +5,8 @@ import { openModal } from './components/Modal';
 import { pushError } from './components/MessageDisplay';
 
 import AbsenceModal from './components/modals/AbsenceModal';
+import SubjectModal from './components/modals/SubjectModal';
+
 
 function putCall(call, obj){
     localStorage.setItem("data_"+call,JSON.stringify(obj));
@@ -16,6 +18,10 @@ function getCall(call){
     } else {
         return {success:false, message: "Adat nem létezik a gyorsítótárban", data:null, code:"NO_CACHE"}
     }
+}
+
+export function openSubject(subject){
+    openModal(subject.name,SubjectModal,subject);
 }
 
 function makeRequest(mode,url, data = {}){

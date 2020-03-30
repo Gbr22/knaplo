@@ -40,10 +40,10 @@
         </div>
     </div>
     <ul id="subjects" class="list">
-        <li v-for="(subject) in GlobalState.processedData.subjects" class="subject lItem" v-on:click="openSubject(subject)" v-bind:key="subject.name">
+        <li v-for="(subject) in GlobalState.processedData.subjects" class="subject lItem" v-on:click="openSubject(subject)" v-bind:key="subject.name" @click="openSubject(subject)">
             <div class="subject_header">
                 <span class="left">{{ subject.name }}</span>
-                <span class="right" :onclick="'showRoundView(\''+subject.name+'\',event)'">
+                <span class="right">
                     <span>{{ format(subject.average) }}</span>
                     <svg class="feather" v-bind:class="{ up: isRoundedUp(subject) }">
                         <use xlink:href="/fi#chevrons-right"/>
@@ -69,7 +69,9 @@
 <script>
 import GlobalState from '../globalState';
 import { openModal } from '../components/Modal';
-import { roundSubject, getAverage } from '../dataHandler';
+import { roundSubject, getAverage, openSubject } from '../dataHandler';
+
+
 
 import ProgressRing from '../components/ProgressRing';
 
@@ -112,9 +114,7 @@ export default {
         ProgressRing
     },
     methods:{
-        openSubject(){
-            //TODO 
-        },
+        openSubject,
         nameAbbriv(name){
             console.log(name);
             return name.split(" ").map((e)=>e[0]).join("");

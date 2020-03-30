@@ -126,6 +126,7 @@ export default {
     }
     .header h1 {
         flex: 1;
+        
     }
     
 </style>
