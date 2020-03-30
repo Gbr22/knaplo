@@ -274,12 +274,21 @@ function updateArray(arr,n){
 export function roundSubject(subject){
     return Math.round(subject.average); //TODO 
 }
-export function calcAvg(subject){
+export function calcAvg(subject, avgCalc = {}){
     let sum = 0;
+    let count = subject.grades.length;
+
+    for (let [grade, c] of Object.entries(avgCalc)){
+        sum += c * parseInt(grade);
+        console.log(grade,c);
+        count+=c;
+    }
+    
+
     for (let grade of subject.grades){
         sum += grade.value;
     }
-    return sum/subject.grades.length;
+    return sum/count;
 }
 export function getAverage(){
     let sum = 0;

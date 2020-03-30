@@ -662,16 +662,21 @@ body, .list, #recent, .fullpage_modal {
     margin-right: 10%;
     height: 200px;
 }
+#avg_calc .type {
+    display: flex;
+}
 #avg_calc .type .avgtitle {
     vertical-align: middle;
     display: inline-block;
     width: 60%;
     text-align: left;
+    flex: 1;
 }
 #avg_calc .type .num {
     display: inline-block;
-    width: 30px;
+    width: 40px;
     text-align: left;
+    flex-shrink: 0;
 }
 
 #avg_calc .avg {
@@ -682,6 +687,8 @@ body, .list, #recent, .fullpage_modal {
 .avg_calc_grade {
     padding: 3px;
     box-sizing: border-box;
+    display: flex;
+    align-items: center;
 }
 
 .avg_calc_grade .gradename {
@@ -689,6 +696,10 @@ body, .list, #recent, .fullpage_modal {
     text-align: left;
     width: 50%;
     font-size: 19px;
+    flex: 1;
+}
+.avg_calc_grade .gradename, .avg_calc_grade .gradecount {
+    vertical-align: middle;
 }
 .avg_calc_grade .gradecount {
     width: 40px;
@@ -702,7 +713,7 @@ body, .list, #recent, .fullpage_modal {
     border: none;
     border-radius: 50%;
     outline: none;
-    background-color: #2A2D34;
+    background-color: var(--element-color);
     
     position: relative;
     vertical-align: middle;

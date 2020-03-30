@@ -114,7 +114,7 @@ export default {
     .pad {
         width: 20px;
         height: 10px;
-        flex: 1;
+        flex-shrink: 1;
     }
     .close {
         flex-shrink: 0;
@@ -126,7 +126,7 @@ export default {
     }
     .header h1 {
         flex: 1;
-        
+
     }
     
 </style>
