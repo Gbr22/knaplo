@@ -478,6 +478,8 @@ body, .list, #recent, .fullpage_modal {
 }
 .subject_header {
     white-space: nowrap;
+    display: flex;
+    align-items: center;
 }
 .subject_header .left, .subject_header .right {
     
@@ -487,12 +489,13 @@ body, .list, #recent, .fullpage_modal {
     padding: 0;
 }
 .subject_header .left {
-    width: 80%;
-    width: calc(100% - 85px);
+    flex: 1;
     white-space: initial;
+    font-weight: bold;
 }
 .subject_header .right {
-    width: 80px;
+    flex-shrink: 0;
+    width: 60px;
     text-align: right;
     vertical-align: top;
 }
