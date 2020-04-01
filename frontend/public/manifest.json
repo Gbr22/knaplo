@@ -1,0 +1,41 @@
+{
+    "short_name": "K Napló",
+    "name": "K Napló",
+    "start_url": "/?source=pwa&utm_source=pwa",
+    "display": "standalone",
+    "orientation": "portrait-primary",
+    "background_color":"#ffffff",
+    "theme_color":"#ffffff",
+    "icons": [
+        {
+            "src": "/icons/icon_vector.svg",
+            "type": "image/svg",
+            "sizes": "128x128 256x256 512x512 1024x1024",
+            "purpose":"maskable any"
+        },
+        {
+          "src": "/icons/icon_128.png",
+          "type": "image/png",
+          "sizes": "128x128",
+          "purpose":"maskable any"
+        },
+        {
+            "src": "/icons/icon_256.png",
+            "type": "image/png",
+            "sizes": "256x256",
+            "purpose":"maskable any"
+        },
+        {
+            "src": "/icons/icon_512.png",
+            "type": "image/png",
+            "sizes": "512x512",
+            "purpose":"maskable any"
+        },
+        {
+            "src": "/icons/icon_1024.png",
+            "type": "image/png",
+            "sizes": "1024x1024",
+            "purpose":"maskable any"
+        }
+    ]
+}
