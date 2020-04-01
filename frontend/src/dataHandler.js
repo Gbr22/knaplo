@@ -282,7 +282,6 @@ export function calcAvg(subject, avgCalc = {}){
 
     for (let [grade, c] of Object.entries(avgCalc)){
         sum += c * parseInt(grade);
-        console.log(grade,c);
         count+=c;
     }
     
@@ -370,7 +369,6 @@ function processData(result){
                 }
             }
             let absentDays = Object.values(map);
-            console.log(absentDays);
             updateArray(pd.absentDays, absentDays);
             updateArray(pd.delays, delays);
         }

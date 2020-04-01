@@ -118,7 +118,6 @@ export default {
     methods:{
         openSubject,
         nameAbbriv(name){
-            console.log(name);
             return name.split(" ").map((e)=>e[0]).join("");
         },
         getAverage,
