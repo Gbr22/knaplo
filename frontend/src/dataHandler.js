@@ -372,7 +372,9 @@ function processData(result){
             updateArray(pd.absentDays, absentDays);
             updateArray(pd.delays, delays);
         }
-        updateArray(pd.absences, data.Absences.map((e)=>new Absence(e)));
+        updateArray(pd.absences, data.Absences.filter((e)=>{
+            return e.Type != "Delay";
+        }).map((e)=>new Absence(e)));
 
         
         

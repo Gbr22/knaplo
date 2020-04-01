@@ -22,6 +22,11 @@
                         
                         
                     </h1>
+                    <div v-if="show == 'absences'" id="absenceCount">
+                        <p>Késések összesen: <b>{{ getDelayMinutes() }} perc</b></p>
+                        <p>Igazolatlan: <b>{{ getAbsenceCount(false) }} óra</b></p>
+                        <p>Igazolt: <b>{{ getAbsenceCount(true) }} óra</b></p>
+                    </div>
                 </template>
                 <template v-slot="{ item, index, active }">
                 <DynamicScrollerItem
@@ -76,6 +81,22 @@ export default {
         }
     },
     methods:{
+        getAbsenceCount(justified){
+            let sum = 0;
+            for (let e of this.GlobalState.processedData.absences){
+                if (e.justified == justified){
+                    sum++;
+                }
+            }
+            return sum;
+        },
+        getDelayMinutes(){
+            let sum = 0;
+            for (let e of this.GlobalState.processedData.delays){
+                sum += e.delayMinutes;
+            }
+            return sum;
+        },
         selectMode(){
             let options = Object.keys(modes).map((mode)=>{
                 return {

@@ -639,7 +639,8 @@ body, .list, #recent, .fullpage_modal {
     padding: 0 20px;
 }
 #absenceCount {
-    padding: 10px 8px;
+    padding: 20px;
+    padding-top: 0;
     box-sizing: border-box;
 }
 #absenceCount p {
