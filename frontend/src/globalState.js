@@ -19,7 +19,7 @@ let GlobalState = {
     },
     
     user:null,
-    currentMenu:"avgs"
+    currentMenu:localStorage.getItem("currentMenu") || "timeline"
 };
 
 window.Cookies = Cookies;

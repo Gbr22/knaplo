@@ -22,6 +22,7 @@ export default {
         navigate(){
             let to = this.navTo;
             GlobalState.currentMenu = to;
+            localStorage.setItem("currentMenu",to);
         }
     }
 }
