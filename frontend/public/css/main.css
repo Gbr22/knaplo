@@ -660,6 +660,12 @@ body, .list, #recent, .fullpage_modal {
         box-shadow: none;
         min-height: 50px;
     }
+    ::-webkit-scrollbar-button {
+        width: 4px;
+        height: 4px;
+        background: none;
+        border: none;
+    }
     ::-webkit-scrollbar-track {
         background: none;
         border: none;
