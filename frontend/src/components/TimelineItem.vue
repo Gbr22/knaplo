@@ -15,7 +15,7 @@
             </div>
             <span class="bottom">{{ item.desc }}</span>
         </span>
-        <span class="date"><b>{{ getDayOfWeek(new Date(item.date)) }}</b><br><i>{{ formatDate(new Date(item.createDate)) }}</i></span>
+        <span class="date"><b>{{ getDayOfWeek(new Date(item.date)) }}</b><br><i>{{ formatDate(new Date(item.date)) }}</i></span>
     </div>
 </div>
 </template>
