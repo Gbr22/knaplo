@@ -6,12 +6,13 @@
     "cookie-parser": "^1.4.4",
     "express": "^4.17.1",
     "jaaulde-cookies": "^3.0.6",
+    "needle": "^2.3.3",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.7"
   },
   "devDependencies": {},
   "scripts": {
-    "start-prod":"npm run build-front & node index.js",
+    "start-prod": "npm run build-front & node index.js",
     "build-front": "cd frontend && npm i && npm run build"
   },
   "repository": {
