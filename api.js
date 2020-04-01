@@ -130,6 +130,7 @@ function studentAmi(school,token){
             url:`https://${school}.e-kreta.hu/mapi/api/v1/StudentAmi`,
             headers:{
                 "Authorization":"Bearer "+token,
+                "User-Agent":userAgent
             },
             json:false
         }).then((json)=>{
