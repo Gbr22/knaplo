@@ -1,6 +1,7 @@
 //imports
 const _request = require('request-promise-native');
 
+const needle = require("needle");
 
 const fs = require('fs');
 
@@ -9,13 +10,14 @@ const api_key = "7856d350-1fda-45f5-822d-e1a2f3f1acf0";
 const api_base = "https://kretaglobalmobileapi.ekreta.hu"
 const client_id = "919e0c1c-76a2-4646-a2fb-7085bbbf3c56";
 const api_full = api_base+"/api/v1/";
+const userAgent = "Kreta.Ellenorzo/2.9.11.2020033003 (Linux; U; Android 8.0.0)";
 
 const defaultOptions = {
     method: "GET",
     headers: {
         "apiKey":api_key,
         "charset":"utf-8",
-        "User-Agent":"Kreta.Ellenorzo/2.9.9.2020022101 (Linux; U; Android 6.0.1)"
+        "User-Agent":userAgent
     },
     json:true
 }
@@ -53,19 +55,24 @@ async function institute(){
 
 function login(school,username,password){
     return new Promise(function(resolve,reject){
-        req({
-            url:`https://${school}.e-kreta.hu/idp/api/v1/Token`,
-            headers:{
-                "Content-Type":"application/x-www-form-urlencoded"
-            },
-            json:true,
-            body:`institute_code=${school}&userName=${username}&password=${password}&grant_type=password&client_id=${client_id}`
-        }).then((json)=>{
-            resolve(json);
-        }).catch((json)=>{
-            //reject(json);
-            resolve(json);
-        });
+        let data = {
+            institute_code:school,
+            userName:username,
+            password:password,
+            grant_type:'password',
+            client_id:client_id,
+        }
+        let options = {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                "User-Agent":userAgent,
+            }
+        }
+        needle('post',`https://${school}.e-kreta.hu/idp/api/v1/Token`, data, options).then((res)=>{
+            resolve(res.body);
+        }).catch((err)=>{
+            reject(err);
+        })
     });
     
 }
@@ -105,6 +112,7 @@ function getData(school,token){
             url:`https://${school}.e-kreta.hu/mapi/api/v1/Student?fromDate=null&toDate=null`,
             headers:{
                 "Authorization":"Bearer "+token,
+                "User-Agent":userAgent
             },
             json:false
         }).then((json)=>{
