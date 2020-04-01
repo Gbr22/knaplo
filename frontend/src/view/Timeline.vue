@@ -60,10 +60,21 @@ let modes = {
 
 export default {
     name:"Timeline",
-    data:()=>({
-        GlobalState,
-        show:"all",
-    }),
+    data:()=>{
+        let stored = localStorage.getItem("timelineMode");
+
+        let show = "all";
+
+        if(Object.keys(modes).includes(stored)){
+            show = stored;
+        }
+
+
+        return {
+            GlobalState,
+            show,
+        }
+    },
     methods:{
         selectMode(){
             let options = Object.keys(modes).map((mode)=>{
@@ -79,6 +90,7 @@ export default {
                 currentValue:this.show,
                 callback: (value)=>{
                     this.show = value;
+                    localStorage.setItem("timelineMode",value);
                 }
             })
         },
