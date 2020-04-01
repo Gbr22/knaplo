@@ -645,3 +645,23 @@ body, .list, #recent, .fullpage_modal {
 #absenceCount p {
     margin: 4px 0;
 }
+
+
+@media (hover: hover) and (pointer: fine) {
+    ::-webkit-scrollbar {
+        width: 16px;
+        height: 16px;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: var(--divider-color);
+        background-clip: padding-box;
+        border: 4px solid transparent;
+        border-radius: 8px;
+        box-shadow: none;
+        min-height: 50px;
+    }
+    ::-webkit-scrollbar-track {
+        background: none;
+        border: none;
+    }
+}
