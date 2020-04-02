@@ -41,23 +41,6 @@
                 </span>
                 
             </li>
-            <li>
-                <svg class="feather">
-                    <use xlink:href="fi#database"/>
-                </svg>
-                <h2>
-                    <div class="big">Gyorsítótár törlése</div>
-                    <div class="small">{{ cacheCount }} elem</div>
-                </h2>
-                <span class="action">
-                    <button class="simplebtn" onclick="clearCachePopUp()">
-                        <svg class="feather">
-                            <use xlink:href="fi#trash-2"/>
-                        </svg>
-                    </button>        
-                </span>
-                
-            </li>
         </ul>
         <div id="credits">
             <div><img src="icons/icon_vector.svg" /></div>
