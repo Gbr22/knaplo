@@ -47,7 +47,13 @@ export function openModal(title,content,obj,settings = {}){
     data.settings = settings;
 }
 export function closeModal(){
-    data.open = false;
+    if (data.open == true){
+        data.open = false;
+        return true; //successfully closed    
+    } else {
+        return false; //nothing to close
+    }
+    
 }
 
 window.openModal = openModal;

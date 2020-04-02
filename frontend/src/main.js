@@ -21,11 +21,20 @@ new Vue({
 
 
 function onBackAction(){
-  closeModal();
+  return closeModal();
 }
+history.pushState({},'');
 window.onpopstate = function(){
-  window.history.pushState({}, '');
-  onBackAction();
+  
+  
+  if (onBackAction()){
+    window.history.pushState({}, '');
+  } else {
+    window.history.back();
+  }
+  
+  
+  
 }
 window.onkeydown = function(event){
   if (event.keyCode == 27){
