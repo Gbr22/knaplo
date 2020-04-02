@@ -4,8 +4,18 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="icon" type="image/png" href="/icons/icon_128.png">
+    
     <title>K napló</title>
+    
+    <script>
+      if('serviceWorker' in navigator) {
+        navigator.serviceWorker
+                 .register('/sw.js')
+                 .then(function() { console.log("Service Worker Registered"); });
+      }
+    </script>
+
+    <link rel="icon" type="image/png" href="/icons/icon_128.png">
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/light.css" title="light" data-theme-style>
     <link rel="stylesheet" href="css/dark.css" title="dark" data-theme-style disabled>
