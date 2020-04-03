@@ -1,8 +1,23 @@
 <template>
     <div class="screen" id="timetable">
-        <div class="header"><h1>Órarend <span v-if="current != null">({{ TTfrom() }} - {{ TTto() }})</span></h1></div>
-        <div v-if="current != null" id="tableWrap">
-            <div v-for="day in current.days" :key="day.day" class="day">
+        <div class="header">
+            <h1>Órarend</h1>
+            <h2 v-if="selectedWeek">
+                <button @click="changeWeek(-1)" v-bind:class="{ nomore: nextWeek(-1) == null }">
+                    <svg class="feather">
+                        <use xlink:href="/fi#chevron-left"/>
+                    </svg>
+                </button>
+                <span class="text">{{ TTfrom() }} - {{ TTto() }}</span>
+                <button @click="changeWeek(1)" v-bind:class="{ nomore: nextWeek(1) == null }">
+                    <svg class="feather">
+                        <use xlink:href="/fi#chevron-right"/>
+                    </svg>
+                </button>
+            </h2>
+        </div>
+        <div v-if="selectedWeek" id="tableWrap">
+            <div v-for="day in selectedWeek.days" :key="day.day" class="day">
                 <h2>{{ getDayName(day.day) }}</h2>
                 <div v-for="lesson in day.lessons" :key="lesson.LessonId" class="lesson">
                     <span class="timeIndex">
@@ -43,33 +58,67 @@ import { formatDate, getDayName, formatTime } from '../util';
 export default {
     name:"Timetable",
     data(){
-        let timetable = GlobalState.processedData.timetable;
-        let current = null;
-
-        
+        let timetable = GlobalState.processedData.timetable;    
 
         return {
             GlobalState,
             timetable,
             weeks:timetable.weeks,
-            current,
+            selectedWeek:null,
         }
     },
     watch:{
         weeks(){
-            for (let e of this.timetable.weeks){
-                console.log(e);
-                if (e.active){
-                    this.current = e;
-                }
-            }
-            let last = this.timetable.weeks[this.timetable.weeks.length-1];
-            if (!this.current){
-                this.current = last;
-            }
+            this.selectedWeek = this.getCurrent();
         }
     },
     methods:{
+        nextWeek(direction){
+            let next = null;
+            for (let w of this.weeks){
+                
+                let selectedW = new Date(this.selectedWeek.week);
+                let thisW = new Date(w.week);
+                let nextW = null;
+                if (next){
+                    nextW = new Date(next.week);
+                }
+
+                direction;
+
+                let b = (a,b)=>{return (a-b)*direction > 0} //bigger
+
+                if (b(thisW, selectedW)){
+                    if (b(nextW, thisW) || nextW == null){
+                        next = w;
+                    }
+                }
+            }
+            return next;
+        },
+        changeWeek(direction){
+            let most = this.nextWeek(direction);
+
+            if (most){
+                this.selectedWeek = most;
+            }
+        },
+        getCurrent(){
+            if (this.selectedWeek != null){
+                return this.selectedWeek;
+            }
+            let current = null;
+            for (let e of this.GlobalState.processedData.timetable.weeks){
+                if (e.active){
+                    current = e;
+                }
+            }
+            let last = this.timetable.weeks[this.timetable.weeks.length-1];
+            if (current==null && last != undefined){
+                current = last;
+            }
+            return current || null;
+        },
         shorten(s,limit){
             let words = s.split(" ");
             let result = null;
@@ -93,10 +142,10 @@ export default {
         },
         getDayName,
         TTfrom(){
-            return formatDate(this.current.first);
+            return formatDate(this.selectedWeek.first);
         },
         TTto(){
-            return formatDate(this.current.last);
+            return formatDate(this.selectedWeek.last);
         },
         formatTime(lesson){
             function f(dateS){
@@ -111,6 +160,24 @@ export default {
 <style scoped>
     .header {
         padding: 20px;
+        text-align: center;
+    }
+    .header h2 {
+        font-size: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .header h2 button.nomore svg {
+        visibility: hidden;
+    }
+    .header h2 button {
+        background: none;
+        border: none;
+        outline: none;
+    }
+    .header h2 svg {
+        stroke: var(--text-smol);
     }
     #tableWrap {
         white-space: nowrap;
