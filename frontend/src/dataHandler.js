@@ -98,6 +98,9 @@ function login(form){
 function getData(){
     return get("data");
 }
+function getTimetable(){
+    return get("timetable");
+}
 
 export class NormalisedItem {
 
@@ -300,6 +303,61 @@ export function getAverage(){
 }
 window.getAverage = getAverage;
 
+function processTimetable(result){
+    if (result.success){
+        let list = GlobalState.lessonsList = result.data;
+
+        
+        let daysMap = {};
+        for (let e of list){
+            
+            let day = (new Date(e.Date)).toDateString();
+            if (!daysMap[day]){
+                daysMap[day] = {
+                    day,
+                    lessons:[]
+                };
+            }
+            daysMap[day].lessons.push(e);
+        }
+        
+        let days = Object.values(daysMap);
+
+
+        let weeksMap = {};
+        for (let e of days){
+            let date = new Date(e.day);
+            
+            let current = date.getDay() - 1;
+            if (current == -1){
+                current = 6;
+            }
+            let first = date.getDate() - current;
+            let last = first + 6;
+
+            first = new Date(date.setDate(first));
+            last = new Date(date.setDate(last));
+
+            
+
+            let week = first.toDateString();
+
+            let active = first < new Date() && new Date() < last;
+
+            if (!weeksMap[week]){
+                weeksMap[week] = {
+                    week,
+                    first,
+                    last,
+                    active,
+                    days:[]
+                }
+            }
+            weeksMap[week].days.push(e);
+        }
+        updateArray(GlobalState.processedData.timetable.weeks, Object.values(weeksMap));
+    }
+}
 function processData(result){
     if (result.success){
         let data = GlobalState.data = result.data;
@@ -384,11 +442,15 @@ function processData(result){
 function afterLogin(){
     setImmediate(()=>{
         processData(getCall("data"));
+        processTimetable(getCall("timetable"));
     });
     
     getData().then((result)=>{
         processData(result);
     });
+    getTimetable().then((result)=>{
+        processTimetable(result);
+    })
 }
 
 

@@ -456,7 +456,7 @@ body, .list, #recent, .fullpage_modal {
 
     transition: background-color 0.3s ease-out;
 }
-.lItem, .recent {
+.lItem, .recent, .lesson {
     list-style: none;
     width: 100%;
     font-size: 16px;
@@ -473,7 +473,7 @@ body, .list, #recent, .fullpage_modal {
     padding: 8px 12px;
     margin: 8px 0;
 }
-.lItem:hover, .hover .recent {
+.lItem:hover, .hover .recent, .lesson:hover {
     background-color: var(--elem-active);
 }
 .subject_header {

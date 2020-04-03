@@ -5,6 +5,7 @@
       <div id="pageview_inner">
         <Averages v-if="currentMenu == 'avgs'" />
         <Timeline v-show="currentMenu == 'timeline'"/>
+        <Timetable v-show="currentMenu == 'timetable'"/>
         <Settings v-if="currentMenu == 'settings'"/>
         <HalfYr v-if="currentMenu == 'halfyr'"/>
       </div>
@@ -25,6 +26,7 @@ import Nav from './components/Nav';
 import Timeline from './view/Timeline';
 import Modal from './components/Modal';
 import Averages from './view/Averages';
+import Timetable from './view/Timetable.vue';
 
 export default {
   name: 'App',
@@ -36,7 +38,8 @@ export default {
     HalfYr,
     Timeline,
     Modal,
-    Averages
+    Averages,
+    Timetable
   },
   data:()=>{
     return GlobalState

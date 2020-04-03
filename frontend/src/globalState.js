@@ -8,14 +8,17 @@ let GlobalState = {
     inst:getInst(),
     loggedIn:false,
     data:null,
-    
+    lessonsList:[],
     processedData:{
         subjects:[],
         grades:[],
         notes:[],
         absentDays:[],
         absences:[],
-        delays:[]
+        delays:[],
+        timetable:{
+            weeks:[]
+        }
     },
     
     user:null,

@@ -3,7 +3,7 @@
         <svg class="feather">
             <use v-bind:xlink:href="'/fi#'+icon"/>
         </svg>
-        <b>{{ text }}</b>
+        <!-- <b>{{ text }}</b> -->
         
     </button>
 </template>
