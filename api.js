@@ -141,6 +141,38 @@ function studentAmi(school,token){
         });
     });
 }
+function timeTable(school,token){
+    let url = `https://${school}.e-kreta.hu/mapi/api/v1/LessonAmi?fromDate=null&toDate=null`;
+    return new Promise(function(resolve,reject){
+        let options = {
+            headers: {
+                "Authorization":"Bearer "+token,
+                "User-Agent":userAgent,
+            }
+        }
+        needle('get',url, options).then((res)=>{
+            resolve(res.body);
+        }).catch((err)=>{
+            reject(err);
+        })
+    });
+}
+function homework(school,token, id){
+    let url = `https://${school}.e-kreta.hu/mapi/api/v1/HaziFeladat/TanarHaziFeladat/${id}`;
+    return new Promise(function(resolve,reject){
+        let options = {
+            headers: {
+                "Authorization":"Bearer "+token,
+                "User-Agent":userAgent,
+            }
+        }
+        needle('get',url, options).then((res)=>{
+            resolve(res.body);
+        }).catch((err)=>{
+            reject(err);
+        })
+    });
+}
 
 
 module.exports = {
@@ -152,5 +184,7 @@ module.exports = {
     getData,
     pipeData,
     refresh,
-    studentAmi
+    studentAmi,
+    timeTable,
+    homework
 }

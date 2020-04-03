@@ -263,6 +263,26 @@ app.all('/data',async (req, res) => {
         res.send("error");
     }) */
 });
+app.all('/timetable',async (req, res) => {
+    let school = req.login.inst;
+    let token = req.login.access_token;
+
+    api.timeTable(school, token).then((data)=>{
+        res.send(data);
+    }).catch((err)=>{
+        res.send(err.message);
+    })
+});
+app.all('/homework/:id',async (req, res) => {
+    let school = req.login.inst;
+    let token = req.login.access_token;
+
+    api.homework(school, token, req.params.id).then((data)=>{
+        res.send(data);
+    }).catch((err)=>{
+        res.send(err.message);
+    })
+});
 app.all('/lastcommit',async (req, res) => {
     res.send(JSON.stringify(lastcommit));
 });
