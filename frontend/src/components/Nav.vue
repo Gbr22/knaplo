@@ -21,6 +21,7 @@ export default {
                 {text:"Átlagok", navTo:"avgs", icon:"bar-chart-2"},
                 {text:"Idővonal", navTo:"timeline", icon:"clock"},
                 {text:"Órarend",navTo:"timetable", icon:'calendar'},
+                {text:"Házik",navTo:"homework", icon:'edit-3'},
                 {text:"Lezárások", navTo:"halfyr", icon:"list"},
                 {text:"Beállítások", navTo:"settings", icon:"settings"},
             ]

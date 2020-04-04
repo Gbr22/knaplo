@@ -33,3 +33,35 @@ export function getDayShortName(date){
     let names = ["V","H","K","Sz","Cs","P","Sz"];
     return names[day];
 }
+export function shortenText(s,limit){
+    let words = s.split(" ");
+    let result = null;
+    while(words.join(" ").length > limit){
+        if (words.length == 1){
+            result = words[0].slice(0,limit);
+        }
+        words.pop();
+    }
+    if (result == null){
+        result = words.join(" ");
+    }
+    if (result != s){
+        return result+"...";
+    } else {
+        return result;
+    }
+}
+export function htmlToText(s){
+    var span = document.createElement('span');
+    span.innerHTML = s;
+    return span.textContent || span.innerText;
+}
+export function formatURLs(text){
+    let regex = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/g;
+    
+    
+    return text.replace(regex, function(match){
+        return /* html */`<a href="${match}" class="link" target="_blank" data-fURL>${match}</a>`;
+    });
+    
+}

@@ -314,10 +314,34 @@ export function getAverage(){
 }
 window.getAverage = getAverage;
 
+function processHomeworks(homeworks){
+    let promises = [];
+    for (let e of homeworks){
+        promises.push(new Promise(function(resolve){
+            getHomeWork(e.id).then((result)=>{
+                if (result.success){
+                    e.homework = result.data;
+                }
+                resolve(e);
+            })
+        }));
+    }
+    Promise.all(promises).then((values)=>{
+        let homeworks = values.filter((e)=>e.homework != undefined);
+        if (homeworks.length != values.length){
+            pushError("Nem sikerült minden házit lekérni");
+        }
+
+        updateArray(GlobalState.processedData.homeworks,homeworks);
+    })
+}
 function processTimetable(result){
     if (result.success){
         let list = GlobalState.lessonsList = result.data;
 
+        let homeworks = list.filter((e)=>e.TeacherHomeworkId != null);
+        homeworks = homeworks.map((e)=>({lesson:e,id:e.TeacherHomeworkId}));
+        processHomeworks(homeworks);
         
         let daysMap = {};
         for (let e of list){

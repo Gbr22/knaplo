@@ -18,7 +18,8 @@ let GlobalState = {
         delays:[],
         timetable:{
             weeks:[]
-        }
+        },
+        homeworks:[]
     },
     
     user:null,

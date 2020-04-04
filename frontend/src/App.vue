@@ -6,6 +6,7 @@
         <Averages v-if="currentMenu == 'avgs'" />
         <Timeline v-show="currentMenu == 'timeline'"/>
         <Timetable v-show="currentMenu == 'timetable'"/>
+        <Homework v-show="currentMenu == 'homework'"/>
         <Settings v-if="currentMenu == 'settings'"/>
         <HalfYr v-if="currentMenu == 'halfyr'"/>
       </div>
@@ -27,6 +28,9 @@ import Timeline from './view/Timeline';
 import Modal from './components/Modal';
 import Averages from './view/Averages';
 import Timetable from './view/Timetable.vue';
+import Homework from './view/Homework.vue';
+
+
 
 export default {
   name: 'App',
@@ -39,7 +43,8 @@ export default {
     Timeline,
     Modal,
     Averages,
-    Timetable
+    Timetable,
+    Homework
   },
   data:()=>{
     return GlobalState

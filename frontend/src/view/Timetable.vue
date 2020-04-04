@@ -64,7 +64,7 @@
 
 <script>
 import GlobalState from '../globalState'
-import { formatDate, getDayName, getDayShortName, formatTime } from '../util';
+import { formatDate, getDayName, getDayShortName, formatTime, shortenText } from '../util';
 import { getHomeWork } from '../dataHandler';
 import { openModal } from '../components/Modal';
 
@@ -180,22 +180,7 @@ export default {
             return current || null;
         },
         shorten(s,limit){
-            let words = s.split(" ");
-            let result = null;
-            while(words.join(" ").length > limit){
-                if (words.length == 1){
-                    result = words[0].slice(0,limit);
-                }
-                words.pop();
-            }
-            if (result == null){
-                result = words.join(" ");
-            }
-            if (result != s){
-                return result+"...";
-            } else {
-                return result;
-            }
+            shortenText(s,limit);
         },
         shortName(name){
             return name.split(" ").map((e)=>e[0]).join(" ");
