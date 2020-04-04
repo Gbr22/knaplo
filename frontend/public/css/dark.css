@@ -13,6 +13,7 @@
     --theme-gradient: linear-gradient(to top left, #08422a, #121212);
     --error-color: rgb(90, 16, 16);
     --link-color: #00cc99;
+    --theme-color: #1CAA53;
 }
 #credits img {
     filter: brightness(90%);

@@ -91,14 +91,14 @@ export default {
     z-index: 9000;
 }
 #menu button.active svg {
-    stroke: #1CAA53;
+    stroke: var(--theme-color);
 }
 #menu button.active b {
-    color: #1CAA53;
+    color: var(--theme-color);
 }
 #menu button.active i {
     /*color: #66ceab;*/
-    color: #1CAA53;
+    color: var(--theme-color);
 
 }
 #menu button svg {

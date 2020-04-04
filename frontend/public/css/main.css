@@ -649,6 +649,9 @@ body, .list, #recent, .fullpage_modal {
 
 
 @media (hover: hover) and (pointer: fine) {
+    .pc-no-scroll {
+        overflow: hidden !important;
+    }
     ::-webkit-scrollbar {
         width: 16px;
         height: 16px;

@@ -15,8 +15,14 @@
                     </svg>
                 </button>
             </h2>
+            <div id="dayButtons" v-if="selectedWeek">
+                <button v-for="(day, index) in selectedWeek.days" :key="day.day" class="dayButton" v-bind:class="{active: index == dayIndex }" @click="gotoDay(index)">
+                    {{ getDayShortName(day.day) }}
+                </button>
+            </div>
+            
         </div>
-        <div v-if="selectedWeek" id="tableWrap">
+        <div v-if="selectedWeek" id="tableWrap" @scroll="tableScroll" class="pc-no-scroll">
             <div v-for="day in selectedWeek.days" :key="day.day" class="day">
                 <h2>{{ getDayName(day.day) }}</h2>
                 <div v-for="lesson in day.lessons" :key="lesson.LessonId" class="lesson">
@@ -55,7 +61,7 @@
 
 <script>
 import GlobalState from '../globalState'
-import { formatDate, getDayName, formatTime } from '../util';
+import { formatDate, getDayName, getDayShortName, formatTime } from '../util';
 
 
 
@@ -69,6 +75,7 @@ export default {
             timetable,
             weeks:timetable.weeks,
             selectedWeek:null,
+            dayIndex:0,
         }
     },
     watch:{
@@ -77,6 +84,26 @@ export default {
         }
     },
     methods:{
+        gotoDay(index){
+            if (this.selectedWeek){
+                let e = document.getElementById("tableWrap");
+                let scroll = e.scrollWidth/this.selectedWeek.days.length * index;
+                e.scrollTo({
+                    top:0,
+                    left:scroll,
+                    
+                })
+            }
+            
+        },
+        tableScroll(event){
+            if (this.selectedWeek){
+                let e = event.target;
+                let index = Math.round(e.scrollLeft / (e.scrollWidth/this.selectedWeek.days.length));
+                this.dayIndex = index;
+            }
+            
+        },
         nextWeek(direction){
             let next = null;
             for (let w of this.weeks){
@@ -145,6 +172,8 @@ export default {
             return name.split(" ").map((e)=>e[0]).join(" ");
         },
         getDayName,
+        getDayShortName,
+        formatTime,
         TTfrom(){
             return formatDate(this.selectedWeek.first);
         },
@@ -152,9 +181,7 @@ export default {
             return formatDate(this.selectedWeek.last);
         },
         
-        formatTime(dateS){
-            return formatTime(new Date(dateS));
-        }
+        
     },
 }
 </script>
@@ -190,6 +217,30 @@ export default {
     }
     #tableWrap * {
         white-space: normal;
+    }
+    #dayButtons {
+        display: flex;
+        width: 100%;
+        max-width: 500px;
+        margin: 0 auto;
+        margin-top: 20px;
+        box-shadow: var(--elem-shadow);
+        border-radius: 8px;
+        overflow: hidden;
+        background: var(--element-color);
+    }
+    #dayButtons button.active {
+        color: var(--theme-color);
+        background-color: rgba(28, 170, 83, 0.10);
+    }
+    #dayButtons button {
+        height: 30px;
+        flex: 1;
+        font-weight: bold;
+        background-color: transparent;
+        border:none;
+        outline: none;
+        transition: all 0.2s;
     }
     .day {
         scroll-snap-align: center;
