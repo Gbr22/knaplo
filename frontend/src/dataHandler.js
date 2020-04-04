@@ -101,6 +101,17 @@ function getData(){
 function getTimetable(){
     return get("timetable");
 }
+export function getHomeWork(homework){
+    let call = "homework/"+homework;
+    let stored = getCall(call);
+    if (stored.code == "NO_CACHE"){
+        return get(call);
+    } else {
+        return new Promise((resolve)=>{
+            resolve(stored);
+        });
+    }
+}
 
 export class NormalisedItem {
 

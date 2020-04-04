@@ -25,7 +25,7 @@
         <div v-if="selectedWeek" id="tableWrap" @scroll="tableScroll" class="pc-no-scroll">
             <div v-for="day in selectedWeek.days" :key="day.day" class="day">
                 <h2>{{ getDayName(day.day) }}</h2>
-                <div v-for="lesson in day.lessons" :key="lesson.LessonId" class="lesson">
+                <div v-for="lesson in day.lessons" :key="lesson.LessonId" class="lesson" @click="openLesson(lesson)">
                     <span class="timeIndex">
                         
                         <div class="index">
@@ -50,6 +50,9 @@
                         <span class="teacher">
                             <span class="short">{{ shortName(lesson.Teacher) }}</span>
                             <span class="long">{{ lesson.Teacher }}</span>
+                            <svg class="feather" v-if="lesson.TeacherHomeworkId">
+                                <use xlink:href="/fi#edit-3"/>
+                            </svg>
                         </span>
                     </span>
                 </div>
@@ -62,7 +65,8 @@
 <script>
 import GlobalState from '../globalState'
 import { formatDate, getDayName, getDayShortName, formatTime } from '../util';
-
+import { getHomeWork } from '../dataHandler';
+import { openModal } from '../components/Modal';
 
 
 export default {
@@ -84,6 +88,31 @@ export default {
         }
     },
     methods:{
+        openLesson(lesson){
+            let id = lesson.TeacherHomeworkId;
+            
+            function afterHomework(homework){
+                if (homework){
+                    openModal("Házi feladat",homework.Szoveg);
+                }
+            }
+            if (id == null){
+                afterHomework(null);
+            } else {
+                getHomeWork(id).then((result)=>{
+                    if (result.success){
+                        afterHomework(result.data);
+                    } else {
+                        afterHomework(null);    
+                    }
+                }).catch(()=>{
+                    
+                    afterHomework(null);
+
+                })
+            }
+            console.log(lesson);
+        },
         gotoDay(index){
             if (this.selectedWeek){
                 let e = document.getElementById("tableWrap");
@@ -269,7 +298,7 @@ export default {
     }
     .mainContent {
         flex-grow: 2;
-        flex-shrink: 1;
+        flex-shrink: 2;
         
     }
     .teacher {
@@ -305,12 +334,25 @@ export default {
     .moreInfo {
         align-items: flex-end;
         padding: 0 10px;
-        flex: 1 2;
-        width: max(40%, 200px);
+        flex: 1 1;
+        width: max(40%, 250px);
         text-align: right;
+    }
+    .moreInfo svg {
+        width: 18px;
+        height: 18px;
+        display: block;
+        flex: 1 none;
+        stroke: var(--link-color);
     }
     .subject, .classRoom {
         font-weight: bold;
+    
+    }
+    .teacher {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
     }
     .teacher, .theme, .time {
         color: var(--text-smol);
