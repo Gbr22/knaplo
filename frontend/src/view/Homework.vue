@@ -46,6 +46,7 @@ export default {
             } else {
                 links.forEach((l)=>{
                     l.classList.add("link");
+                    l.setAttribute("target","_blank");
                 })
                 html = tag.innerHTML;
             }
