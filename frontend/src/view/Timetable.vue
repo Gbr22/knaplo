@@ -21,13 +21,17 @@
                 <h2>{{ getDayName(day.day) }}</h2>
                 <div v-for="lesson in day.lessons" :key="lesson.LessonId" class="lesson">
                     <span class="timeIndex">
+                        
                         <div class="index">
                             {{ lesson.Count != -1 ? lesson.Count : "-" }}
                         </div>
                         <div class="time">
-                            {{ formatTime(lesson) }}
+                            {{ formatTime(lesson.StartTime) }}
+                            <br>
+                            {{ formatTime(lesson.EndTime) }}
                         </div>
                     </span>
+                    <span class="vr"></span>
                     <span class="mainContent">
                         <span class="subject">{{ lesson.Subject }}</span>
                         <span class="theme">
@@ -147,11 +151,9 @@ export default {
         TTto(){
             return formatDate(this.selectedWeek.last);
         },
-        formatTime(lesson){
-            function f(dateS){
-                return formatTime(new Date(dateS));
-            }
-            return f(lesson.StartTime)+" - "+f(lesson.EndTime);
+        
+        formatTime(dateS){
+            return formatTime(new Date(dateS));
         }
     },
 }
@@ -206,20 +208,13 @@ export default {
         margin: 8px 0;
         padding: 6px 0;
     }
-    .timeIndex {
-        display: flex;
-        font-weight: bold;
-        
-        align-items: center;
-        
-        width: 85px;
-        flex: none;
-    }
+    
     .index {
         font-size: 30px;
     }
     .time {
         font-size: 12px;
+        margin: 0 auto;
     }
     .mainContent {
         flex-grow: 2;
@@ -229,10 +224,32 @@ export default {
     .teacher {
         
     }
-    .mainContent, .moreInfo, .timeIndex {
+    .mainContent, .moreInfo, .timeIndex, .vr {
         display: flex;
         justify-content: center;
         flex-direction: column;
+    }
+    .vr {
+        margin: 0 5px;
+        height: 50px;
+        width: 1px;
+        background-color: var(--divider-color);
+        display: block;
+    }
+    .timeIndex {
+        
+        font-weight: bold;
+        
+        align-items: center;
+        justify-content: flex-start;
+        
+        width: 67px;
+        flex: none;
+        flex-direction: row;
+    }
+    .index {
+        padding: 0 7px;
+        padding-left: 9px;
     }
     .moreInfo {
         align-items: flex-end;
@@ -251,19 +268,13 @@ export default {
         display: none;
     }
     @media screen and (max-width: 680px) {
-        .time {
-            display: none;
-        }
+        
         .long {
             display: none;
         }
         .short {
             display: block;
         }
-        .timeIndex {
-            width: unset;
-            padding: 0 10px;
-            font-size: 18px;
-        }
+        
     }
 </style>
