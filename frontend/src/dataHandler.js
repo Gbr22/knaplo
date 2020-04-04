@@ -322,7 +322,11 @@ function processTimetable(result){
         }
         
         let days = Object.values(daysMap);
-
+        for (let day of days){
+            day.lessons.sort((a,b)=>{
+                return new Date(a.StartTime) - new Date(b.StartTime);
+            })
+        }
 
         let weeksMap = {};
         for (let e of days){
@@ -355,7 +359,14 @@ function processTimetable(result){
             }
             weeksMap[week].days.push(e);
         }
-        updateArray(GlobalState.processedData.timetable.weeks, Object.values(weeksMap));
+        let weeks = Object.values(weeksMap);
+        for (let week of weeks){
+            week.days.sort((a,b)=>{
+                return new Date(a.day) - new Date(b.day);
+            })
+        }
+
+        updateArray(GlobalState.processedData.timetable.weeks, weeks);
     }
 }
 function processData(result){
