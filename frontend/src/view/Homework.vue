@@ -43,13 +43,18 @@ export default {
             let hasHTML = /<\/?[a-z][\s\S]*>/i.test(html);
             if (links.length == 0 && !hasHTML){
                 html = formatURLs(html);
-            } else {
-                links.forEach((l)=>{
-                    l.classList.add("link");
-                    l.setAttribute("target","_blank");
-                })
-                html = tag.innerHTML;
+                tag.innerHTML = html;
             }
+            links = tag.querySelectorAll("a[href]");
+            links.forEach((l)=>{
+                let url = l.getAttribute("href");
+                if (url == l.textContent){
+                    l.innerHTML = new URL(url).hostname;
+                }
+                l.classList.add("link");
+                l.setAttribute("target","_blank");
+            })
+            html = tag.innerHTML;
             console.log(elem);
             openModal("Házi feladat",html);
         },
