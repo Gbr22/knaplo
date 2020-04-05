@@ -17,6 +17,8 @@
 import GlobalState from '../globalState'
 import { shortenText, htmlToText, formatURLsHTML } from '../util'
 import { openModal } from '../components/Modal';
+import { openHomework } from '../components/modals/HomeworkModal.vue';
+
 
 
 export default {
@@ -35,13 +37,7 @@ export default {
             let text = htmlToText(formatURLsHTML(elem.homework.Szoveg));
             return shortenText(text, 50);
         },
-        openHomework(elem){
-            let html = elem.homework.Szoveg;
-            
-            html = formatURLsHTML(html);
-            console.log(elem);
-            openModal("Házi feladat",html);
-        },
+        openHomework,
         shortenText,
         htmlToText
     }

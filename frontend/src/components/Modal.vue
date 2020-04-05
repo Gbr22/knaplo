@@ -32,6 +32,9 @@ let data = {
 };
 
 export function openModal(title,content,obj,settings = {}){
+    //(title, content)
+    //or (title, component, obj, settings)
+
     let component;
     if (typeof content == "string"){
         component = ModalContent;

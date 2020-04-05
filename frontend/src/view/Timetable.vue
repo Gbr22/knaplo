@@ -66,7 +66,8 @@
 import GlobalState from '../globalState'
 import { formatDate, getDayName, getDayShortName, formatTime, shortenText } from '../util';
 import { getHomeWork } from '../dataHandler';
-import { openModal } from '../components/Modal';
+import { openHomework } from '../components/modals/HomeworkModal.vue';
+
 
 
 export default {
@@ -93,7 +94,7 @@ export default {
             
             function afterHomework(homework){
                 if (homework){
-                    openModal("Házi feladat",homework.Szoveg);
+                    openHomework({lesson,homework});
                 }
             }
             if (id == null){
