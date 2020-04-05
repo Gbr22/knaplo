@@ -9,8 +9,6 @@ const cookieParser = require('cookie-parser');
 const app = express();
 const port = process.env.PORT || 3001;
 
-const crypto = require('crypto');
-
 function getLastCommit(){
     function run(command){
         return require('child_process').execSync(command).toString().trim()
@@ -27,47 +25,7 @@ console.log("Running "+lastcommit.hash);
 app.use(cookieParser());
 
 
-let enc_dec_secret;
-if (!fs.existsSync("secret")){
-    var token = crypto.randomBytes(64).toString('hex');
-    fs.writeFileSync("secret",token);
 
-    enc_dec_secret = token;
-} else {
-    enc_dec_secret = fs.readFileSync("secret");
-}
-
-
-function encrypt(data){
-    let secret = enc_dec_secret;
-    var key = crypto.createCipher('aes-128-cbc', secret);
-    var str = key.update(data, 'utf8', 'hex')
-    str += key.final('hex');
-    return str;
-}
-function decrypt(data){
-    let secret = enc_dec_secret;
-
-    try {
-        var key = crypto.createDecipher('aes-128-cbc', secret);
-        var str = key.update(data, 'hex', 'utf8')
-        str += key.final('utf8');
-        return str;
-    } catch(err){
-        throw err;
-    }
-}
-{// encryption decryption test
-    let start = Date.now();
-    let original = "test";
-    console.log("Original string: ",{s:original});
-    let enc = encrypt(original);
-    console.log("Encrypted string: ",{s:enc});
-    let dec = decrypt(enc);
-    console.log("Decrypted string: ",{s:dec});
-    console.log("Matches original: ",original == dec);
-    console.log("Took: ",Date.now()- start);
-}
 
 app.all('/login',async (req, res) => {
      
@@ -128,59 +86,7 @@ app.all('/login',async (req, res) => {
         }
     })
 });
-function refresh(login){
-    return new Promise(async function(resolve,reject){
 
-        console.log("login",login);
-        let result = await api.refresh(login.inst,login.refresh_token);
-        console.log("result for ",login.inst, login.refresh_token, result);
-
-        if (result == "error"){
-            //console.log("Refresh token failed, trying password");
-
-
-            let _return = false;
-            //try logging in again
-            let password;
-            try {
-                password = decrypt(login.password_encrypted);
-            } catch(err){
-                //console.log("Failed to decrypt password",err);
-                resolve(false);
-                return;
-            }
-            console.log("decrypted password");
-            
-            api.login(login.inst,login.username,password)
-            .catch((error)=>{
-                resolve(false);
-            })
-            .then( (result) => {
-                console.log("Password auth successful");
-
-                login.access_token = result.access_token;
-                login.refresh_token = result.refresh_token;
-                
-
-                resolve(true);
-            });
-
-            
-            
-            
-        } else {
-            console.log("Token auth successfull");
-
-            login.access_token = result.access_token;
-            login.refresh_token = result.refresh_token;
-
-            resolve(true);
-        }
-
-        
-
-    });
-}
 app.all('/inst_full',async (req, res) => {
     res.sendFile(__dirname+"/institute.json");
 });
@@ -188,47 +94,15 @@ app.all('/institute',async (req, res) => {
     res.sendFile(__dirname+"/inst_clean.json");
 });
 app.all('/**',async (req, res, next) => {
-    let login = null;
-    function tryRefresh(){
-        return new Promise(function(resolve,reject){
-            try {
-                login = JSON.parse(req.cookies["loginInfo"]);
-            } catch(err){
-                reject();
-            }
-            
-
-
-            if (login){
-                console.log("Refreshing auth");
-        
-                refresh(login).then((ref)=>{
-                    console.log("refresh:",ref);
-                    if (ref == true){
-                        resolve();
-                    } else {
-                        reject();
-                    }
-                }).catch(()=>{
-                    reject();
-                })
-            } else {
-                reject();
-            }
-        });
-    }
-    function badLogin(){
-        res.statusCode = 500;
-        res.send("Érvénytelen bejelentkezés");
-    }
-
-    tryRefresh().then((success)=>{
-        req.login = login;
-        res.cookie("loginInfo",JSON.stringify(login), {maxAge: 1000*60*60*24*30*365});
+    api.validateUser(req.cookies["loginInfo"]).then((result)=>{
+        req.login = result;
+        let options = {maxAge: 1000*60*60*24*30*365};
+        res.cookie("loginInfo",JSON.stringify(result), options);
         next();
     }).catch((err)=>{
-        console.log(err);
-        badLogin();
+        res.statusCode = 500;
+        res.statusMessage = err.message;
+        res.send(err.message);
     })
 });
 app.all('/health',async (req, res) => {

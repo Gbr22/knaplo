@@ -22,6 +22,50 @@ const defaultOptions = {
     json:true
 }
 
+const crypto = require('crypto');
+
+let enc_dec_secret;
+if (!fs.existsSync("secret")){
+    var token = crypto.randomBytes(64).toString('hex');
+    fs.writeFileSync("secret",token);
+
+    enc_dec_secret = token;
+} else {
+    enc_dec_secret = fs.readFileSync("secret");
+}
+
+
+function encrypt(data){
+    let secret = enc_dec_secret;
+    var key = crypto.createCipher('aes-128-cbc', secret);
+    var str = key.update(data, 'utf8', 'hex')
+    str += key.final('hex');
+    return str;
+}
+function decrypt(data){
+    let secret = enc_dec_secret;
+
+    try {
+        var key = crypto.createDecipher('aes-128-cbc', secret);
+        var str = key.update(data, 'hex', 'utf8')
+        str += key.final('utf8');
+        return str;
+    } catch(err){
+        throw err;
+    }
+}
+{// encryption decryption test
+    let start = Date.now();
+    let original = "test";
+    console.log("Original string: ",{s:original});
+    let enc = encrypt(original);
+    console.log("Encrypted string: ",{s:enc});
+    let dec = decrypt(enc);
+    console.log("Decrypted string: ",{s:dec});
+    console.log("Matches original: ",original == dec);
+    console.log("Took: ",Date.now()- start);
+}
+
 function req(options){
     let obj = Object.assign({},defaultOptions);
     return _request(Object.assign(obj,options));
@@ -69,32 +113,106 @@ function login(school,username,password){
             }
         }
         needle('post',`https://${school}.e-kreta.hu/idp/api/v1/Token`, data, options).then((res)=>{
-            resolve(res.body);
+            if (res.statusCode == 200){
+                resolve(res.body);
+            } else {
+                reject(new Error(`login ${res.statusCode} ${res.statusMessage}`));
+            }
         }).catch((err)=>{
             reject(err);
         })
     });
     
 }
-function refresh(school,token){
+function refresh(user){
     return new Promise(function(resolve,reject){
-        req({
-            url:`https://${school}.e-kreta.hu/idp/api/v1/Token`,
-            headers:{
-                "Content-Type":"application/x-www-form-urlencoded"
-            },
-            json:true,
-            body: `refresh_token=${token}&grant_type=refresh_token&client_id=${client_id}`
-        }).then((json)=>{
-            resolve(json);
+        let data = {
+            refresh_token:user.refresh_token,
+            grant_type:'refresh_token',
+            client_id:client_id,
+        }
+        let options = {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                "User-Agent":userAgent,
+            }
+        }
+        needle('post',`https://${user.inst}.e-kreta.hu/idp/api/v1/Token`, data, options).then((res)=>{
+            if (res.statusCode == 200){
+                resolve(res.body);
+            } else {
+                reject(new Error(`refresh ${res.statusCode} ${res.statusMessage}`));
+            }
         }).catch((err)=>{
-            //reject(json);
-            
-            resolve("error");
-        });
+            reject(err);
+        })
     });
 }
+function refreshUser(loginInfoS){
+    return new Promise(function(resolve,reject){
+        let loginInfo = null;
+        try {
+            loginInfo = JSON.parse(loginInfoS);
+        } catch(err){
+            reject(new Error("invalid cookie"));
+        }
+        refresh(loginInfo).then((result)=>{
+            loginInfo.access_token = result.access_token;
+            loginInfo.refresh_token = result.refresh_token;
+            resolve(loginInfo);
+            console.log("[token auth]")
+        }).catch(()=>{
+            let password;
+            try {
+                password = decrypt(loginInfo.password_encrypted);
+            } catch(err){
+                reject(new Error("password broken"));
+            }
+            
+            login(loginInfo.inst,loginInfo.username,password).then((result)=>{
+                loginInfo.access_token = result.access_token;
+                loginInfo.refresh_token = result.refresh_token;
+                resolve(loginInfo);
+                console.log("[password auth]")
+            }).catch(()=>{
+                reject(new Error("failed login"));
+            })
+        })
 
+    });
+
+}
+function validateUser(loginInfoS){
+    return new Promise(function(resolve,reject){
+        let loginInfo = null;
+        try {
+            loginInfo = JSON.parse(loginInfoS);
+        } catch(err){
+            reject(new Error("invalid cookie"));
+        }
+        let tokenInfo = decodeToken(loginInfo.access_token);
+        let expires = tokenInfo.exp;
+        let now = Date.now()/1000;
+        let time = expires - now; //in seconds
+        let timeMinutes = time/60;
+        if (timeMinutes >= 3){
+            console.log(`[${timeMinutes.toFixed(2)}m left till refresh]`);
+            resolve(loginInfo);
+        } else {
+            refreshUser(loginInfoS).then(resolve).catch(reject);
+        }
+    })
+
+}
+function decodeToken(access_token){
+    let parts = access_token.split(".");
+    function decode(data){
+        let buff = new Buffer(data, 'base64');
+        let text = buff.toString('utf8');
+        return text;
+    }
+    return JSON.parse(decode(parts[1]));
+}
 function pipeData(school,token,p){
     
     req({
@@ -197,5 +315,7 @@ module.exports = {
     refresh,
     studentAmi,
     timeTable,
-    homework
+    homework,
+    refreshUser,
+    validateUser
 }
