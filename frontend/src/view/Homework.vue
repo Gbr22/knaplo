@@ -6,6 +6,7 @@
 
         <div class="homeworkList">
             <div class="homework" v-for="elem in getFiltered()" :key="elem.id" @click="openHomework(elem)">
+                <div class="header">{{ elem.lesson.Subject }}</div>
                 <div>{{ getText(elem) }}</div>
             </div>
         </div>
@@ -14,7 +15,7 @@
 
 <script>
 import GlobalState from '../globalState'
-import { shortenText, htmlToText, formatURLs } from '../util'
+import { shortenText, htmlToText, formatURLsHTML } from '../util'
 import { openModal } from '../components/Modal';
 
 
@@ -31,30 +32,13 @@ export default {
             return this.homeworks;
         },
         getText(elem){
-            let text = htmlToText(elem.homework.Szoveg);
+            let text = htmlToText(formatURLsHTML(elem.homework.Szoveg));
             return shortenText(text, 50);
         },
         openHomework(elem){
             let html = elem.homework.Szoveg;
-            let tag = document.createElement("span");
-            tag.innerHTML = html;
-
-            let links = tag.querySelectorAll("a[href]");
-            let hasHTML = /<\/?[a-z][\s\S]*>/i.test(html);
-            if (links.length == 0 && !hasHTML){
-                html = formatURLs(html);
-                tag.innerHTML = html;
-            }
-            links = tag.querySelectorAll("a[href]");
-            links.forEach((l)=>{
-                let url = l.getAttribute("href");
-                if (url == l.textContent){
-                    l.innerHTML = new URL(url).hostname;
-                }
-                l.classList.add("link");
-                l.setAttribute("target","_blank");
-            })
-            html = tag.innerHTML;
+            
+            html = formatURLsHTML(html);
             console.log(elem);
             openModal("Házi feladat",html);
         },
@@ -76,5 +60,8 @@ export default {
         padding: 0 10px;
         box-sizing: border-box;
         word-wrap: break-word;
+    }
+    .homework .header {
+        font-weight: bold;
     }
 </style>

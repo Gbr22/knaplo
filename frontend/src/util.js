@@ -57,11 +57,41 @@ export function htmlToText(s){
     return span.textContent || span.innerText;
 }
 export function formatURLs(text){
-    let regex = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/g;
+    /* let regex = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/g; */
+    let regex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/g;
     
     
     return text.replace(regex, function(match){
         return /* html */`<a href="${match}" class="link" target="_blank" data-fURL>${match}</a>`;
     });
     
+}
+export function formatURLsHTML(html){
+    let tag = document.createElement("span");
+    tag.innerHTML = html;
+
+    let links = tag.querySelectorAll("a[href]");
+    let hasHTML = code => /<\/?[a-z][\s\S]*>/i.test(code);
+    if (links.length == 0 && !hasHTML(html)){
+        html = formatURLs(html);
+        tag.innerHTML = html;
+    }
+    let tags = tag.querySelectorAll("*");
+    for (let t of tags){
+        if (!hasHTML(t.innerHTML)){
+            t.innerHTML = formatURLs(t.textContent);
+        }
+    }
+
+    links = tag.querySelectorAll("a[href]");
+    links.forEach((l)=>{
+        let url = l.getAttribute("href");
+        if (url == l.textContent){
+            l.innerHTML = new URL(url).hostname;
+        }
+        l.classList.add("link");
+        l.setAttribute("target","_blank");
+    })
+    html = tag.innerHTML;
+    return html;
 }
