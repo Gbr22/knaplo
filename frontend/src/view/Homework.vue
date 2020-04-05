@@ -4,21 +4,15 @@
             <h1>Házi feladatok</h1>
         </div>
 
-        <div class="homeworkList">
-            <div class="homework" v-for="elem in getFiltered()" :key="elem.id" @click="openHomework(elem)">
-                <div class="header">{{ elem.lesson.Subject }}</div>
-                <div>{{ getText(elem) }}</div>
-            </div>
-        </div>
+        <HomeworkList :list="getActual()" title="Aktuális" />
+        <HomeworkList :list="getExpired()" title="Lejárt határidejű" />
     </div>
 </template>
 
 <script>
 import GlobalState from '../globalState'
-import { shortenText, htmlToText, formatURLsHTML } from '../util'
-import { openModal } from '../components/Modal';
-import { openHomework } from '../components/modals/HomeworkModal.vue';
 
+import HomeworkList from '../components/HomeworkList.vue';
 
 
 export default {
@@ -30,16 +24,28 @@ export default {
         }
     },
     methods:{
+        getActual(){
+            return this.homeworks.filter((e)=>{
+                return new Date(e.homework.Hatarido) > new Date();
+            }).sort((a,b)=>{
+                let g = x => new Date(x.homework.Hatarido);
+                return g(a)-g(b);
+            })
+        },
+        getExpired(){
+            return this.homeworks.filter((e)=>{
+                return new Date(e.homework.Hatarido) <= new Date();
+            }).sort((a,b)=>{
+                let g = x => new Date(x.homework.Hatarido);
+                return g(b)-g(a);
+            })
+        },
         getFiltered(){
             return this.homeworks;
         },
-        getText(elem){
-            let text = htmlToText(formatURLsHTML(elem.homework.Szoveg));
-            return shortenText(text, 50);
-        },
-        openHomework,
-        shortenText,
-        htmlToText
+    },
+    components:{
+        HomeworkList
     }
 }
 </script>
@@ -47,17 +53,5 @@ export default {
 <style scoped>
     .head {
         padding: 20px;
-    }
-    .homework {
-        padding: 10px;
-        margin: 8px 0;
-    }
-    .homeworkList {
-        padding: 0 10px;
-        box-sizing: border-box;
-        word-wrap: break-word;
-    }
-    .homework .header {
-        font-weight: bold;
     }
 </style>

@@ -331,7 +331,6 @@ function processHomeworks(homeworks){
         if (homeworks.length != values.length){
             pushError("Nem sikerült minden házit lekérni");
         }
-
         updateArray(GlobalState.processedData.homeworks,homeworks);
     })
 }
