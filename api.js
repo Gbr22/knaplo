@@ -160,6 +160,14 @@ function timeTable(school,token){
 function homework(school,token, id){
     let url = `https://${school}.e-kreta.hu/mapi/api/v1/HaziFeladat/TanarHaziFeladat/${id}`;
     return new Promise(function(resolve,reject){
+        let filename = "cache/homework/"+id+".cache";
+
+        if (fs.existsSync(filename)){
+            console.log(`serving hw ${id} from cache`);
+            resolve(JSON.parse(fs.readFileSync(filename).toString()));
+            return;
+        }
+
         let options = {
             headers: {
                 "Authorization":"Bearer "+token,
@@ -167,6 +175,9 @@ function homework(school,token, id){
             }
         }
         needle('get',url, options).then((res)=>{
+            if (res.body && res.statusCode === 200){
+                fs.writeFileSync(filename,JSON.stringify(res.body));
+            }
             resolve(res.body);
         }).catch((err)=>{
             reject(err);
