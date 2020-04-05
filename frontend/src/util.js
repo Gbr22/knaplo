@@ -51,6 +51,7 @@ export function shortenText(s,limit){
         return result;
     }
 }
+window.shortenText = shortenText;
 export function htmlToText(s){
     var span = document.createElement('span');
     span.innerHTML = s;

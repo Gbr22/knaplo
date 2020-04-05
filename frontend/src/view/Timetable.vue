@@ -41,7 +41,7 @@
                     <span class="mainContent">
                         <span class="subject">{{ lesson.Subject }}</span>
                         <span class="theme">
-                            <span class="short">{{ shorten(lesson.Theme,30) }}</span>
+                            <span class="short">{{ shortenText(lesson.Theme,30) }}</span>
                             <span class="long">{{ lesson.Theme }}</span>
                         </span>
                     </span>
@@ -67,7 +67,6 @@ import GlobalState from '../globalState'
 import { formatDate, getDayName, getDayShortName, formatTime, shortenText } from '../util';
 import { getHomeWork } from '../dataHandler';
 import { openHomework } from '../components/modals/HomeworkModal.vue';
-
 
 
 export default {
@@ -180,9 +179,7 @@ export default {
             }
             return current || null;
         },
-        shorten(s,limit){
-            shortenText(s,limit);
-        },
+        shortenText,
         shortName(name){
             return name.split(" ").map((e)=>e[0]).join(" ");
         },
