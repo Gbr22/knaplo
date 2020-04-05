@@ -2,7 +2,7 @@
 export function formatDate(date){
     date = toDate(date);
     let pad = (n) => (n+"").padStart(2,"0");
-    return `${pad(date.getMonth())}/${pad(date.getDate())}`;
+    return `${pad(date.getMonth()+1)}/${pad(date.getDate())}`;
 }
 export function formatTime(date){
     date = toDate(date);
