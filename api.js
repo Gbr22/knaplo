@@ -160,7 +160,7 @@ function timeTable(school,token){
 function homework(school,token, id){
     let url = `https://${school}.e-kreta.hu/mapi/api/v1/HaziFeladat/TanarHaziFeladat/${id}`;
     return new Promise(function(resolve,reject){
-        let filename = "cache/homework/"+id+".cache";
+        let filename = `cache/homework/${school}.${id}.cache`;
 
         if (fs.existsSync(filename)){
             console.log(`serving hw ${id} from cache`);
