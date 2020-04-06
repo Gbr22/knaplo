@@ -76,7 +76,7 @@ app.all('/login',async (req, res) => {
                 "access_token":result.access_token,
                 "refresh_token":result.refresh_token,
                 "inst":req.query.inst,
-                "password_encrypted":encrypt(req.query.password),
+                "password_encrypted":api.encrypt(req.query.password),
                 "username":req.query.username
             }
             res.cookie("loginInfo",JSON.stringify(info), options);

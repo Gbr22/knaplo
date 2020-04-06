@@ -317,5 +317,7 @@ module.exports = {
     timeTable,
     homework,
     refreshUser,
-    validateUser
+    validateUser,
+    encrypt,
+    decrypt
 }
