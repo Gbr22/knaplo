@@ -113,6 +113,63 @@ export function getHomeWork(homework){
     }
 }
 
+export function homeworksCompleted(){
+    return GlobalState.processedData.homeworksCompleted;
+}
+function processHomeworksCompleted(){
+    if (localStorage.getItem("homeworksCompleted")){
+        try {
+            homeworksCompleted().push(...JSON.parse(localStorage.getItem("homeworksCompleted"))  );
+        } catch(err){
+            err;
+        }
+    }
+}
+window.homeworksCompleted = homeworksCompleted;
+
+export function getHWCompObjFArr(id,arr){
+    id = id.toString();
+    for (let p of arr){
+        if (p.id == id){
+            return p;
+        }
+    }
+    return null;
+}
+function getHWCompObj(id){
+    return getHWCompObjFArr(id,homeworksCompleted());
+}
+
+export function getHomeworkCompleted(id){
+    return getHWCompObj(id)?.value == true;
+}
+window.getHomeworkCompleted = getHomeworkCompleted;
+export function setHomeworkCompleted(id,value){
+    id = id.toString();
+    let state = getHWCompObj(id);
+    if (state == null){
+        state = {};
+    }
+    state.changed = Date.now();
+    state.value = value;
+    state.id = id;
+
+    let arr = homeworksCompleted();
+    let index = arr.indexOf(state);
+    if (index != -1){
+        arr.splice(index,1);
+    }
+    arr.push(state);
+
+
+    localStorage.setItem("homeworksCompleted", JSON.stringify(homeworksCompleted()));
+}
+export function toggleHomeworkCompleted(id){
+    console.log("toggling",id);
+    return setHomeworkCompleted(id, !getHomeworkCompleted(id));
+}
+window.setHomeworkCompleted = setHomeworkCompleted;
+
 export class NormalisedItem {
 
     obj=null;
@@ -488,6 +545,7 @@ function afterLogin(){
     setImmediate(()=>{
         processData(getCall("data"));
         processTimetable(getCall("timetable"));
+        processHomeworksCompleted();
     });
     
     getData().then((result)=>{
@@ -495,7 +553,7 @@ function afterLogin(){
     });
     getTimetable().then((result)=>{
         processTimetable(result);
-    })
+    });
 }
 
 

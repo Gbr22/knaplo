@@ -2,7 +2,7 @@ import { getInst } from "./dataHandler";
 
 import Cookies from 'js-cookie';
 
-import { afterLogin } from './dataHandler';
+import { afterLogin, getHomeworksCompletedMap } from './dataHandler';
 
 let GlobalState = {
     inst:getInst(),
@@ -19,7 +19,8 @@ let GlobalState = {
         timetable:{
             weeks:[]
         },
-        homeworks:[]
+        homeworks:[],
+        homeworksCompleted:[],
     },
     
     user:null,
