@@ -95,9 +95,10 @@ export default {
         transition: all 0.3s;
     }
     .completed[data-value="false"] svg {
-        stroke: #ff5050bd;
-        border: 2px solid #ff50506e;
-        background-color: #ff50502a;
+        stroke: var(--text-smol);
+        border: 2px solid var(--text-smol);
+        background-color: var(--divider-color);
+        opacity: 0.5;
         border-radius: 5px;
     }
     .title b {
