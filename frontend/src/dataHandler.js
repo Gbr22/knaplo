@@ -129,7 +129,12 @@ export function homeworksCompleted(){
 export function syncHomeworkCompleted(){
     post("pushHomeworkDone",{},homeworksCompleted()).then((result)=>{
         if (result.success){
-            console.log(result.data);
+            for (let p in result.data){
+                let id = p;
+                let state = result.data[p];
+                assignHomeworkCompletedState(id,state);
+            }
+            saveHWC();
         }
     })
 }
@@ -161,23 +166,35 @@ export function getHomeworkCompleted(id){
     return getHWCompObj(id)?.value == true;
 }
 window.getHomeworkCompleted = getHomeworkCompleted;
-export function setHomeworkCompleted(id,value){
+
+export function assignHomeworkCompletedState(id,assignState){
     id = id.toString();
     let state = getHWCompObj(id);
     let exists = true;
     if (state == null){
         exists = false;
-        state = {};
+        state = {id:id};
     }
-    state.changed = Date.now();
-    state.value = value;
-    state.id = id;
+    Object.assign(state,assignState);
 
     if (!exists){
         let arr = homeworksCompleted();
         arr.push(state);
     }
-    syncHomeworkCompleted();
+}
+export function setHomeworkCompleted(id,value, sync = true){
+    
+    assignHomeworkCompletedState(id,{
+        changed: Date.now(),
+        value:value,
+    });
+
+    if (sync){
+        syncHomeworkCompleted();
+    }
+    saveHWC();
+}
+export function saveHWC(){
     localStorage.setItem("homeworksCompleted", JSON.stringify(homeworksCompleted()));
 }
 export function toggleHomeworkCompleted(id){
