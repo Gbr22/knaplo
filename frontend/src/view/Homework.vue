@@ -13,6 +13,7 @@
 import GlobalState from '../globalState'
 
 import HomeworkList from '../components/HomeworkList.vue';
+import { getHWCompObjFArr } from '../dataHandler';
 
 
 export default {
@@ -20,17 +21,24 @@ export default {
     data(){
         return {
             GlobalState,
-            homeworks:GlobalState.processedData.homeworks
+            homeworks:GlobalState.processedData.homeworks,
+            homeworksCompleted:GlobalState.processedData.homeworksCompleted,
         }
     },
     methods:{
+        isCompleted(hw){
+            return getHWCompObjFArr(hw.Id, this.homeworksCompleted)?.value == true;
+        },
+        sortByDone(a,b){
+            return this.isCompleted(a.homework) - this.isCompleted(b.homework);
+        },
         getActual(){
             return this.homeworks.filter((e)=>{
                 return new Date(e.homework.Hatarido) > new Date();
             }).sort((a,b)=>{
                 let g = x => new Date(x.homework.Hatarido);
                 return g(a)-g(b);
-            })
+            }).sort(this.sortByDone)
         },
         getExpired(){
             return this.homeworks.filter((e)=>{
@@ -38,7 +46,7 @@ export default {
             }).sort((a,b)=>{
                 let g = x => new Date(x.homework.Hatarido);
                 return g(b)-g(a);
-            })
+            }).sort(this.sortByDone)
         },
         getFiltered(){
             return this.homeworks;
