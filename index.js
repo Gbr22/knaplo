@@ -5,9 +5,14 @@ const fs = require("fs");
 
 const express = require('express');
 const cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
 
 const app = express();
 const port = process.env.PORT || 3001;
+
+app.use(bodyParser.json());
+app.use(cookieParser());
+
 
 function getLastCommit(){
     function run(command){
@@ -22,7 +27,6 @@ function getLastCommit(){
 let lastcommit = getLastCommit();
 console.log("Running "+lastcommit.hash);
 
-app.use(cookieParser());
 
 
 
@@ -120,6 +124,18 @@ app.all('/health',async (req, res) => {
 
     api.pipeData(school,token,res);
 }); */
+app.all("/pushHomeworkDone", async(req,res)=>{
+    let body = null;
+    try {
+        body = req.body;
+    } catch(err){
+        res.statusCode = 400;
+        res.send("BAD_DONE_LIST");
+        return;
+    }
+    console.log(req.body);
+    res.send({});
+});
 app.all('/data',async (req, res) => {
     let school = req.login.inst;
     let token = req.login.access_token;

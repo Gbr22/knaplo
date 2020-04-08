@@ -27,7 +27,8 @@ export function openSubject(subject){
     });
 }
 
-function makeRequest(mode,url, data = {}){
+function makeRequest(mode,url, data = {}, body){
+    
     let base = "/api/";
     return new Promise(function(promiseResolve){
         function resolve(obj){
@@ -81,8 +82,16 @@ function makeRequest(mode,url, data = {}){
         }
 
         xhttp.open(mode, base+url+params, true);
-        xhttp.send();
-
+        let send = body;
+        if (typeof body == "object"){
+            send = JSON.stringify(body);
+            xhttp.setRequestHeader("Content-Type","application/json");
+        }
+        try {
+            xhttp.send(send);
+        } catch(err){
+            resolve({success:false, data:null, message:"Request failed"});
+        }
     });
 }
 
@@ -90,8 +99,8 @@ function makeRequest(mode,url, data = {}){
 function get(url){
     return makeRequest("GET",url);
 }
-function post(url, data){
-    return makeRequest("POST",url,data);
+function post(url, data,body){
+    return makeRequest("POST",url,data,body);
 }
 function login(form){
     return post("login",form);
@@ -116,6 +125,13 @@ export function getHomeWork(homework){
 
 export function homeworksCompleted(){
     return GlobalState.processedData.homeworksCompleted;
+}
+export function syncHomeworkCompleted(){
+    post("pushHomeworkDone",{},homeworksCompleted()).then((result)=>{
+        if (result.success){
+
+        }
+    })
 }
 function processHomeworksCompleted(){
     if (localStorage.getItem("homeworksCompleted")){
@@ -161,7 +177,7 @@ export function setHomeworkCompleted(id,value){
         let arr = homeworksCompleted();
         arr.push(state);
     }
-
+    syncHomeworkCompleted();
     localStorage.setItem("homeworksCompleted", JSON.stringify(homeworksCompleted()));
 }
 export function toggleHomeworkCompleted(id){
