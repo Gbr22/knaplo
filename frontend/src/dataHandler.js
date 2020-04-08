@@ -6,6 +6,7 @@ import { pushError } from './components/MessageDisplay';
 
 import AbsenceModal from './components/modals/AbsenceModal';
 import SubjectModal from './components/modals/SubjectModal';
+import { exists } from 'fs';
 
 
 function putCall(call, obj){
@@ -147,20 +148,19 @@ window.getHomeworkCompleted = getHomeworkCompleted;
 export function setHomeworkCompleted(id,value){
     id = id.toString();
     let state = getHWCompObj(id);
+    let exists = true;
     if (state == null){
+        exists = false;
         state = {};
     }
     state.changed = Date.now();
     state.value = value;
     state.id = id;
 
-    let arr = homeworksCompleted();
-    let index = arr.indexOf(state);
-    if (index != -1){
-        arr.splice(index,1);
+    if (!exists){
+        let arr = homeworksCompleted();
+        arr.push(state);
     }
-    arr.push(state);
-
 
     localStorage.setItem("homeworksCompleted", JSON.stringify(homeworksCompleted()));
 }
