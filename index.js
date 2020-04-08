@@ -125,16 +125,13 @@ app.all('/health',async (req, res) => {
     api.pipeData(school,token,res);
 }); */
 app.all("/pushHomeworkDone", async(req,res)=>{
-    let body = null;
-    try {
-        body = req.body;
-    } catch(err){
+    if (req.body.constructor == Array){
+        res.send(api.save_HWC_changes(req.login,req.body));
+    } else {
         res.statusCode = 400;
         res.send("BAD_DONE_LIST");
         return;
     }
-    console.log(req.body);
-    res.send({});
 });
 app.all('/data',async (req, res) => {
     let school = req.login.inst;

@@ -302,7 +302,37 @@ function homework(school,token, id){
         })
     });
 }
+function save_HWC_changes(user,changelist){
+    let filename = __dirname+`/db/homework/${user.username}.db`;
+    let contents = {};
+    if (fs.existsSync(filename)){
+        try {
+            contents = JSON.parse(fs.readFileSync(filename).toString());
+        } catch(err){
 
+        }
+    }
+    for (let e of changelist){
+        let badObj = false;
+        if (!contents[e.id]){
+            badObj = true;
+        } else if (Object.keys(contents[e.id]).length === 0){
+            badObj = true;
+        }
+        if (badObj){
+            contents[e.id] = {changed:-Infinity};
+        }
+
+        if (e.changed > contents[e.id].changed){
+            contents[e.id] = {
+                changed:e.changed,
+                value:e.value
+            }
+        }
+    }
+    fs.writeFileSync(filename, JSON.stringify(contents));
+    return contents;
+}
 
 module.exports = {
     key:api_key,
@@ -319,5 +349,6 @@ module.exports = {
     refreshUser,
     validateUser,
     encrypt,
-    decrypt
+    decrypt,
+    save_HWC_changes
 }

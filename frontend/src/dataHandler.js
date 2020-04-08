@@ -129,7 +129,7 @@ export function homeworksCompleted(){
 export function syncHomeworkCompleted(){
     post("pushHomeworkDone",{},homeworksCompleted()).then((result)=>{
         if (result.success){
-
+            console.log(result.data);
         }
     })
 }
