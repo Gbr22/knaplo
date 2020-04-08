@@ -182,6 +182,7 @@ export function assignHomeworkCompletedState(id,assignState){
         arr.push(state);
     }
 }
+let scheduledSync = -1;
 export function setHomeworkCompleted(id,value, sync = true){
     
     assignHomeworkCompletedState(id,{
@@ -190,7 +191,12 @@ export function setHomeworkCompleted(id,value, sync = true){
     });
 
     if (sync){
-        syncHomeworkCompleted();
+        if (scheduledSync){
+            clearTimeout(scheduledSync);
+        }
+        scheduledSync = setTimeout(()=>{
+            syncHomeworkCompleted();
+        }, 500);
     }
     saveHWC();
 }
