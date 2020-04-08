@@ -579,6 +579,7 @@ function afterLogin(){
         processData(getCall("data"));
         processTimetable(getCall("timetable"));
         processHomeworksCompleted();
+        syncHomeworkCompleted();
     });
     
     getData().then((result)=>{
