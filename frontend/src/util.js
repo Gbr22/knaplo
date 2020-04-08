@@ -57,6 +57,10 @@ export function htmlToText(s){
     span.innerHTML = s;
     return span.textContent || span.innerText;
 }
+export function toOneLine(s){
+    return s.replace(/\n/g,'').replace(/ +(?= )/g,'');
+}
+window.htmlToText = htmlToText;
 export function formatURLs(text){
     /* let regex = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/g; */
     let regex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/g;
@@ -66,6 +70,15 @@ export function formatURLs(text){
         return /* html */`<a href="${match}" class="link" target="_blank" data-fURL>${match}</a>`;
     });
     
+}
+export function ratioImg(width,height, color){
+    let canvas = document.createElement("canvas");
+    canvas.width = width;
+    canvas.height = height;
+    let ctx = canvas.getContext("2d");
+    ctx.fillStyle = color;
+    ctx.fillRect(0,0,width,height);
+    return canvas.toDataURL();
 }
 export function formatURLsHTML(html){
     let tag = document.createElement("span");
@@ -93,6 +106,20 @@ export function formatURLsHTML(html){
         l.classList.add("link");
         l.setAttribute("target","_blank");
     })
+    let youtubelinks = tag.querySelectorAll('a[href*="youtube.com"]');
+    for (let e of youtubelinks){
+        let id = (new URL(e.getAttribute("href"))).searchParams.get("v");
+        let d = document.createElement("div");
+        e.parentNode.replaceChild(d, e);
+        d.classList.add("youtubeEmbed");
+        d.innerHTML = `
+            <img class="ratio" src="${ratioImg(16,9,"#000")}"/>
+            <span>[YouTube]</span>
+            <iframe src="https://www.youtube.com/embed/${id}" allowfullscreen>
+            </iframe>
+        `;
+    }
     html = tag.innerHTML;
     return html;
 }
+window.formatURLsHTML = formatURLsHTML;

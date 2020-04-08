@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { shortenText, htmlToText, formatURLsHTML, formatDate } from '../util'
+import { shortenText, htmlToText, formatURLsHTML, formatDate, toOneLine } from '../util'
 import { openHomework } from '../components/modals/HomeworkModal.vue';
 import { getHomeworkCompleted, setHomeworkCompleted, toggleHomeworkCompleted, getHWCompObjFArr } from '../dataHandler';
 import GlobalState from '../globalState';
@@ -48,7 +48,7 @@ export default {
         },
         getText(elem){
             let text = htmlToText(formatURLsHTML(elem.homework.Szoveg));
-            return shortenText(text, 50);
+            return shortenText(toOneLine(text), 50);
         },
         openHomework,
         shortenText,

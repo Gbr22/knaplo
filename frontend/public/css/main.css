@@ -675,3 +675,33 @@ body, .list, #recent, .fullpage_modal {
         border: none;
     }
 }
+.youtubeEmbed {
+    display: block;
+    width: min(80vw, 350px);
+    margin: 5px auto;
+    box-sizing: border-box;
+    position: relative;
+    border-radius: 4px;
+    overflow: hidden;
+    border: 4px solid var(--divider-color);
+}
+.youtubeEmbed .ratio {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+.youtubeEmbed span {
+    visibility: hidden;
+    position: absolute;
+    top: 0;
+}
+.youtubeEmbed iframe {
+    border: none;
+    width: 100%;
+    margin: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
