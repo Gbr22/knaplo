@@ -2,6 +2,7 @@
   <div id="login_form">
         <div id="login_wrap">
             
+            <div class="logo"><img :src="`/icons/icon_transparent_vector.svg`" /></div>
             <h1>Bejelentkezés a Krétába</h1>
             <form v-on:submit.prevent="onSubmit" enctype="text/plain">
                 <div id="school_section">
@@ -127,18 +128,29 @@ export default {
     overflow-y: auto;
 }
 
+.logo {
+    display: block;
+}
+.logo img {
+    height: 60px;
+    border-radius: 50%;
+    background-color: var(--modal-color);
+    box-shadow: var(--elem-shadow);
+    margin: 10px 0;
+}
     
 #login_form {
     text-align: center;
-    display: table;
-    
+    display: flex;
+    justify-content: center;
+    align-items: center;
     position: relative;
     top: 0;
     bottom: 0;
     left: 0;
-    height: 100vh;
-    height: var(--vh-100);
-    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    flex-direction: column;
 }
 #login_error {
     background-color: var(--error-color);
@@ -148,9 +160,12 @@ export default {
 }
 #login_wrap {
     background-color: var(--bg-color);
-    display: table-cell;
     vertical-align: middle;
-    padding: 0 20px;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow: auto;
+    flex: none;
+    max-height: 100%;
 }
 #login_form h1 {
     margin-top: 0;
@@ -188,22 +203,26 @@ input:-webkit-autofill:active  {
 }
 
 #school_section {
-    background-color: #2E2D2E;
+    background-color: var(--modal-color);
+    box-shadow: var(--modal-shadow);
     padding: 5px 20px;
     border-radius: 15px;
+    margin: 20px 0;
 }
 #school_section input[type="text"]{
-    background-color: rgb(59, 59, 59);
-    color: rgb(228, 228, 228);
+    background-color: var(--element2-color);
+    color: var(--text-color);
     border: none;
+}
+#school_section input[type="text"]::placeholder {
+    color: var(--text-smol);
 }
 #schools {
     width: 100%;
     margin: auto;
     height: 150px;
     overflow: auto;
-
-    color: rgb(228, 228, 228);
+    color: var(--text-color);
 }
 
 .school {
@@ -212,7 +231,7 @@ input:-webkit-autofill:active  {
     text-align: left;
 }
 .school i {
-    color: #949494;
+    color: var(--text-smol);
     font-style: normal;
 }
 .school input {
@@ -225,10 +244,10 @@ input:-webkit-autofill:active  {
     width: 15px;
     height: 15px;
     border-radius: 50%;
-    background-color: #b3b3b3;
+    background-color: var(--text-color);
+    opacity: 0.3;
     display: inline-block;
     vertical-align: middle;
-    transition: opacity .3s ease-out;
     color: green;
 }
 .school .checkmark i {
@@ -236,6 +255,7 @@ input:-webkit-autofill:active  {
 }
 .school input:checked ~ .checkmark {
     background-color: #1CAA53;
+    opacity: 1;
 }
 
 </style>
