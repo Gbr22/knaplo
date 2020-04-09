@@ -586,8 +586,8 @@ function afterLogin(){
     setImmediate(()=>{
         processData(getCall("data"));
         processTimetable(getCall("timetable"));
+        processHomeworksCompleted();
         if (online){
-            processHomeworksCompleted();
             syncHomeworkCompleted();
         }
     });
