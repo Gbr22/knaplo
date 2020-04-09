@@ -29,7 +29,7 @@ function cacheFirst(request){
     return caches.match(request).then(c=>{
         let f = fetch(request).then(response=>{
             return caches.open(cacheName).then(cache=>{
-                console.log("[putting]",request.url);
+                //console.log("[putting]",request.url);
                 cache.put(request, response.clone());
                 return response;
             })
@@ -41,7 +41,7 @@ function cacheFirst(request){
 function fetchFirst(request){
     return fetch(request).then((response)=>{
         return caches.open(cacheName).then(cache=>{
-            console.log("[putting]",request.url);
+            //console.log("[putting]",request.url);
             cache.put(request, response.clone());
             return response;
         })
@@ -70,10 +70,10 @@ self.addEventListener('fetch', (e) => {
         e.respondWith(fetchFirst(new Request("/")));
     }
     else if (doCache(e.request)){
-        console.log("[fetchFirst]",e.request.url);
+        //console.log("[fetchFirst]",e.request.url);
         e.respondWith(fetchFirst(e.request));
     } else {
-        console.log("[networkOnly]",e.request.url);
+        //console.log("[networkOnly]",e.request.url);
         e.respondWith(networkOnly(e.request));
     }
   });

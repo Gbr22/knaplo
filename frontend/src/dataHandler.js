@@ -619,8 +619,6 @@ function getInst(){
             updateArray(items, map(call.data));
         })
     }
-    console.log("teszt222");
-    console.log("inst call",call);
 
     if (navigator.onLine){
         get("institute").then(function(result){

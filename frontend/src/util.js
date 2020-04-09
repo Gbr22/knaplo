@@ -103,7 +103,6 @@ export function formatURLsHTML(html){
             t.remove();
         }
         if (t.attributes.length == 0 && t.childNodes.length == 1 && t.parentElement == tag){
-            console.log(t.tagName);
             let tagnames = [
                 "div",
                 "table","tbody","tr","td",
