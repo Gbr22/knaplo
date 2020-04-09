@@ -80,7 +80,11 @@ export function ratioImg(width,height, color){
     ctx.fillRect(0,0,width,height);
     return canvas.toDataURL();
 }
+export function isSelfClosing(tagname){
+    return !document.createElement(tagname).outerHTML.includes("/");
+}
 export function formatURLsHTML(html){
+    
     let tag = document.createElement("span");
     tag.innerHTML = html;
 
@@ -91,8 +95,38 @@ export function formatURLsHTML(html){
         tag.innerHTML = html;
     }
     let tags = tag.querySelectorAll("*");
+
+    //cleanup
     for (let t of tags){
-        if (!hasHTML(t.innerHTML)){
+        function removeParent(){
+            t.parentElement.insertBefore(t.childNodes[0],t);
+            t.remove();
+        }
+        if (t.attributes.length == 0 && t.childNodes.length == 1 && t.parentElement == tag){
+            console.log(t.tagName);
+            let tagnames = [
+                "div",
+                "table","tbody","tr","td",
+                "dl","dd"
+            ];
+            if (tagnames.includes(t.tagName.toLowerCase())){
+                removeParent();
+            }
+        }
+        else if (!isSelfClosing(t.tagName) && t.innerHTML == ""){
+            t.remove();
+        } else if (t.innerHTML == "<br>"){
+            removeParent();
+        }
+    }
+
+    tags = tag.querySelectorAll("*");
+
+    for (let t of tags){
+        let onlybr = [...t.children].every(e=>e.tagName.toLowerCase() == "br");
+
+
+        if (!hasHTML(t.innerHTML) || onlybr){
             t.innerHTML = formatURLs(t.textContent);
         }
     }
