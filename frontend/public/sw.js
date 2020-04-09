@@ -39,7 +39,13 @@ function cacheFirst(request){
     })
 }
 function fetchFirst(request){
-    return fetch(request).catch(() => caches.match(request));
+    return fetch(request).then((response)=>{
+        return caches.open(cacheName).then(cache=>{
+            console.log("[putting]",request.url);
+            cache.put(request, response.clone());
+            return response;
+        })
+    }).catch(() => caches.match(request));
 }
 
 function networkOnly(request){
@@ -59,12 +65,15 @@ function doCache(request){
 }
 
 self.addEventListener('fetch', (e) => {
-    
-    if (doCache(e.request)){
-        console.log("[cache]",e.request.url);
+    let url = new URL(e.request.url);
+    if (url.pathname == "/"){
+        e.respondWith(fetchFirst(new Request("/")));
+    }
+    else if (doCache(e.request)){
+        console.log("[fetchFirst]",e.request.url);
         e.respondWith(fetchFirst(e.request));
     } else {
-        console.log("[network]",e.request.url);
+        console.log("[networkOnly]",e.request.url);
         e.respondWith(networkOnly(e.request));
     }
   });
