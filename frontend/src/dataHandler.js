@@ -28,7 +28,6 @@ export function openSubject(subject){
 }
 
 function makeRequest(mode,url, data = {}, body){
-    
     let base = "/api/";
     return new Promise(function(promiseResolve){
         function resolve(obj){
@@ -195,7 +194,9 @@ export function setHomeworkCompleted(id,value, sync = true){
             clearTimeout(scheduledSync);
         }
         scheduledSync = setTimeout(()=>{
-            syncHomeworkCompleted();
+            if (navigator.onLine){
+                syncHomeworkCompleted();
+            }
         }, 500);
     }
     saveHWC();
@@ -581,36 +582,53 @@ function processData(result){
 }
 
 function afterLogin(){
+    let online = navigator.onLine;
     setImmediate(()=>{
         processData(getCall("data"));
         processTimetable(getCall("timetable"));
-        processHomeworksCompleted();
-        syncHomeworkCompleted();
+        if (online){
+            processHomeworksCompleted();
+            syncHomeworkCompleted();
+        }
     });
-    
-    getData().then((result)=>{
-        processData(result);
-    });
-    getTimetable().then((result)=>{
-        processTimetable(result);
-    });
+    if (online){    
+        getData().then((result)=>{
+            processData(result);
+        });
+        getTimetable().then((result)=>{
+            processTimetable(result);
+        });
+    }
 }
 
 
-function getInst(callback = ()=>{}){
+function getInst(){
     let items = [];
 
-    get("institute").then(function(result){
-        if (result.success){
-            result.data = result.data.map((e)=>({
-                code:e.InstituteCode,
-                name:e.Name,
-                city:e.City
-            }));
-            items.push(...result.data);
-            callback(result.data);
-        }
-    });
+    function map(arr){
+        return arr.map((e)=>({
+            code:e.InstituteCode,
+            name:e.Name,
+            city:e.City
+        }));
+    }
+    
+    let call = getCall("institute");
+    if (call.success){
+        setImmediate(()=>{
+            updateArray(items, map(call.data));
+        })
+    }
+    console.log("teszt222");
+    console.log("inst call",call);
+
+    if (navigator.onLine){
+        get("institute").then(function(result){
+            if (result.success){
+                updateArray(items, map(result.data));
+            }
+        });   
+    }
     
 
     return items;
