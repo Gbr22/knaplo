@@ -14,14 +14,13 @@
 import Login from './view/Login';
 import GlobalState from './globalState';
 import MessageDisplay from './components/MessageDisplay';
-import Nav from './components/Nav';
 import Modal from './components/Modal';
 
 export default {
   name: 'App',
   components: {
     MessageDisplay,
-    Nav,
+    Nav:()=>import('./components/Nav'),
     Modal,
     Login,
     Screens:()=>import("./Screens"),
