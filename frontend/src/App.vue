@@ -15,6 +15,8 @@ import Login from './view/Login';
 import GlobalState from './globalState';
 import MessageDisplay from './components/MessageDisplay';
 import Modal from './components/Modal';
+import ThemeHandler from './themeHandler';
+ThemeHandler;
 
 export default {
   name: 'App',
