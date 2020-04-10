@@ -5,16 +5,22 @@
   "dependencies": {
     "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.4",
+    "esm": "^3.2.25",
     "express": "^4.17.1",
     "jaaulde-cookies": "^3.0.6",
     "needle": "^2.3.3",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.7"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
+    "mocha": "^7.1.1"
+  },
   "scripts": {
     "start-prod": "npm run build-front & node index.js",
-    "build-front": "cd frontend && npm i && npm run build"
+    "build-front": "cd frontend && npm i && npm run build",
+    "test": "mocha"
   },
   "repository": {
     "type": "git",

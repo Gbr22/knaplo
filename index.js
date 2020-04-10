@@ -29,7 +29,9 @@ console.log("Running "+lastcommit.hash);
 
 
 
-
+app.all("/running", (req,res)=>{
+    res.send("yes");
+});
 
 app.all('/login',async (req, res) => {
      
@@ -138,6 +140,7 @@ app.all('/data',async (req, res) => {
     let token = req.login.access_token;
 
     api.studentAmi(school, token).then((data)=>{
+        res.setHeader("Content-Type","application/json");
         res.send(data);
     }).catch((err)=>{
         res.send(err.message);
@@ -174,6 +177,15 @@ app.all('/lastcommit',async (req, res) => {
     res.send(JSON.stringify(lastcommit));
 });
 
-app.listen(port);
-
-console.log("Server started");
+if (require.main === module) {
+    console.log('called directly');
+    app.listen(port);
+    console.log("Server started on",port);
+} else {
+    console.log('required as a module');
+}
+module.exports = function(p){
+    console.log = ()=>{};
+    return app.listen(p);
+    /* return app; */
+}
