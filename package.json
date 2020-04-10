@@ -13,7 +13,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "start-prod": "npm run build-front & node index.js",
+    "start-prod": "node index.js",
     "build-front": "cd frontend && npm i && npm run build"
   },
   "repository": {

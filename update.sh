@@ -1,6 +1,4 @@
-git pull &
-./frontend/update.sh &
-pm2 restart knaplo &
-wait
+git pull && npm i &&
+pm2 restart knaplo && npm run build-front
 
 
