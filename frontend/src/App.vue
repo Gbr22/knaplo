@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <Login v-if="!loggedIn" />
-    <div v-if="loggedIn" id="pageviewer">
-      <Screens />
+    <div id="pageviewer">
+      <Login v-if="!loggedIn" />
+      <Screens v-if="loggedIn"/>
       <Modal />
     </div>
     <Nav v-if="loggedIn" />

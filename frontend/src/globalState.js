@@ -5,7 +5,6 @@ import Cookies from 'js-cookie';
 import { afterLogin, getHomeworksCompletedMap } from './dataHandler';
 
 let GlobalState = {
-    inst:getInst(),
     loggedIn:false,
     data:null,
     lessonsList:[],
