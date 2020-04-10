@@ -162,6 +162,227 @@ export default {
 </script>
 
 <style>
+#subjects {
+    border-radius: 15px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+.divider {
+    width: 0;
+    height: 30px;
+    display: inline-block;
+    border: 0.5px solid #cfcfcf;
+    content: '';
+    vertical-align: middle;
+    margin: 0 10px;
+}
+
+#avg_detail_cont .section {
+    
+    vertical-align: middle;
+    display: inline-block;
+    width: 40%;
+
+}
+#avg_detail_cont .left {
+    padding-top: 3px;
+}
+#avg_detail_cont .right, #avg_detail_cont .left {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+#avg_detail_cont .big, #avg_detail_cont .small {
+    display: block;
+    width: max-content;
+    margin: 0;
+}
+#avg_detail_cont .big {
+    font-size: 18px;
+    font-weight: bold;
+    color: whitesmoke;
+    
+}
+#avg_detail_cont .small {
+    font-size: 13px;
+    color: #cccccc;
+}
+
+
+
+circle {
+    transition: stroke-dashoffset 0.35s, stroke 0.35s;
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+    /*stroke: #00cc66;*/
+
+}
+#circle_container {
+    
+    
+    width: 120px;
+    height: 120px;
+    position: relative;
+    display: inline-block;
+}
+#circle_container #total_avg, #circle_container #avg_circle {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: inline-block;
+}
+#total_avg_text {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    text-align: center;
+    height: max-content;
+    font-size: 30px;
+}
+
+#ranks_container, #roundView_cont {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    margin: auto;
+    vertical-align: middle;
+    text-align: center;
+    display: flex;
+    align-items: center;
+}
+#roundView h2 {
+    text-align: center;
+}
+#roundView input[type="number"] {
+    font-size: inherit;
+    margin: 0;
+    border: none;
+    padding: 3px;
+    padding-bottom: 0;
+    outline: none;
+    background-color: transparent;
+    border-bottom: 1px solid var(--text-color);
+}
+#roundView input[type="number"]:invalid {
+    color: rgb(190, 0, 0);
+}
+#roundView .example {
+    font-size: 30px;
+    text-align: center;
+}
+
+#roundView {
+    width: 100%;
+    box-sizing: border-box;
+    margin: 30px;
+    padding: 20px;
+    height: max-content;
+    text-align: left;
+    display: inline-block;
+    border-radius: 15px;
+    background-color: var(--modal-color);
+    box-shadow: var(--modal-shadow);
+    position: relative;
+}
+#ranks .rank {
+
+}
+#ranks .left {
+    border-right: 1px solid var(--divider-color);
+}
+
+#ranks .left span, #ranks .right span {
+    display: block;
+    padding: 1.5px 0;
+}
+#ranks .left, #ranks .right {
+    display: inline-block;
+    width: 50%;
+    box-sizing: border-box;
+    padding: 0 8px;
+}
+#ranks .left {
+    text-align: right;
+}
+#ranks .right {
+    text-align: left;
+}
+
+#ranks h2 {
+    text-align: center;
+    margin: 5px 0;
+}
+#ranks .close, #roundView .close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 10px;
+}
+
+#home {
+    /*background-color: var(--color-dark);*/
+    
+    background: var(--theme-gradient);
+
+}
+
+
+#avg_screen {
+    padding: 30px 0;
+
+    width: 100%;
+    height: 220px;
+    box-sizing: border-box;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /*background-color: rgba(232, 238, 243, 0.418);*/
+    background: transparent;
+    text-align: center;
+
+    color: whitesmoke;
+
+}
+#avg_screen .inner {
+    display: block;
+    width: 100%;
+}
+#avg_detail_cont {
+    vertical-align: middle;
+}
+#avg_detail_cont svg {
+    vertical-align: middle;
+}
+#avg_detail_cont i {
+    vertical-align: bottom;
+}
+.section.avg svg {
+    stroke: #8ED081;
+}
+.section.rank svg {
+    stroke: #F2DC5D;
+}
+.section.rank i {
+    color: #F2DC5D;
+}
+.section.avg {
+    text-align: right;
+}
+.section.rank {
+    text-align: left;
+}
+.section.rank a {
+    color: inherit;
+    text-decoration: none;
+}
 
 #subject_grades {
     text-align: initial;

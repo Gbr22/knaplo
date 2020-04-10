@@ -31,6 +31,10 @@ export default {
 </script>
 
 <style>
+#menu {
+    flex:0;
+    position: relative;
+}
 
 #menu.loading_data {
     transform: translateY(-4px);

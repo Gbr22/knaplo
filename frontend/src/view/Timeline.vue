@@ -159,7 +159,16 @@ export default {
 }
 </script>
 
+<style>
+[data-item-type="absence"] svg {
+    stroke: #009999;
+}
+[data-item-type="absence"][data-state="true"] svg {
+    stroke: #00af58;
+}
+</style>
 <style scoped>
+
 #bottomPadding {
     height: 10px;
 }
@@ -184,6 +193,15 @@ export default {
 #header {
     padding: 10px;
     box-sizing: border-box;
+}
+
+#absenceCount {
+    padding: 20px;
+    padding-top: 0;
+    box-sizing: border-box;
+}
+#absenceCount p {
+    margin: 4px 0;
 }
 
 </style>

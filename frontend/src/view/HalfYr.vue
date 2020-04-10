@@ -58,8 +58,8 @@ export default {
     
 .halfyr_item {
     position: relative;
-    font-size: 18px;
-    padding: 15px 0px;
+    font-size: 18px !important;
+    padding: 15px 0px !important;
 }
 .halfyr_item .mid {
     margin: 0 45px;
