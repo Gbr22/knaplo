@@ -19,7 +19,8 @@
   },
   "scripts": {
     "start-prod": "node index.js",
-    "build-front": "cd frontend && npm i && npm run build"
+    "build-front": "cd frontend && npm i && npm run build",
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
