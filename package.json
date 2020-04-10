@@ -18,9 +18,8 @@
     "mocha": "^7.1.1"
   },
   "scripts": {
-    "start-prod": "npm run build-front & node index.js",
-    "build-front": "cd frontend && npm i && npm run build",
-    "test": "mocha"
+    "start-prod": "node index.js",
+    "build-front": "cd frontend && npm i && npm run build"
   },
   "repository": {
     "type": "git",
