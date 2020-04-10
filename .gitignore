@@ -3,3 +3,4 @@ inst_clean.json
 secret
 *.cache
 *.db
+node_modules
