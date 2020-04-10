@@ -10,6 +10,8 @@
 
 <script>
 import GlobalState from '../globalState';
+import { closeModal } from './Modal.vue';
+
 export default {
     name:"NavItem",
     props:["navTo","icon","text"],
@@ -20,6 +22,7 @@ export default {
     ),
     methods:{
         navigate(){
+            closeModal();
             let to = this.navTo;
             GlobalState.currentMenu = to;
             localStorage.setItem("currentMenu",to);
