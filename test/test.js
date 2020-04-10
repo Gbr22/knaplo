@@ -1,6 +1,11 @@
 var assert = require('assert');
 
-let creds = require("./login.json");
+let creds = null;
+if (process.env["LOGIN"]){
+    creds = JSON.parse(process.env["LOGIN"]);
+} else {
+    creds = require("./login.json");
+}
 
 var assert = require('assert');
 const chai = require("chai");
