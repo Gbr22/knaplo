@@ -12,7 +12,7 @@
             :buffer="300"
         >
             <template #before>
-                <div v-if="filtered.length == 0" id="noresults">
+                <div v-if="filtered.length == 0 && inst.length != 0" id="noresults">
                     A keresett intézményre nincs találat
                 </div>
             </template>
@@ -29,13 +29,10 @@
                 class="instItem"
             >
                 <div v-on:click="select(item)" class="school">
-                    <input type="radio" name="inst" :value="item.inst" :id="item.inst" :data-test="item.code">
-                    <span class="checkmark">
-                        
-                    </span>
-                    <label :for="item.inst"> {{ item.name }}
+                    <span>
+                        {{ item.name }}
                         <i>({{ item.city }})</i>
-                    </label>
+                    </span>
                 </div>
             </DynamicScrollerItem>
             </template>
