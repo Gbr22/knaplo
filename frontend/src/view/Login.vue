@@ -2,7 +2,7 @@
   <div id="login_form">
         <div id="login_wrap">
             
-            <div class="logo"><img :src="`/icons/icon_transparent_vector.svg`" /></div>
+            <div class="logo"><img :src="`/icons/icon_transparent_vector.svg`" alt="Logo" /></div>
             <h1>Bejelentkezés</h1>
             <form v-on:submit.prevent="onSubmit" enctype="text/plain">
                 
@@ -11,7 +11,7 @@
                 <input v-model="form.password" aria-label="Jelszó" name="password" type="password" placeholder="Jelszó" autocomplete="current-password" required>
                 <p id="selectInst" @click="selectInst">{{ inst.name }}</p>
 
-                <input type="submit" value="Bejelentkezés">
+                <button id="submit">Bejelentkezés</button>
                 
             </form>
         </div>
@@ -131,7 +131,7 @@ input:-webkit-autofill:active  {
     transition: "color 9999s ease-out, background-color 9999s ease-out";
     transition-delay: 9999s;
 }
-#login_form input[type="text"], #login_form input[type="password"], #login_form input[type="submit"] {
+#login_form input[type="text"], #login_form input[type="password"], #login_form #submit {
     box-sizing: border-box;
     display: block;
     border: 1px solid var(--divider-color);
@@ -145,11 +145,11 @@ input:-webkit-autofill:active  {
     background-color: var(--element2-color);
     font-size: 16px;
 }
-#login_form input[type="submit"] {
-    background-color: #199649;
+#login_form #submit {
+    background-color: #1ca04e;
     border: none;
     /*color: rgb(240, 255, 249);*/
-    color:white;
+    color:#1d1d1d;
     margin-top: 30px;
 }
 
