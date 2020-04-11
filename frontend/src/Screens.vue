@@ -4,8 +4,8 @@
         <Timeline v-show="currentMenu == 'timeline'"/>
         <Timetable v-show="currentMenu == 'timetable'"/>
         <Homework v-show="currentMenu == 'homework'"/>
-        <Settings v-if="currentMenu == 'settings'"/>
-        <HalfYr v-if="currentMenu == 'halfyr'"/>
+        <Settings v-if="currentMenu == 'more'"/>
+        <HalfYr v-if="currentMenu == 'more/halfyr'"/>
     </div>
 </template>
 

@@ -22,7 +22,7 @@ let ConfirmModal = {
         }
     }
 }
-export function openComfirm(title,callback){
+export function openConfirm(title,callback){
     let obj = {
         onConfirm:callback
     }

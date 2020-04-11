@@ -11,7 +11,6 @@ import VueVirtualScroller from 'vue-virtual-scroller'
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 import { closeModal } from './components/Modal';
 
-
 Vue.use(VueVirtualScroller)
 
 new Vue({
@@ -19,10 +18,25 @@ new Vue({
   render: h => h(App),
 }).$mount('#app')
 
+function goUpPage(){
+  let menus = GlobalState.currentMenu.split("/");
+  if (menus.length > 1){
+    menus.pop();
+    GlobalState.currentMenu = menus.join("/");
+    return true;
+  } else {
+    return false;
+  }
+}
+window.goUpPage = goUpPage;
 
 function onBackAction(){
-  return closeModal();
+  return closeModal() || goUpPage();
 }
+window.onBackAction = onBackAction;
+
+
+
 history.pushState({},'');
 window.onpopstate = function(){
   
@@ -38,6 +52,6 @@ window.onpopstate = function(){
 }
 window.onkeydown = function(event){
   if (event.keyCode == 27){
-    onBackAction();
+    closeModal();
   }
 }

@@ -13,7 +13,7 @@
         <section id="more">
             <div class="header">Továbbiak</div>
             <div class="content">
-                <div class="item" @click="navigate('halfyr')">
+                <div class="item" @click="navigate('more/halfyr')">
                     <span class="icon">
                         <svg class="feather">
                             <use xlink:href="fi#list"/>
@@ -23,7 +23,7 @@
                         Lezárások
                     </p>
                 </div>
-                <div class="item" @click="openComfirm('Biztosan Kilép?',logout)">
+                <div class="item" @click="openConfirm('Biztosan Kilép?',logout)">
                     <span class="icon">
                         <svg class="feather">
                             <use xlink:href="fi#log-out"/>
@@ -70,7 +70,7 @@ import GlobalState from '../globalState';
 import ThemeHandler from '../themeHandler';
 import Cookies from 'js-cookie';
 import { navigate } from '../util';
-import ConfirmModal, { openComfirm } from '../components/modals/ConfirmModal.vue';
+import ConfirmModal, { openConfirm } from '../components/modals/ConfirmModal.vue';
 
 
 export default {
@@ -86,7 +86,7 @@ export default {
         }
     },
     methods:{
-        openComfirm,
+        openConfirm,
         navigate,
         logout(){
             GlobalState.loggedIn = false;

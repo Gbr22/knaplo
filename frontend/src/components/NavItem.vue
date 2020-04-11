@@ -1,5 +1,5 @@
 <template>
-  <button v-bind:class="{ active: GlobalState.currentMenu == navTo }" v-on:click="navigate(navTo)">
+  <button v-bind:class="{ active: GlobalState.currentMenu.indexOf(navTo)==0 }" v-on:click="navigate(navTo)">
         <svg class="feather">
             <use v-bind:xlink:href="'/fi#'+icon"/>
         </svg>
