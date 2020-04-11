@@ -46,6 +46,22 @@ html, body, #app {
     height: 100%;
     overscroll-behavior-y: none;
 }
+.btn {
+    border: none;
+    color: var(--text-color);
+    background-color: var(--element-color);
+    padding: 8px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    box-shadow: var(--elem-shadow);
+    transition: all 0.3s ease;
+    background-color: var(--button-color);
+    outline: none;
+}
+.btn:hover {
+    opacity: 0.7;
+    transform: scale(0.95);
+}
 #pageviewer {
     flex: 1;
     overflow-y: auto;

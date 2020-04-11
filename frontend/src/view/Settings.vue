@@ -23,7 +23,7 @@
                         Lezárások
                     </p>
                 </div>
-                <div class="item" @click="logout()">
+                <div class="item" @click="openComfirm('Biztosan Kilép?',logout)">
                     <span class="icon">
                         <svg class="feather">
                             <use xlink:href="fi#log-out"/>
@@ -70,7 +70,7 @@ import GlobalState from '../globalState';
 import ThemeHandler from '../themeHandler';
 import Cookies from 'js-cookie';
 import { navigate } from '../util';
-
+import ConfirmModal, { openComfirm } from '../components/modals/ConfirmModal.vue';
 
 
 export default {
@@ -86,6 +86,7 @@ export default {
         }
     },
     methods:{
+        openComfirm,
         navigate,
         logout(){
             GlobalState.loggedIn = false;
