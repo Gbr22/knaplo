@@ -1,5 +1,5 @@
 <template>
-  <button v-bind:class="{ active: GlobalState.currentMenu == navTo }" v-on:click="navigate">
+  <button v-bind:class="{ active: GlobalState.currentMenu == navTo }" v-on:click="navigate(navTo)">
         <svg class="feather">
             <use v-bind:xlink:href="'/fi#'+icon"/>
         </svg>
@@ -10,7 +10,7 @@
 
 <script>
 import GlobalState from '../globalState';
-import { closeModal } from './Modal.vue';
+import { navigate } from '../util';
 
 export default {
     name:"NavItem",
@@ -21,12 +21,7 @@ export default {
         }
     ),
     methods:{
-        navigate(){
-            closeModal();
-            let to = this.navTo;
-            GlobalState.currentMenu = to;
-            localStorage.setItem("currentMenu",to);
-        }
+        navigate
     }
 }
 </script>

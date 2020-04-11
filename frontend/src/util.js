@@ -1,3 +1,5 @@
+import { closeModal } from './components/Modal.vue';
+
 
 export function formatDate(date){
     date = toDate(date);
@@ -170,3 +172,9 @@ export function formatURLsHTML(html){
     return html;
 }
 window.formatURLsHTML = formatURLsHTML;
+export function navigate(navTo){
+    closeModal();
+    let to = navTo;
+    GlobalState.currentMenu = to;
+    localStorage.setItem("currentMenu",to);
+}

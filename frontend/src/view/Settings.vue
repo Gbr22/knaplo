@@ -10,38 +10,52 @@
             <h1 id="fullname">{{ GlobalState.data ? GlobalState.data.Name : "#### ####" }}</h1>
         </div>
 
-        <ul id="info_action">
-            <li>
-                <svg class="feather">
-                    <use xlink:href="fi#moon"/>
-                </svg>
-                <h2>Sötét téma</h2>
-                <span class="action">
-                    <label class="switch">
-                        <input type="checkbox" :checked="ThemeHandler.isDark()" @click="ThemeHandler.toggleDarkMode()">
-                        <span class="slider"></span>
-                    </label>
-                </span>
-                
-            </li>
-            <li>
-                <svg class="feather">
-                    <use xlink:href="fi#user"/>
-                </svg>
-                <h2>
-                    <div class="big">Kijelentkezés</div>
-                    <div class="small">{{ GlobalState.user ? GlobalState.user.username : "##########" }}</div>
-                </h2>
-                <span class="action">
-                    <button class="simplebtn" v-on:click="logout()">
+        <section id="more">
+            <div class="header">Továbbiak</div>
+            <div class="content">
+                <div class="item" @click="navigate('halfyr')">
+                    <span class="icon">
+                        <svg class="feather">
+                            <use xlink:href="fi#list"/>
+                        </svg>
+                    </span>
+                    <p>
+                        Lezárások
+                    </p>
+                </div>
+                <div class="item" @click="logout()">
+                    <span class="icon">
                         <svg class="feather">
                             <use xlink:href="fi#log-out"/>
                         </svg>
-                    </button>        
-                </span>
-                
-            </li>
-        </ul>
+                    </span>
+                    <p>
+                        Kijelentkezés
+                    </p>
+                </div>
+            </div>
+        </section>
+        <section id="settings">
+            <div class="header">Beállítások</div>
+            <div class="content">
+                <div class="item">
+                    <span class="icon">
+                        <svg class="feather">
+                            <use xlink:href="fi#moon"/>
+                        </svg>
+                    </span>
+                    <p>
+                        Sötét téma
+                    </p>
+                    <span class="action">
+                        <label class="switch">
+                            <input type="checkbox" :checked="ThemeHandler.isDark()" @click="ThemeHandler.toggleDarkMode()">
+                            <span class="slider"></span>
+                        </label>
+                    </span>
+                </div>
+            </div>
+        </section>
         <div id="credits">
             <div><img src="icons/icon_vector.svg" /></div>
             <h2>K napló</h2>
@@ -55,6 +69,9 @@
 import GlobalState from '../globalState';
 import ThemeHandler from '../themeHandler';
 import Cookies from 'js-cookie';
+import { navigate } from '../util';
+
+
 
 export default {
     name: 'Settings',
@@ -69,6 +86,7 @@ export default {
         }
     },
     methods:{
+        navigate,
         logout(){
             GlobalState.loggedIn = false;
             GlobalState.user = null;
@@ -80,65 +98,44 @@ export default {
 </script>
 
 <style>
-    
-#info_page {
-    text-align: center;
+section {
+    margin-bottom: 20px;
 }
-#info_page ul {
-    padding: 0;
+section .header {
     text-align: left;
+    margin: 0 20px;
+    padding: 5px 10px;
+    font-size: 18px;
 }
-#info_page li {
-    list-style: none;
-    border-top: 1px solid var(--divider-color);
-    margin: 0 30px;
-    padding: 10px 0;
+section .item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: var(--element-color);
+    box-shadow: var(--elem-shadow);
+    margin: 0 20px;
+    padding: 10px 10px;
+    border-radius: 15px;
+    margin-bottom: 8px;
 }
-#info_page li:first-child {
-    border: none;
+.item .icon {
+    display: block;
+    width: 40px;
+    flex: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
-
-#info_page h1 {
+.item p {
     margin: 0;
-}
-#info_action {
-
-}
-#info_action li {
-    position: relative;
-}
-#info_action li svg, #info_action li h2 {
-    display: inline-block;
-    vertical-align: middle;
-}   
-#info_action li svg {
-    
-}
-#info_action li h2 {
-    
-    font-size: 20px;
-    margin: 0;
-}
-#info_action li h2 .small {
-    font-size: 15px;
-    color: var(--text-smol);
-}
-#info_action li .action button {
-    outline: none;
-}
-#info_action li .action {
-    position: absolute;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    margin: auto;
-    height: 26px;
-    padding: inherit;
+    flex: 1;
+    text-align: left;
+    padding: 0 5px;
 }
 
 #profile_circle_container {
     margin: 60px 0;
-    
+    text-align: center;
 }
 #profile_circle svg {
     width: 30px;
@@ -231,7 +228,6 @@ border-radius: 50%;
 }
 
 #credits {
-    background-color: var(--element2-color);
     background-color: var(--modal-color);
     box-shadow: var(--modal-shadow);
     margin: 0 20px;
@@ -239,6 +235,7 @@ border-radius: 50%;
     padding: 20px;
     border-radius: 15px;
     margin-bottom: 20px;
+    text-align: center;
 }
 #credits h2 {
     margin-bottom: 13px;
