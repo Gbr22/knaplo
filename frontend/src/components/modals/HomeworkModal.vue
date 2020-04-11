@@ -16,7 +16,13 @@
           <hr>
       </div>
       <div class="hwContent" v-html="html"></div>
-      
+      <div class="completedSwitch" :data-value="isCompleted(obj.homework)+''">
+          <p>Megoldott feladat?</p>
+          <span>
+                <button class="true" @click="setHomeworkCompleted(obj.homework.Id,true)">Igen</button>
+                <button class="false" @click="setHomeworkCompleted(obj.homework.Id,false)">Nem</button>
+          </span>
+      </div>
   </div>
 </template>
 
@@ -24,7 +30,7 @@
 import GlobalState from '../../globalState';
 import { formatURLsHTML, formatDate } from '../../util';
 import { openModal } from '../Modal';
-
+import { getHomeworkCompleted, setHomeworkCompleted, toggleHomeworkCompleted, getHWCompObjFArr } from '../../dataHandler';
 
 
 let HomeworkModal = {
@@ -38,9 +44,14 @@ let HomeworkModal = {
         return {
             GlobalState,
             html,
+            homeworksCompleted:GlobalState.processedData.homeworksCompleted
         }
     },
     methods:{
+        setHomeworkCompleted,
+        isCompleted(hw){
+            return getHWCompObjFArr(hw.Id, this.homeworksCompleted)?.value == true;
+        },
         formatDate,
     }
 }
@@ -58,6 +69,46 @@ export function openHomework(elem){
 </script>
 
 <style scoped>
+    .completedSwitch {
+        text-align: center;
+    }
+    .completedSwitch p {
+        margin: 3px 0;
+    }
+    .completedSwitch span {
+        display: inline-block;
+        margin: 0 auto;
+        margin-bottom: 20px;
+        margin-top: 5px;
+        box-shadow: var(--elem-shadow);
+        background-color: var(--divider-color);
+        border-radius: 5px;
+        overflow: hidden;
+    }
+    .completedSwitch button {
+        border: none;
+        padding: 5px 10px;
+        outline: none;
+        background-color: transparent;
+        color: var(--text-smol);
+        
+    }
+    .completedSwitch .true {
+        
+    }
+    .completedSwitch[data-value="true"] .true{
+        background-color: #4ec275b7;
+        opacity: 1;
+        color: black;
+    }
+    .completedSwitch[data-value="false"] .false{
+        background-color: #f54266b9;
+        opacity: 1;
+        color: black;
+    }
+    .completedSwitch .false {
+        
+    }
     hr  {
         margin: 0 auto;
         box-sizing: border-box;
