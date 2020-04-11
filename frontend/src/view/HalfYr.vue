@@ -41,12 +41,14 @@ export default {
             type;
             let subjects = this.subjects;
             let sum = 0;
+            let count = 0;
             for (let subj of subjects){
                 if (subj[type] != null){
                     sum+=subj[type].value;
+                    count++;
                 }
             }
-            return sum == 0 ? "#" : (sum/subjects.length).toFixed(2);
+            return sum == 0 ? "#" : (sum/count).toFixed(2);
         }
     }
     

@@ -253,6 +253,7 @@ export class Grade extends NormalisedItem {
     teacher;
     theme;
     mode;
+    normal=true;
 
     constructor(o) {
         super(o);
@@ -263,10 +264,26 @@ export class Grade extends NormalisedItem {
             theme:"Theme",
             mode:"Mode",
         });
+        if (o.Form == "Diligence" || o.Form == "Deportment"){
+            this.normal = false;
+            this.map({
+                value:"Value",
+                subject:"JellegNev"
+            });
+            if (this.subject == "Magatartas"){
+                this.subject = "Magatartás";
+            }
+            if (o.Value == "Jó" || o.Value == "Példás"){
+                this.icon = "fi#smile";
+            } else {
+                this.icon = "fi#frown";
+            }
+        } else {
+            this.icon = this.value;
+        }
 
         this.header = this.subject;
-        this.desc = this.theme ? this.theme : this.mode;
-        this.icon = this.value;
+        this.desc = this.theme || this.mode || this.value;
         this.displayState = this.value;
     }
 }
@@ -404,10 +421,16 @@ export function calcAvg(subject, avgCalc = {}){
 }
 export function getAverage(){
     let sum = 0;
+    let count = 0;
     for (let subject of GlobalState.processedData.subjects){
-        sum += roundSubject(subject);
+        let round = roundSubject(subject);
+        if (!isNaN(round)){
+            sum += round;
+            count++;
+        }
+        
     }
-    return sum / GlobalState.processedData.subjects.length;
+    return sum / count;
 }
 window.getAverage = getAverage;
 
@@ -508,7 +531,10 @@ function processData(result){
         
 
         let grades = data.Evaluations.filter((e)=>{
-            return e.Form == "Mark" && e.Type == "MidYear";
+            return e.Type == "MidYear" && (
+                e.Form == "Mark" ||
+                e.Form == "Diligence" || e.Form == "Deportment"
+            );
         }).map((e)=>{
             return new Grade(e);
         });
@@ -520,8 +546,9 @@ function processData(result){
             if (!subject_keys[g.subject]){
                 let obj = {
                     name:g.subject,
-                    average:5,
-                    grades:[]
+                    average:NaN,
+                    grades:[],
+                    normal:g.normal
                 };
                 subject_keys[g.subject] = obj;
                 subjects.push(obj)
@@ -530,7 +557,11 @@ function processData(result){
             
         }
         subjects.sort(function(a,b){
+            console.log(a.name,b.name);
             return a.name.localeCompare(b.name);
+        });
+        subjects.sort(function(a,b){
+            return b.normal - a.normal;
         })
         for (let e of data.Evaluations){
             if (e.Type == "HalfYear" || e.Type == "EndYear"){

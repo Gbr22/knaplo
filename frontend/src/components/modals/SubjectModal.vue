@@ -1,6 +1,6 @@
 <template>
 <div>
-    <div id="avg_calc">
+    <div id="avg_calc" v-if="!isNaN(obj.average)">
         <div class="avg">
             <div class="type"><span class="avgtitle">Jelenlegi átlag</span><span class="num">{{ obj.average.toFixed(2) }}</span></div>
             <div class="type"><span class="avgtitle">Átszámított átlag</span><span class="num">{{ calcNewAvg().toFixed(2) }}</span></div>

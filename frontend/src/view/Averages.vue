@@ -45,20 +45,20 @@
         <li v-for="(subject) in GlobalState.processedData.subjects" class="subject lItem" v-on:click="openSubject(subject)" v-bind:key="subject.name" @click="openSubject(subject)">
             <div class="subject_header">
                 <span class="left">{{ subject.name }}</span>
-                <span class="right">
-                    <span>{{ format(subject.average) }}</span>
+                <span class="right" v-if="!isNaN(subject.average)">
+                    <span>{{ format(subject.average) || "#" }}</span>
                     <svg class="feather" v-bind:class="{ up: isRoundedUp(subject) }">
                         <use xlink:href="/fi#chevrons-right"/>
                     </svg>
                     <!-- <i class="material-icons" v-bind:class="{ up: isRoundedUp(subject) }">
                         arrow_right_alt
                     </i> -->
-                    <span>{{ roundSubject(subject) }}</span>
+                    <span>{{ roundSubject(subject) || "#" }}</span>
                 </span>
                 
             </div>
             <div class="subject_grades">
-                {{ subject.grades.map((e)=>e.value).join(" ") }}
+                {{ subject.grades.map((e)=>e.value.toString()[0]).join(" ") }}
             </div>
         </li>
     </ul>
