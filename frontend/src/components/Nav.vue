@@ -114,7 +114,7 @@ export default {
     color: var(--text-color);
     display: block;
     font-weight: bold;
-    font-size: 12px;
+    font-size: 11px;
 }
 #menu button i {
     font-size: 28px;
@@ -128,7 +128,8 @@ export default {
     text-align:center;
     /*display: inline-block;*/
     
-    padding: 8px 15px;
+    padding: 8px 0;
+    width: 48px;
     
     box-sizing: border-box;
     vertical-align: middle;
