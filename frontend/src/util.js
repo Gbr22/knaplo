@@ -87,6 +87,7 @@ export function formatURLsHTML(html){
     
     let tag = document.createElement("span");
     tag.innerHTML = html;
+    let inital = tag.innerText;
 
     let links = tag.querySelectorAll("a[href]");
     let hasHTML = code => /<\/?[a-z][\s\S]*>/i.test(code);
@@ -118,6 +119,19 @@ export function formatURLsHTML(html){
             removeParent();
         }
     }
+
+    //make sure no content is lost in the cleanup
+
+    let now = tag.innerText;
+    if (inital == now){
+        let smaller = html.length-tag.innerHTML.length;
+        /* console.log(`${smaller} smaller!`); */
+    } else {
+        console.error("Content lost!", "Inital:",inital, "Now:",now);
+        tag.innerHTML = html; //if content is lost reset
+    }
+
+    //link formatting
 
     tags = tag.querySelectorAll("*");
 
