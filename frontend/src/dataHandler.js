@@ -27,12 +27,74 @@ export function openSubject(subject){
     });
 }
 
+if (cordova){
+    console.log("running in app");
+}
+
+
+
 function makeRequest(mode,url, data = {}, body){
     let base = "/api/";
+
+    function HTMLtoString(html){
+        let e = document.createElement("div");
+        e.innerHTML = html;
+        let title = e.querySelector("title");
+        if (title){
+            title.innerHTML = "";
+        }
+        console.log("element",e);
+        return e.textContent;
+    }
+
+    let params = "";
+
+    for (let [key,elem] of Object.entries(data)){
+        if (params == ""){
+            params+="?";
+        } else {
+            params+="&";
+        }
+        if (elem == null || elem == undefined){
+            elem = "";
+        }
+        params+=`${key}=${elem}`;
+    }
+
+    function makeRequestCordova(mode,endpoint,data={},body={}){
+        let base = "https://naplo.gbr22.me/api/";
+        let url = base+=endpoint+params;
+        return new Promise(function(resolve){
+            let m = "get";
+            if (mode == "POST"){
+                m = "post";
+            }
+
+            cordova.plugin.http[m](url,body,{},function(res){
+                console.log(res);
+                if (res.status == 200){
+                    resolve({success:true,data:JSON.parse(res.data),message:"Sikeres"});
+                } else {
+                    resolve({success:false, message: HTMLtoString(xhttp.responseText) || `Hiba ${this.status}`, data:null});
+                }
+                
+            },(err)=>{
+                pushError(err.message);
+                console.error(err);
+                resolve({success:false, message: err.message, data:null});
+            })
+        })
+        
+    }
+
+    if (cordova){
+        return makeRequestCordova(...arguments);
+    }
     return new Promise(function(promiseResolve){
         function resolve(obj){
 
             if (!obj.success){
+                console.error(obj);
                 pushError(obj.message)
             } else if (obj.success){
                 putCall(url, obj);
@@ -40,16 +102,7 @@ function makeRequest(mode,url, data = {}, body){
 
             promiseResolve(obj);
         }
-        function HTMLtoString(html){
-            let e = document.createElement("div");
-            e.innerHTML = html;
-            let title = e.querySelector("title");
-            if (title){
-                title.innerHTML = "";
-            }
-            console.log("element",e);
-            return e.textContent;
-        }
+        
 
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
@@ -66,19 +119,7 @@ function makeRequest(mode,url, data = {}, body){
                 resolve({success:false, message: HTMLtoString(xhttp.responseText) || `Hiba ${this.status}`, data:null});
             }
         };
-        let params = "";
-
-        for (let [key,elem] of Object.entries(data)){
-            if (params == ""){
-                params+="?";
-            } else {
-                params+="&";
-            }
-            if (elem == null || elem == undefined){
-                elem = "";
-            }
-            params+=`${key}=${elem}`;
-        }
+        
 
         xhttp.open(mode, base+url+params, true);
         let send = body;

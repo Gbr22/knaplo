@@ -1,3 +1,8 @@
 module.exports = {
-    lintOnSave: false
+    lintOnSave: false,
+    publicPath: '',
+
+    pluginOptions: {
+      cordovaPath: 'src-cordova'
+    }
 }

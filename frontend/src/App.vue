@@ -45,6 +45,7 @@ html, body, #app {
     -moz-osx-font-smoothing: grayscale;
     height: 100%;
     /* overscroll-behavior-y: none; */
+    -webkit-overflow-scrolling: auto;
 }
 .btn {
     border: none;
