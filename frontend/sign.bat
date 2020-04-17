@@ -1,0 +1,1 @@
+jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore C:\\Users\\gbr22\\key.jks .\src-cordova\platforms\android\app\build\outputs\apk\release\app-release-unsigned.apk key
