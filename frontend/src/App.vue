@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div id="pageviewer">
-      <Login v-if="!loggedIn" />
+      <Login v-if="!loggedIn && loaded" />
       <Screens v-if="loggedIn"/>
       <Modal />
     </div>

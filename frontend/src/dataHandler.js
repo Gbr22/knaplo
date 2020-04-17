@@ -47,6 +47,15 @@ function makeRequest(mode,url, data = {}, body){
         return e.textContent;
     }
 
+    function handleResult(obj){
+        if (!obj.success){
+            console.error(obj);
+            pushError(obj.message)
+        } else if (obj.success){
+            putCall(url, obj);
+        }
+    }
+
     let params = "";
 
     for (let [key,elem] of Object.entries(data)){
@@ -64,7 +73,12 @@ function makeRequest(mode,url, data = {}, body){
     function makeRequestCordova(mode,endpoint,data={},body={}){
         let base = "https://naplo.gbr22.me/api/";
         let url = base+=endpoint+params;
-        return new Promise(function(resolve){
+        return new Promise(function(promiseResolve){
+            function resolve(obj){
+
+                handleResult(obj);
+                promiseResolve(obj);
+            }
             let m = "get";
             if (mode == "POST"){
                 m = "post";
@@ -93,13 +107,7 @@ function makeRequest(mode,url, data = {}, body){
     return new Promise(function(promiseResolve){
         function resolve(obj){
 
-            if (!obj.success){
-                console.error(obj);
-                pushError(obj.message)
-            } else if (obj.success){
-                putCall(url, obj);
-            }
-
+            handleResult(obj);
             promiseResolve(obj);
         }
         
