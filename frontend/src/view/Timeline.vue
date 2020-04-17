@@ -16,7 +16,7 @@
                         </span>
                         <span class="right">
                             <svg class="feather">
-                                <use :xlink:href="'/'+getShowIcon()"/>
+                                <use :xlink:href="getFiURL(getShowIcon())"/>
                             </svg>
                         </span>
                         
@@ -55,6 +55,8 @@ import GlobalState from '../globalState';
 import TimelineItem from '../components/TimelineItem';
 import { openModal } from '../components/Modal';
 import SelectModal from '../components/modals/SelectModal';
+import { getFiURL } from '../util';
+
 
 let modes = {
     all:["Minden", "fi#box"],
@@ -81,6 +83,7 @@ export default {
         }
     },
     methods:{
+        getFiURL,
         getAbsenceCount(justified){
             let sum = 0;
             for (let e of this.GlobalState.processedData.absences){
