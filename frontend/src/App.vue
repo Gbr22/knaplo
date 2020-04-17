@@ -47,6 +47,9 @@ html, body, #app {
     /* overscroll-behavior-y: none; */
     -webkit-overflow-scrolling: auto;
 }
+[style*="--aspect-ratio"] {
+    padding-bottom: calc(100% / (var(--aspect-ratio)));
+}
 .btn {
     border: none;
     color: var(--text-color);

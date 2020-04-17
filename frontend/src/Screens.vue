@@ -166,6 +166,7 @@ export default {
     display: block;
     width: 100%;
     height: auto;
+    background-color: black;
 }
 .youtubeEmbed span {
     visibility: hidden;

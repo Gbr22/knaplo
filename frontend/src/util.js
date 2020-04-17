@@ -162,7 +162,7 @@ export function formatURLsHTML(html){
         e.parentNode.replaceChild(d, e);
         d.classList.add("youtubeEmbed");
         d.innerHTML = `
-            <img class="ratio" src="${ratioImg(16,9,"#000")}"/>
+            <div style="--aspect-ratio: 16/9;" class="ratio">
             <span>[YouTube]</span>
             <iframe src="https://www.youtube.com/embed/${id}" allowfullscreen>
             </iframe>
