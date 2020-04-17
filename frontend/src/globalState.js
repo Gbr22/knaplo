@@ -38,6 +38,7 @@ function loginWithCookie(c){
 
 if (cordova){
     document.addEventListener("deviceready", function(){
+        navigator.splashscreen.hide();
         let info = getCookieFromString("loginInfo",cordova.plugin.http.getCookieString("https://naplo.gbr22.me"));
         if (info){
             GlobalState.loggedIn = true;
