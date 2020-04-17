@@ -4,16 +4,21 @@
             {{ option.display }}
             <div class="pad"></div>
             <svg class="feather">
-                <use :xlink:href="'/'+option.icon"/>
+                <use :xlink:href="getFiURL(option.icon)"/>
             </svg>
       </div>
   </div>
 </template>
 
 <script>
+import { getFiURL } from '../../util'
+
 export default {
     name:"SelectModal",
-    props:["obj","close","currentValue"]
+    props:["obj","close","currentValue"],
+    methods:{
+        getFiURL,
+    }
 }
 </script>
 

@@ -2,7 +2,7 @@
   <div id="login_form">
         <div id="login_wrap">
             
-            <div class="logo"><img :src="`/icons/icon_transparent_vector.svg`" alt="Logo" /></div>
+            <div class="logo"><img :src="`icons/icon_transparent_vector.svg`" alt="Logo" /></div>
             <h1>Bejelentkezés</h1>
             <form v-on:submit.prevent="onSubmit" enctype="text/plain">
                 

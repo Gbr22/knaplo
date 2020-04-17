@@ -12,7 +12,7 @@
                     @click.stop="toggleHomeworkCompleted(elem.homework.Id)"
                 >
                     <svg class="feather">
-                        <use :xlink:href="'/fi#' + (isCompleted(elem.homework) ? 'check' : 'x')"/>
+                        <use :xlink:href="getFiURL((isCompleted(elem.homework) ? '#check' : '#x'))"/>
                     </svg>
                 </button>
             </div>
@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { shortenText, htmlToText, formatURLsHTML, formatDate, toOneLine } from '../util'
+import { shortenText, htmlToText, formatURLsHTML, formatDate, toOneLine, getFiURL } from '../util'
 import { openHomework } from '../components/modals/HomeworkModal.vue';
 import { getHomeworkCompleted, setHomeworkCompleted, toggleHomeworkCompleted, getHWCompObjFArr } from '../dataHandler';
 import GlobalState from '../globalState';
@@ -39,6 +39,7 @@ export default {
         }
     },
     methods:{
+        getFiURL,
         formatDate,
         getCompletedCount(){
             return this.list.filter(e=>this.isCompleted(e.homework)).length;
