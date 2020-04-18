@@ -27,7 +27,7 @@ export function openSubject(subject){
     });
 }
 
-if (cordova){
+if (window.cordova){
     console.log("running in app");
 }
 
@@ -101,7 +101,7 @@ function makeRequest(mode,url, data = {}, body){
         
     }
 
-    if (cordova){
+    if (window.cordova){
         return makeRequestCordova(...arguments);
     }
     return new Promise(function(promiseResolve){

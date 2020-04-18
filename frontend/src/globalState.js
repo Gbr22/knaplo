@@ -36,7 +36,7 @@ function loginWithCookie(c){
     afterLogin();
 }
 
-if (cordova){
+if (window.cordova != undefined){
     document.addEventListener("deviceready", function(){
         navigator.splashscreen.hide();
         let info = getCookieFromString("loginInfo",cordova.plugin.http.getCookieString("https://naplo.gbr22.me"));
