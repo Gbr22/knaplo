@@ -12,6 +12,18 @@
     <preference name="ShowSplashScreenSpinner" value="false" />
     <preference name="AutoHideSplashScreen" value="false" />
     <content src="index.html" />
+
+    <icon src="../public/icons/icon_512.png" />
+    <platform name="android">
+        <resource-file src="res/values/colors.xml" target="/app/src/main/res/values/colors.xml" />
+        <icon background="@color/background" density="ldpi" foreground="../public/icons/foreground_192.png" />
+        <icon background="@color/background" density="mdpi" foreground="../public/icons/foreground_192.png" />
+        <icon background="@color/background" density="hdpi" foreground="../public/icons/foreground_256.png" />
+        <icon background="@color/background" density="xhdpi" foreground="../public/icons/foreground_256.png" />
+        <icon background="@color/background" density="xxhdpi" foreground="../public/icons/foreground_512.png" />
+        <icon background="@color/background" density="xxxhdpi" foreground="../public/icons/foreground_512.png" />
+    </platform>
+
     <plugin name="cordova-plugin-whitelist" spec="1" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
