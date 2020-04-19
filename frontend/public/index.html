@@ -8,7 +8,7 @@
     <title>K napló</title>
     
     <script>
-      if('serviceWorker' in navigator) {
+      if('serviceWorker' in navigator && !window.cordova) {
         navigator.serviceWorker
                  .register('/sw.js')
                  .then(function() { console.log("Service Worker Registered"); });
