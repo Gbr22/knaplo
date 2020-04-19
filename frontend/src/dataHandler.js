@@ -606,7 +606,6 @@ function processData(result){
             
         }
         subjects.sort(function(a,b){
-            console.log(a.name,b.name);
             return a.name.localeCompare(b.name);
         });
         subjects.sort(function(a,b){
