@@ -209,8 +209,7 @@ export default {
 }
 
 
-
-circle {
+#circle_container circle {
     transition: stroke-dashoffset 0.35s, stroke 0.35s;
     transform: rotate(-90deg);
     transform-origin: 50% 50%;

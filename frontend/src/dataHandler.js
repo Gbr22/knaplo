@@ -215,7 +215,35 @@ export function getHomeworkCompleted(id){
 }
 window.getHomeworkCompleted = getHomeworkCompleted;
 
+export function cleanHWC(){
+    let arr = homeworksCompleted();
+    let ids = new Map();
+    for (let i=0; i < arr.length; i++){
+        let e = arr[i];
+        if (!ids.has(e.id)){
+            ids.set(e.id,[]);
+        } else {
+            ids.get(e.id).push(e);
+        }
+    }
+    for (let [id,elems] of ids){
+        let max = elems[0];
+        for (let e in elems){
+            if (e.changed > max.changed){
+                max = e;
+            }
+        }
+        for (let e in elems){
+            if (e != max){
+                arr.splice(arr.indexOf(max),1);
+            }
+        }
+        
+    }
+}
+window.cleanHWC = cleanHWC;
 export function assignHomeworkCompletedState(id,assignState){
+    
     id = id.toString();
     let state = getHWCompObj(id);
     let exists = true;
@@ -229,6 +257,8 @@ export function assignHomeworkCompletedState(id,assignState){
         let arr = homeworksCompleted();
         arr.push(state);
     }
+    cleanHWC();
+    saveHWC();
 }
 let scheduledSync = -1;
 export function setHomeworkCompleted(id,value, sync = true){
@@ -248,7 +278,7 @@ export function setHomeworkCompleted(id,value, sync = true){
             }
         }, 500);
     }
-    saveHWC();
+    
 }
 export function saveHWC(){
     localStorage.setItem("homeworksCompleted", JSON.stringify(homeworksCompleted()));
@@ -606,7 +636,6 @@ function processData(result){
             
         }
         subjects.sort(function(a,b){
-            console.log(a.name,b.name);
             return a.name.localeCompare(b.name);
         });
         subjects.sort(function(a,b){
@@ -680,7 +709,60 @@ function afterLogin(){
         });
     }
 }
-
+export function refreshPage(page){
+    if (!navigator.onLine){
+        console.log("offline, not refreshing");
+        return new Promise(r=>r());
+    }
+    let actions = [
+        {
+            pages:["avgs","timeline","more/halfyr"],
+            action(){
+                return new Promise(function(resolve){
+                    getData().then((result)=>{
+                        processData(result);
+                        console.log("refreshed data");
+                        resolve();
+                    });
+                })
+                
+            }
+        },
+        {
+            pages:["timetable"],
+            action(){
+                return new Promise(function(resolve){
+                    getTimetable().then((result)=>{
+                        processTimetable(result);
+                        console.log("refreshed timetable");
+                        resolve();
+                    });
+                })
+            }
+        },
+        {
+            pages:["homework"],
+            action(){
+                return new Promise(function(resolve){
+                    getTimetable().then((result)=>{
+                        processTimetable(result);
+                        processHomeworksCompleted();
+                        syncHomeworkCompleted();
+                        console.log("refreshed homework");
+                        resolve();
+                    });
+                })
+            }
+        }
+    ]
+    
+    for (let a of actions){
+        if (a.pages.includes(page)){
+            return a.action();
+        }
+    }
+    return new Promise(r=>r());
+}
 
 function getInst(){
     let items = [];

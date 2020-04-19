@@ -55,6 +55,4 @@ if (window.cordova != undefined){
     GlobalState.loaded = true;
 }
 
-
-
 export default GlobalState;

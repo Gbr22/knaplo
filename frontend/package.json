@@ -27,6 +27,7 @@
     "core-js": "^3.6.4",
     "feather-icons": "^4.26.0",
     "js-cookie": "^2.2.1",
+    "mobile-pull-to-refresh": "^0.2.2",
     "vue": "^2.6.11",
     "vue-virtual-scroller": "^1.0.0-rc.2"
   },
