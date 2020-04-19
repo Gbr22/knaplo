@@ -1,3 +1,10 @@
+if('serviceWorker' in navigator && !window.cordova) {
+  navigator.serviceWorker
+           .register('/sw.js')
+           .then(function() { console.log("Service Worker Registered"); });
+}
+
+
 import Vue from 'vue'
 import App from './App.vue'
 
