@@ -680,7 +680,60 @@ function afterLogin(){
         });
     }
 }
-
+export function refreshPage(page){
+    if (!navigator.onLine){
+        console.log("offline, not refreshing");
+        return new Promise(r=>r());
+    }
+    let actions = [
+        {
+            pages:["avgs","timeline","more/halfyr"],
+            action(){
+                return new Promise(function(resolve){
+                    getData().then((result)=>{
+                        processData(result);
+                        console.log("refreshed data");
+                        resolve();
+                    });
+                })
+                
+            }
+        },
+        {
+            pages:["timetable"],
+            action(){
+                return new Promise(function(resolve){
+                    getTimetable().then((result)=>{
+                        processTimetable(result);
+                        console.log("refreshed timetable");
+                        resolve();
+                    });
+                })
+            }
+        },
+        {
+            pages:["homework"],
+            action(){
+                return new Promise(function(resolve){
+                    getTimetable().then((result)=>{
+                        processTimetable(result);
+                        processHomeworksCompleted();
+                        syncHomeworkCompleted();
+                        console.log("refreshed homework");
+                        resolve();
+                    });
+                })
+            }
+        }
+    ]
+    
+    for (let a of actions){
+        if (a.pages.includes(page)){
+            return a.action();
+        }
+    }
+    return new Promise(r=>r());
+}
 
 function getInst(){
     let items = [];

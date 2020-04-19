@@ -20,6 +20,9 @@ import ptrAnimatesMaterial from 'mobile-pull-to-refresh/dist/styles/material/ani
 import 'mobile-pull-to-refresh/dist/styles/material/style.css';
 
 import GlobalState from '../globalState'
+
+import { refreshPage } from '../dataHandler';
+
 export default {
     name:"Screen",
     props:["menu","comp"],
@@ -35,11 +38,8 @@ export default {
             container: this.$refs.screens,
             animates: ptrAnimatesMaterial,
             scrollable,
-            refresh() {
-                return new Promise(resolve => {
-                    
-                    setTimeout(resolve, 2000);
-                })
+            refresh:()=>{
+                return refreshPage(this.menu);
             }
         })
     }
