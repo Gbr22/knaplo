@@ -75,6 +75,12 @@ function makeRequest(mode,url, data = {}, body){
 
         let url = base+=endpoint+params;
         console.log(mode,url);
+        
+        if (typeof body == "object"){
+            body = JSON.parse(JSON.stringify( body ));
+        }
+        console.log(body);
+
         return new Promise(function(promiseResolve){
             function resolve(obj){
 
@@ -85,7 +91,7 @@ function makeRequest(mode,url, data = {}, body){
             if (mode == "POST"){
                 m = "post";
             }
-
+            cordova.plugin.http.setDataSerializer('json');
             cordova.plugin.http[m](url,body,{},function(res){
                 console.log(res);
                 if (res.status == 200){
