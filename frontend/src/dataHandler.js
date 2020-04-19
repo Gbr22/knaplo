@@ -215,7 +215,35 @@ export function getHomeworkCompleted(id){
 }
 window.getHomeworkCompleted = getHomeworkCompleted;
 
+export function cleanHWC(){
+    let arr = homeworksCompleted();
+    let ids = new Map();
+    for (let i=0; i < arr.length; i++){
+        let e = arr[i];
+        if (!ids.has(e.id)){
+            ids.set(e.id,[]);
+        } else {
+            ids.get(e.id).push(e);
+        }
+    }
+    for (let [id,elems] of ids){
+        let max = elems[0];
+        for (let e in elems){
+            if (e.changed > max.changed){
+                max = e;
+            }
+        }
+        for (let e in elems){
+            if (e != max){
+                arr.splice(arr.indexOf(max),1);
+            }
+        }
+        
+    }
+}
+window.cleanHWC = cleanHWC;
 export function assignHomeworkCompletedState(id,assignState){
+    
     id = id.toString();
     let state = getHWCompObj(id);
     let exists = true;
@@ -229,6 +257,8 @@ export function assignHomeworkCompletedState(id,assignState){
         let arr = homeworksCompleted();
         arr.push(state);
     }
+    cleanHWC();
+    saveHWC();
 }
 let scheduledSync = -1;
 export function setHomeworkCompleted(id,value, sync = true){
@@ -248,7 +278,7 @@ export function setHomeworkCompleted(id,value, sync = true){
             }
         }, 500);
     }
-    saveHWC();
+    
 }
 export function saveHWC(){
     localStorage.setItem("homeworksCompleted", JSON.stringify(homeworksCompleted()));
