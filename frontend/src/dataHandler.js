@@ -1,4 +1,4 @@
-import GlobalState from './globalState';
+import GlobalState, { ApiEndpoint } from './globalState';
 
 import { openModal } from './components/Modal';
 
@@ -71,8 +71,10 @@ function makeRequest(mode,url, data = {}, body){
     }
 
     function makeRequestCordova(mode,endpoint,data={},body={}){
-        let base = "https://naplo.gbr22.me/api/";
+        let base = ApiEndpoint;
+
         let url = base+=endpoint+params;
+        console.log(mode,url);
         return new Promise(function(promiseResolve){
             function resolve(obj){
 
