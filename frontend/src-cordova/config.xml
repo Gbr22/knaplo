@@ -14,6 +14,25 @@
     <content src="index.html" />
 
     <icon src="../public/icons/icon_512.png" />
+    <splash src="../public/icons/splash.png" />
+    <preference name="SplashMaintainAspectRatio" value="true" />
+    <platform name="android">
+        
+        <splash density="land-ldpi" src="../public/icons/splash.png" />
+        <splash density="land-mdpi" src="../public/icons/splash.png" />
+        <splash density="land-hdpi" src="../public/icons/splash.png" />
+        <splash density="land-xhdpi" src="../public/icons/splash.png" />
+        <splash density="land-xxhdpi" src="../public/icons/splash.png" />
+        <splash density="land-xxxhdpi" src="../public/icons/splash.png" />
+
+        <splash density="port-ldpi" src="../public/icons/splash.png" />
+        <splash density="port-mdpi" src="../public/icons/splash.png" />
+        <splash density="port-hdpi" src="../public/icons/splash.png" />
+        <splash density="port-xhdpi" src="../public/icons/splash.png" />
+        <splash density="port-xxhdpi" src="../public/icons/splash.png" />
+        <splash density="port-xxxhdpi" src="../public/icons/splash.png" />
+    </platform>
+
     <platform name="android">
         <resource-file src="res/values/colors.xml" target="/app/src/main/res/values/colors.xml" />
         <icon background="@color/background" density="ldpi" foreground="../public/icons/foreground_192.png" src="../public/icons/icon_256.png" />
