@@ -16,6 +16,11 @@ export function toDate(date){
     }
     return date;
 }
+export function getDateCompareNumber(date){
+    let pad = (n) => (n+"").padStart(2,"0");
+    return parseInt(`${date.getFullYear()}${pad(date.getMonth()+1)}${pad(date.getDate())}`);
+}
+window.getDateCompareNumber = getDateCompareNumber;
 window.toDate = toDate;
 export function getDayName(date){
     date = toDate(date);

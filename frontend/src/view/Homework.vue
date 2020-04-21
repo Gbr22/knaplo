@@ -14,6 +14,7 @@ import GlobalState from '../globalState'
 
 import HomeworkList from '../components/HomeworkList.vue';
 import { getHWCompObjFArr } from '../dataHandler';
+import { getDateCompareNumber } from '../util';
 
 
 export default {
@@ -32,9 +33,13 @@ export default {
         sortByDone(a,b){
             return this.isCompleted(a.homework) - this.isCompleted(b.homework);
         },
+        isExpired(e){
+            let g = getDateCompareNumber;
+            return g(new Date(e.homework.Hatarido)) < g(new Date());
+        },
         getActual(){
             return this.homeworks.filter((e)=>{
-                return new Date(e.homework.Hatarido) > new Date();
+                return !this.isExpired(e);
             }).sort((a,b)=>{
                 let g = x => new Date(x.homework.Hatarido);
                 return g(a)-g(b);
@@ -42,7 +47,7 @@ export default {
         },
         getExpired(){
             return this.homeworks.filter((e)=>{
-                return new Date(e.homework.Hatarido) <= new Date();
+                return this.isExpired(e);
             }).sort((a,b)=>{
                 let g = x => new Date(x.homework.Hatarido);
                 return g(b)-g(a);
