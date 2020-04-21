@@ -56,6 +56,10 @@ export default {
 }
 .ptr .icon {
     stroke: none;
+    fill: var(--theme-color);
+}
+.ptr .spinner circle {
+    stroke: var(--theme-color);
 }
 .link, #credits a {
     color: var(--link-color);
