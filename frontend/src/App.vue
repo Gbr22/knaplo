@@ -1,8 +1,8 @@
 <template>
   <div id="app">
     <div id="pageviewer">
-      <Login v-if="!loggedIn && loaded" />
-      <Screens v-if="loggedIn"/>
+      <Login v-if="!loggedIn && loaded" v-bind:class="{ modalBg:isModalOpen() }" />
+      <Screens v-if="loggedIn" v-bind:class="{ modalBg:isModalOpen() }" />
       <Modal />
     </div>
     <Nav v-if="loggedIn" />
@@ -16,6 +16,7 @@ import GlobalState from './globalState';
 import MessageDisplay from './components/MessageDisplay';
 import Modal from './components/Modal';
 import ThemeHandler from './themeHandler';
+import { isModalOpen } from './components/Modal.vue';
 ThemeHandler;
 
 export default {
@@ -29,6 +30,9 @@ export default {
   },
   data:()=>{
     return GlobalState
+  },
+  methods:{
+      isModalOpen,
   }
 }
 </script>
@@ -36,6 +40,9 @@ export default {
 <style>
 * {
     font-family: Helvetica, sans-serif;
+}
+.modalBg {
+    filter: blur(10px);
 }
 html, body, #app {
     margin: 0;

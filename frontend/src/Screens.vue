@@ -1,5 +1,5 @@
 <template>
-    <div id="pageview_inner" ref="screens" v-bind:class="{ modalBg:isModalOpen() }">
+    <div id="pageview_inner" ref="screens">
         
         <Screen v-for="s in screens" :key="s[1]" :comp="s[0]" :menu="s[1]" :data-screen="s[1]" />
     </div>
@@ -13,7 +13,6 @@ import Averages from './view/Averages';
 import Timetable from './view/Timetable.vue';
 import Homework from './view/Homework.vue';
 import Screen from './view/Screen.vue';
-import { isModalOpen } from './components/Modal.vue';
 
 
 
@@ -31,7 +30,6 @@ export default {
     data:()=>{
         return {
             GlobalState,
-            isModalOpen,
             screens: [
                 [Averages,"avgs"],
                 [Timeline,"timeline"],
@@ -47,9 +45,7 @@ export default {
 </script>
 
 <style>
-.modalBg {
-    filter: blur(10px);
-}
+
 [data-screen="timeline"]{
     height: 100%;
 }
