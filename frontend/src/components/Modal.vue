@@ -30,6 +30,10 @@ let data = {
     contentComponent:null,
     settings:{}
 };
+export function isModalOpen(){
+    return data.open;
+}
+window.isModalOpen = isModalOpen;
 
 export function openModal(title,content,obj,settings = {}){
     //(title, content)
@@ -83,7 +87,6 @@ export default {
         box-sizing: border-box;
         padding: 15px;
         /* background-color: rgba(0, 0, 0, 0.3); */
-        backdrop-filter: blur(10px);
     }
     .modal {
         background-color: var(--modal-color);
