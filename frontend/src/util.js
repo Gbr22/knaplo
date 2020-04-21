@@ -86,6 +86,12 @@ export function isSelfClosing(tagname){
     return !document.createElement(tagname).outerHTML.includes("/");
 }
 function addEmbedPlayer(id){
+    if (!window.matchMedia(`(hover: hover) and (pointer: fine)`).matches){ //mobile
+        
+        let url = `https://youtube.com/watch?v=${id}`;
+        window.open(url, "_blank");
+        return;
+    }
     console.log(id);
     let div = document.createElement("div");
     div.innerHTML = `
