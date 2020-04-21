@@ -94,6 +94,7 @@ export default {
     }
     .completed svg {
         transition: all 0.3s;
+        margin-left: 5px;
     }
     .completed[data-value="false"] svg {
         stroke: var(--text-smol);
