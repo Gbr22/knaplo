@@ -118,6 +118,9 @@ body, .list, #recent, .fullpage_modal {
 }
 
 @media (hover: hover) and (pointer: fine) {
+    #app {
+        flex-direction: column-reverse;
+    }
     .pc-no-scroll {
         overflow: hidden !important;
     }

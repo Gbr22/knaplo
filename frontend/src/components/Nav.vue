@@ -1,9 +1,9 @@
 <template>
     <nav id="menu" v-bind:class="{ loading_data: false }">
         <NavItem v-for="i in items" :key="i.navTo" :navTo="i.navTo" :text="i.text" :icon="i.icon" />
-        <div id="loading_data">
+        <!-- <div id="loading_data">
             <div id="loading_percent" v-bind:style="{ '--loaded': 100+'%' }"></div>
-        </div>
+        </div> -->
     </nav>
 </template>
 
@@ -31,6 +31,7 @@ export default {
 </script>
 
 <style>
+
 #menu {
     flex:0;
     position: relative;
