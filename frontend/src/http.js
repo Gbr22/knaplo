@@ -11,6 +11,9 @@ export function httpRequest(options){
             body: undefined,
             url: undefined,
         },options);
+
+        let isCors = false;
+
         var r = new RegExp('^(?:[a-z]+:)?//', 'i');
         let urlObj;
         if (r.test(options.url)){
@@ -19,7 +22,16 @@ export function httpRequest(options){
             urlObj = new URL(origin+options.url);
         }
         if (urlObj.origin != window.location.origin && !window.cordova){
-            options.url = "https://cors-anywhere.herokuapp.com/"+urlObj.toString();
+            isCors = true;
+            for (let p in options.headers){
+                let prefix = "X-Proxy-Header-";
+                if (p.indexOf(prefix) != 0){
+                    options.headers[prefix+p] = options.headers[p];
+                    delete options.headers[p];
+                }
+            }
+            options.headers["X-Proxy-URL"] = options.url;
+            options.url = "http://localhost:5050";
         } else {
             options.url = urlObj.toString();
         }
@@ -29,7 +41,9 @@ export function httpRequest(options){
         let bodyText = options.body;
         if (typeof bodyText == "object"){
             bodyText = JSON.stringify(bodyText);
-            options.headers["Content-Type"]="application/json";
+            if (!options.headers["Content-Type"]){
+                options.headers["Content-Type"]="application/json";
+            }
         }
     
         function processRawHeaders(string){
@@ -50,9 +64,7 @@ export function httpRequest(options){
             
         } else {
             var xhttp = new XMLHttpRequest();
-            for (let header in options.headers){
-                xhr.setRequestHeader(header, options.headers[header]);
-            }
+            
             xhttp.onreadystatechange = function() {
                 if (this.readyState == 4) {
                     let res = {
@@ -66,6 +78,11 @@ export function httpRequest(options){
                 }
             };
             xhttp.open(options.method, options.url, true);
+
+            for (let header in options.headers){
+                xhttp.setRequestHeader(header, options.headers[header]);
+            }
+
             xhttp.send(bodyText);
         }
     })
