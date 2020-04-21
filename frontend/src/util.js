@@ -85,6 +85,18 @@ export function ratioImg(width,height, color){
 export function isSelfClosing(tagname){
     return !document.createElement(tagname).outerHTML.includes("/");
 }
+function addEmbedPlayer(id){
+    console.log(id);
+    let div = document.createElement("div");
+    div.innerHTML = `
+        <iframe src="https://www.youtube.com/embed/${id}?autoplay=1" allowfullscreen>
+        </iframe>
+    `;
+    let thumb = document.querySelector(`[data-id='${id}'].thumbnail`);
+    thumb.remove();
+    document.querySelector(`[data-id='${id}']`).appendChild(div.children[0]);
+}
+window.addEmbedPlayer = addEmbedPlayer;
 export function formatURLsHTML(html){
     
     let tag = document.createElement("span");
@@ -161,11 +173,15 @@ export function formatURLsHTML(html){
         let d = document.createElement("div");
         e.parentNode.replaceChild(d, e);
         d.classList.add("youtubeEmbed");
+        d.setAttribute("data-id",id);
         d.innerHTML = `
             <canvas width="16" height="9" class="ratio"></canvas>
+            <div style="background-image: url(${`https://i.ytimg.com/vi/${id}/hqdefault.jpg`})" data-id="${id}" class="thumbnail" onclick="addEmbedPlayer('${id}')">
+                <div class="play">
+                </div>
+            </div>
             <span>[YouTube]</span>
-            <iframe src="https://www.youtube.com/embed/${id}" allowfullscreen>
-            </iframe>
+            
         `;
     }
     html = tag.innerHTML;
