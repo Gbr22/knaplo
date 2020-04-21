@@ -1,11 +1,7 @@
 <template>
-    <div id="pageview_inner">
-        <Averages v-if="currentMenu == 'avgs'" />
-        <Timeline v-show="currentMenu == 'timeline'"/>
-        <Timetable v-show="currentMenu == 'timetable'"/>
-        <Homework v-show="currentMenu == 'homework'"/>
-        <Settings v-if="currentMenu == 'more'"/>
-        <HalfYr v-if="currentMenu == 'more/halfyr'"/>
+    <div id="pageview_inner" ref="screens">
+        
+        <Screen v-for="s in screens" :key="s[1]" :comp="s[0]" :menu="s[1]" :data-screen="s[1]" />
     </div>
 </template>
 
@@ -16,6 +12,9 @@ import Timeline from './view/Timeline';
 import Averages from './view/Averages';
 import Timetable from './view/Timetable.vue';
 import Homework from './view/Homework.vue';
+import Screen from './view/Screen.vue';
+
+
 
 export default {
     name:"Screens",
@@ -26,14 +25,37 @@ export default {
         HalfYr,
         Timeline,
         Averages,
+        Screen,
     },
     data:()=>{
-        return GlobalState
-    }
+        return {
+            GlobalState,
+            screens: [
+                [Averages,"avgs"],
+                [Timeline,"timeline"],
+                [Timetable,"timetable"],
+                [Homework,"homework"],
+                [Settings,"more"],
+                [HalfYr,"more/halfyr"],
+            ]
+        }
+    },
+    
 }
 </script>
 
 <style>
+[data-screen="timeline"]{
+    height: 100%;
+}
+.ptr {
+    background-color: var(--element-color);
+    position: fixed;
+    z-index: 999999;
+}
+.ptr .icon {
+    stroke: none;
+}
 .link, #credits a {
     color: var(--link-color);
     text-decoration: none;
@@ -166,6 +188,7 @@ export default {
     display: block;
     width: 100%;
     height: auto;
+    background-color: black;
 }
 .youtubeEmbed span {
     visibility: hidden;

@@ -61,5 +61,6 @@ export default {
 <style scoped>
     .head {
         padding: 20px;
+        text-align: center;
     }
 </style>

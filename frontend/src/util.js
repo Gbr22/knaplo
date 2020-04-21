@@ -162,7 +162,7 @@ export function formatURLsHTML(html){
         e.parentNode.replaceChild(d, e);
         d.classList.add("youtubeEmbed");
         d.innerHTML = `
-            <img class="ratio" src="${ratioImg(16,9,"#000")}"/>
+            <canvas width="16" height="9" class="ratio"></canvas>
             <span>[YouTube]</span>
             <iframe src="https://www.youtube.com/embed/${id}" allowfullscreen>
             </iframe>
@@ -178,3 +178,28 @@ export function navigate(navTo){
     GlobalState.currentMenu = to;
     localStorage.setItem("currentMenu",to);
 }
+export function getFiURL(fi){
+    let url = "feather-sprite.svg"
+    if (!fi){
+        return url;
+    } else {
+        return url+fi.replace("/fi#","#").replace("fi#","#");
+    }
+
+}
+export function getCookieFromString(cname,string) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(string);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+      }
+    }
+    return "";
+}
+window.getCookieFromString = getCookieFromString;

@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="knaplo.gbr22" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>K napló</name>
+    <description>
+        A sample Apache Cordova application that responds to the deviceready event.
+    </description>
+    <author email="dev@cordova.apache.org" href="http://cordova.io">
+        Apache Cordova Team
+    </author>
+    <!-- this hook will point your config.xml to the DevServer on Serve -->
+    <hook type="after_prepare" src="../node_modules/vue-cli-plugin-cordova/serve-config-hook.js" />
+    <preference name="ShowSplashScreenSpinner" value="false" />
+    <preference name="AutoHideSplashScreen" value="false" />
+    <content src="index.html" />
+
+    <icon src="../public/icons/icon_512.png" />
+    <splash src="../public/icons/splash.png" />
+    <preference name="SplashMaintainAspectRatio" value="true" />
+    <platform name="android">
+        
+        <splash density="land-ldpi" src="../public/icons/splash.png" />
+        <splash density="land-mdpi" src="../public/icons/splash.png" />
+        <splash density="land-hdpi" src="../public/icons/splash.png" />
+        <splash density="land-xhdpi" src="../public/icons/splash.png" />
+        <splash density="land-xxhdpi" src="../public/icons/splash.png" />
+        <splash density="land-xxxhdpi" src="../public/icons/splash.png" />
+
+        <splash density="port-ldpi" src="../public/icons/splash.png" />
+        <splash density="port-mdpi" src="../public/icons/splash.png" />
+        <splash density="port-hdpi" src="../public/icons/splash.png" />
+        <splash density="port-xhdpi" src="../public/icons/splash.png" />
+        <splash density="port-xxhdpi" src="../public/icons/splash.png" />
+        <splash density="port-xxxhdpi" src="../public/icons/splash.png" />
+    </platform>
+
+    <platform name="android">
+        <resource-file src="res/values/colors.xml" target="/app/src/main/res/values/colors.xml" />
+        <icon background="@color/background" density="ldpi" foreground="../public/icons/foreground_192.png" src="../public/icons/icon_256.png" />
+        <icon background="@color/background" density="mdpi" foreground="../public/icons/foreground_192.png" src="../public/icons/icon_256.png" />
+        <icon background="@color/background" density="hdpi" foreground="../public/icons/foreground_256.png" src="../public/icons/icon_256.png" />
+        <icon background="@color/background" density="xhdpi" foreground="../public/icons/foreground_256.png" src="../public/icons/icon_256.png" />
+        <icon background="@color/background" density="xxhdpi" foreground="../public/icons/foreground_512.png" src="../public/icons/icon_512.png" />
+        <icon background="@color/background" density="xxxhdpi" foreground="../public/icons/foreground_512.png" src="../public/icons/icon_512.png" />
+    </platform>
+
+    <plugin name="cordova-plugin-whitelist" spec="1" />
+    <access origin="*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-intent href="tel:*" />
+    <allow-intent href="sms:*" />
+    <allow-intent href="mailto:*" />
+    <allow-intent href="geo:*" />
+    <platform name="android">
+        <allow-intent href="market:*" />
+    </platform>
+    <platform name="ios">
+        <allow-intent href="itms:*" />
+        <allow-intent href="itms-apps:*" />
+    </platform>
+</widget>

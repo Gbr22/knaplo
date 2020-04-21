@@ -7,7 +7,7 @@
                         <h1>{{ title }}</h1>
                         <div class="pad"></div>
                         <svg class="feather close" v-on:click="closeModal()">
-                            <use xlink:href="fi#x"/>
+                            <use xlink:href="feather-sprite.svg#x"/>
                         </svg>
                     </div>
                     <component v-bind:is="contentComponent" :obj="obj" :close="closeModal" class="content"></component>

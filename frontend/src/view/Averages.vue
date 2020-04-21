@@ -10,7 +10,7 @@
                 <span class="section avg">
                     
                     <svg class="feather">
-                        <use xlink:href="/fi#bar-chart-2"/>
+                        <use xlink:href="feather-sprite.svg#bar-chart-2"/>
                     </svg>
                     <!-- <i class="material-icons left">equalizer</i> -->
                     <span class="right">
@@ -27,7 +27,7 @@
                 <span class="section rank">
                     
                     <svg class="feather">
-                        <use xlink:href="/fi#award"/>
+                        <use xlink:href="feather-sprite.svg#award"/>
                     </svg>
                     <!-- <i class="material-icons left">stars</i> -->
                     <span class="right">
@@ -48,7 +48,7 @@
                 <span class="right" v-if="!isNaN(subject.average)">
                     <span>{{ format(subject.average) || "#" }}</span>
                     <svg class="feather" v-bind:class="{ up: isRoundedUp(subject) }">
-                        <use xlink:href="/fi#chevrons-right"/>
+                        <use xlink:href="feather-sprite.svg#chevrons-right"/>
                     </svg>
                     <!-- <i class="material-icons" v-bind:class="{ up: isRoundedUp(subject) }">
                         arrow_right_alt
@@ -209,8 +209,7 @@ export default {
 }
 
 
-
-circle {
+#circle_container circle {
     transition: stroke-dashoffset 0.35s, stroke 0.35s;
     transform: rotate(-90deg);
     transform-origin: 50% 50%;

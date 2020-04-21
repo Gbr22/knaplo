@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div id="pageviewer">
-      <Login v-if="!loggedIn" />
+      <Login v-if="!loggedIn && loaded" />
       <Screens v-if="loggedIn"/>
       <Modal />
     </div>
@@ -44,7 +44,8 @@ html, body, #app {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     height: 100%;
-    /* overscroll-behavior-y: none; */
+    overscroll-behavior-y: none;
+    -webkit-overflow-scrolling: auto;
 }
 .btn {
     border: none;

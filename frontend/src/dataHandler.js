@@ -1,4 +1,4 @@
-import GlobalState from './globalState';
+import GlobalState, { ApiEndpoint } from './globalState';
 
 import { openModal } from './components/Modal';
 
@@ -27,29 +27,98 @@ export function openSubject(subject){
     });
 }
 
+if (window.cordova){
+    console.log("running in app");
+}
+
+
+
 function makeRequest(mode,url, data = {}, body){
     let base = "/api/";
+
+    function HTMLtoString(html){
+        let e = document.createElement("div");
+        e.innerHTML = html;
+        let title = e.querySelector("title");
+        if (title){
+            title.innerHTML = "";
+        }
+        console.log("element",e);
+        return e.textContent;
+    }
+
+    function handleResult(obj){
+        if (!obj.success){
+            console.error(obj);
+            pushError(obj.message)
+        } else if (obj.success){
+            putCall(url, obj);
+        }
+    }
+
+    let params = "";
+
+    for (let [key,elem] of Object.entries(data)){
+        if (params == ""){
+            params+="?";
+        } else {
+            params+="&";
+        }
+        if (elem == null || elem == undefined){
+            elem = "";
+        }
+        params+=`${key}=${elem}`;
+    }
+
+    function makeRequestCordova(mode,endpoint,data={},body={}){
+        let base = ApiEndpoint;
+
+        let url = base+=endpoint+params;
+        console.log(mode,url);
+        
+        if (typeof body == "object"){
+            body = JSON.parse(JSON.stringify( body ));
+        }
+        console.log(body);
+
+        return new Promise(function(promiseResolve){
+            function resolve(obj){
+
+                handleResult(obj);
+                promiseResolve(obj);
+            }
+            let m = "get";
+            if (mode == "POST"){
+                m = "post";
+            }
+            cordova.plugin.http.setDataSerializer('json');
+            cordova.plugin.http[m](url,body,{},function(res){
+                console.log(res);
+                if (res.status == 200){
+                    resolve({success:true,data:JSON.parse(res.data),message:"Sikeres"});
+                } else {
+                    resolve({success:false, message: HTMLtoString(xhttp.responseText) || `Hiba ${this.status}`, data:null});
+                }
+                
+            },(err)=>{
+                pushError(err.message);
+                console.error(err);
+                resolve({success:false, message: err.message, data:null});
+            })
+        })
+        
+    }
+
+    if (window.cordova){
+        return makeRequestCordova(...arguments);
+    }
     return new Promise(function(promiseResolve){
         function resolve(obj){
 
-            if (!obj.success){
-                pushError(obj.message)
-            } else if (obj.success){
-                putCall(url, obj);
-            }
-
+            handleResult(obj);
             promiseResolve(obj);
         }
-        function HTMLtoString(html){
-            let e = document.createElement("div");
-            e.innerHTML = html;
-            let title = e.querySelector("title");
-            if (title){
-                title.innerHTML = "";
-            }
-            console.log("element",e);
-            return e.textContent;
-        }
+        
 
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
@@ -66,19 +135,7 @@ function makeRequest(mode,url, data = {}, body){
                 resolve({success:false, message: HTMLtoString(xhttp.responseText) || `Hiba ${this.status}`, data:null});
             }
         };
-        let params = "";
-
-        for (let [key,elem] of Object.entries(data)){
-            if (params == ""){
-                params+="?";
-            } else {
-                params+="&";
-            }
-            if (elem == null || elem == undefined){
-                elem = "";
-            }
-            params+=`${key}=${elem}`;
-        }
+        
 
         xhttp.open(mode, base+url+params, true);
         let send = body;
@@ -166,7 +223,35 @@ export function getHomeworkCompleted(id){
 }
 window.getHomeworkCompleted = getHomeworkCompleted;
 
+export function cleanHWC(){
+    let arr = homeworksCompleted();
+    let ids = new Map();
+    for (let i=0; i < arr.length; i++){
+        let e = arr[i];
+        if (!ids.has(e.id)){
+            ids.set(e.id,[]);
+        } else {
+            ids.get(e.id).push(e);
+        }
+    }
+    for (let [id,elems] of ids){
+        let max = elems[0];
+        for (let e in elems){
+            if (e.changed > max.changed){
+                max = e;
+            }
+        }
+        for (let e in elems){
+            if (e != max){
+                arr.splice(arr.indexOf(max),1);
+            }
+        }
+        
+    }
+}
+window.cleanHWC = cleanHWC;
 export function assignHomeworkCompletedState(id,assignState){
+    
     id = id.toString();
     let state = getHWCompObj(id);
     let exists = true;
@@ -180,6 +265,8 @@ export function assignHomeworkCompletedState(id,assignState){
         let arr = homeworksCompleted();
         arr.push(state);
     }
+    cleanHWC();
+    saveHWC();
 }
 let scheduledSync = -1;
 export function setHomeworkCompleted(id,value, sync = true){
@@ -199,7 +286,7 @@ export function setHomeworkCompleted(id,value, sync = true){
             }
         }, 500);
     }
-    saveHWC();
+    
 }
 export function saveHWC(){
     localStorage.setItem("homeworksCompleted", JSON.stringify(homeworksCompleted()));
@@ -557,7 +644,6 @@ function processData(result){
             
         }
         subjects.sort(function(a,b){
-            console.log(a.name,b.name);
             return a.name.localeCompare(b.name);
         });
         subjects.sort(function(a,b){
@@ -631,7 +717,60 @@ function afterLogin(){
         });
     }
 }
-
+export function refreshPage(page){
+    if (!navigator.onLine){
+        console.log("offline, not refreshing");
+        return new Promise(r=>r());
+    }
+    let actions = [
+        {
+            pages:["avgs","timeline","more/halfyr"],
+            action(){
+                return new Promise(function(resolve){
+                    getData().then((result)=>{
+                        processData(result);
+                        console.log("refreshed data");
+                        resolve();
+                    });
+                })
+                
+            }
+        },
+        {
+            pages:["timetable"],
+            action(){
+                return new Promise(function(resolve){
+                    getTimetable().then((result)=>{
+                        processTimetable(result);
+                        console.log("refreshed timetable");
+                        resolve();
+                    });
+                })
+            }
+        },
+        {
+            pages:["homework"],
+            action(){
+                return new Promise(function(resolve){
+                    getTimetable().then((result)=>{
+                        processTimetable(result);
+                        processHomeworksCompleted();
+                        syncHomeworkCompleted();
+                        console.log("refreshed homework");
+                        resolve();
+                    });
+                })
+            }
+        }
+    ]
+    
+    for (let a of actions){
+        if (a.pages.includes(page)){
+            return a.action();
+        }
+    }
+    return new Promise(r=>r());
+}
 
 function getInst(){
     let items = [];

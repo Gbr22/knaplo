@@ -11,13 +11,13 @@
 
             <button v-on:click="minus(index)">
                 <svg class="feather">
-                    <use xlink:href="/fi#minus"/>
+                    <use xlink:href="feather-sprite.svg#minus"/>
                 </svg>
             </button>
             <div class="gradecount">{{ count }}</div>
             <button @click="plus(index)">
                 <svg class="feather">
-                    <use xlink:href="/fi#plus"/>
+                    <use xlink:href="feather-sprite.svg#plus"/>
                 </svg>
             </button>
             

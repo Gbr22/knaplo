@@ -4,7 +4,7 @@
         <div id="profile_circle_container">
             <span id="profile_circle">
                 <svg class="feather">
-                    <use xlink:href="fi#user"/>
+                    <use xlink:href="feather-sprite.svg#user"/>
                 </svg>
             </span>
             <h1 id="fullname">{{ GlobalState.data ? GlobalState.data.Name : "#### ####" }}</h1>
@@ -16,7 +16,7 @@
                 <div class="item" @click="navigate('more/halfyr')">
                     <span class="icon">
                         <svg class="feather">
-                            <use xlink:href="fi#list"/>
+                            <use xlink:href="feather-sprite.svg#list"/>
                         </svg>
                     </span>
                     <p>
@@ -26,7 +26,7 @@
                 <div class="item" @click="openConfirm('Biztosan Kilép?',logout)">
                     <span class="icon">
                         <svg class="feather">
-                            <use xlink:href="fi#log-out"/>
+                            <use xlink:href="feather-sprite.svg#log-out"/>
                         </svg>
                     </span>
                     <p>
@@ -41,7 +41,7 @@
                 <div class="item">
                     <span class="icon">
                         <svg class="feather">
-                            <use xlink:href="fi#moon"/>
+                            <use xlink:href="feather-sprite.svg#moon"/>
                         </svg>
                     </span>
                     <p>
