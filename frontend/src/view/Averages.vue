@@ -3,6 +3,7 @@
     <div id="avg_screen">
         <div class="inner" v-show="GlobalState.data">
             <div id="circle_container">
+                <ProgressRing id="avg_circle_bg" stroke-color="#DCE0D9" :radius="120/2" :progress="100" :stroke="6"></ProgressRing>
                 <ProgressRing id="avg_circle" stroke-color="#DCE0D9" :radius="120/2" :progress="avgPercent()" :stroke="6"></ProgressRing>
                 <span id="total_avg"><span id="total_avg_text">{{ GlobalState.data ? nameAbbriv(GlobalState.data.Name) : "##" }}</span></span>
             </div>
@@ -171,7 +172,7 @@ export default {
     width: 0;
     height: 30px;
     display: inline-block;
-    border: 0.5px solid #cfcfcf;
+    border: 0.5px solid var(--divider-color);
     content: '';
     vertical-align: middle;
     margin: 0 10px;
@@ -200,12 +201,12 @@ export default {
 #avg_detail_cont .big {
     font-size: 18px;
     font-weight: bold;
-    color: whitesmoke;
+    color: var(--text-color);
     
 }
 #avg_detail_cont .small {
     font-size: 13px;
-    color: #cccccc;
+    color: var(--text-smol);
 }
 
 
@@ -214,7 +215,13 @@ export default {
     transform: rotate(-90deg);
     transform-origin: 50% 50%;
     /*stroke: #00cc66;*/
-
+    stroke: var(--theme-color);
+    opacity: 0.70;
+    border-radius: 50%;
+}
+#avg_circle_bg circle {
+    stroke: var(--text-smol);
+    opacity: 0.1;
 }
 #circle_container {
     
@@ -241,7 +248,10 @@ export default {
     margin: auto;
     text-align: center;
     height: max-content;
-    font-size: 30px;
+    font-size: 31px;
+    color: var(--text-color);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-weight: bold;
 }
 
 #ranks_container, #roundView_cont {
@@ -327,9 +337,7 @@ export default {
 
 #home {
     /*background-color: var(--color-dark);*/
-    
-    background: var(--theme-gradient);
-
+    /* background: var(--theme-gradient); */
 }
 
 
@@ -364,10 +372,10 @@ export default {
     vertical-align: bottom;
 }
 .section.avg svg {
-    stroke: #8ED081;
+    stroke: var(--theme-color);
 }
 .section.rank svg {
-    stroke: #F2DC5D;
+    stroke: #ffcc00;
 }
 .section.rank i {
     color: #F2DC5D;
