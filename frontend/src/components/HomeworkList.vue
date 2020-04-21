@@ -95,13 +95,14 @@ export default {
     .completed svg {
         transition: all 0.3s;
         margin-left: 5px;
+        border-radius: 8px;
     }
     .completed[data-value="false"] svg {
         stroke: var(--text-smol);
         border: 2px solid var(--text-smol);
         background-color: var(--divider-color);
         opacity: 0.5;
-        border-radius: 5px;
+        
     }
     .title b {
         color: #4ec275;
@@ -110,7 +111,7 @@ export default {
         stroke: #4ec275;
         border: 2px solid #4ec27598;
         background-color: #4ec27549;
-        border-radius: 5px;
+        
     }
     .until i {
         font-style: normal;
