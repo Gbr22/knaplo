@@ -21,9 +21,11 @@
 
 <script>
 
-import { login, afterLogin } from '../dataHandler';
+import { afterLogin } from '../dataHandler';
+import { login } from '../api';
 import { openModal } from '../components/Modal';
 import InstModal from '../components/modals/InstModal';
+import {pushError } from '../components/MessageDisplay';
 
 export default {
   name: 'Login',
@@ -40,25 +42,25 @@ export default {
       
       return data;
   },
-  methods:{
-      selectInst(){
-          openModal("Intézmény választása", InstModal, {
-              change:(to)=>{
-                  this.inst = to;
-                  this.form.inst = to.code;
-              }
-          });
-      },
-      onSubmit(){
-          login(this.form).then((result)=>{
-              if(result.success){
-                  window.GlobalState.user = result.data;
-                  window.GlobalState.loggedIn = true;
-                  afterLogin();
-              }
-              console.log(result);
-          })
-      },
+    methods:{
+        selectInst(){
+            openModal("Intézmény választása", InstModal, {
+                change:(to)=>{
+                    this.inst = to;
+                    this.form.inst = to.code;
+                }
+            });
+        },
+        onSubmit(){
+            login(this.form).then((result)=>{
+                window.GlobalState.user = result;
+                window.GlobalState.loggedIn = true;
+                afterLogin();
+                console.log(result);
+            }).catch(err=>{
+                pushError(err.toString());
+            })
+        },
       
     }
   

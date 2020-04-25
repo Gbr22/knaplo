@@ -52,6 +52,7 @@ export function login(form){
                     "password":form.password,
                     "username":form.username
                 }
+                localStorage.setItem("loginInfo",JSON.stringify(info));
                 resolve(info);
             } else {
                 if (r.bodyJSON){

@@ -7,6 +7,13 @@ export function tryJSON(string){
         return null;
     }
 }
+export function tryJSONStringify(o){
+    try {
+        return JSON.stringify(o);
+    } catch(err){
+        return null;
+    }
+}
 export function formatDate(date){
     date = toDate(date);
     let pad = (n) => (n+"").padStart(2,"0");

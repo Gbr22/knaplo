@@ -9,6 +9,7 @@ import SubjectModal from './components/modals/SubjectModal';
 import { exists } from 'fs';
 import {} from './api';
 
+
 function putCall(call, obj){
     localStorage.setItem("data_"+call,JSON.stringify(obj));
 }

@@ -4,7 +4,7 @@ import Cookies from 'js-cookie';
 
 import { afterLogin, getHomeworksCompletedMap } from './dataHandler';
 import { getCookieFromString } from "./util";
-
+import storage from './storage';
 
 let GlobalState = {
     loaded:false,
@@ -35,11 +35,17 @@ export let ApiEndpoint = "/api/";
 
 function loginWithCookie(c){
     
-    GlobalState.user = JSON.parse(c);
-    afterLogin();
+    
 }
 
-
+function tryLogin(){
+    let info = storage.getJSON("loginInfo");
+    if (info){
+        GlobalState.loggedIn = true;
+        GlobalState.user = info;
+        afterLogin();
+    }
+}
 
 if (window.cordova != undefined){
     document.addEventListener("deviceready", function(){
@@ -52,11 +58,7 @@ if (window.cordova != undefined){
                 `http://${window.location.hostname}:84/api/` :
                 "https://naplo.gbr22.me/api/";
             console.log("endpoint",ApiEndpoint);
-            let info = getCookieFromString("loginInfo",cordova.plugin.http.getCookieString(ApiEndpoint));
-            if (info){
-                GlobalState.loggedIn = true;
-                loginWithCookie(info);
-            }
+            tryLogin();
         }, function(err) {
             console.error(err);
         });
@@ -65,11 +67,7 @@ if (window.cordova != undefined){
     }, false);
 } else {
     console.log("endpoint",ApiEndpoint);
-    GlobalState.loggedIn = Cookies.get("loginInfo") != null;
-
-    if (GlobalState.loggedIn){
-        loginWithCookie(Cookies.get("loginInfo"));
-    }
+    tryLogin();
     GlobalState.loaded = true;
 }
 
