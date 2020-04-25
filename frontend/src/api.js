@@ -178,7 +178,7 @@ export function login(form){
     })
 }
 export function refreshLogin(){
-    return new Promise((resolve)=>{
+    return new Promise((resolve,reject)=>{
         let user = GlobalState.user;
         login({
             username:user.username,
