@@ -23,10 +23,16 @@ const proxy = http.createServer((pReq, pRes) => {
     let lowercaseHeaders = {};
     let proxyHeaders = {};
     for (let p in headers){
-        lowercaseHeaders[p.toLocaleLowerCase()] = headers[p];
-        let prefix = "X-Proxy-Header-";
-        if (p.indexOf(prefix) == 0){
+        lowercaseHeaders[p.toLowerCase()] = headers[p];
+        
+    }
+    for (let p in lowercaseHeaders){
+        let prefix = "x-proxy-header-";
+        if (key.indexOf(prefix) == 0){
             let key = p.replace(prefix,"");
+            if (key == "apikey"){
+                key = "apiKey";
+            }
             headers[key] = headers[p];
             proxyHeaders[key] = headers[p];
             delete headers[p];
