@@ -7,20 +7,8 @@ import { pushError } from './components/MessageDisplay';
 import AbsenceModal from './components/modals/AbsenceModal';
 import SubjectModal from './components/modals/SubjectModal';
 import { exists } from 'fs';
-import {} from './api';
+import { getData, getHomework, getFromCache } from './api';
 
-
-function putCall(call, obj){
-    localStorage.setItem("data_"+call,JSON.stringify(obj));
-}
-function getCall(call){
-    let storage = localStorage.getItem("data_"+call);
-    if (storage){
-        return JSON.parse(storage);
-    } else {
-        return {success:false, message: "Adat nem létezik a gyorsítótárban", data:null, code:"NO_CACHE"}
-    }
-}
 
 export function openSubject(subject){
     openModal(subject.name,SubjectModal,subject,{
@@ -158,26 +146,6 @@ function get(url){
 }
 function post(url, data,body){
     return makeRequest("POST",url,data,body);
-}
-function login(form){
-    return post("login",form);
-}
-function getData(){
-    return get("data");
-}
-function getTimetable(){
-    return get("timetable");
-}
-export function getHomeWork(homework){
-    let call = "homework/"+homework;
-    let stored = getCall(call);
-    if (stored.code == "NO_CACHE"){
-        return get(call);
-    } else {
-        return new Promise((resolve)=>{
-            resolve(stored);
-        });
-    }
 }
 
 export function homeworksCompleted(){
@@ -526,10 +494,8 @@ function processHomeworks(homeworks){
     let promises = [];
     for (let e of homeworks){
         promises.push(new Promise(function(resolve){
-            getHomeWork(e.id).then((result)=>{
-                if (result.success){
-                    e.homework = result.data;
-                }
+            getHomework(e.id).then((result)=>{
+                e.homework = result;
                 resolve(e);
             })
         }));
@@ -543,8 +509,8 @@ function processHomeworks(homeworks){
     })
 }
 function processTimetable(result){
-    if (result.success){
-        let list = GlobalState.lessonsList = result.data;
+    {
+        let list = GlobalState.lessonsList = result;
 
         let homeworks = list.filter((e)=>e.TeacherHomeworkId != null);
         homeworks = homeworks.map((e)=>({lesson:e,id:e.TeacherHomeworkId}));
@@ -612,8 +578,8 @@ function processTimetable(result){
     }
 }
 function processData(result){
-    if (result.success){
-        let data = GlobalState.data = result.data;
+    {
+        let data = GlobalState.data = result;
         let pd = GlobalState.processedData;
 
         
@@ -702,20 +668,22 @@ function processData(result){
 function afterLogin(){
     let online = navigator.onLine;
     setImmediate(()=>{
-        processData(getCall("data"));
-        processTimetable(getCall("timetable"));
+        processData(getFromCache("data"));
+        processTimetable(getFromCache("timetable"));
         processHomeworksCompleted();
         if (online){
             syncHomeworkCompleted();
         }
     });
-    if (online){    
-        getData().then((result)=>{
-            processData(result);
-        });
-        getTimetable().then((result)=>{
-            processTimetable(result);
-        });
+    if (online){
+        setImmediate(()=>{
+            getData().then((result)=>{
+                processData(result);
+            });
+            getTimetable().then((result)=>{
+                processTimetable(result);
+            });
+        })
     }
 }
 export function refreshPage(page){
@@ -784,7 +752,7 @@ function getInst(){
         }));
     }
     
-    let call = getCall("institute");
+    let call = getFromCache("institute");
     if (call.success){
         setImmediate(()=>{
             updateArray(items, map(call.data));
@@ -818,7 +786,6 @@ class User {
 let currentUser = new User(null);
 
 export {
-    login,
     getInst,
     currentUser,
     User,

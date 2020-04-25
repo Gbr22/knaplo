@@ -65,8 +65,8 @@
 <script>
 import GlobalState from '../globalState'
 import { formatDate, getDayName, getDayShortName, formatTime, shortenText } from '../util';
-import { getHomeWork } from '../dataHandler';
 import { openHomework } from '../components/modals/HomeworkModal.vue';
+import { getHomework } from '../api';
 
 
 export default {
@@ -99,7 +99,7 @@ export default {
             if (id == null){
                 afterHomework(null);
             } else {
-                getHomeWork(id).then((result)=>{
+                getHomework(id).then((result)=>{
                     if (result.success){
                         afterHomework(result.data);
                     } else {

@@ -1,4 +1,8 @@
 import {httpRequest} from './http';
+import GlobalState from './globalState';
+import { pushError  } from './components/MessageDisplay';
+import storage from './storage';
+
 
 let loginInfo;
 
@@ -16,7 +20,54 @@ function req(options){
     });
     return httpRequest(options);
 }
+export function getFromCache(dataKey){
+    return storage.getJSON("data_"+dataKey);
+}
+window.getFromCache = getFromCache;
+export function genericKretaRequest(endpoint,dataKey,errorMessage){
+    let info = GlobalState.user;
+    return new Promise(function(resolve,reject){
+        function showErr(err){
+            if (errorMessage){
+                pushError(errorMessage)
+            }
+            reject(err);
+        }
+        req({
+            url:`https://${info.inst}.e-kreta.hu/${endpoint}`,
+            headers:{
+                "Authorization":"Bearer "+info.access_token,
+            },
+        }).then((res)=>{
+            if (res.statusCode == 200){
+                storage.setJSON("data_"+dataKey, res.bodyJSON);
+                resolve(res.bodyJSON);
+            } else {
+                showErr(res);
+            }
+        }).catch((err)=>{
+            showErr(err);
+        });
+    });
+}
+export function getData(){
+    return genericKretaRequest("mapi/api/v1/StudentAmi?fromDate=null&toDate=null","data","Tanuló adatok lekérése sikertelen")
+}
+export function getTimetable(){
+    return genericKretaRequest("mapi/api/v1/LessonAmi?fromDate=null&toDate=null","timetable","Órarend lekérése sikertelen");
+}
+export async function getHomework(id){
+    let s = getFromCache("homework/"+id);
+    if (s){
+        return s;
+    } else {
+        let hw = await genericKretaRequest(`mapi/api/v1/HaziFeladat/TanarHaziFeladat/${id}`,"homework/"+id);
+        return hw;
+    }
+}
 
+window.getTimetable = getTimetable;
+window.getData = getData;
 export function login(form){
     return new Promise(function(resolve,reject){
         let props = ["inst","username","password"];
