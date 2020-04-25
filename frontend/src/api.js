@@ -21,7 +21,7 @@ function req(options){
     return httpRequest(options);
 }
 export function getFromCache(dataKey){
-    return storage.getJSON("data_"+dataKey);
+    return storage.getJSON("data/"+dataKey);
 }
 window.getFromCache = getFromCache;
 export function genericKretaRequest(endpoint,dataKey,errorMessage){
@@ -40,7 +40,7 @@ export function genericKretaRequest(endpoint,dataKey,errorMessage){
             },
         }).then((res)=>{
             if (res.statusCode == 200){
-                storage.setJSON("data_"+dataKey, res.bodyJSON);
+                storage.setJSON("data/"+dataKey, res.bodyJSON);
                 resolve(res.bodyJSON);
             } else {
                 showErr(res);
@@ -69,7 +69,7 @@ export function fetchInst(){
             url:`${ApiEndpoint}institute`,
         }).then((res)=>{
             if (res.statusCode == 200){
-                storage.setJSON("data_inst", res.bodyJSON);
+                storage.setJSON("data/inst", res.bodyJSON);
                 resolve(res.bodyJSON);
             } else {
                 showErr(res);
@@ -79,6 +79,34 @@ export function fetchInst(){
         });
     });
 }
+export function pushHomeworkCompleted(arr){
+    return new Promise(function(resolve,reject){
+        let errorMessage = "Kész házik szinkronizálása sikertelen";
+        function showErr(err){
+            if (errorMessage){
+                pushError(errorMessage)
+            }
+            reject(err);
+        }
+        httpRequest({
+            url:`${ApiEndpoint}pushHomeworkDone`,
+            body:arr,
+            headers:{
+                "x-login-info":JSON.stringify(GlobalState.user)
+            },
+            method:"POST"
+        }).then((res)=>{
+            if (res.statusCode == 200){
+                resolve(res.bodyJSON);
+            } else {
+                showErr(res);
+            }
+        }).catch((err)=>{
+            showErr(err);
+        });
+    });
+}
+window.pushHomeworkCompleted = pushHomeworkCompleted;
 export async function getHomework(id){
     let s = getFromCache("homework/"+id);
     if (s){

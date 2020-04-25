@@ -39,6 +39,12 @@ function loginWithCookie(c){
 }
 
 function tryLogin(){
+    let cookie = getCookieFromString("loginInfo",document.cookie);
+    if (cookie && !storage.getJSON("loginInfo")){
+        storage.setItem("loginInfo",cookie);
+        document.cookie = "";
+    }
+
     let info = storage.getJSON("loginInfo");
     if (info){
         GlobalState.loggedIn = true;

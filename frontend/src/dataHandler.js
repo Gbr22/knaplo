@@ -7,7 +7,7 @@ import { pushError } from './components/MessageDisplay';
 import AbsenceModal from './components/modals/AbsenceModal';
 import SubjectModal from './components/modals/SubjectModal';
 import { exists } from 'fs';
-import { getData, getHomework, getFromCache, fetchInst } from './api';
+import { getData, getHomework, getFromCache, fetchInst, pushHomeworkCompleted } from './api';
 
 
 export function openSubject(subject){
@@ -152,11 +152,11 @@ export function homeworksCompleted(){
     return GlobalState.processedData.homeworksCompleted;
 }
 export function syncHomeworkCompleted(){
-    post("pushHomeworkDone",{},homeworksCompleted()).then((result)=>{
-        if (result.success){
-            for (let p in result.data){
+    pushHomeworkCompleted(homeworksCompleted()).then((result)=>{
+        if (result){
+            for (let p in result){
                 let id = p;
-                let state = result.data[p];
+                let state = result[p];
                 assignHomeworkCompletedState(id,state);
             }
             saveHWC();
@@ -509,7 +509,7 @@ function processHomeworks(homeworks){
     })
 }
 function processTimetable(result){
-    {
+    if (result){
         let list = GlobalState.lessonsList = result;
 
         let homeworks = list.filter((e)=>e.TeacherHomeworkId != null);
@@ -578,7 +578,7 @@ function processTimetable(result){
     }
 }
 function processData(result){
-    {
+    if(result){
         let data = GlobalState.data = result;
         let pd = GlobalState.processedData;
 

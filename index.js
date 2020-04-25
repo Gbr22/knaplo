@@ -33,66 +33,6 @@ app.all("/running", (req,res)=>{
     res.send("yes");
 });
 
-app.all('/login',async (req, res) => {
-     
-    let needs = {
-        inst:"Intézményt",
-        username:"Felhasználónevet",
-        password:"Jelszót"
-    };
-
-    function loginError(message){
-        console.log(message);
-
-        res.statusCode = "500";
-        res.send(message);
-
-    }
-
-
-    for (let p in needs){
-        if (req.query.username){
-            req.query.username = req.query.username.toString().replace(/\+/g," ").trim()
-        }
-        
-
-        if (req.query[p] == undefined
-          || req.query[p] == ""
-          || req.query[p] == null){
-
-            loginError("Nem adott meg "+needs[p]);
-            return;
-        }
-    }
-    
-
-    api.login(req.query.inst,req.query.username,req.query.password)
-    .catch((error)=>{
-        loginError(error);
-    })
-    .then( (result) => {
-        console.log(result);
-        if (result.error){
-            console.log(result.error);
-            loginError(result.error.error_description);
-            return;
-        } else {
-            let options = {maxAge: 1000*60*60*24*30*365};
-            let info = {
-                "access_token":result.access_token,
-                "refresh_token":result.refresh_token,
-                "inst":req.query.inst,
-                "password_encrypted":api.encrypt(req.query.password),
-                "username":req.query.username
-            }
-            res.cookie("loginInfo",JSON.stringify(info), options);
-            
-            res.send(info);
-
-        }
-    })
-});
-
 app.all('/inst_full',async (req, res) => {
     res.sendFile(__dirname+"/institute.json");
 });
@@ -100,7 +40,7 @@ app.all('/institute',async (req, res) => {
     res.sendFile(__dirname+"/inst_clean.json");
 });
 app.all('/**',async (req, res, next) => {
-    api.validateUser(req.cookies["loginInfo"]).then((result)=>{
+    api.validateUser(req.headers["x-login-info"]).then((result)=>{
         req.login = result;
         let options = {maxAge: 1000*60*60*24*30*365};
         res.cookie("loginInfo",JSON.stringify(result), options);
@@ -127,6 +67,7 @@ app.all('/health',async (req, res) => {
     api.pipeData(school,token,res);
 }); */
 app.all("/pushHomeworkDone", async(req,res)=>{
+    console.log(req.body);
     if (req.body.constructor == Array){
         res.send(api.save_HWC_changes(req.login,req.body));
     } else {
