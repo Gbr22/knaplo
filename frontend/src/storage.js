@@ -27,6 +27,7 @@ class Storage {
                     key.replace("data_","data/"),
                     this.getJSON(key).data
                 )
+                this.removeItem(key);
             }
         }
     }
