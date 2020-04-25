@@ -100,8 +100,8 @@ export default {
                 afterHomework(null);
             } else {
                 getHomework(id).then((result)=>{
-                    if (result.success){
-                        afterHomework(result.data);
+                    if (result){
+                        afterHomework(result);
                     } else {
                         afterHomework(null);    
                     }
