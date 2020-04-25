@@ -28,7 +28,7 @@ const proxy = http.createServer((pReq, pRes) => {
     }
     for (let p in lowercaseHeaders){
         let prefix = "x-proxy-header-";
-        if (key.indexOf(prefix) == 0){
+        if (p.indexOf(prefix) == 0){
             let key = p.replace(prefix,"");
             if (key == "apikey"){
                 key = "apiKey";
