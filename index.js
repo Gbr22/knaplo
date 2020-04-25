@@ -3,6 +3,8 @@ let api = require("./api.js");
 const http = require("http");
 const fs = require("fs");
 
+require("./proxy")
+
 const express = require('express');
 const cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');

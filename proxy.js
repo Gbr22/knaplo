@@ -30,9 +30,9 @@ const proxy = http.createServer((pReq, pRes) => {
             delete headers[p];
         }
     }
-    console.log(headers);
+    /* console.log(headers); */
     
-    console.log("X-Proxy-URL",headers["X-Proxy-URL"]);
+    /* console.log("X-Proxy-URL",headers["X-Proxy-URL"]); */
     let url;
     try {
         url = new URL(headers["X-Proxy-URL"]);
@@ -43,7 +43,7 @@ const proxy = http.createServer((pReq, pRes) => {
         pRes.end();
         return;
     }
-    console.log(url);
+    /* console.log(url); */
     let protocols = {
         "http:":http,
         "https:":https
@@ -74,7 +74,7 @@ const proxy = http.createServer((pReq, pRes) => {
         });
         
         data.forEach(c=>{
-            console.log("send chunk",c.toString());
+            /* console.log("send chunk",c.toString()); */
             req.write(c);
         })
         
@@ -83,4 +83,7 @@ const proxy = http.createServer((pReq, pRes) => {
     
 });
 // Now that proxy is running
-proxy.listen(1337, '127.0.0.1', () => {});
+let port = 1337;
+proxy.listen(port, '127.0.0.1', () => {
+    console.log("Proxy started on",port);
+});
