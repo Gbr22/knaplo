@@ -71,7 +71,7 @@ import ThemeHandler from '../themeHandler';
 import Cookies from 'js-cookie';
 import { navigate } from '../util';
 import ConfirmModal, { openConfirm } from '../components/modals/ConfirmModal.vue';
-
+import storage from '../storage';
 
 export default {
     name: 'Settings',
@@ -92,6 +92,7 @@ export default {
             GlobalState.loggedIn = false;
             GlobalState.user = null;
             Cookies.remove("loginInfo");
+            storage.removeItem("loginInfo");
         }
     }
     
