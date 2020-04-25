@@ -27,27 +27,29 @@ window.getFromCache = getFromCache;
 export function genericKretaRequest(endpoint,dataKey,errorMessage){
     let info = GlobalState.user;
     return new Promise(function(resolve,reject){
-        function showErr(err){
-            if (errorMessage){
-                pushError(errorMessage)
+        refreshUser().then(()=>{
+            function showErr(err){
+                if (errorMessage){
+                    pushError(errorMessage)
+                }
+                reject(err);
             }
-            reject(err);
-        }
-        req({
-            url:`https://${info.inst}.e-kreta.hu/${endpoint}`,
-            headers:{
-                "Authorization":"Bearer "+info.access_token,
-            },
-        }).then((res)=>{
-            if (res.statusCode == 200){
-                storage.setJSON("data/"+dataKey, res.bodyJSON);
-                resolve(res.bodyJSON);
-            } else {
-                showErr(res);
-            }
-        }).catch((err)=>{
-            showErr(err);
-        });
+            req({
+                url:`https://${info.inst}.e-kreta.hu/${endpoint}`,
+                headers:{
+                    "Authorization":"Bearer "+info.access_token,
+                },
+            }).then((res)=>{
+                if (res.statusCode == 200){
+                    storage.setJSON("data/"+dataKey, res.bodyJSON);
+                    resolve(res.bodyJSON);
+                } else {
+                    showErr(res);
+                }
+            }).catch((err)=>{
+                showErr(err);
+            });
+        })
     });
 }
 export function getData(){
@@ -81,29 +83,31 @@ export function fetchInst(){
 }
 export function pushHomeworkCompleted(arr){
     return new Promise(function(resolve,reject){
-        let errorMessage = "Kész házik szinkronizálása sikertelen";
-        function showErr(err){
-            if (errorMessage){
-                pushError(errorMessage)
+        refreshUser().then(()=>{
+            let errorMessage = "Kész házik szinkronizálása sikertelen";
+            function showErr(err){
+                if (errorMessage){
+                    pushError(errorMessage)
+                }
+                reject(err);
             }
-            reject(err);
-        }
-        httpRequest({
-            url:`${ApiEndpoint}pushHomeworkDone`,
-            body:arr,
-            headers:{
-                "x-login-info":JSON.stringify(GlobalState.user)
-            },
-            method:"POST"
-        }).then((res)=>{
-            if (res.statusCode == 200){
-                resolve(res.bodyJSON);
-            } else {
-                showErr(res);
-            }
-        }).catch((err)=>{
-            showErr(err);
-        });
+            httpRequest({
+                url:`${ApiEndpoint}pushHomeworkDone`,
+                body:arr,
+                headers:{
+                    "x-login-info":JSON.stringify(GlobalState.user)
+                },
+                method:"POST"
+            }).then((res)=>{
+                if (res.statusCode == 200){
+                    resolve(res.bodyJSON);
+                } else {
+                    showErr(res);
+                }
+            }).catch((err)=>{
+                showErr(err);
+            });
+        })
     });
 }
 window.pushHomeworkCompleted = pushHomeworkCompleted;
@@ -173,4 +177,88 @@ export function login(form){
         })
     })
 }
+export function refreshLogin(){
+    return new Promise((resolve)=>{
+        let user = GlobalState.user;
+        login(user).then(result=>{
+            Object.assign(user,result);
+            resolve(user);
+        }).catch(reject);
+    })
+}
+export function decodeToken(access_token){
+    let parts = access_token.split(".");
+    function decode(data){
+        let buff = new Buffer(data, 'base64');
+        let text = buff.toString('utf8');
+        return text;
+    }
+    return JSON.parse(decode(parts[1]));
+}
+window.decodeToken = decodeToken;
+export async function assureAccesstoken(){
+    let loginInfo = GlobalState.user;
+    let tokenInfo = decodeToken(loginInfo.access_token);
+    let expires = tokenInfo.exp;
+    let now = Date.now()/1000;
+    let time = expires - now; //in seconds
+    let timeMinutes = time/60;
+    if (timeMinutes >= 3){
+        console.log(`[${timeMinutes.toFixed(2)}m left till refresh]`);
+        resolve(loginInfo);
+    } else {
+        reject("Token not valid");
+    }
+}
+export function refreshUser(){
+    return new Promise((resolve,reject)=>{
+        assureAccesstoken().then(resolve).catch(()=>{
+            refreshToken().then(resolve).catch(()=>{
+                refreshLogin().then(resolve).catch(()=>{
+                    let m = "Érvénytelen bejelentkezés";
+                    pushError(m);
+                    reject(m);
+                })
+            })
+        })
+    })
+}
+window.refreshUser = refreshUser;
+export function refreshToken(){
+    let user = GlobalState.user;
+    return new Promise(function(resolve,reject){
+        let data = {
+            refresh_token:user.refresh_token,
+            grant_type:'refresh_token',
+            client_id:CLIENT_ID,
+        }
+        req({
+            method:"POST",
+            url:`https://${user.inst}.e-kreta.hu/idp/api/v1/Token`,
+            body:data,
+        }).then((r)=>{
+            if (r.statusCode == 200){
+                let o = r.bodyJSON;
+                Object.assign(user,{
+                    "access_token":o.access_token,
+                    "refresh_token":o.refresh_token,
+                })
+                localStorage.setItem("loginInfo",JSON.stringify(user));
+                resolve(user);
+            } else {
+                if (r.bodyJSON){
+                    let messages = {
+                    }
+                    reject(messages[r.bodyJSON.error] || r.bodyJSON.error_description || "Ismeretlen hiba");
+                } else {
+                    reject(`${r.statusCode} ${r.statusMessage}`)
+                }
+            }
+        }).catch(err=>{
+            console.error("login failed",err);
+            reject("Sikertelen bejelentkezés");
+        })
+    })
+}
+window.refreshToken = refreshToken;
 window.login = login;
