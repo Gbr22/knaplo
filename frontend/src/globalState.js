@@ -6,6 +6,8 @@ import { afterLogin, getHomeworksCompletedMap } from './dataHandler';
 import { getCookieFromString } from "./util";
 import storage from './storage';
 import { httpRequest } from "./http";
+import Vue from 'vue';
+
 
 let GlobalState = {
     loaded:false,
@@ -62,11 +64,22 @@ async function tryLogin(){
         afterLogin();
     }
     GlobalState.loaded = true;
+    hideSplash();
 }
-
+function hideSplash(){
+    Vue.nextTick(function(){
+        let img = new Image();
+        img.src = "feather-sprite.svg";
+        img.onload = img.onerror = function(){
+            navigator.splashscreen.hide();
+        }
+    })
+    
+}
 if (window.cordova != undefined){
     document.addEventListener("deviceready", function(){
-        navigator.splashscreen.hide();
+        
+        
         
         cordova.plugins.IsDebug.getIsDebug(function(isDebug) {
             console.log('Is debug:', isDebug);
