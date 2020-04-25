@@ -20,8 +20,10 @@ const proxy = http.createServer((pReq, pRes) => {
             headers[pReq.rawHeaders[i]] = pReq.rawHeaders[i+1];
         }
     }
+    let lowercaseHeaders = {};
     let proxyHeaders = {};
     for (let p in headers){
+        lowercaseHeaders[p.toLocaleLowerCase()] = headers[p];
         let prefix = "X-Proxy-Header-";
         if (p.indexOf(prefix) == 0){
             let key = p.replace(prefix,"");
@@ -35,7 +37,7 @@ const proxy = http.createServer((pReq, pRes) => {
     /* console.log("X-Proxy-URL",headers["X-Proxy-URL"]); */
     let url;
     try {
-        url = new URL(headers["X-Proxy-URL"]);
+        url = new URL(lowercaseHeaders["x-proxy-url"]);
     } catch(err){
         console.error(err);
         pRes.statusCode = 500;
