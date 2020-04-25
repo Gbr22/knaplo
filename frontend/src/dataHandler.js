@@ -7,7 +7,7 @@ import { pushError } from './components/MessageDisplay';
 import AbsenceModal from './components/modals/AbsenceModal';
 import SubjectModal from './components/modals/SubjectModal';
 import { exists } from 'fs';
-import { getData, getHomework, getFromCache } from './api';
+import { getData, getHomework, getFromCache, fetchInst } from './api';
 
 
 export function openSubject(subject){
@@ -741,7 +741,7 @@ export function refreshPage(page){
     return new Promise(r=>r());
 }
 
-function getInst(){
+export function getInst(){
     let items = [];
 
     function map(arr){
@@ -753,16 +753,16 @@ function getInst(){
     }
     
     let call = getFromCache("institute");
-    if (call.success){
+    if (call){
         setImmediate(()=>{
             updateArray(items, map(call.data));
         })
     }
 
     if (navigator.onLine){
-        get("institute").then(function(result){
-            if (result.success){
-                updateArray(items, map(result.data));
+        fetchInst().then(function(result){
+            if (result){
+                updateArray(items, map(result));
             }
         });   
     }
@@ -770,6 +770,7 @@ function getInst(){
 
     return items;
 }
+window.getInst = getInst;
 
 class User {
     loggedIn=false;
@@ -786,7 +787,6 @@ class User {
 let currentUser = new User(null);
 
 export {
-    getInst,
     currentUser,
     User,
     afterLogin,

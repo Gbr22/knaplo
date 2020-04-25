@@ -1,5 +1,5 @@
 import {httpRequest} from './http';
-import GlobalState from './globalState';
+import GlobalState, { ApiEndpoint } from './globalState';
 import { pushError  } from './components/MessageDisplay';
 import storage from './storage';
 
@@ -55,6 +55,29 @@ export function getData(){
 }
 export function getTimetable(){
     return genericKretaRequest("mapi/api/v1/LessonAmi?fromDate=null&toDate=null","timetable","Órarend lekérése sikertelen");
+}
+export function fetchInst(){
+    return new Promise(function(resolve,reject){
+        let errorMessage = "Intézmények lekérése sikertelen";
+        function showErr(err){
+            if (errorMessage){
+                pushError(errorMessage)
+            }
+            reject(err);
+        }
+        httpRequest({
+            url:`${ApiEndpoint}institute`,
+        }).then((res)=>{
+            if (res.statusCode == 200){
+                storage.setJSON("data_inst", res.bodyJSON);
+                resolve(res.bodyJSON);
+            } else {
+                showErr(res);
+            }
+        }).catch((err)=>{
+            showErr(err);
+        });
+    });
 }
 export async function getHomework(id){
     let s = getFromCache("homework/"+id);
