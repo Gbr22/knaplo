@@ -64,7 +64,9 @@ async function tryLogin(){
         afterLogin();
     }
     GlobalState.loaded = true;
-    hideSplash();
+    if (window.cordova){
+        hideSplash();
+    }
 }
 function hideSplash(){
     Vue.nextTick(function(){
