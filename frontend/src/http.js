@@ -3,6 +3,16 @@ export function httpRequest(options){
 
         let origin = "http://localhost:84"
         
+        function objToURL(o){
+            let string = "";
+            for (let p in o){
+                if (string != ""){
+                    string+="&";
+                }
+                string+=`${p}=${o[p]}`;
+            }
+            return string;
+        }
 
         options = Object.assign({ // defaults
             method:"GET",
@@ -13,6 +23,18 @@ export function httpRequest(options){
         },options);
 
         let isCors = false;
+
+        
+        let bodyText = options.body;
+        if (typeof bodyText == "object"){
+            
+            if (!options.headers["Content-Type"]){
+                options.headers["Content-Type"]="application/json";
+                bodyText = JSON.stringify(bodyText);
+            } else {
+                bodyText = objToURL(bodyText);
+            }
+        }
 
         var r = new RegExp('^(?:[a-z]+:)?//', 'i');
         let urlObj;
@@ -31,20 +53,13 @@ export function httpRequest(options){
                 }
             }
             options.headers["X-Proxy-URL"] = options.url;
-            options.url = "http://localhost:5050";
+            options.url = "http://localhost:1337";
         } else {
             options.url = urlObj.toString();
         }
         
 
 
-        let bodyText = options.body;
-        if (typeof bodyText == "object"){
-            bodyText = JSON.stringify(bodyText);
-            if (!options.headers["Content-Type"]){
-                options.headers["Content-Type"]="application/json";
-            }
-        }
     
         function processRawHeaders(string){
             var arr = string.trim().split(/[\r\n]+/);
@@ -67,6 +82,7 @@ export function httpRequest(options){
             
             xhttp.onreadystatechange = function() {
                 if (this.readyState == 4) {
+                    
                     let res = {
                         status:this.status,
                         statusText:this.statusText,
@@ -74,12 +90,14 @@ export function httpRequest(options){
                         body:this.response,
                         headers:processRawHeaders(xhttp.getAllResponseHeaders()),
                     };
+                    console.log(res);
                     resolve(res);
                 }
             };
             xhttp.open(options.method, options.url, true);
 
             for (let header in options.headers){
+                console.log(header, options.headers[header]);
                 xhttp.setRequestHeader(header, options.headers[header]);
             }
 
