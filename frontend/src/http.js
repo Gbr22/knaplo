@@ -8,7 +8,7 @@ export function httpRequest(options){
             resolve(res);
         }
 
-        let origin = "http://localhost:84"
+        let origin = window.location.origin;
         
         function objToURL(o){
             let string = "";
@@ -61,7 +61,7 @@ export function httpRequest(options){
                 }
             }
             options.headers["X-Proxy-URL"] = options.url;
-            options.url = "http://localhost:1337";
+            options.url = "/proxy";
         } else {
             options.url = urlObj.toString();
         }
