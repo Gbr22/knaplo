@@ -180,10 +180,18 @@ export function login(form){
 export function refreshLogin(){
     return new Promise((resolve)=>{
         let user = GlobalState.user;
-        login(user).then(result=>{
+        login({
+            username:user.username,
+            password:user.password,
+            inst:user.inst
+        }).then(result=>{
+            console.log("Login refresh result",result);
             Object.assign(user,result);
             resolve(user);
-        }).catch(reject);
+        }).catch((err)=>{
+            console.warn("login",err);
+            reject(err);
+        });
     })
 }
 export function decodeToken(access_token){
