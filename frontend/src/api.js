@@ -28,6 +28,7 @@ export function login(form){
         for (let p of props){
             if (!form[p]){
                 reject(`Nem adott meg ${missing[p]}!`);
+                return;
             }
         }
         let data = {
@@ -42,7 +43,27 @@ export function login(form){
             url:`https://${form.inst}.e-kreta.hu/idp/api/v1/Token`,
             body:data,
         }).then((r)=>{
-
+            if (r.statusCode == 200){
+                let o = r.bodyJSON;
+                let info = {
+                    "access_token":o.access_token,
+                    "refresh_token":o.refresh_token,
+                    "inst":form.inst,
+                    "password":form.password,
+                    "username":form.username
+                }
+                resolve(info);
+            } else {
+                if (r.bodyJSON){
+                    let messages = {
+                        "invalid_grant":"Helytelen felhasználónév, vagy jelszó",
+                        "invalid_password":"A jelszó üres"
+                    }
+                    reject(messages[r.bodyJSON.error] || r.bodyJSON.error_description || "Ismeretlen hiba");
+                } else {
+                    reject(`${r.statusCode} ${r.statusMessage}`)
+                }
+            }
         }).catch(err=>{
             console.error("login failed",err);
             reject("Sikertelen bejelentkezés");

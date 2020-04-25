@@ -1,6 +1,12 @@
 import { closeModal } from './components/Modal.vue';
 
-
+export function tryJSON(string){
+    try {
+        return JSON.parse(string);
+    } catch(err){
+        return null;
+    }
+}
 export function formatDate(date){
     date = toDate(date);
     let pad = (n) => (n+"").padStart(2,"0");

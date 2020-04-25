@@ -62,8 +62,8 @@ const proxy = http.createServer((pReq, pRes) => {
     })
     pReq.on('end', () => {
         const req = protocols[url.protocol].request(options, (res) => {
-            console.log("piping response");
-            
+            pRes.statusCode = res.statusCode;
+            pRes.statusMessage = res.statusMessage;
             res.pipe(pRes);
         })
         req.on('error', (error) => {

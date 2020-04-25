@@ -1,5 +1,12 @@
+import { tryJSON } from './util';
+
 export function httpRequest(options){
     return new Promise(function(resolve,reject){
+
+        function resolveResponse(res){
+            res.bodyJSON = tryJSON(res.body);
+            resolve(res);
+        }
 
         let origin = "http://localhost:84"
         
@@ -84,20 +91,20 @@ export function httpRequest(options){
                 if (this.readyState == 4) {
                     
                     let res = {
-                        status:this.status,
+                        statusCode:this.status,
                         statusText:this.statusText,
                         req:options,
                         body:this.response,
                         headers:processRawHeaders(xhttp.getAllResponseHeaders()),
                     };
-                    console.log(res);
-                    resolve(res);
+                    /* console.log(res); */
+                    resolveResponse(res);
                 }
             };
             xhttp.open(options.method, options.url, true);
 
             for (let header in options.headers){
-                console.log(header, options.headers[header]);
+                /* console.log(header, options.headers[header]); */
                 xhttp.setRequestHeader(header, options.headers[header]);
             }
 
