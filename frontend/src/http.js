@@ -31,14 +31,17 @@ export function httpRequest(options){
 
         let isCors = false;
 
-        
+        let type = "utf8";
         let bodyText = options.body;
         if (typeof bodyText == "object"){
             
             if (!options.headers["Content-Type"]){
                 options.headers["Content-Type"]="application/json";
+                type = "json";
                 bodyText = JSON.stringify(bodyText);
             } else {
+                type = "urlencoded";
+                options.headers["Content-Type"]="application/x-www-form-urlencoded";
                 bodyText = objToURL(bodyText);
             }
         }
@@ -84,7 +87,24 @@ export function httpRequest(options){
         }
 
         if (window.cordova){
-            
+            cordova.plugin.http.setDataSerializer(type);
+            function respond(response){
+                                
+                let res = {
+                    statusCode:response.status,
+                    statusText:"",
+                    req:options,
+                    body:response.data || response.error,
+                    headers:response.headers,
+                };
+                console.log(type,response);
+                resolveResponse(res);
+            }
+            cordova.plugin.http.sendRequest(options.url,{
+                data:options.body,
+                headers:options.headers,
+                method:options.method.toLowerCase()
+            },respond,respond);
         } else {
             var xhttp = new XMLHttpRequest();
             
