@@ -46,7 +46,8 @@ app.all("/loginInfo",(req,res)=>{
     }
     res.send(req.body);
 })
-/* app.all('/**',async (req, res, next) => {
+
+app.all('/**',async (req, res, next) => {
     api.validateUser(req.headers["x-login-info"]).then((result)=>{
         req.login = result;
         let options = {maxAge: 1000*60*60*24*30*365};
@@ -57,7 +58,7 @@ app.all("/loginInfo",(req,res)=>{
         res.statusMessage = err.message;
         res.send(err.message);
     })
-}); */
+});
 app.all('/health',async (req, res) => {
     let resp = {
         time:Date.now(),
