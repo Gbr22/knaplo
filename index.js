@@ -39,7 +39,14 @@ app.all('/inst_full',async (req, res) => {
 app.all('/institute',async (req, res) => {
     res.sendFile(__dirname+"/inst_clean.json");
 });
-app.all('/**',async (req, res, next) => {
+app.all("/loginInfo",(req,res)=>{
+    if (req.body.password_encrypted){
+        req.body.password = api.decrypt(req.body.password_encrypted);
+        delete req.body.password_encrypted;
+    }
+    res.send(req.body);
+})
+/* app.all('/**',async (req, res, next) => {
     api.validateUser(req.headers["x-login-info"]).then((result)=>{
         req.login = result;
         let options = {maxAge: 1000*60*60*24*30*365};
@@ -50,7 +57,7 @@ app.all('/**',async (req, res, next) => {
         res.statusMessage = err.message;
         res.send(err.message);
     })
-});
+}); */
 app.all('/health',async (req, res) => {
     let resp = {
         time:Date.now(),
@@ -67,7 +74,6 @@ app.all('/health',async (req, res) => {
     api.pipeData(school,token,res);
 }); */
 app.all("/pushHomeworkDone", async(req,res)=>{
-    console.log(req.body);
     if (req.body.constructor == Array){
         res.send(api.save_HWC_changes(req.login,req.body));
     } else {

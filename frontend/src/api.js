@@ -205,16 +205,29 @@ export async function assureAccesstoken(){
     let timeMinutes = time/60;
     if (timeMinutes >= 3){
         console.log(`[${timeMinutes.toFixed(2)}m left till refresh]`);
-        resolve(loginInfo);
+        return(loginInfo);
     } else {
-        reject("Token not valid");
+        throw ("Token not valid");
     }
 }
+window.assureAccesstoken = assureAccesstoken;
 export function refreshUser(){
+    
     return new Promise((resolve,reject)=>{
-        assureAccesstoken().then(resolve).catch(()=>{
-            refreshToken().then(resolve).catch(()=>{
-                refreshLogin().then(resolve).catch(()=>{
+        let c = Math.random();
+        function functionBuilder(string){
+            return (r)=>{
+                console.log(string+" successful",c);
+                resolve(r);
+            }
+        }
+        let f = functionBuilder;
+        assureAccesstoken().then(f("Access token")).catch(()=>{
+            console.log("Access token failed",c);
+            refreshToken().then(f("Refresh token")).catch(()=>{
+                console.log("Refresh token failed",c);
+                refreshLogin().then(f("Login")).catch(()=>{
+                    console.log("Login failed",c);
                     let m = "Érvénytelen bejelentkezés";
                     pushError(m);
                     reject(m);

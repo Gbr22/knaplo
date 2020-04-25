@@ -7,7 +7,7 @@ import { pushError } from './components/MessageDisplay';
 import AbsenceModal from './components/modals/AbsenceModal';
 import SubjectModal from './components/modals/SubjectModal';
 import { exists } from 'fs';
-import { getData, getHomework, getFromCache, fetchInst, pushHomeworkCompleted } from './api';
+import { getData, getHomework, getFromCache, fetchInst, pushHomeworkCompleted, refreshUser } from './api';
 
 
 export function openSubject(subject){
@@ -677,12 +677,15 @@ function afterLogin(){
     });
     if (online){
         setImmediate(()=>{
-            getData().then((result)=>{
-                processData(result);
-            });
-            getTimetable().then((result)=>{
-                processTimetable(result);
-            });
+            refreshUser().then(()=>{
+                console.log("[afterlogin] refreshed user");
+                getData().then((result)=>{
+                    processData(result);
+                });
+                getTimetable().then((result)=>{
+                    processTimetable(result);
+                });
+            })
         })
     }
 }

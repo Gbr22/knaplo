@@ -164,7 +164,7 @@ function refreshUser(loginInfoS){
         }).catch(()=>{
             let password;
             try {
-                password = decrypt(loginInfo.password_encrypted);
+                password = loginInfo.password || decrypt(loginInfo.password_encrypted);
             } catch(err){
                 reject(new Error("password broken"));
             }

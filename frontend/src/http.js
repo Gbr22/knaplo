@@ -42,6 +42,7 @@ export function httpRequest(options){
                 bodyText = objToURL(bodyText);
             }
         }
+        
 
         var r = new RegExp('^(?:[a-z]+:)?//', 'i');
         let urlObj;
@@ -107,7 +108,6 @@ export function httpRequest(options){
                 /* console.log(header, options.headers[header]); */
                 xhttp.setRequestHeader(header, options.headers[header]);
             }
-
             xhttp.send(bodyText);
         }
     })

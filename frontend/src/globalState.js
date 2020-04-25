@@ -5,6 +5,7 @@ import Cookies from 'js-cookie';
 import { afterLogin, getHomeworksCompletedMap } from './dataHandler';
 import { getCookieFromString } from "./util";
 import storage from './storage';
+import { httpRequest } from "./http";
 
 let GlobalState = {
     loaded:false,
@@ -38,11 +39,20 @@ function loginWithCookie(c){
     
 }
 
-function tryLogin(){
+async function tryLogin(){
     let cookie = getCookieFromString("loginInfo",document.cookie);
     if (cookie && !storage.getJSON("loginInfo")){
-        storage.setItem("loginInfo",cookie);
-        document.cookie = "";
+        try {
+            let result = await httpRequest({
+                method:"POST",
+                body:JSON.parse(cookie),
+                url:"/api/loginInfo"
+            })
+            console.log("cookie result",result);
+            storage.setJSON("loginInfo",result.bodyJSON);
+        } catch(err){
+            console.log("Error with cookie",err);
+        }
     }
 
     let info = storage.getJSON("loginInfo");
@@ -51,6 +61,7 @@ function tryLogin(){
         GlobalState.user = info;
         afterLogin();
     }
+    GlobalState.loaded = true;
 }
 
 if (window.cordova != undefined){
@@ -69,12 +80,11 @@ if (window.cordova != undefined){
             console.error(err);
         });
         
-        GlobalState.loaded = true;
     }, false);
 } else {
     console.log("endpoint",ApiEndpoint);
     tryLogin();
-    GlobalState.loaded = true;
+    
 }
 
 export default GlobalState;
