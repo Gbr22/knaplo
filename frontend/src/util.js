@@ -14,6 +14,21 @@ export function tryJSONStringify(o){
         return null;
     }
 }
+export function getWeek(date){
+    date = toDate(date);
+    
+    let current = date.getDay() - 1;
+    if (current == -1){
+        current = 6;
+    }
+    let first = date.getDate() - current;
+    let last = first + 6;
+
+    first = new Date(date.setDate(first));
+    last = new Date(date.setDate(last));
+    return {first,last};
+}
+window.getWeek = getWeek;
 export function formatDate(date){
     date = toDate(date);
     let pad = (n) => (n+"").padStart(2,"0");
