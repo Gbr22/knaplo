@@ -226,6 +226,7 @@ export default {
         display: block;
         overflow: auto;
         scroll-snap-type: x mandatory;
+        overflow: hidden; /*TODO: Fix scroll crash*/
     }
     #tableWrap * {
         white-space: normal;
