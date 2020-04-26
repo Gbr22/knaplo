@@ -2,6 +2,7 @@ import {httpRequest} from './http';
 import GlobalState, { ApiEndpoint } from './globalState';
 import { pushError  } from './components/MessageDisplay';
 import storage from './storage';
+import { getWeek } from './util';
 
 
 let loginInfo;
@@ -55,8 +56,21 @@ export function genericKretaRequest(endpoint,dataKey,errorMessage){
 export function getData(){
     return genericKretaRequest("mapi/api/v1/StudentAmi?fromDate=null&toDate=null","data","Tanuló adatok lekérése sikertelen")
 }
-export function getTimetable(){
-    return genericKretaRequest("mapi/api/v1/LessonAmi?fromDate=null&toDate=null","timetable","Órarend lekérése sikertelen");
+export function getTimetable(weeksAfter = 0){
+    let id = "timetable/week/"+weeksAfter;
+    if (getFromCache(id) && weeksAfter < 0){
+        return Promise.resolve(getFromCache(id));
+    }
+    let {first, last} = getWeek(new Date());
+    first.setDate(first.getDate()+7*weeksAfter);
+    last.setDate(last.getDate()+7*weeksAfter);
+
+    function format(date){
+        let pad = (n) => (n+"").padStart(2,"0");
+        return `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())}`;
+    }
+
+    return genericKretaRequest(`mapi/api/v1/LessonAmi?fromDate=${format(first)}&toDate=${format(last)}`,id,"Órarend lekérése sikertelen");
 }
 export function fetchInst(){
     return new Promise(function(resolve,reject){

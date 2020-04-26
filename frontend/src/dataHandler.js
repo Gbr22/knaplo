@@ -7,7 +7,7 @@ import { pushError } from './components/MessageDisplay';
 import AbsenceModal from './components/modals/AbsenceModal';
 import SubjectModal from './components/modals/SubjectModal';
 import { exists } from 'fs';
-import { getData, getHomework, getFromCache, fetchInst, pushHomeworkCompleted, refreshUser } from './api';
+import { getData, getHomework, getFromCache, fetchInst, pushHomeworkCompleted, refreshUser, getTimetable } from './api';
 
 
 export function openSubject(subject){
@@ -492,22 +492,57 @@ window.getAverage = getAverage;
 
 function processHomeworks(homeworks){
     let promises = [];
+    let processed = [];
+    let index = 0;
+    let hadContent = !(GlobalState.processedData.homeworks.length == 0);
     for (let e of homeworks){
-        promises.push(new Promise(function(resolve){
+        index++;
+        promises.push(new Promise(function(resolve,reject){
             getHomework(e.id).then((result)=>{
                 e.homework = result;
+                processed.push(e);
+                if (!hadContent){
+                    updateArray(GlobalState.processedData.homeworks,processed);
+                }
                 resolve(e);
+            }).catch(()=>{
+                console.log("Couldn't get homework!",e);
+                resolve();
             })
         }));
     }
     Promise.all(promises).then((values)=>{
-        let homeworks = values.filter((e)=>e.homework != undefined);
-        if (homeworks.length != values.length){
+        if (homeworks.length != processed.length){
             pushError("Nem sikerült minden házit lekérni");
         }
-        updateArray(GlobalState.processedData.homeworks,homeworks);
+        updateArray(GlobalState.processedData.homeworks,processed);
     })
 }
+export function getTimetables(){
+    return new Promise((resolve,reject)=>{
+        let list = [];
+        let start = -3;
+        let end = 1;
+        let finished = start;
+        function get(i){
+            getTimetable(i).then((result)=>{
+                list.push(...result);
+                processTimetable(list);
+                finished++;
+                if (finished == end){
+                    resolve();
+                }
+            });
+        }
+        get(0);
+        for (let i=end; i>start; i--){
+            if (i != 0){
+                get(i);
+            }
+        }
+    })
+}
+window.getTimetables = getTimetables;
 function processTimetable(result){
     if (result){
         let list = GlobalState.lessonsList = result;
@@ -682,9 +717,7 @@ function afterLogin(){
                 getData().then((result)=>{
                     processData(result);
                 });
-                getTimetable().then((result)=>{
-                    processTimetable(result);
-                });
+                getTimetables()
             })
         })
     }
@@ -712,8 +745,7 @@ export function refreshPage(page){
             pages:["timetable"],
             action(){
                 return new Promise(function(resolve){
-                    getTimetable().then((result)=>{
-                        processTimetable(result);
+                    getTimetables().then((result)=>{
                         console.log("refreshed timetable");
                         resolve();
                     });
@@ -724,12 +756,11 @@ export function refreshPage(page){
             pages:["homework"],
             action(){
                 return new Promise(function(resolve){
-                    getTimetable().then((result)=>{
-                        processTimetable(result);
+                    getTimetables().then((result)=>{
+                        resolve();
                         processHomeworksCompleted();
                         syncHomeworkCompleted();
                         console.log("refreshed homework");
-                        resolve();
                     });
                 })
             }
