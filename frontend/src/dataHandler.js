@@ -396,15 +396,22 @@ export function getTimetables(){
         let start = -3;
         let end = 1;
         let finished = start;
+        function done(){
+            finished++;
+            if (finished == end){
+                resolve();
+            }
+        }
         function get(i){
             getTimetable(i).then((result)=>{
-                list.push(...result);
-                processTimetable(list);
-                finished++;
-                if (finished == end){
-                    resolve();
+                if (result){
+                    list.push(...result);
+                    processTimetable(list);
                 }
-            });
+                done();
+            }).catch(()=>{
+                done();
+            })
         }
         get(0);
         for (let i=end; i>start; i--){
@@ -576,11 +583,7 @@ function afterLogin(){
     let online = navigator.onLine;
     setImmediate(()=>{
         processData(getFromCache("data"));
-        processTimetable(getFromCache("timetable"));
-        processHomeworksCompleted();
-        if (online){
-            syncHomeworkCompleted();
-        }
+        getTimetables(true);
     });
     if (online){
         setImmediate(()=>{
@@ -590,8 +593,10 @@ function afterLogin(){
                     processData(result);
                 });
                 getTimetables()
+                syncHomeworkCompleted();
             })
         })
+        
     }
 }
 export function refreshPage(page){

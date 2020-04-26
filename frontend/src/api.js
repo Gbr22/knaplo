@@ -2,7 +2,7 @@ import {httpRequest} from './http';
 import GlobalState, { ApiEndpoint } from './globalState';
 import { pushError  } from './components/MessageDisplay';
 import storage from './storage';
-import { getWeek } from './util';
+import { getWeek, getDateCompareNumber } from './util';
 
 
 let loginInfo;
@@ -57,13 +57,17 @@ export function getData(){
     return genericKretaRequest("mapi/api/v1/StudentAmi?fromDate=null&toDate=null","data","Tanuló adatok lekérése sikertelen")
 }
 export function getTimetable(weeksAfter = 0){
-    let id = "timetable/week/"+weeksAfter;
-    if (getFromCache(id) && weeksAfter < 0){
-        return Promise.resolve(getFromCache(id));
-    }
+    
     let {first, last} = getWeek(new Date());
     first.setDate(first.getDate()+7*weeksAfter);
     last.setDate(last.getDate()+7*weeksAfter);
+
+    let id = "timetable/week/"+getDateCompareNumber(first);
+    if (getFromCache(id) && weeksAfter < 0){
+        return Promise.resolve(getFromCache(id));
+    } else if (weeksAfter >= 0 && !navigator.onLine){
+        return Promise.resolve(getFromCache(id));
+    }
 
     function format(date){
         let pad = (n) => (n+"").padStart(2,"0");

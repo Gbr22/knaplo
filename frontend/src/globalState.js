@@ -25,7 +25,7 @@ let GlobalState = {
             weeks:[]
         },
         homeworks:[],
-        homeworksCompleted:[],
+        homeworksCompleted:storage.getJSON("homeworksCompleted") || [],
     },
     cordovaIsDebug:false,
     user:null,
