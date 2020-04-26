@@ -1,1 +1,2 @@
-npm run cordova-build-android && .\sign.bat
+npm run cordova-build-android
+& .\sign.bat
