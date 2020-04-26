@@ -26,6 +26,7 @@ const proxy = http.createServer((pReq, pRes) => {
         lowercaseHeaders[p.toLowerCase()] = headers[p];
         
     }
+    
     for (let p in lowercaseHeaders){
         let prefix = "x-proxy-header-";
         if (p.indexOf(prefix) == 0){
@@ -33,8 +34,8 @@ const proxy = http.createServer((pReq, pRes) => {
             if (key == "apikey"){
                 key = "apiKey";
             }
-            headers[key] = headers[p];
-            proxyHeaders[key] = headers[p];
+            lowercaseHeaders[key] = lowercaseHeaders[p];
+            proxyHeaders[key] = lowercaseHeaders[p];
             delete headers[p];
         }
     }
@@ -65,6 +66,7 @@ const proxy = http.createServer((pReq, pRes) => {
         headers:proxyHeaders,
     }
     let data = [];
+    
     pReq.on('data', chunk => {
         data.push(chunk)
     })
