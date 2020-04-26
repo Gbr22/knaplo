@@ -61,7 +61,7 @@ const proxy = http.createServer((pReq, pRes) => {
     const options = {
         hostname: url.hostname,
         port: url.protocol == "http:" ? 80 : 443,
-        path: url.pathname,
+        path: url.pathname+url.search,
         method: pReq.method,
         headers:proxyHeaders,
     }
