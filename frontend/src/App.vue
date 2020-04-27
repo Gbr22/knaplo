@@ -85,15 +85,19 @@ h1, h2, h3, h4, h5, h6 {
     margin: 0;
 }
 
+::selection {
+  background-color: var(--theme-5);
+  color: var(--text-color);
+}
 * {
     -webkit-tap-highlight-color: transparent;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
     user-select: none;
 }
+.hwContent *, h3.theme {
+    -webkit-tap-highlight-color: initial;
+    user-select: text !important;
+}
+
 
 :root {
     --theme-5: #88D498;
