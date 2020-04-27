@@ -205,6 +205,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
 }
 .youtubeEmbed .thumbnail::before {
     position: absolute;
@@ -227,6 +228,11 @@ export default {
     align-items: center;
     box-shadow: var(--modal-shadow);
     z-index: 1;
+    transition: transform 0.3s;
+    transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+.youtubeEmbed .thumbnail .play:hover {
+    transform: scale(1.17);
 }
 .youtubeEmbed .play::before {
     content: '';
