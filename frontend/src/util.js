@@ -96,6 +96,12 @@ export function toOneLine(s){
     return s.replace(/\n/g,'').replace(/ +(?= )/g,'');
 }
 window.htmlToText = htmlToText;
+export function decodeHtmlEntities(html) {
+    var txt = document.createElement("textarea");
+    txt.innerHTML = html;
+    return txt.value;
+}
+window.decodeHtmlEntities = decodeHtmlEntities;
 export function formatURLs(text){
     /* let regex = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/g; */
     let regex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/g;
@@ -145,7 +151,7 @@ export function formatURLsHTML(html){
     let links = tag.querySelectorAll("a[href]");
     let hasHTML = code => /<\/?[a-z][\s\S]*>/i.test(code);
     if (links.length == 0 && !hasHTML(html)){
-        html = formatURLs(html);
+        html = formatURLs(decodeHtmlEntities(html));
         tag.innerHTML = html;
     }
     let tags = tag.querySelectorAll("*");
@@ -180,7 +186,7 @@ export function formatURLsHTML(html){
         let smaller = html.length-tag.innerHTML.length;
         /* console.log(`${smaller} smaller!`); */
     } else {
-        console.error("Content lost!", "Inital:",inital, "Now:",now);
+        console.error("Content lost!", {inital,now},{initalHTML:html,now:tag.innerHTML});
         tag.innerHTML = html; //if content is lost reset
     }
 
