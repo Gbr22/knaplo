@@ -54,6 +54,22 @@
                         </label>
                     </span>
                 </div>
+                <div class="item" v-for="[key, e] in Object.entries(options.options)" :key="key">
+                    <span class="icon">
+                        <svg class="feather">
+                            <use :xlink:href="'feather-sprite.svg#'+e.icon"/>
+                        </svg>
+                    </span>
+                    <p>
+                        {{ e.text }}
+                    </p>
+                    <span class="action">
+                        <label class="switch">
+                            <input type="checkbox" :checked="GlobalState.options[key]" @click="options.set(key,!GlobalState.options[key])">
+                            <span class="slider"></span>
+                        </label>
+                    </span>
+                </div>
             </div>
         </section>
         <div id="credits">
@@ -72,7 +88,7 @@ import Cookies from 'js-cookie';
 import { navigate } from '../util';
 import ConfirmModal, { openConfirm } from '../components/modals/ConfirmModal.vue';
 import storage from '../storage';
-
+import options from '../options';
 export default {
     name: 'Settings',
     components: {
@@ -82,7 +98,8 @@ export default {
         return {
             GlobalState,
             ThemeHandler,
-            cacheCount:0
+            cacheCount:0,
+            options
         }
     },
     methods:{

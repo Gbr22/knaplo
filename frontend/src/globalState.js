@@ -7,7 +7,7 @@ import { getCookieFromString } from "./util";
 import storage from './storage';
 import { httpRequest } from "./http";
 import Vue from 'vue';
-
+import options from './options';
 
 let GlobalState = {
     loaded:false,
@@ -27,6 +27,7 @@ let GlobalState = {
         homeworks:[],
         homeworksCompleted:storage.getJSON("homeworksCompleted") || [],
     },
+    options:options.getAllOptions(),
     cordovaIsDebug:false,
     user:null,
     currentMenu:localStorage.getItem("currentMenu") || "timeline"

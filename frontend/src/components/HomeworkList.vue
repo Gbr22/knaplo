@@ -1,5 +1,5 @@
 <template>
-    <div class="homeworkList">
+    <div class="homeworkList" v-if="list.length > 0">
         <h2 class="title">{{ title }} (<b>{{ getCompletedCount() }}</b>/{{ list.length }})</h2>
         <div class="homework" v-for="elem in list" :key="elem.id" @click="openHomework(elem)">
             <div class="header">

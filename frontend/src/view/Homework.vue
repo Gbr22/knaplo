@@ -4,6 +4,7 @@
             <h1>Házi feladatok</h1>
         </div>
 
+        <HomeworkList :list="getTomorrow()" title="Holnapra" />
         <HomeworkList :list="getActual()" title="Aktuális" />
         <HomeworkList :list="getExpired()" title="Lejárt határidejű" />
     </div>
@@ -37,9 +38,27 @@ export default {
             let g = getDateCompareNumber;
             return g(new Date(e.homework.Hatarido)) < g(new Date());
         },
+        isTomorrow(e){
+            if (!GlobalState.options["homeworks.separateTomorrow"]){
+                return false;
+            }
+            let g = getDateCompareNumber;
+            let tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate()+1);
+            let compare = g(new Date(e.homework.Hatarido));
+            return compare == g(new Date()) || compare == g(tomorrow);
+        },
         getActual(){
             return this.homeworks.filter((e)=>{
-                return !this.isExpired(e);
+                return !this.isExpired(e) && !this.isTomorrow(e);
+            }).sort((a,b)=>{
+                let g = x => new Date(x.homework.Hatarido);
+                return g(a)-g(b);
+            }).sort(this.sortByDone)
+        },
+        getTomorrow(){
+            return this.homeworks.filter((e)=>{
+                return this.isTomorrow(e);
             }).sort((a,b)=>{
                 let g = x => new Date(x.homework.Hatarido);
                 return g(a)-g(b);
