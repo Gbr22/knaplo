@@ -8,7 +8,7 @@ import AbsenceModal from './components/modals/AbsenceModal';
 import SubjectModal from './components/modals/SubjectModal';
 import { getData, getHomework, getFromCache, fetchInst, pushHomeworkCompleted, refreshUser, getTimetable, getWeekStorageId } from './api';
 import { getWeekIndex } from './util';
-
+import { updateTT } from './view/Timetable';
 
 export function openSubject(subject){
     openModal(subject.name,SubjectModal,subject,{
@@ -657,10 +657,11 @@ export function refreshPage(page){
             pages:["timetable"],
             action(){
                 return new Promise(function(resolve){
-                    getTimetables().then((result)=>{
-                        console.log("refreshed timetable");
+                    weekReactiveRequested = [];
+                    updateTT();
+                    setTimeout(()=>{
                         resolve();
-                    });
+                    },500)
                 })
             }
         },

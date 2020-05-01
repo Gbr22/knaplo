@@ -69,19 +69,26 @@ import { openHomework } from '../components/modals/HomeworkModal.vue';
 import { getHomework } from '../api';
 import { getWeekReactive } from '../dataHandler';
 
+export let updateTT = ()=>{};
+
 export default {
     name:"Timetable",
     data(){
         let timetable = GlobalState.processedData.timetable;    
 
         let weekIndex = 0;
-        return {
+        let o = {
             weekIndex,
             GlobalState,
             timetable,
             selectedWeek:getWeekReactive(weekIndex),
             dayIndex:0,
         }
+        updateTT = function(){
+            o.selectedWeek=getWeekReactive(o.weekIndex);
+        };
+
+        return o;
     },
     methods:{
         openLesson(lesson){
