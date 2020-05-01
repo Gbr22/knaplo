@@ -14,6 +14,11 @@ export function tryJSONStringify(o){
         return null;
     }
 }
+export function addDays(date, days) {
+    var result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result;
+}
 export function getWeek(date){
     date = toDate(date);
     
@@ -21,11 +26,10 @@ export function getWeek(date){
     if (current == -1){
         current = 6;
     }
-    let first = date.getDate() - current;
-    let last = first + 6;
-
-    first = new Date(date.setDate(first));
-    last = new Date(date.setDate(last));
+    
+    let first = addDays(date, -current);
+    let last = addDays(date,-current+6);
+    
     return {first,last};
 }
 window.getWeek = getWeek;
