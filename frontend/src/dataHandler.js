@@ -415,9 +415,9 @@ export function getWeekReactive(i){
     return o;
 }
 window.getWeekReactive = getWeekReactive;
-export function getTimetables(){
+export function getHomeworks(){
     return new Promise((resolve,reject)=>{
-        let list = [];
+        let list = new Map();
         let start = -3;
         let end = 1;
         let finished = start;
@@ -427,16 +427,36 @@ export function getTimetables(){
                 resolve();
             }
         }
+        function process(){
+            let arr = [...(list).values()].flat();
+            let homeworks = arr.filter((e)=>e.TeacherHomeworkId != null);
+            homeworks = homeworks.map((e)=>({lesson:e,id:e.TeacherHomeworkId}));
+            processHomeworks(homeworks);
+            /* console.log(...arguments, list); */
+        }
         function get(i){
-            getTimetable(i).then((result)=>{
-                if (result){
-                    list.push(...result);
-                    processTimetable(list);
-                }
+            let s = getFromCache(getWeekStorageId(i));
+            if (s){
+                list.set(i,s);
+                process(i,"cache");
+            }
+
+
+
+            if (navigator.onLine){
+                getTimetable(i).then((result)=>{
+                    if (result){
+                        list.set(i,result);
+                        process(i,"network");
+                    }
+                    done();
+                }).catch(()=>{
+                    done();
+                })
+            } else {
                 done();
-            }).catch(()=>{
-                done();
-            })
+            }
+            
         }
         get(0);
         for (let i=end; i>start; i--){
@@ -444,9 +464,12 @@ export function getTimetables(){
                 get(i);
             }
         }
-    })
+        /* for (let i=start; i <= end; i++){
+            get(i);
+        } */
+    }) 
 }
-window.getTimetables = getTimetables;
+
 export function getWeekDaysTT(lessons){
     let daysMap = {};
     for (let e of lessons){
@@ -474,9 +497,6 @@ function processTimetable(result){
     if (result){
         let list = GlobalState.lessonsList = result;
 
-        let homeworks = list.filter((e)=>e.TeacherHomeworkId != null);
-        homeworks = homeworks.map((e)=>({lesson:e,id:e.TeacherHomeworkId}));
-        processHomeworks(homeworks);
         
         let days = getWeekDaysTT(list);
         for (let day of days){
@@ -618,7 +638,7 @@ function afterLogin(){
     let online = navigator.onLine;
     setImmediate(()=>{
         processData(getFromCache("data"));
-        getTimetables(true);
+        getHomeworks();
     });
     if (online){
         setImmediate(()=>{
@@ -627,7 +647,6 @@ function afterLogin(){
                 getData().then((result)=>{
                     processData(result);
                 });
-                getTimetables()
                 syncHomeworkCompleted();
             })
         })
@@ -669,7 +688,8 @@ export function refreshPage(page){
             pages:["homework"],
             action(){
                 return new Promise(function(resolve){
-                    getTimetables().then((result)=>{
+                    
+                    getHomeworks().then((result)=>{
                         resolve();
                         processHomeworksCompleted();
                         syncHomeworkCompleted();
