@@ -3,13 +3,13 @@
         <div class="header">
             <h1>Órarend</h1>
             <h2 v-if="selectedWeek">
-                <button @click="changeWeek(-1)" v-bind:class="{ nomore: nextWeek(-1) == null }">
+                <button @click="changeWeek(-1)" v-bind:class="{ nomore: !nextWeek(-1) }">
                     <svg class="feather">
                         <use xlink:href="feather-sprite.svg#chevron-left"/>
                     </svg>
                 </button>
                 <span class="text">{{ TTfrom() }} - {{ TTto() }}</span>
-                <button @click="changeWeek(1)" v-bind:class="{ nomore: nextWeek(1) == null }">
+                <button @click="changeWeek(1)" v-bind:class="{ nomore: !nextWeek(1) }">
                     <svg class="feather">
                         <use xlink:href="feather-sprite.svg#chevron-right"/>
                     </svg>
@@ -67,24 +67,20 @@ import GlobalState from '../globalState'
 import { formatDate, getDayName, getDayShortName, formatTime, shortenText } from '../util';
 import { openHomework } from '../components/modals/HomeworkModal.vue';
 import { getHomework } from '../api';
-
+import { getWeekReactive } from '../dataHandler';
 
 export default {
     name:"Timetable",
     data(){
         let timetable = GlobalState.processedData.timetable;    
 
+        let weekIndex = 0;
         return {
+            weekIndex,
             GlobalState,
             timetable,
-            weeks:timetable.weeks,
-            selectedWeek:null,
+            selectedWeek:getWeekReactive(weekIndex),
             dayIndex:0,
-        }
-    },
-    watch:{
-        weeks(){
-            this.selectedWeek = this.getCurrent();
         }
     },
     methods:{
@@ -134,50 +130,11 @@ export default {
             
         },
         nextWeek(direction){
-            let next = null;
-            for (let w of this.weeks){
-                
-                let selectedW = new Date(this.selectedWeek.week);
-                let thisW = new Date(w.week);
-                let nextW = null;
-                if (next){
-                    nextW = new Date(next.week);
-                }
-
-                direction;
-
-                let b = (a,b)=>{return (a-b)*direction > 0} //bigger
-
-                if (b(thisW, selectedW)){
-                    if (b(nextW, thisW) || nextW == null){
-                        next = w;
-                    }
-                }
-            }
-            return next;
+            return true;
         },
         changeWeek(direction){
-            let most = this.nextWeek(direction);
-
-            if (most){
-                this.selectedWeek = most;
-            }
-        },
-        getCurrent(){
-            if (this.selectedWeek != null){
-                return this.selectedWeek;
-            }
-            let current = null;
-            for (let e of this.GlobalState.processedData.timetable.weeks){
-                if (e.active){
-                    current = e;
-                }
-            }
-            let last = this.timetable.weeks[this.timetable.weeks.length-1];
-            if (current==null && last != undefined){
-                current = last;
-            }
-            return current || null;
+            this.weekIndex += direction;
+            this.selectedWeek = getWeekReactive(this.weekIndex);
         },
         shortenText,
         shortName(name){

@@ -32,7 +32,16 @@ export function getWeek(date){
     
     return {first,last};
 }
+export function getWeekIndex(weeksAfter = 0){
+    let {first, last} = getWeek(new Date());
+    first.setDate(first.getDate()+7*weeksAfter);
+    last.setDate(last.getDate()+7*weeksAfter);
+    return {first, last};
+}
 window.getWeek = getWeek;
+export function replaceIndex(arr,i,item){
+    arr.splice(i,1,item);
+}
 export function formatDate(date){
     date = toDate(date);
     let pad = (n) => (n+"").padStart(2,"0");

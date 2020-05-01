@@ -6,8 +6,8 @@ import { pushError } from './components/MessageDisplay';
 
 import AbsenceModal from './components/modals/AbsenceModal';
 import SubjectModal from './components/modals/SubjectModal';
-import { exists } from 'fs';
-import { getData, getHomework, getFromCache, fetchInst, pushHomeworkCompleted, refreshUser, getTimetable } from './api';
+import { getData, getHomework, getFromCache, fetchInst, pushHomeworkCompleted, refreshUser, getTimetable, getWeekStorageId } from './api';
+import { getWeekIndex } from './util';
 
 
 export function openSubject(subject){
@@ -390,6 +390,31 @@ function processHomeworks(homeworks){
         updateArray(GlobalState.processedData.homeworks,processed);
     })
 }
+
+let weekReactiveRequested = [];
+export function getWeekReactive(i){
+    let weeksAfter = i;
+    let {first, last} = getWeekIndex(i);
+    let o = {
+        first,last,
+        week:first.toDateString(),
+        active:i==0,
+        days:[]
+    };
+    let id = getWeekStorageId(weeksAfter);
+    if (getFromCache(id)){
+        o.days = getWeekDaysTT(getFromCache(id));
+    }
+
+    if (navigator.onLine && !weekReactiveRequested.includes(i) ){
+        weekReactiveRequested.push(i);
+        getTimetable(i).then((d)=>{
+            updateArray(o.days,getWeekDaysTT(d));
+        })
+    }
+    return o;
+}
+window.getWeekReactive = getWeekReactive;
 export function getTimetables(){
     return new Promise((resolve,reject)=>{
         let list = [];
@@ -422,6 +447,29 @@ export function getTimetables(){
     })
 }
 window.getTimetables = getTimetables;
+export function getWeekDaysTT(lessons){
+    let daysMap = {};
+    for (let e of lessons){
+        
+        let day = (new Date(e.Date)).toDateString();
+        if (!daysMap[day]){
+            daysMap[day] = {
+                day,
+                lessons:[]
+            };
+        }
+        daysMap[day].lessons.push(e);
+    }
+    
+    let days = Object.values(daysMap);
+    for (let day of days){
+        day.lessons.sort((a,b)=>{
+            return new Date(a.StartTime) - new Date(b.StartTime);
+        })
+    }
+    return Object.values(daysMap);
+}
+window.getWeekDaysTT = getWeekDaysTT;
 function processTimetable(result){
     if (result){
         let list = GlobalState.lessonsList = result;
@@ -430,20 +478,7 @@ function processTimetable(result){
         homeworks = homeworks.map((e)=>({lesson:e,id:e.TeacherHomeworkId}));
         processHomeworks(homeworks);
         
-        let daysMap = {};
-        for (let e of list){
-            
-            let day = (new Date(e.Date)).toDateString();
-            if (!daysMap[day]){
-                daysMap[day] = {
-                    day,
-                    lessons:[]
-                };
-            }
-            daysMap[day].lessons.push(e);
-        }
-        
-        let days = Object.values(daysMap);
+        let days = getWeekDaysTT(list);
         for (let day of days){
             day.lessons.sort((a,b)=>{
                 return new Date(a.StartTime) - new Date(b.StartTime);
