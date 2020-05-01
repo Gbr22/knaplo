@@ -638,15 +638,23 @@ function afterLogin(){
     let online = navigator.onLine;
     setImmediate(()=>{
         processData(getFromCache("data"));
-        getHomeworks();
+        if (!online){
+            getHomeworks();
+        }
     });
     if (online){
         setImmediate(()=>{
             refreshUser().then(()=>{
                 console.log("[afterlogin] refreshed user");
+                function afterData(){
+                    getHomeworks();
+                }
                 getData().then((result)=>{
                     processData(result);
-                });
+                    afterData();
+                }).catch(()=>{
+                    afterData();
+                })
                 syncHomeworkCompleted();
             })
         })
