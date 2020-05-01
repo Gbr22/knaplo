@@ -23,8 +23,8 @@ if (window.cordova){
 export function homeworksCompleted(){
     return GlobalState.processedData.homeworksCompleted;
 }
-export function syncHomeworkCompleted(){
-    pushHomeworkCompleted(homeworksCompleted()).then((result)=>{
+export function syncHomeworkCompleted(arr = homeworksCompleted()){
+    pushHomeworkCompleted(arr).then((result)=>{
         if (result){
             for (let p in result){
                 let id = p;
@@ -35,6 +35,7 @@ export function syncHomeworkCompleted(){
         }
     })
 }
+
 function processHomeworksCompleted(){
     if (localStorage.getItem("homeworksCompleted")){
         try {
@@ -64,8 +65,7 @@ export function getHomeworkCompleted(id){
 }
 window.getHomeworkCompleted = getHomeworkCompleted;
 
-export function cleanHWC(){
-    let arr = homeworksCompleted();
+export function cleanHWC(arr = homeworksCompleted()){
     let ids = new Map();
     for (let i=0; i < arr.length; i++){
         let e = arr[i];
@@ -90,6 +90,8 @@ export function cleanHWC(){
         
     }
 }
+
+
 window.cleanHWC = cleanHWC;
 export function assignHomeworkCompletedState(id,assignState){
     
@@ -108,24 +110,32 @@ export function assignHomeworkCompletedState(id,assignState){
     }
     cleanHWC();
     saveHWC();
+    return state;
 }
 let scheduledSync = -1;
+let HWCpushList = [];
+export function beforePushHWC(change){
+    HWCpushList.push(change);
+    if (scheduledSync){
+        clearTimeout(scheduledSync);
+    }
+    scheduledSync = setTimeout(()=>{
+        if (navigator.onLine){
+            cleanHWC(HWCpushList)
+            syncHomeworkCompleted(HWCpushList);
+            HWCpushList = [];
+        }
+    }, 500);
+}
 export function setHomeworkCompleted(id,value, sync = true){
     
-    assignHomeworkCompletedState(id,{
+    let result = assignHomeworkCompletedState(id,{
         changed: Date.now(),
         value:value,
     });
 
     if (sync){
-        if (scheduledSync){
-            clearTimeout(scheduledSync);
-        }
-        scheduledSync = setTimeout(()=>{
-            if (navigator.onLine){
-                syncHomeworkCompleted();
-            }
-        }, 500);
+        beforePushHWC(result);
     }
     
 }
