@@ -220,7 +220,30 @@ export function formatURLsHTML(html){
     links.forEach((l)=>{
         let url = l.getAttribute("href");
         if (url == l.textContent){
-            l.innerHTML = new URL(url).hostname;
+            let obj = new URL(url);
+            function normalLink(){
+                l.innerHTML = new URL(url).hostname;
+            }
+            if (obj.hostname == "teams.microsoft.com" && obj.pathname == "/_"){
+                try {
+                    let inner = new URL(obj.hash.replace("#","about:"));
+                    let path = decodeURIComponent(inner.searchParams.get("rootfolder"));
+                    path = path.split("Megosztott dokumentumok/")[1];
+                    if (!path){
+                        throw Error();
+                    }
+                    l.innerHTML = path.split("/").join("<i><wbr>/</i>");
+                    l.classList.add("teams");
+                } catch(err){
+                    normalLink();
+                }
+                
+
+
+            } else {
+                normalLink();
+            }
+            
         }
         l.classList.add("link");
         l.setAttribute("target","_blank");

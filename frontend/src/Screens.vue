@@ -178,6 +178,26 @@ export default {
     color: var(--text-smol);
 }
 
+.link.teams {
+    color: #464775;
+    color: #7173ad;
+    /* filter: invert(1) hue-rotate(180deg); */
+}
+.link.teams i {
+    font-style: normal;
+}
+.link.teams::before {
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    background-image: url('/services/teams.svg');
+    background-position: center;
+    background-size: 150%;
+    background-repeat: no-repeat;
+    vertical-align: middle;
+    margin-top: -5px;
+    content: '';
+}
 .youtubeEmbed {
     display: block;
     width: min(80vw, 350px);
