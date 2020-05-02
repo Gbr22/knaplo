@@ -226,6 +226,7 @@ export default {
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    -webkit-tap-highlight-color:  rgba(255, 255, 255, 0); 
 }
 .youtubeEmbed .thumbnail::before {
     position: absolute;

@@ -93,7 +93,7 @@ h1, h2, h3, h4, h5, h6 {
     -webkit-tap-highlight-color: transparent;
     user-select: none;
 }
-.hwContent *, h3.theme {
+.hwContent *, .hwContent, h3.theme {
     -webkit-tap-highlight-color: initial;
     user-select: text !important;
 }
