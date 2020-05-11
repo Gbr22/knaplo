@@ -48,7 +48,8 @@ export default {
             return this.list.filter(e=>this.isCompleted(e.homework)).length;
         },
         isCompleted(hw){
-            return hw.IsMegoldva;
+            
+            return hw?.IsMegoldva == true;
         },
         getText(elem){
             let text = htmlToText(formatURLsHTML(elem.homework.Szoveg));
@@ -58,8 +59,9 @@ export default {
         shortenText,
         htmlToText,
         toggleHomeworkCompleted(hw){
+            console.log("ismegoldva",hw);
             hw.IsMegoldva = !hw.IsMegoldva;
-            setHomeworkDone(hw.Id,IsMegoldva);
+            setHomeworkDone(hw.Id,hw.IsMegoldva);
         }
     }
 }
