@@ -1,4 +1,4 @@
-import { getInst } from "./dataHandler";
+import { getInst, homeworksCompleted } from "./dataHandler";
 
 import Cookies from 'js-cookie';
 
@@ -8,6 +8,7 @@ import storage from './storage';
 import { httpRequest } from "./http";
 import Vue from 'vue';
 import options from './options';
+import { setHomeworkDone } from "./api";
 
 let GlobalState = {
     loaded:false,
@@ -36,6 +37,12 @@ let GlobalState = {
 window.Cookies = Cookies;
 
 export let ApiEndpoint = "/api/";
+
+if (!storage.getJSON("migrated/hwc1")){
+    homeworksCompleted().forEach(e=>setHomeworkDone(e.id,e.value))    ;
+    storage.setJSON("migrated/hwc1",true);
+}
+
 
 function loginWithCookie(c){
     
