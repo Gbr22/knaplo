@@ -34,11 +34,13 @@ export function httpRequest(options){
         let type = "utf8";
         let bodyText = options.body;
         if (typeof bodyText == "object"){
-            
-            if (!options.headers["Content-Type"]){
+            console.log("body is object", JSON.parse(JSON.stringify(options)));
+
+            if (!options.headers["Content-Type"] || options.headers["Content-Type"]=="application/json"){
                 options.headers["Content-Type"]="application/json";
                 type = "json";
                 bodyText = JSON.stringify(bodyText);
+                console.log("content type json");
             } else {
                 type = "urlencoded";
                 options.headers["Content-Type"]="application/x-www-form-urlencoded";

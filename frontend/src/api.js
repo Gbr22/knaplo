@@ -14,11 +14,11 @@ function req(options){
     if (options.headers == undefined){
         options.headers = {};
     }
-    Object.assign(options.headers, {
+    options.headers = Object.assign({
         "User-Agent":"Kreta.Ellenorzo/2.9.11.2020033003 (Linux; U; Android 8.0.0)",
         "apiKey":API_KEY,
         'Content-Type': 'application/x-www-form-urlencoded',
-    });
+    },options.headers);
     return httpRequest(options);
 }
 export function getFromCache(dataKey){
@@ -56,6 +56,7 @@ export function genericKretaRequest(endpoint,dataKey,errorMessage){
 export function getData(){
     return genericKretaRequest("mapi/api/v1/StudentAmi?fromDate=null&toDate=null","data","Tanuló adatok lekérése sikertelen")
 }
+
 export function getWeekStorageId(weeksAfter = 0){
     let {first, last} = getWeekIndex(weeksAfter);
 
@@ -145,6 +146,39 @@ export async function getHomework(id){
 
 window.getTimetable = getTimetable;
 window.getData = getData;
+
+export function setHomeworkDone(id,state){
+    return new Promise(function(resolve,reject){
+        
+        
+        let data = {
+            "TanarHaziFeladatId":id.toString(),
+            "isMegoldva":state ? "True" : "False"
+        }
+        function fail(){
+            reject("Nem sikerült a házi állapotát megváltoztatni");
+        }
+        req({
+            method:"POST",
+            url:`https://${GlobalState.user.inst}.e-kreta.hu/mapi/api/v1/HaziFeladat/Megoldva`,
+            body:data,
+            headers:{
+                "Authorization":"Bearer "+GlobalState.user.access_token,
+                "Content-Type":"application/json"
+            },
+        }).then((r)=>{
+            if (r.statusCode == 200 || r.statusCode == 204){
+                resolve();
+            } else {
+                fail();
+            }
+        }).catch(err=>{
+            console.error("login failed",err);
+            fail();
+        })
+    })
+}
+window.setHomeworkDone = setHomeworkDone;
 export function login(form){
     return new Promise(function(resolve,reject){
         let props = ["inst","username","password"];
