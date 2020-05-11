@@ -6,7 +6,7 @@ import { pushError } from './components/MessageDisplay';
 
 import AbsenceModal from './components/modals/AbsenceModal';
 import SubjectModal from './components/modals/SubjectModal';
-import { getData, getHomework, getFromCache, fetchInst, pushHomeworkCompleted, refreshUser, getTimetable, getWeekStorageId } from './api';
+import { getData, getHomework, getFromCache, fetchInst, refreshUser, getTimetable, getWeekStorageId } from './api';
 import { getWeekIndex } from './util';
 import { updateTT } from './view/Timetable';
 
@@ -19,134 +19,6 @@ export function openSubject(subject){
 if (window.cordova){
     console.log("running in app");
 }
-
-export function homeworksCompleted(){
-    return GlobalState.processedData.homeworksCompleted;
-}
-export function syncHomeworkCompleted(arr = homeworksCompleted()){
-    pushHomeworkCompleted(arr).then((result)=>{
-        if (result){
-            for (let p in result){
-                let id = p;
-                let state = result[p];
-                assignHomeworkCompletedState(id,state);
-            }
-            saveHWC();
-        }
-    })
-}
-
-function processHomeworksCompleted(){
-    if (localStorage.getItem("homeworksCompleted")){
-        try {
-            homeworksCompleted().push(...JSON.parse(localStorage.getItem("homeworksCompleted"))  );
-        } catch(err){
-            err;
-        }
-    }
-}
-window.homeworksCompleted = homeworksCompleted;
-
-export function getHWCompObjFArr(id,arr){
-    id = id.toString();
-    for (let p of arr){
-        if (p.id == id){
-            return p;
-        }
-    }
-    return null;
-}
-function getHWCompObj(id){
-    return getHWCompObjFArr(id,homeworksCompleted());
-}
-
-export function getHomeworkCompleted(id){
-    return getHWCompObj(id)?.value == true;
-}
-window.getHomeworkCompleted = getHomeworkCompleted;
-
-export function cleanHWC(arr = homeworksCompleted()){
-    let ids = new Map();
-    for (let i=0; i < arr.length; i++){
-        let e = arr[i];
-        if (!ids.has(e.id)){
-            ids.set(e.id,[]);
-        } else {
-            ids.get(e.id).push(e);
-        }
-    }
-    for (let [id,elems] of ids){
-        let max = elems[0];
-        for (let e in elems){
-            if (e.changed > max.changed){
-                max = e;
-            }
-        }
-        for (let e in elems){
-            if (e != max){
-                arr.splice(arr.indexOf(max),1);
-            }
-        }
-        
-    }
-}
-
-
-window.cleanHWC = cleanHWC;
-export function assignHomeworkCompletedState(id,assignState){
-    
-    id = id.toString();
-    let state = getHWCompObj(id);
-    let exists = true;
-    if (state == null){
-        exists = false;
-        state = {id:id};
-    }
-    Object.assign(state,assignState);
-
-    if (!exists){
-        let arr = homeworksCompleted();
-        arr.push(state);
-    }
-    cleanHWC();
-    saveHWC();
-    return state;
-}
-let scheduledSync = -1;
-let HWCpushList = [];
-export function beforePushHWC(change){
-    HWCpushList.push(change);
-    if (scheduledSync){
-        clearTimeout(scheduledSync);
-    }
-    scheduledSync = setTimeout(()=>{
-        if (navigator.onLine){
-            cleanHWC(HWCpushList)
-            syncHomeworkCompleted(HWCpushList);
-            HWCpushList = [];
-        }
-    }, 500);
-}
-export function setHomeworkCompleted(id,value, sync = true){
-    
-    let result = assignHomeworkCompletedState(id,{
-        changed: Date.now(),
-        value:value,
-    });
-
-    if (sync){
-        beforePushHWC(result);
-    }
-    
-}
-export function saveHWC(){
-    localStorage.setItem("homeworksCompleted", JSON.stringify(homeworksCompleted()));
-}
-export function toggleHomeworkCompleted(id){
-    console.log("toggling",id);
-    return setHomeworkCompleted(id, !getHomeworkCompleted(id));
-}
-window.setHomeworkCompleted = setHomeworkCompleted;
 
 export class NormalisedItem {
 
@@ -380,12 +252,26 @@ function processHomeworks(homeworks){
     for (let e of homeworks){
         index++;
         promises.push(new Promise(function(resolve,reject){
-            getHomework(e.id).then((result)=>{
-                e.homework = result;
-                processed.push(e);
+
+            function update(){
                 if (!hadContent){
                     updateArray(GlobalState.processedData.homeworks,processed);
                 }
+            }
+
+            let current = e;
+            let s = getFromCache("homework/"+e.id);
+            if (s){
+                e.homework = s;
+                processed.push(e);
+                update();
+            }
+            getHomework(e.id).then((result)=>{
+                e.homework = result;
+                if (!s){
+                    processed.push(e);
+                }
+                update();
                 resolve(e);
             }).catch(()=>{
                 console.log("Couldn't get homework!",e);
@@ -665,7 +551,7 @@ function afterLogin(){
                 }).catch(()=>{
                     afterData();
                 })
-                syncHomeworkCompleted();
+                
             })
         })
         
@@ -710,7 +596,7 @@ export function refreshPage(page){
                     getHomeworks().then((result)=>{
                         resolve();
                         processHomeworksCompleted();
-                        syncHomeworkCompleted();
+                        
                         console.log("refreshed homework");
                     });
                 })

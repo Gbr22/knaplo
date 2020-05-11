@@ -104,44 +104,12 @@ export function fetchInst(){
         });
     });
 }
-export function pushHomeworkCompleted(arr){
-    return new Promise(function(resolve,reject){
-        refreshUser().then(()=>{
-            let errorMessage = "Kész házik szinkronizálása sikertelen";
-            function showErr(err){
-                if (errorMessage){
-                    pushError(errorMessage)
-                }
-                reject(err);
-            }
-            httpRequest({
-                url:`${ApiEndpoint}pushHomeworkDone`,
-                body:arr,
-                headers:{
-                    "x-login-info":JSON.stringify(GlobalState.user)
-                },
-                method:"POST"
-            }).then((res)=>{
-                if (res.statusCode == 200){
-                    resolve(res.bodyJSON);
-                } else {
-                    showErr(res);
-                }
-            }).catch((err)=>{
-                showErr(err);
-            });
-        })
-    });
-}
-window.pushHomeworkCompleted = pushHomeworkCompleted;
+
 export async function getHomework(id){
-    let s = getFromCache("homework/"+id);
-    if (s){
-        return s;
-    } else {
-        let hw = await genericKretaRequest(`mapi/api/v1/HaziFeladat/TanarHaziFeladat/${id}`,"homework/"+id);
-        return hw;
-    }
+    
+    let hw = await genericKretaRequest(`mapi/api/v1/HaziFeladat/TanarHaziFeladat/${id}`,"homework/"+id);
+    return hw;
+    
 }
 
 window.getTimetable = getTimetable;

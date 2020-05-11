@@ -10,7 +10,7 @@
                 <div class="bottom">
                     <div class="desc">{{ getText(elem) }}</div>
                     <button class="completed" :data-value="isCompleted(elem.homework)+''"
-                        @click.stop="toggleHomeworkCompleted(elem.homework.Id)"
+                        @click.stop="toggleHomeworkCompleted(elem.homework)"
                     >
                         <svg class="feather">
                             <use :xlink:href="getFiURL((isCompleted(elem.homework) ? '#check' : '#x'))"/>
@@ -25,8 +25,9 @@
 <script>
 import { shortenText, htmlToText, formatURLsHTML, formatDate, toOneLine, getFiURL } from '../util'
 import { openHomework } from '../components/modals/HomeworkModal.vue';
-import { getHomeworkCompleted, setHomeworkCompleted, toggleHomeworkCompleted, getHWCompObjFArr } from '../dataHandler';
+import { getHomeworkCompleted} from '../dataHandler';
 import GlobalState from '../globalState';
+import { setHomeworkDone } from '../api';
 
 
 
@@ -47,7 +48,7 @@ export default {
             return this.list.filter(e=>this.isCompleted(e.homework)).length;
         },
         isCompleted(hw){
-            return getHWCompObjFArr(hw.Id, this.homeworksCompleted)?.value == true;
+            return hw.IsMegoldva;
         },
         getText(elem){
             let text = htmlToText(formatURLsHTML(elem.homework.Szoveg));
@@ -56,8 +57,10 @@ export default {
         openHomework,
         shortenText,
         htmlToText,
-        getHomeworkCompleted,
-        toggleHomeworkCompleted
+        toggleHomeworkCompleted(hw){
+            hw.IsMegoldva = !hw.IsMegoldva;
+            setHomeworkDone(hw.Id,IsMegoldva);
+        }
     }
 }
 </script>
