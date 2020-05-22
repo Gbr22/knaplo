@@ -391,7 +391,7 @@ function processHomeworks(homeworks){
                 processed.push(e);
                 updateArray(GlobalState.processedData.homeworks,[...homeworkMap.values()]);
 
-                if (!hw.IsMegoldva){
+                if (!hw.IsMegoldva && navigator.onLine){
                     
                     setTimeout(()=>{
                         getHomework(e.id,true).then((result)=>{
@@ -401,7 +401,7 @@ function processHomeworks(homeworks){
                         })
                     },100);       
                 }
-            } else {
+            } else if (navigator.onLine) {
                 getHomework(e.id).then((result)=>{
                     e.homework = result;
                     homeworkMap.set(e.id,e);
