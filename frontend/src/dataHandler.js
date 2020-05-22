@@ -6,7 +6,7 @@ import { pushError } from './components/MessageDisplay';
 
 import AbsenceModal from './components/modals/AbsenceModal';
 import SubjectModal from './components/modals/SubjectModal';
-import { getData, getHomework, getFromCache, fetchInst, pushHomeworkCompleted, refreshUser, getTimetable, getWeekStorageId } from './api';
+import { getData, getHomework, getFromCache, fetchInst, pushHomeworkCompleted, refreshUser, getTimetable, getWeekStorageId, fetchedHW } from './api';
 import { getWeekIndex } from './util';
 import { updateTT } from './view/Timetable';
 
@@ -372,6 +372,7 @@ export function getAverage(){
 }
 window.getAverage = getAverage;
 
+export var homeworkMap = new Map();
 function processHomeworks(homeworks){
     let promises = [];
     let processed = [];
@@ -380,39 +381,45 @@ function processHomeworks(homeworks){
     for (let e of homeworks){
         index++;
         promises.push(new Promise(function(resolve,reject){
+            
             if (storage.has(`data/homework/${e.id}`)){
                 let hw = storage.getJSON(`data/homework/${e.id}`);
-                
-                if (!hw.IsMegoldva && !fetchedHW.includes(e.id)){
+                e.homework = hw;
+                if (!homeworkMap.has(e.id)){
+                    homeworkMap.set(e.id,e);
+                }
+                processed.push(e);
+                updateArray(GlobalState.processedData.homeworks,[...homeworkMap.values()]);
+
+                if (!hw.IsMegoldva){
                     
-                    fetchedHW.push(e.id);
                     setTimeout(()=>{
                         getHomework(e.id,true).then((result)=>{
                             e.homework = result;
+                            homeworkMap.set(e.id,e);
+                            updateArray(GlobalState.processedData.homeworks,[...homeworkMap.values()]);
                         })
                     },100);       
                 }
             } else {
-                fetchedHW.push(e.id);
+                getHomework(e.id).then((result)=>{
+                    e.homework = result;
+                    homeworkMap.set(e.id,e);
+                    processed.push(e);
+                    updateArray(GlobalState.processedData.homeworks,[...homeworkMap.values()]);
+                    resolve(e);
+                }).catch(()=>{
+                    console.log("Couldn't get homework!",e);
+                    resolve();
+                })
             }
-            getHomework(e.id).then((result)=>{
-                e.homework = result;
-                processed.push(e);
-                if (!hadContent){
-                    updateArray(GlobalState.processedData.homeworks,processed);
-                }
-                resolve(e);
-            }).catch(()=>{
-                console.log("Couldn't get homework!",e);
-                resolve();
-            })
         }));
     }
     Promise.all(promises).then((values)=>{
         if (homeworks.length != processed.length){
             pushError("Nem sikerült minden házit lekérni");
         }
-        updateArray(GlobalState.processedData.homeworks,processed);
+        updateArray(GlobalState.processedData.homeworks,[...homeworkMap.values()]);
     })
 }
 
@@ -440,9 +447,11 @@ export function getWeekReactive(i){
     return o;
 }
 window.getWeekReactive = getWeekReactive;
-export var fetchedHW = [];
+
+
+
 export function getHomeworks(){
-    fetchedHW.splice(0,fetchedHW.length);
+    fetchedHW.clear();
     return new Promise((resolve,reject)=>{
         let list = new Map();
         let start = -3;

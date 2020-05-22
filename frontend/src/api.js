@@ -134,13 +134,22 @@ export function pushHomeworkCompleted(arr){
     });
 }
 window.pushHomeworkCompleted = pushHomeworkCompleted;
+export var fetchedHW = new Map();
+window.fetchedHW = fetchedHW;
 export async function getHomework(id,forceNetwork = false){
     let s = getFromCache("homework/"+id);
     if (s && !forceNetwork){
         return s;
     } else {
-        let hw = await genericKretaRequest(`mapi/api/v1/HaziFeladat/TanarHaziFeladat/${id}`,"homework/"+id);
-        return hw;
+        if (fetchedHW.has(id)){
+            return await fetchedHW.get(id);
+        } else {
+            let prom = genericKretaRequest(`mapi/api/v1/HaziFeladat/TanarHaziFeladat/${id}`,"homework/"+id)
+            fetchedHW.set(id,prom);
+            let hw = await prom;
+            return hw;
+        }
+        
     }
 }
 
