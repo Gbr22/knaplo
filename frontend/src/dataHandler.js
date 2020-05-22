@@ -212,12 +212,12 @@ export class Grade extends NormalisedItem {
                 this.subject = "Magatartás";
             }
             if (o.Value == "Jó" || o.Value == "Példás"){
-                this.icon = "fi#smile";
+                this.icon = "fi/smile";
             } else {
-                this.icon = "fi#frown";
+                this.icon = "fi/frown";
             }
         } else {
-            this.icon = this.value;
+            this.icon = "text/"+this.value;
         }
 
         this.header = this.subject;
@@ -250,7 +250,7 @@ export class Absence extends NormalisedItem {
 
         this.header = `${o.TypeName} - ${this.justified ? `Igazolt (${o.JustificationTypeName})` : 'Igazolatlan'}`;
         this.desc = `${this.lesson}. Óra - ${this.subject}${this.absenceType == "Delay" ? `, ${this.delayMinutes} perc`:''}`;
-        this.icon = "fi#clock";
+        this.icon = "fi/clock";
         this.displayState = this.justified;
     }
 }
@@ -279,7 +279,7 @@ export class AbsentDay extends Absence {
         this.header = `${o.TypeName} - ${this.justified ? `Igazolt (${o.JustificationTypeName})` : 'Igazolatlan'}`;
         this.desc="";
 
-        this.icon = "fi#clock";
+        this.icon = "fi/clock";
         this.displayState = this.justified;
     }
 
@@ -331,7 +331,7 @@ export class Note extends NormalisedItem {
 
         this.header = this.title;
         this.desc = shorten(this.content);
-        this.icon = "fi#message-square";
+        this.icon = "fi/message-square";
     }
 }
 

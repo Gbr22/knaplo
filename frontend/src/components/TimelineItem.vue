@@ -1,13 +1,9 @@
 <template>
 <div class="itemWrap">
     <div class="gradeLike recent" :data-item-type="item.type" :data-state="item.displayState" v-on:click="item.onclick()">
-        <span v-if="(item.icon+'').startsWith('fi')" class="left">
-            <svg class="feather">
-                <use :xlink:href="getFiURL(item.icon)"/>
-            </svg>
-        </span>
-        <span v-else class="left">
-            {{ item.icon }}
+        
+        <span class="left">
+            <Icon :src="item.icon" />
         </span>
         <span class="right">
             <div class="header">
@@ -22,7 +18,7 @@
 
 <script>
 import { getFiURL } from '../util';
-
+import Icon from './Icon.vue';
 
 
 export default {
@@ -38,6 +34,9 @@ export default {
             let p = (n) => n.toString().padStart(2,0);
             return p(date.getMonth()+1)+"/"+p(date.getDate());
         }
+    },
+    components:{
+        Icon
     }
 }
 </script>

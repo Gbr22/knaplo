@@ -1,5 +1,5 @@
 <template>
-    <span v-html="getIcon(src)">
+    <span v-html="getIcon(src)" class="cont">
 
     </span>
 </template>
@@ -13,17 +13,33 @@ export default {
         getIcon(icon){
             let parts = icon.split("/");
             let type = parts[0];
-            let name = parts[1];
+            let value = parts[1];
 
-            let i = feather.icons[name];
-            if (i){
-                return i.toSvg();
+            let types = {
+                fi(value){
+                    let i = feather.icons[value];
+                    if (i){
+                        return i.toSvg();
+                    }
+                },
+                text(value){
+                    return value;
+                }
             }
+            if (types[type]){
+                return types[type](value);
+            }
+            
+            
         }
     }
 }
 </script>
 
-<style>
-
+<style scoped>
+    .cont {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
 </style>
