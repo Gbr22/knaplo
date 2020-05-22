@@ -68,7 +68,7 @@ export function getTimetable(weeksAfter = 0){
     let {first, last} = getWeekIndex(weeksAfter);
 
     let id = getWeekStorageId(weeksAfter);
-    if (getFromCache(id) && weeksAfter < 0){
+    if (getFromCache(id) && weeksAfter < -4){
         return Promise.resolve(getFromCache(id));
     } else if (weeksAfter >= 0 && !navigator.onLine){
         return Promise.resolve(getFromCache(id));
