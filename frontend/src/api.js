@@ -147,6 +147,11 @@ export async function getHomework(id,forceNetwork = false){
 window.getTimetable = getTimetable;
 window.getData = getData;
 
+
+export function isHomeworkDone(id){
+    return storage.getJSON(`data/homework/${id}`).IsMegoldva == true
+}
+window.isHomeworkDone = isHomeworkDone;
 export function setHomeworkDone(id,state){
     return new Promise(function(resolve,reject){
         
@@ -168,6 +173,10 @@ export function setHomeworkDone(id,state){
             },
         }).then((r)=>{
             if (r.statusCode == 200 || r.statusCode == 204){
+                let key = `data/homework/${id}`;
+                let hw = storage.getJSON(key);
+                hw.IsMegoldva = state;
+                storage.setJSON(key,hw);
                 resolve();
             } else {
                 fail();
