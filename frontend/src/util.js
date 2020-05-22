@@ -157,62 +157,75 @@ function addEmbedPlayer(id){
 window.addEmbedPlayer = addEmbedPlayer;
 export function formatURLsHTML(html){
     
+    let hasHTML = code => /<\/?[a-z][\s\S]*>/i.test(code);
+    let isText = !hasHTML(html);
+
     let tag = document.createElement("span");
     tag.innerHTML = html;
+
+    
+    
     let inital = tag.innerText;
 
     let links = tag.querySelectorAll("a[href]");
-    let hasHTML = code => /<\/?[a-z][\s\S]*>/i.test(code);
-    if (links.length == 0 && !hasHTML(html)){
+    
+    if (links.length == 0 && isText){
         html = formatURLs(decodeHtmlEntities(html));
-        tag.innerHTML = html;
+        tag.innerHTML = `<p>${html.split("\n").join("</p><p>")}</p>`;
     }
+    
     let tags = tag.querySelectorAll("*");
 
-    //cleanup
-    for (let t of tags){
-        function removeParent(){
-            t.parentElement.insertBefore(t.childNodes[0],t);
-            t.remove();
-        }
-        if (t.attributes.length == 0 && t.childNodes.length == 1 && t.parentElement == tag){
-            let tagnames = [
-                "div",
-                "table","tbody","tr","td",
-                "dl","dd"
-            ];
-            if (tagnames.includes(t.tagName.toLowerCase())){
+    
+
+    let now = tag.innerText;
+    if (!isText){
+        //cleanup
+        for (let t of tags){
+            function removeParent(){
+                t.parentElement.insertBefore(t.childNodes[0],t);
+                t.remove();
+            }
+            if (t.attributes.length == 0 && t.childNodes.length == 1 && t.parentElement == tag){
+                let tagnames = [
+                    "div",
+                    "table","tbody","tr","td",
+                    "dl","dd"
+                ];
+                if (tagnames.includes(t.tagName.toLowerCase())){
+                    removeParent();
+                }
+            }
+            else if (!isSelfClosing(t.tagName) && t.innerHTML == ""){
+                t.remove();
+            } else if (t.innerHTML == "<br>"){
                 removeParent();
             }
         }
-        else if (!isSelfClosing(t.tagName) && t.innerHTML == ""){
-            t.remove();
-        } else if (t.innerHTML == "<br>"){
-            removeParent();
+
+        //make sure no content is lost in the cleanup
+        if (inital.replace(/\n/,"") == now.replace(/\n/,"")){
+            let smaller = html.length-tag.innerHTML.length;
+            /* console.log(`${smaller} smaller!`); */
+        } else {
+            console.error("Content lost!", {inital,now},{initalHTML:html,now:tag.innerHTML});
+            tag.innerHTML = html; //if content is lost reset
         }
     }
-
-    //make sure no content is lost in the cleanup
-
-    let now = tag.innerText;
-    if (inital == now){
-        let smaller = html.length-tag.innerHTML.length;
-        /* console.log(`${smaller} smaller!`); */
-    } else {
-        console.error("Content lost!", {inital,now},{initalHTML:html,now:tag.innerHTML});
-        tag.innerHTML = html; //if content is lost reset
-    }
+    
 
     //link formatting
 
     tags = tag.querySelectorAll("*");
 
-    for (let t of tags){
-        let onlybr = [...t.children].every(e=>e.tagName.toLowerCase() == "br");
-
-
-        if (!hasHTML(t.innerHTML) || onlybr){
-            t.innerHTML = formatURLs(t.textContent);
+    if (!isText){
+        for (let t of tags){
+            let onlybr = [...t.children].every(e=>e.tagName.toLowerCase() == "br");
+    
+    
+            if (!hasHTML(t.innerHTML) || onlybr){
+                t.innerHTML = formatURLs(t.textContent);
+            }
         }
     }
 
