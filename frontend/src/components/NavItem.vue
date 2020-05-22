@@ -7,7 +7,7 @@
 
 <script>
 import GlobalState from '../globalState';
-import { navigate, getFiURL } from '../util';
+import { navigate } from '../util';
 import Icon from './Icon';
 
 export default {
@@ -22,7 +22,6 @@ export default {
         Icon,
     },
     methods:{
-        getFiURL,
         navigate
     }
 }

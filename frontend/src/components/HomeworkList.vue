@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { shortenText, htmlToText, formatURLsHTML, formatDate, toOneLine, getFiURL } from '../util'
+import { shortenText, htmlToText, formatURLsHTML, formatDate, toOneLine } from '../util'
 import { openHomework } from '../components/modals/HomeworkModal.vue';
 import { getHomeworkCompleted, setHomeworkCompleted, toggleHomeworkCompleted, getHWCompObjFArr } from '../dataHandler';
 import GlobalState from '../globalState';
@@ -44,7 +44,6 @@ export default {
         Icon
     },
     methods:{
-        getFiURL,
         formatDate,
         getCompletedCount(){
             return this.list.filter(e=>this.isCompleted(e.homework)).length;

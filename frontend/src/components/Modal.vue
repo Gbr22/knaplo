@@ -6,9 +6,7 @@
                     <div class="header">
                         <h1>{{ title }}</h1>
                         <div class="pad"></div>
-                        <svg class="feather close" v-on:click="closeModal()">
-                            <use xlink:href="feather-sprite.svg#x"/>
-                        </svg>
+                        <Icon class="feather close" src="fi/x" @click.native="closeModal()"/>
                     </div>
                     <component v-bind:is="contentComponent" :obj="obj" :close="closeModal" class="content"></component>
                 </div>
@@ -21,6 +19,7 @@
 <script>
 
 import ModalContent from './ModalContent';
+import Icon from './Icon.vue';
 
 
 let data = {
@@ -71,6 +70,9 @@ export default {
     data:()=>{return data},
     methods:{
         closeModal
+    },
+    components:{
+        Icon
     }
 }
 </script>

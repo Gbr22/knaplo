@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { getFiURL } from '../util';
+
 import Icon from './Icon.vue';
 
 
@@ -25,7 +25,6 @@ export default {
     name:"TimelineItem",
     props:["item"],
     methods:{
-        getFiURL,
         getDayOfWeek(date){
             let days = ["Vasárnap","Hétfő","Kedd","Szerda","Csütörtök","Péntek"];
             return days[date.getDay()];

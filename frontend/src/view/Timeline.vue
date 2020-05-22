@@ -15,9 +15,7 @@
                             {{ getShowName() }}
                         </span>
                         <span class="right">
-                            <svg class="feather">
-                                <use :xlink:href="getFiURL(getShowIcon())"/>
-                            </svg>
+                            <Icon :src="getShowIcon()" />
                         </span>
                         
                         
@@ -55,14 +53,13 @@ import GlobalState from '../globalState';
 import TimelineItem from '../components/TimelineItem';
 import { openModal } from '../components/Modal';
 import SelectModal from '../components/modals/SelectModal';
-import { getFiURL } from '../util';
-
+import Icon from '../components/Icon.vue';
 
 let modes = {
-    all:["Minden", "fi#box"],
-    grades:["Jegyek", "fi#book"],
-    notes:["Feljegyzések", "fi#clipboard"],
-    absences:["Mulasztások","fi#watch"]
+    all:["Minden", "fi/box"],
+    grades:["Jegyek", "fi/book"],
+    notes:["Feljegyzések", "fi/clipboard"],
+    absences:["Mulasztások","fi/watch"]
 };
 
 export default {
@@ -83,7 +80,6 @@ export default {
         }
     },
     methods:{
-        getFiURL,
         getAbsenceCount(justified){
             let sum = 0;
             for (let e of this.GlobalState.processedData.absences){
@@ -157,7 +153,8 @@ export default {
         },
     },
     components:{
-        TimelineItem
+        TimelineItem,
+        Icon
     }
 }
 </script>
