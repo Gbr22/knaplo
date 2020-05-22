@@ -151,6 +151,9 @@ window.getData = getData;
 export function isHomeworkDone(id){
     return storage.getJSON(`data/homework/${id}`).IsMegoldva == true
 }
+export function toggleHomeworkDone(id){
+    return setHomeworkDone(id,!isHomeworkDone(id));
+}
 window.isHomeworkDone = isHomeworkDone;
 export function setHomeworkDone(id,state){
     return new Promise(function(resolve,reject){
