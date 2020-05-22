@@ -449,17 +449,22 @@ export function getWeekReactive(i){
 window.getWeekReactive = getWeekReactive;
 
 
-
-export function getHomeworks(){
+export async function getHomeworks(){
     fetchedHW.clear();
+    let weeks = [0,-1,1]; //important weeks
+    await getSomeHomeworks(weeks);
+    await getSomeHomeworks([-2]);
+}
+export function getSomeHomeworks(weeks){
+    
     return new Promise((resolve,reject)=>{
         let list = new Map();
-        let start = -3;
-        let end = 1;
-        let finished = start;
+        
+        let finished = 0;
+        
         function done(){
             finished++;
-            if (finished == end){
+            if (finished == weeks.length){
                 resolve();
             }
         }
@@ -494,15 +499,11 @@ export function getHomeworks(){
             }
             
         }
-        get(0);
-        for (let i=end; i>start; i--){
-            if (i != 0){
+        
+        for (let i of weeks){
                 get(i);
             }
-        }
-        /* for (let i=start; i <= end; i++){
-            get(i);
-        } */
+        
     }) 
 }
 export function getWeekDaysTT(lessons){
