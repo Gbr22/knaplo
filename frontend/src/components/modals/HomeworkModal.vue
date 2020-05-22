@@ -31,7 +31,7 @@ import GlobalState from '../../globalState';
 import { formatURLsHTML, formatDate } from '../../util';
 import { openModal } from '../Modal';
 import { getHomeworkCompleted, setHomeworkCompleted, toggleHomeworkCompleted, getHWCompObjFArr } from '../../dataHandler';
-import { setHomeworkDone } from '../../api';
+import { setHomeworkDone, getHomework } from '../../api';
 
 
 let HomeworkModal = {
@@ -65,7 +65,11 @@ export default HomeworkModal;
 export function openHomework(elem){
 
     let obj = elem;
-    console.log(elem);
+    console.log("homework",elem);
+    getHomework(elem.id,true).then((data)=>{
+        Object.assign(elem.homework,data);
+        console.log("updated homework",elem,data);
+    });
     openModal(elem.homework.Tantargy,HomeworkModal,obj);
 }
 
