@@ -16,6 +16,14 @@ class Storage {
     setJSON(i,json){
         this.setItem(i,tryJSONStringify(json));
     }
+    has(i){
+        for (let key of Object.keys(localStorage)){
+            if (key == i){
+                return true;
+            }
+        }
+        return false;
+    }
     constructor(){
 
     }
