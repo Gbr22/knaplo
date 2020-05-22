@@ -39,7 +39,11 @@ window.Cookies = Cookies;
 export let ApiEndpoint = "/api/";
 
 if (!storage.getJSON("migrated/hwc1")){
-    homeworksCompleted().forEach(e=>setHomeworkDone(e.id,e.value))    ;
+    homeworksCompleted().forEach(e=>{
+        if (e.value){
+            setHomeworkDone(e.id,e.value);
+        }
+    });
     storage.setJSON("migrated/hwc1",true);
 }
 
