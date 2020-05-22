@@ -134,9 +134,9 @@ export function pushHomeworkCompleted(arr){
     });
 }
 window.pushHomeworkCompleted = pushHomeworkCompleted;
-export async function getHomework(id){
+export async function getHomework(id,forceNetwork = false){
     let s = getFromCache("homework/"+id);
-    if (s){
+    if (s && !forceNetwork){
         return s;
     } else {
         let hw = await genericKretaRequest(`mapi/api/v1/HaziFeladat/TanarHaziFeladat/${id}`,"homework/"+id);

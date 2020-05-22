@@ -380,6 +380,21 @@ function processHomeworks(homeworks){
     for (let e of homeworks){
         index++;
         promises.push(new Promise(function(resolve,reject){
+            if (storage.has(`data/homework/${e.id}`)){
+                let hw = storage.getJSON(`data/homework/${e.id}`);
+                
+                if (!hw.IsMegoldva && !fetchedHW.includes(e.id)){
+                    
+                    fetchedHW.push(e.id);
+                    setTimeout(()=>{
+                        getHomework(e.id,true).then((result)=>{
+                            e.homework = result;
+                        })
+                    },100);       
+                }
+            } else {
+                fetchedHW.push(e.homework.id);
+            }
             getHomework(e.id).then((result)=>{
                 e.homework = result;
                 processed.push(e);
@@ -425,7 +440,9 @@ export function getWeekReactive(i){
     return o;
 }
 window.getWeekReactive = getWeekReactive;
+export var fetchedHW = [];
 export function getHomeworks(){
+    fetchedHW.splice(0,fetchedHW.length);
     return new Promise((resolve,reject)=>{
         let list = new Map();
         let start = -3;
@@ -479,7 +496,6 @@ export function getHomeworks(){
         } */
     }) 
 }
-
 export function getWeekDaysTT(lessons){
     let daysMap = {};
     for (let e of lessons){
