@@ -1,6 +1,64 @@
 import { tryJSON } from './util';
 
+let requestQueue = [];
+
+export function getRunningQueue(){
+    return requestQueue.filter((e)=>e.running);
+}
+export function getNonRunningQueue(){
+    return requestQueue.filter((e)=>!e.running);
+}
+window.getRunningQueue = getRunningQueue;
+window.getNonRunningQueue = getNonRunningQueue;
+
+var requestQueueLimit = 13;
+
+export function popRequestQueue(){
+    if (getNonRunningQueue().length == 0){
+        return;
+    }
+    let o = getNonRunningQueue()[0];
+    o.running = true;
+    function done(){
+        requestQueue.splice(requestQueue.indexOf(o),1);
+        if (getRunningQueue().length < requestQueueLimit){
+            popRequestQueue();
+        }
+    }
+    simpleHttpRequest(o.options).then((ret)=>{
+        o.callback(ret);
+        done();
+    }).catch((err)=>{
+        o.errCallback(err);
+        done();
+    })
+}
+setInterval(()=>{
+    if (getRunningQueue().length < requestQueueLimit){
+        popRequestQueue();
+    }
+},100);
 export function httpRequest(options){
+    if (window.cordova){
+        return simpleHttpRequest(options);
+    } else {
+        return new Promise((resolve,reject)=>{
+            let id = Math.random();
+            requestQueue.push({
+                id,
+                options,
+                date:Date.now(),
+                callback:(ret)=>{
+                    resolve(ret);
+                },
+                errCallback:(err)=>{
+                    reject(err);
+                }
+            });
+        });
+    }
+}
+export function simpleHttpRequest(options){
     return new Promise(function(resolve,reject){
 
         function resolveResponse(res){
@@ -134,4 +192,6 @@ export function httpRequest(options){
         }
     })
 }
+
+
 window.httpRequest = httpRequest;
