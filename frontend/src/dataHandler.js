@@ -673,7 +673,7 @@ function afterLogin(){
             refreshUser().then(()=>{
                 console.log("[afterlogin] refreshed user");
                 function afterData(){
-                    getHomeworks();
+                    
                 }
                 getData().then((result)=>{
                     processData(result);
@@ -681,6 +681,7 @@ function afterLogin(){
                 }).catch(()=>{
                     afterData();
                 })
+                getHomeworks();
                 syncHomeworkCompleted();
             })
         })
