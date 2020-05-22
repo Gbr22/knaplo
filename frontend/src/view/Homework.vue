@@ -16,6 +16,7 @@ import GlobalState from '../globalState'
 import HomeworkList from '../components/HomeworkList.vue';
 import { getHWCompObjFArr } from '../dataHandler';
 import { getDateCompareNumber } from '../util';
+import { isHomeworkDone } from '../api';
 
 
 export default {
@@ -29,7 +30,8 @@ export default {
     },
     methods:{
         isCompleted(hw){
-            return getHWCompObjFArr(hw.Id, this.homeworksCompleted)?.value == true;
+            return hw.IsMegoldva;
+            /* return getHWCompObjFArr(hw.Id, this.homeworksCompleted)?.value == true; */
         },
         sortByDone(a,b){
             return this.isCompleted(a.homework) - this.isCompleted(b.homework);

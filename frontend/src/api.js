@@ -149,7 +149,13 @@ window.getData = getData;
 
 
 export function isHomeworkDone(id){
-    return storage.getJSON(`data/homework/${id}`).IsMegoldva == true
+    let s = storage.getJSON(`data/homework/${id}`);
+    if (s){
+        return s.IsMegoldva == true
+    } else {
+        console.log("hw",id,"not found is storage");
+    }
+    
 }
 export function toggleHomeworkDone(id){
     return setHomeworkDone(id,!isHomeworkDone(id));

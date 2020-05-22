@@ -19,8 +19,8 @@
       <div class="completedSwitch" :data-value="isCompleted(obj.homework)+''">
           <p>Megoldott feladat?</p>
           <span>
-                <button class="true" @click="setHomeworkCompleted(obj.homework.Id,true)">Igen</button>
-                <button class="false" @click="setHomeworkCompleted(obj.homework.Id,false)">Nem</button>
+                <button class="true" @click="setHomeworkCompleted(obj.homework,true)">Igen</button>
+                <button class="false" @click="setHomeworkCompleted(obj.homework,false)">Nem</button>
           </span>
       </div>
   </div>
@@ -31,6 +31,7 @@ import GlobalState from '../../globalState';
 import { formatURLsHTML, formatDate } from '../../util';
 import { openModal } from '../Modal';
 import { getHomeworkCompleted, setHomeworkCompleted, toggleHomeworkCompleted, getHWCompObjFArr } from '../../dataHandler';
+import { setHomeworkDone } from '../../api';
 
 
 let HomeworkModal = {
@@ -48,9 +49,13 @@ let HomeworkModal = {
         }
     },
     methods:{
-        setHomeworkCompleted,
+        setHomeworkCompleted(hw,val){
+            hw.IsMegoldva = val;
+            setHomeworkDone(hw.Id,val);
+        },
         isCompleted(hw){
-            return getHWCompObjFArr(hw.Id, this.homeworksCompleted)?.value == true;
+            return hw.IsMegoldva;
+            /* return getHWCompObjFArr(hw.Id, this.homeworksCompleted)?.value == true; */
         },
         formatDate,
     }
