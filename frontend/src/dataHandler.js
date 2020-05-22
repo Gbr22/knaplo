@@ -7,7 +7,7 @@ import { pushError } from './components/MessageDisplay';
 import AbsenceModal from './components/modals/AbsenceModal';
 import SubjectModal from './components/modals/SubjectModal';
 import { getData, getHomework, getFromCache, fetchInst, pushHomeworkCompleted, refreshUser, getTimetable, getWeekStorageId, fetchedHW } from './api';
-import { getWeekIndex } from './util';
+import { getWeekIndex, formatURLsHTML } from './util';
 import { updateTT } from './view/Timetable';
 
 export function openSubject(subject){
@@ -295,18 +295,7 @@ export class Note extends NormalisedItem {
     noteType;
 
     onclick(){
-        function formatURLs(text){
-            let regex = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/g;
-            
-            
-            return text.replace(regex, function(match){
-                return /* html */`<a href="${match}" class="link" target="_blank">${match}</a>`;
-            });
-            
-        }
-
-
-        openModal(this.title,formatURLs(this.content));
+        openModal(this.title,formatURLsHTML(this.content));
     }
 
     constructor(o) {
