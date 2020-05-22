@@ -393,7 +393,7 @@ function processHomeworks(homeworks){
                     },100);       
                 }
             } else {
-                fetchedHW.push(e.homework.id);
+                fetchedHW.push(e.id);
             }
             getHomework(e.id).then((result)=>{
                 e.homework = result;
