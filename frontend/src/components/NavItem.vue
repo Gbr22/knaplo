@@ -1,17 +1,14 @@
 <template>
   <button v-bind:class="{ active: GlobalState.currentMenu.indexOf(navTo)==0 }" v-on:click="navigate(navTo)">
-        <svg class="feather">
-            <use :xlink:href="getFiURL('#'+icon)"/>
-        </svg>
+        <Icon :src="icon" />
         <b>{{ text }}</b>
-        
     </button>
 </template>
 
 <script>
 import GlobalState from '../globalState';
 import { navigate, getFiURL } from '../util';
-
+import Icon from './Icon';
 
 export default {
     name:"NavItem",
@@ -21,6 +18,9 @@ export default {
             GlobalState   
         }
     ),
+    components:{
+        Icon,
+    },
     methods:{
         getFiURL,
         navigate

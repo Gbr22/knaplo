@@ -12,9 +12,7 @@
                     <button class="completed" :data-value="isCompleted(elem.homework)+''"
                         @click.stop="toggleHomeworkCompleted(elem.homework.Id)"
                     >
-                        <svg class="feather">
-                            <use :xlink:href="getFiURL((isCompleted(elem.homework) ? '#check' : '#x'))"/>
-                        </svg>
+                        <Icon :src="(isCompleted(elem.homework) ? 'fi/check' : 'fi/x')" class="icon" />
                     </button>
                 </div>
             </div>
@@ -27,7 +25,7 @@ import { shortenText, htmlToText, formatURLsHTML, formatDate, toOneLine, getFiUR
 import { openHomework } from '../components/modals/HomeworkModal.vue';
 import { getHomeworkCompleted, setHomeworkCompleted, toggleHomeworkCompleted, getHWCompObjFArr } from '../dataHandler';
 import GlobalState from '../globalState';
-
+import Icon from './Icon';
 
 
 export default {
@@ -39,6 +37,9 @@ export default {
             GlobalState,
             homeworksCompleted:hwc
         }
+    },
+    components:{
+        Icon
     },
     methods:{
         getFiURL,
@@ -113,6 +114,23 @@ export default {
     .bottom {
         display: flex;
     }
+    
+    
+    .title b {
+        color: #4ec275;
+    }
+    
+    .until i {
+        font-style: normal;
+        color: var(--text-smol);
+    }
+    .desc {
+        flex: 1;
+        color: var(--text-smol);
+        word-break: break-word;
+    }
+</style>
+<style>
     .completed {
         flex: none;
         border: none;
@@ -133,22 +151,10 @@ export default {
         opacity: 0.5;
         
     }
-    .title b {
-        color: #4ec275;
-    }
     .completed[data-value="true"] svg {
         stroke: #4ec275;
         border: 2px solid #4ec27598;
         background-color: #4ec27549;
         
-    }
-    .until i {
-        font-style: normal;
-        color: var(--text-smol);
-    }
-    .desc {
-        flex: 1;
-        color: var(--text-smol);
-        word-break: break-word;
     }
 </style>

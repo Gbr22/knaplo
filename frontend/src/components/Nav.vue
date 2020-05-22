@@ -18,12 +18,12 @@ export default {
     data:()=>(
         {
             items: [
-                {text:"Átlagok", navTo:"avgs", icon:"bar-chart-2"},
-                {text:"Idővonal", navTo:"timeline", icon:"clock"},
-                {text:"Órarend",navTo:"timetable", icon:'calendar'},
-                {text:"Házik",navTo:"homework", icon:'edit-3'},
-                /* {text:"Lezárások", navTo:"halfyr", icon:"list"}, */
-                {text:"Menü", navTo:"more", icon:"menu"},
+                {text:"Átlagok", navTo:"avgs", icon:"fi/bar-chart-2"},
+                {text:"Idővonal", navTo:"timeline", icon:"fi/clock"},
+                {text:"Órarend",navTo:"timetable", icon:'fi/calendar'},
+                {text:"Házik",navTo:"homework", icon:'fi/edit-3'},
+                /* {text:"Lezárások", navTo:"halfyr", icon:"fi/list"}, */
+                {text:"Menü", navTo:"more", icon:"fi/menu"},
             ]
         }
     )
