@@ -125,7 +125,7 @@ export default {
             
             function afterHomework(homework){
                 if (homework){
-                    openHomework({lesson,homework});
+                    openHomework({lesson,homework,id});
                 }
             }
             if (id == null){
