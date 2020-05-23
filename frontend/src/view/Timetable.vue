@@ -22,8 +22,12 @@
             </div>
             
         </div>
-        <div v-if="selectedWeek" id="tableWrap" @scroll="tableScroll" class="pc-no-scroll">
-            <div v-for="day in selectedWeek.days" :key="day.day" class="day">
+        <swiper
+            ref="mySwiper"
+            :options="{}"
+            v-if="selectedWeek"
+        >
+            <swiper-slide v-for="day in selectedWeek.days" :key="day.day" class="day">
                 <h2>{{ getDayName(day.day) }}</h2>
                 <div v-for="lesson in day.lessons" :key="lesson.LessonId" class="lesson" @click="openLesson(lesson)">
                     <span class="timeIndex">
@@ -57,7 +61,10 @@
                     </span>
                 </div>
 
-            </div>
+            </swiper-slide>
+        </swiper>
+        <div v-if="selectedWeek" id="tableWrap" @scroll="tableScroll" class="pc-no-scroll">
+            
         </div>
     </div>
 </template>
@@ -68,11 +75,30 @@ import { formatDate, getDayName, getDayShortName, formatTime, shortenText } from
 import { openHomework } from '../components/modals/HomeworkModal.vue';
 import { getHomework } from '../api';
 import { getWeekReactive } from '../dataHandler';
+import { Swiper, SwiperSlide, directive } from 'vue-awesome-swiper'
+import 'swiper/css/swiper.css'
 
 export let updateTT = ()=>{};
 
 export default {
     name:"Timetable",
+    components: {
+        Swiper,
+        SwiperSlide
+    },
+    directives: {
+        swiper: directive
+    },
+    computed: {
+      swiper() {
+        let s = this.$refs.mySwiper.$swiper;
+        
+        s.on('slideChange', (i)=>{
+            this.dayIndex = s.activeIndex;
+        });
+        return s;
+      }
+    },
     data(){
         let timetable = GlobalState.processedData.timetable;    
 
@@ -89,6 +115,9 @@ export default {
         };
 
         return o;
+    },
+    mounted(){
+        this.swiper.slideTo(0, 0, false);
     },
     methods:{
         openLesson(lesson){
@@ -117,14 +146,9 @@ export default {
             console.log(lesson);
         },
         gotoDay(index){
+            
             if (this.selectedWeek){
-                let e = document.getElementById("tableWrap");
-                let scroll = e.scrollWidth/this.selectedWeek.days.length * index;
-                e.scrollTo({
-                    top:0,
-                    left:scroll,
-                    
-                })
+                this.swiper.slideTo(index, 0, false);
             }
             
         },
@@ -184,17 +208,7 @@ export default {
     .header h2 svg {
         stroke: var(--text-smol);
     }
-    #tableWrap {
-        white-space: nowrap;
-        width: 100%;
-        display: block;
-        overflow: auto;
-        scroll-snap-type: x mandatory;
-        overflow: hidden; /*TODO: Fix scroll crash*/
-    }
-    #tableWrap * {
-        white-space: normal;
-    }
+    
     #dayButtons {
         display: flex;
         width: 100%;
