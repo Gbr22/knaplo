@@ -19,16 +19,14 @@
 <script>
 
 import Icon from './Icon.vue';
+import { getDayOfWeek } from '../util';
 
 
 export default {
     name:"TimelineItem",
     props:["item"],
     methods:{
-        getDayOfWeek(date){
-            let days = ["Vasárnap","Hétfő","Kedd","Szerda","Csütörtök","Péntek"];
-            return days[date.getDay()];
-        },
+        getDayOfWeek,
         formatDate(date){
             let p = (n) => n.toString().padStart(2,0);
             return p(date.getMonth()+1)+"/"+p(date.getDate());

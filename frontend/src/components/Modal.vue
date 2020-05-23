@@ -130,6 +130,7 @@ export default {
         display: flex;
         padding: 20px;
         padding-bottom: 0;
+        word-break: break-word;
     }
     .pad {
         width: 20px;

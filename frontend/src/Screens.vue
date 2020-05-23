@@ -157,13 +157,13 @@ export default {
     text-align: right;
     
 }
-.recent .date {
+.recent .date, .tinyDate {
     color: var(--text-smol);
 }
-.gradeLike .date b {
+.gradeLike .date b, .tinyDate b {
     font-weight: normal;
 }
-.gradeLike .date i {
+.gradeLike .date i, .tinyDate i {
     font-style: normal;
     font-size: 15px;
 }

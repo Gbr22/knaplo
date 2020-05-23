@@ -154,6 +154,10 @@ function addEmbedPlayer(id){
     thumb.remove();
     document.querySelector(`[data-id='${id}']`).appendChild(div.children[0]);
 }
+export function getDayOfWeek(date){
+    let days = ["Vasárnap","Hétfő","Kedd","Szerda","Csütörtök","Péntek"];
+    return days[date.getDay()];
+}
 window.addEmbedPlayer = addEmbedPlayer;
 export function formatURLsHTML(html){
     

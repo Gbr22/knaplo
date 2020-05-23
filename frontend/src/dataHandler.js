@@ -264,7 +264,7 @@ export class AbsentDay extends Absence {
 
 
 }
-
+import { openNote } from './components/modals/NoteModal';
 export class Note extends NormalisedItem {
     type="note";
     
@@ -274,7 +274,8 @@ export class Note extends NormalisedItem {
     noteType;
 
     onclick(){
-        openModal(this.title,formatURLsHTML(this.content));
+        openNote(this);
+        /* openModal(this.title,formatURLsHTML(this.content)); */
     }
 
     constructor(o) {
