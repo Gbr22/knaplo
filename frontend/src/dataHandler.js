@@ -23,28 +23,7 @@ if (window.cordova){
 export function homeworksCompleted(){
     return GlobalState.processedData.homeworksCompleted;
 }
-export function syncHomeworkCompleted(arr = homeworksCompleted()){
-    pushHomeworkCompleted(arr).then((result)=>{
-        if (result){
-            for (let p in result){
-                let id = p;
-                let state = result[p];
-                assignHomeworkCompletedState(id,state);
-            }
-            saveHWC();
-        }
-    })
-}
 
-function processHomeworksCompleted(){
-    if (localStorage.getItem("homeworksCompleted")){
-        try {
-            homeworksCompleted().push(...JSON.parse(localStorage.getItem("homeworksCompleted"))  );
-        } catch(err){
-            err;
-        }
-    }
-}
 window.homeworksCompleted = homeworksCompleted;
 
 export function getHWCompObjFArr(id,arr){
@@ -681,7 +660,6 @@ function afterLogin(){
                     afterData();
                 })
                 getHomeworks();
-                syncHomeworkCompleted();
             })
         })
         
@@ -725,8 +703,6 @@ export function refreshPage(page){
                     
                     getHomeworks().then((result)=>{
                         resolve();
-                        processHomeworksCompleted();
-                        syncHomeworkCompleted();
                         console.log("refreshed homework");
                     });
                 })
