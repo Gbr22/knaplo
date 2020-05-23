@@ -38,6 +38,13 @@ export default {
 </script>
 
 <style>
+.notransition * { 
+  -webkit-transition: none !important; 
+  -moz-transition: none !important; 
+  -o-transition: none !important; 
+  -ms-transition: none !important; 
+  transition: none !important; 
+} 
 * {
     font-family: Helvetica, sans-serif;
 }
@@ -62,13 +69,13 @@ html, body, #app {
     border-radius: 8px;
     font-size: 16px;
     box-shadow: var(--elem-shadow);
-    transition: all 0.3s ease;
+    transition: all 0.15s ease;
     background-color: var(--button-color);
     outline: none;
 }
 .btn:hover {
     opacity: 0.7;
-    transform: scale(0.95);
+    transform: scale(0.97);
 }
 #pageviewer {
     flex: 1;

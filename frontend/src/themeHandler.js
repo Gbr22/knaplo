@@ -7,6 +7,7 @@ class ThemeHandlerClass {
         return theme ?? "light";
     }
     switchTo(theme){
+        document.body.classList.add("notransition");
         let to = document.querySelector(`[data-theme-style][title="${theme}"]`);
         if (!to){return}
         to.disabled = false;
@@ -15,6 +16,8 @@ class ThemeHandlerClass {
         for (let s of styles){
             s.disabled = true;
         }
+        document.body.offsetHeight;
+        document.body.classList.remove("notransition");
         localStorage.setItem("theme", theme);
     }
     toggleDarkMode(){

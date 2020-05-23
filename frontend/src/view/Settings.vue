@@ -10,10 +10,10 @@
             <h1 id="fullname">{{ GlobalState.data ? GlobalState.data.Name : "#### ####" }}</h1>
         </div>
 
-        <section id="more">
+        <section id="more" class="grid">
             <div class="header">Továbbiak</div>
             <div class="content">
-                <div class="item" @click="navigate('more/halfyr')">
+                <div class="item btn" @click="navigate('more/halfyr')">
                     <span class="icon">
                         <svg class="feather">
                             <use xlink:href="feather-sprite.svg#list"/>
@@ -23,7 +23,7 @@
                         Lezárások
                     </p>
                 </div>
-                <div class="item" @click="openConfirm('Biztosan Kilép?',logout)">
+                <div class="item btn" @click="openConfirm('Biztosan Kilép?',logout)">
                     <span class="icon">
                         <svg class="feather">
                             <use xlink:href="feather-sprite.svg#log-out"/>
@@ -85,10 +85,14 @@
 import GlobalState from '../globalState';
 import ThemeHandler from '../themeHandler';
 import Cookies from 'js-cookie';
-import { navigate } from '../util';
+import { navigate, formatURLsHTML } from '../util';
 import ConfirmModal, { openConfirm } from '../components/modals/ConfirmModal.vue';
 import storage from '../storage';
 import options from '../options';
+import { httpRequest } from '../http';
+import { openModal } from '../components/Modal.vue';
+
+
 export default {
     name: 'Settings',
     components: {
@@ -110,6 +114,13 @@ export default {
             GlobalState.user = null;
             Cookies.remove("loginInfo");
             storage.removeItem("loginInfo");
+        },
+        privacy(){
+            httpRequest({
+                url:"/privacy.txt"
+            }).then((resp)=>{
+                openModal("Adatkezelés",formatURLsHTML(resp.body));
+            })
         }
     }
     
@@ -126,13 +137,31 @@ section .header {
     padding: 5px 10px;
     font-size: 18px;
 }
+section .content {
+    margin: 0 20px;
+}
+section.grid .content {
+    display: flex;
+    flex-direction: row;
+    margin: 0 15px;
+}
+section.grid .item {
+    flex: 1;
+    height: 60px;
+    flex-direction: column;
+    justify-content: center;
+    background-color: var(--element-color);
+    margin: 0 5px;
+}
+section.grid .item p {
+    flex: 0;
+}
 section .item {
     display: flex;
     flex-direction: row;
     align-items: center;
     background-color: var(--element-color);
     box-shadow: var(--elem-shadow);
-    margin: 0 20px;
     padding: 10px 10px;
     border-radius: 15px;
     margin-bottom: 8px;
@@ -150,6 +179,7 @@ section .item {
     flex: 1;
     text-align: left;
     padding: 0 5px;
+    vertical-align: middle;
 }
 
 #profile_circle_container {
