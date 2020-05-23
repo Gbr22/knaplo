@@ -1,0 +1,4 @@
+A K napló alakalmazás arra való, hogy a KRÉTA szervereiről lekérje az adatokat, és egy szép, használható felületen megjelenítse azokat.
+Az adatok kizárólag az alkalmazás és a KRÉTA szerverei között kerülnek tavábbításra.
+Az alkalmazás statisztikát sem gyűjt.
+Az adataid kizárólag annyira vannak biztonságban amennyire a hivatalos alkalmazás esetén.
