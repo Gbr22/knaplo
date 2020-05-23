@@ -4,15 +4,12 @@
             <h1>Órarend</h1>
             <h2 v-if="selectedWeek">
                 <button @click="changeWeek(-1)" v-bind:class="{ nomore: !nextWeek(-1) }">
-                    <svg class="feather">
-                        <use xlink:href="feather-sprite.svg#chevron-left"/>
-                    </svg>
+                    <Icon src="fi/chevron-left" />
+                    
                 </button>
                 <span class="text">{{ TTfrom() }} - {{ TTto() }}</span>
                 <button @click="changeWeek(1)" v-bind:class="{ nomore: !nextWeek(1) }">
-                    <svg class="feather">
-                        <use xlink:href="feather-sprite.svg#chevron-right"/>
-                    </svg>
+                    <Icon src="fi/chevron-right" />
                 </button>
             </h2>
             <div id="dayButtons" v-if="selectedWeek">
@@ -54,9 +51,7 @@
                         <span class="teacher">
                             <span class="short">{{ shortName(lesson.Teacher) }}</span>
                             <span class="long">{{ lesson.Teacher }}</span>
-                            <svg class="feather" v-if="lesson.TeacherHomeworkId">
-                                <use xlink:href="feather-sprite.svg#edit-3"/>
-                            </svg>
+                            <Icon src="fi/edit-3" v-if="lesson.TeacherHomeworkId"/>
                         </span>
                     </span>
                 </div>
@@ -300,7 +295,7 @@ export default {
         width: max(40%, 250px);
         text-align: right;
     }
-    .moreInfo svg {
+    /deep/ .moreInfo svg {
         width: 18px;
         height: 18px;
         display: block;

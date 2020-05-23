@@ -3,9 +3,7 @@
         
         <div id="profile_circle_container">
             <span id="profile_circle">
-                <svg class="feather">
-                    <use xlink:href="feather-sprite.svg#user"/>
-                </svg>
+                <Icon src="fi/user" />
             </span>
             <h1 id="fullname">{{ GlobalState.data ? GlobalState.data.Name : "#### ####" }}</h1>
         </div>
@@ -15,9 +13,7 @@
             <div class="content">
                 <div class="item btn" @click="navigate('more/halfyr')">
                     <span class="icon">
-                        <svg class="feather">
-                            <use xlink:href="feather-sprite.svg#list"/>
-                        </svg>
+                        <Icon src="fi/list" />
                     </span>
                     <p>
                         Lezárások
@@ -25,9 +21,7 @@
                 </div>
                 <div class="item btn" @click="openConfirm('Biztosan Kilép?',logout)">
                     <span class="icon">
-                        <svg class="feather">
-                            <use xlink:href="feather-sprite.svg#log-out"/>
-                        </svg>
+                        <Icon src="fi/log-out" />
                     </span>
                     <p>
                         Kijelentkezés
@@ -40,9 +34,7 @@
             <div class="content">
                 <div class="item">
                     <span class="icon">
-                        <svg class="feather">
-                            <use xlink:href="feather-sprite.svg#moon"/>
-                        </svg>
+                        <Icon src="fi/moon" />
                     </span>
                     <p>
                         Sötét téma
@@ -56,9 +48,7 @@
                 </div>
                 <div class="item" v-for="[key, e] in Object.entries(options.options)" :key="key">
                     <span class="icon">
-                        <svg class="feather">
-                            <use :xlink:href="'feather-sprite.svg#'+e.icon"/>
-                        </svg>
+                        <Icon :src="'fi/'+e.icon" />
                     </span>
                     <p>
                         {{ e.text }}
@@ -91,12 +81,13 @@ import storage from '../storage';
 import options from '../options';
 import { httpRequest } from '../http';
 import { openModal } from '../components/Modal.vue';
+import Icon from '../components/Icon.vue';
 
 
 export default {
     name: 'Settings',
     components: {
-        
+        Icon
     },
     data:()=>{
         return {

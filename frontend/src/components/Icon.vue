@@ -1,5 +1,5 @@
 <template>
-    <span v-html="getIcon(src)" class="cont">
+    <span v-html="getIcon(src)" class="icon">
 
     </span>
 </template>
@@ -37,7 +37,7 @@ export default {
 </script>
 
 <style scoped>
-    .cont {
+    .icon {
         display: inline-flex;
         align-items: center;
         justify-content: center;

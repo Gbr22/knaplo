@@ -83,14 +83,9 @@ async function tryLogin(){
     }
 }
 function hideSplash(){
-    Vue.nextTick(function(){
-        let img = new Image();
-        img.src = "feather-sprite.svg";
-        img.onload = img.onerror = function(){
-            navigator.splashscreen.hide();
-        }
+    Vue.nextTick(()=>{
+        navigator.splashscreen.hide();
     })
-    
 }
 if (window.cordova != undefined){
     document.addEventListener("deviceready", function(){

@@ -10,10 +10,7 @@
             <div id="avg_detail_cont">
                 <span class="section avg">
                     
-                    <svg class="feather">
-                        <use xlink:href="feather-sprite.svg#bar-chart-2"/>
-                    </svg>
-                    <!-- <i class="material-icons left">equalizer</i> -->
+                    <Icon src="fi/bar-chart-2" />
                     <span class="right">
                         <span class="big">
                             {{ format(getAverage()) }}
@@ -27,9 +24,7 @@
 
                 <span class="section rank">
                     
-                    <svg class="feather">
-                        <use xlink:href="feather-sprite.svg#award"/>
-                    </svg>
+                    <Icon src="fi/award" />
                     <!-- <i class="material-icons left">stars</i> -->
                     <span class="right">
                         <span class="big">
@@ -48,9 +43,7 @@
                 <span class="left">{{ subject.name }}</span>
                 <span class="right" v-if="!isNaN(subject.average)">
                     <span>{{ format(subject.average) || "#" }}</span>
-                    <svg class="feather" v-bind:class="{ up: isRoundedUp(subject) }">
-                        <use xlink:href="feather-sprite.svg#chevrons-right"/>
-                    </svg>
+                    <Icon src="fi/chevrons-right" v-bind:class="{ up: isRoundedUp(subject) }"/>
                     <!-- <i class="material-icons" v-bind:class="{ up: isRoundedUp(subject) }">
                         arrow_right_alt
                     </i> -->
@@ -365,7 +358,7 @@ export default {
 #avg_detail_cont {
     vertical-align: middle;
 }
-#avg_detail_cont svg {
+#avg_detail_cont .icon {
     vertical-align: middle;
 }
 #avg_detail_cont i {
@@ -495,5 +488,9 @@ export default {
     margin: auto;
     width: 22px;
     height: 22px;
+}
+
+.subject_header .right .icon.up svg {
+    stroke: #1CAA53;    
 }
 </style>

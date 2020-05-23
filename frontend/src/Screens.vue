@@ -354,9 +354,7 @@ export default {
     stroke: rgb(218, 134, 95);    
 }
 
-.subject_header .right svg.up {
-    stroke: #1CAA53;    
-}
+
 
 .subject_grades {
     color: var(--text-smol);

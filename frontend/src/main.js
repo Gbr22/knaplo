@@ -17,8 +17,11 @@ window.GlobalState = GlobalState;
 import VueVirtualScroller from 'vue-virtual-scroller'
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 import { closeModal } from './components/Modal';
+import Icon from './components/Icon';
+
 
 Vue.use(VueVirtualScroller)
+Vue.component("Icon",Icon);
 
 new Vue({
   data:GlobalState,

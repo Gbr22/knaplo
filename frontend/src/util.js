@@ -292,15 +292,6 @@ export function navigate(navTo){
     GlobalState.currentMenu = to;
     localStorage.setItem("currentMenu",to);
 }
-export function getFiURL(fi){
-    let url = "feather-sprite.svg"
-    if (!fi){
-        return url;
-    } else {
-        return url+fi.replace("/fi#","#").replace("fi#","#");
-    }
-
-}
 export function getCookieFromString(cname,string) {
     var name = cname + "=";
     var decodedCookie = decodeURIComponent(string);
