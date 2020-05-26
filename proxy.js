@@ -72,8 +72,8 @@ const proxy = http.createServer((pReq, pRes) => {
     })
     pReq.on('end', () => {
         const req = protocols[url.protocol].request(options, (res) => {
-            pRes.statusCode = res.statusCode;
-            pRes.statusMessage = res.statusMessage;
+            
+            pRes.writeHead(res.statusCode, res.statusMessage,res.headers);
             res.pipe(pRes);
         })
         req.on('error', (error) => {
