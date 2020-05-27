@@ -1,7 +1,7 @@
-const http = require('http');
-const net = require('net');
+
 const { URL } = require('url');
-const https = require('https');
+
+const { http, https } = require('follow-redirects');
 // Create an HTTP tunneling proxy
 const proxy = http.createServer((pReq, pRes) => {
     pRes.setHeader("Access-Control-Allow-Origin","*");
