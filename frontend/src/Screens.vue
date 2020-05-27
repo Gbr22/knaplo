@@ -202,7 +202,7 @@ export default {
     background-color: var(--embed-color);
     box-shadow: var(--elem-shadow);
     padding: 12px;
-    margin: 5px auto;
+    margin: 5px 0;
     border-radius: 8px;
     font-size: inherit;
     font-family: inherit;
@@ -211,6 +211,7 @@ export default {
     text-align: left;
     outline: none;
     cursor: pointer;
+    display: block;
 }
 .embedFormat .desc {
     color: var(--text-smol);

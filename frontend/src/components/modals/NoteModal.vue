@@ -60,10 +60,6 @@ window.openNote = openNote;
         padding: 20px;
         box-sizing: border-box;
     }
-    .noteContent :first-child {
-        padding-top: 0 !important;
-        margin-top: 0 !important;
-    }
     .user {
         margin: 20px;
         margin-top: 0;
