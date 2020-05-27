@@ -198,6 +198,27 @@ export default {
     margin-top: -5px;
     content: '';
 }
+.embedFormat {
+    background-color: var(--embed-color);
+    box-shadow: var(--elem-shadow);
+    padding: 12px;
+    margin: 5px auto;
+    border-radius: 8px;
+    font-size: inherit;
+    font-family: inherit;
+    border: none;
+    box-sizing: border-box;
+    text-align: left;
+    outline: none;
+    cursor: pointer;
+}
+.embedFormat .desc {
+    color: var(--text-smol);
+    margin: 4px 0;
+}
+.embedFormat .url a {
+    color: var(--link-color);
+}
 .youtubeEmbed {
     display: block;
     width: min(80vw, 350px);
@@ -255,6 +276,7 @@ export default {
 .youtubeEmbed .thumbnail * {
     z-index: 1;
 }
+
 .youtubeEmbed .thumbnail::before {
     border-radius: inherit;
     position: absolute;

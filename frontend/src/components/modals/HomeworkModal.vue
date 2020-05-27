@@ -158,8 +158,4 @@ export function openHomework(elem){
         padding: 20px;
         box-sizing: border-box;
     }
-    .hwContent :first-child {
-        padding-top: 0 !important;
-        margin-top: 0 !important;
-    }
 </style>

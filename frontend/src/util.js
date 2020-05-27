@@ -234,6 +234,14 @@ export function formatURLsHTML(html){
         }
     }
 
+    function fetchSiteData(href){
+        if (!storage.has("data/pagehtml/"+getSiteData(href))){
+            setTimeout(()=>{
+                getSiteData(href);
+            },0);
+        }
+    }
+
     links = tag.querySelectorAll("a[href]");
     links.forEach((l)=>{
         let url = l.getAttribute("href");
@@ -258,7 +266,27 @@ export function formatURLsHTML(html){
                 
 
 
-            } else {
+            } else if (url.indexOf("youtube") == -1){
+                if (getSiteDataSync(url)){
+                    let data = getSiteDataSync(url);
+                    let d = document.createElement("button");
+                    l.parentNode.replaceChild(d, l);
+                    d.classList.add("embedFormat");
+                    let title = data.og.title || data.title
+                    let desc = data.og.description || data.desc;
+                    d.setAttribute("onclick",`this.querySelector("a").click()`);
+                    d.innerHTML = `
+                        ${title ? `<div class="title">${shortenText(title,25)}</div>` : ''}
+                        ${desc ? `<div class="desc">${shortenText(desc,40)}</div>` : ''}
+                        <div class="url"><a href="${url}" target="_blank">${new URL(url).hostname}</a></div>
+                    `
+                }
+                else {
+                    fetchSiteData(url);
+                    normalLink();
+                }
+            }
+            else {
                 normalLink();
             }
             
@@ -287,11 +315,7 @@ export function formatURLsHTML(html){
             let d = getSiteDataSync(href);
             title = `<div class="title"><a href="${href}" target="_blank">${d.og.title}</a></div>`;
         }
-        if (!storage.has("data/pagehtml/"+getSiteData(href))){
-            setTimeout(()=>{
-                getSiteData(href);
-            },0);
-        }
+        fetchSiteData(href);
 
         d.innerHTML = `
             <div class="player">
@@ -343,7 +367,7 @@ import storage from './storage';
 var processedSiteDataMap = new Map();
 export function getSiteDataSync(url){
     let id = "data/pagehtml/"+url;
-    if (storage.has(id)){
+    if (storage.getItem(id)){
         return processSiteData(storage.getItem(id));
     }
     return null;
@@ -377,23 +401,31 @@ export function processSiteData(body){
     
     return processedSiteDataMap.get(body) || null;
 }
+let fetchingSiteData = [];
 export function getSiteData(url){
     return new Promise(function(resolve,reject){
         function afterPage(body){
             try {
-                processSiteData(body);
+                resolve(processSiteData(body));
             } catch (err){
                 console.error("Could not parse og",err);
                 resolve(null);
             }
         }
+        
         let id = "data/pagehtml/"+url;
-        if (storage.has(id)){
+        if (storage.getItem(id)){
             afterPage(storage.getItem(id));
+            
             return;
-        } else {
-            storage.setItem(id,"");
         }
+        else if (fetchingSiteData.includes(url)){
+            
+            resolve(null);
+            return;
+        }
+        fetchingSiteData.push(url);
+        
         httpRequest({
             url:url,
             headers:{
@@ -401,7 +433,13 @@ export function getSiteData(url){
             }
         }).then((res)=>{
             if (res.statusCode == 200){
-                let body = res.body;
+                let body = res.body.split("</head>")[0]+"</head></html>";
+                let meta_tags = body.match(/<meta.+>|<title.+>/g);
+                let head = "<head>";
+                head += meta_tags.join("");
+                head += "</head>";
+                body = head;
+                
                 storage.setItem(id,body);
                 afterPage(body);
             } else {
