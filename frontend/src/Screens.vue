@@ -206,44 +206,42 @@ export default {
     position: relative;
     border-radius: 8px;
     overflow: hidden;
-    border: 4px solid var(--divider-color);
+    background-color: var(--embed-color);
+    box-shadow: var(--elem-shadow);
+    padding: 5px;
+    padding-bottom: 0;
 }
 .youtubeEmbed .ratio {
     display: block;
     width: 100%;
     height: auto;
     background-color: black;
+    border-radius: inherit;
 }
 .youtubeEmbed span {
     visibility: hidden;
     position: absolute;
     top: 0;
 }
+.youtubeEmbed .player {
+    position: relative;
+    border-radius: 4px;
+    overflow: hidden;
+}
 .youtubeEmbed .title {
-    position: absolute;
-    width: calc(100%);
-    top: 10px;
-    left: 0;
-    padding: 0 10px;
-    box-sizing: border-box;
-    text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
-    color: white;
-    font-weight: bold;
-    font-size: 20px;
+    padding: 8px 8px;
+    padding-top: 10px;
 }
-.youtubeEmbed .thumbnail::after,
-.youtubeEmbed .thumbnail::before {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    content: '';
+.youtubeEmbed .title a {
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+    text-decoration: none;
+    color: var(--link-color);
 }
-.youtubeEmbed .thumbnail::after {
-    background-image: linear-gradient(to bottom, rgba(0,0,0,0.4) 10%, transparent);
-    z-index: 0;
+.youtubeEmbed .title a:hover {
+    opacity: 0.6;
 }
+
 .youtubeEmbed .thumbnail {
     background-size: cover;
     background-position: center;
@@ -251,12 +249,20 @@ export default {
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    border-radius: inherit;
     -webkit-tap-highlight-color:  rgba(255, 255, 255, 0); 
 }
 .youtubeEmbed .thumbnail * {
     z-index: 1;
 }
 .youtubeEmbed .thumbnail::before {
+    border-radius: inherit;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    content: '';
     z-index: -2;
     background-color: black;
     opacity: 0;

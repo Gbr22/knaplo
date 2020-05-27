@@ -153,7 +153,7 @@ function addEmbedPlayer(id){
     `;
     let thumb = document.querySelector(`[data-id='${id}'].thumbnail`);
     thumb.remove();
-    document.querySelector(`[data-id='${id}']`).appendChild(div.children[0]);
+    document.querySelector(`[data-id='${id}'] .player`).appendChild(div.children[0]);
 }
 export function getDayOfWeek(date){
     let days = ["Vasárnap","Hétfő","Kedd","Szerda","Csütörtök","Péntek"];
@@ -285,7 +285,7 @@ export function formatURLsHTML(html){
         
         if (getSiteDataSync(href)?.og?.title){
             let d = getSiteDataSync(href);
-            title = `<div class="title">${d.og.title}</div>`;
+            title = `<div class="title"><a href="${href}" target="_blank">${d.og.title}</a></div>`;
         }
         if (!storage.has("data/pagehtml/"+getSiteData(href))){
             setTimeout(()=>{
@@ -294,14 +294,15 @@ export function formatURLsHTML(html){
         }
 
         d.innerHTML = `
-            <canvas width="16" height="9" class="ratio"></canvas>
-            <div style="background-image: url(${`https://i.ytimg.com/vi/${id}/hqdefault.jpg`})" data-id="${id}" class="thumbnail" onclick="addEmbedPlayer('${id}')">
-                ${title}
-                <div class="play">
+            <div class="player">
+                <canvas width="16" height="9" class="ratio"></canvas>
+                <div style="background-image: url(${`https://i.ytimg.com/vi/${id}/hqdefault.jpg`})" data-id="${id}" class="thumbnail" onclick="addEmbedPlayer('${id}')">
+                    <div class="play">
+                    </div>
                 </div>
+                <span>[YouTube]</span>
             </div>
-            <span>[YouTube]</span>
-            
+            ${title}
         `;
     }
     html = tag.innerHTML;

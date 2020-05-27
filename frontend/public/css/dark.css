@@ -1,6 +1,7 @@
 :root {
     --bg-color: #121212;
     --element-color: #1d1d1d;
+    --embed-color: #3a3a3a;
     --elem-active: rgba(255, 255, 255, 0.11);
     --element2-color: rgb(68, 68, 68);
     --text-color: rgb(216, 216, 216);
