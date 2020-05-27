@@ -204,7 +204,7 @@ export default {
     margin: 5px auto;
     box-sizing: border-box;
     position: relative;
-    border-radius: 4px;
+    border-radius: 8px;
     overflow: hidden;
     border: 4px solid var(--divider-color);
 }
@@ -219,6 +219,31 @@ export default {
     position: absolute;
     top: 0;
 }
+.youtubeEmbed .title {
+    position: absolute;
+    width: calc(100%);
+    top: 10px;
+    left: 0;
+    padding: 0 10px;
+    box-sizing: border-box;
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+}
+.youtubeEmbed .thumbnail::after,
+.youtubeEmbed .thumbnail::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    content: '';
+}
+.youtubeEmbed .thumbnail::after {
+    background-image: linear-gradient(to bottom, rgba(0,0,0,0.4) 10%, transparent);
+    z-index: 0;
+}
 .youtubeEmbed .thumbnail {
     background-size: cover;
     background-position: center;
@@ -228,15 +253,14 @@ export default {
     cursor: pointer;
     -webkit-tap-highlight-color:  rgba(255, 255, 255, 0); 
 }
+.youtubeEmbed .thumbnail * {
+    z-index: 1;
+}
 .youtubeEmbed .thumbnail::before {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    z-index: -2;
     background-color: black;
     opacity: 0;
-    content: '';
+    
     transition: opacity 0.2s ease-in-out;
 }
 .youtubeEmbed .play {

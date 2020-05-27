@@ -1,4 +1,5 @@
 import { closeModal } from './components/Modal.vue';
+import { httpRequest } from './http';
 
 export function tryJSON(string){
     try {
@@ -266,15 +267,36 @@ export function formatURLsHTML(html){
         l.setAttribute("target","_blank");
     })
     let youtubelinks = tag.querySelectorAll('a[href*="youtube.com"]');
+
+    function runLater(func){
+        return `<script>(${func.toString()})()</script>`;
+    }
+
     for (let e of youtubelinks){
-        let id = (new URL(e.getAttribute("href"))).searchParams.get("v");
+        let href = e.getAttribute("href");
+        let id = (new URL(href)).searchParams.get("v");
         let d = document.createElement("div");
         e.parentNode.replaceChild(d, e);
         d.classList.add("youtubeEmbed");
         d.setAttribute("data-id",id);
+
+        let title = "";
+
+        
+        if (getSiteDataSync(href)?.og?.title){
+            let d = getSiteDataSync(href);
+            title = `<div class="title">${d.og.title}</div>`;
+        }
+        if (!storage.has("data/pagehtml/"+getSiteData(href))){
+            setTimeout(()=>{
+                getSiteData(href);
+            },0);
+        }
+
         d.innerHTML = `
             <canvas width="16" height="9" class="ratio"></canvas>
             <div style="background-image: url(${`https://i.ytimg.com/vi/${id}/hqdefault.jpg`})" data-id="${id}" class="thumbnail" onclick="addEmbedPlayer('${id}')">
+                ${title}
                 <div class="play">
                 </div>
             </div>
@@ -308,3 +330,87 @@ export function getCookieFromString(cname,string) {
     return "";
 }
 window.getCookieFromString = getCookieFromString;
+
+export function parseHTML(html){
+    var parser = new DOMParser();
+    var htmlDoc = parser.parseFromString(html, 'text/html');
+    return htmlDoc;
+}
+
+import storage from './storage';
+
+var processedSiteDataMap = new Map();
+export function getSiteDataSync(url){
+    let id = "data/pagehtml/"+url;
+    if (storage.has(id)){
+        return processSiteData(storage.getItem(id));
+    }
+    return null;
+}
+window.getSiteDataSync = getSiteDataSync;
+export function processSiteData(body){
+    if (!processedSiteDataMap.has(body)){
+        try {
+            let dom = parseHTML(body);
+            let og_raw = [...dom.querySelectorAll(`meta[property^=og]`)].map(e=>({
+                prop:e.getAttribute("property"),
+                value:e.content
+            }));
+            let og = {};
+            for(let e of og_raw){
+                let dots = e.prop.split(":");
+                dots.shift();
+                og[dots.join(":")] = e.value;
+            }
+            processedSiteDataMap.set(body,{
+                title:dom.querySelector("title")?.innerText,
+                desc:dom.querySelector("meta[name=description]")?.content,
+                themeColor:dom.querySelector("meta[name=theme-color]")?.content,
+                og_raw,
+                og
+            });
+        } catch (err){
+            return null;
+        }
+    }
+    
+    return processedSiteDataMap.get(body) || null;
+}
+export function getSiteData(url){
+    return new Promise(function(resolve,reject){
+        function afterPage(body){
+            try {
+                processSiteData(body);
+            } catch (err){
+                console.error("Could not parse og",err);
+                resolve(null);
+            }
+        }
+        let id = "data/pagehtml/"+url;
+        if (storage.has(id)){
+            afterPage(storage.getItem(id));
+            return;
+        } else {
+            storage.setItem(id,"");
+        }
+        httpRequest({
+            url:url,
+            headers:{
+                "User-Agent":`Mozilla/5.0 (compatible; Google-Structured-Data-Testing-Tool +https://search.google.com/structured-data/testing-tool)`
+            }
+        }).then((res)=>{
+            if (res.statusCode == 200){
+                let body = res.body;
+                storage.setItem(id,body);
+                afterPage(body);
+            } else {
+                resolve(null);
+            }
+            
+        }).catch(()=>{
+            resolve(null);
+        })
+    })
+
+}
+window.getSiteData = getSiteData;
