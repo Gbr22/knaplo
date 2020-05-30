@@ -1,7 +1,10 @@
 <template>
     <div class="screen">
         <div class="head">
-            <h1>Házi feladatok</h1>
+            <div class="searchbox"><input type="text" placeholder="Házik keresése" v-model="query"></div>
+            <button class="search">
+                <Icon src="fi/search" />
+            </button>
         </div>
 
         <HomeworkList :list="getTomorrow()" title="Holnapra" />
@@ -23,6 +26,7 @@ export default {
     name:"Homework",
     data(){
         return {
+            query:"",
             GlobalState,
             homeworks:GlobalState.processedData.homeworks,
             homeworksCompleted:GlobalState.processedData.homeworksCompleted,
@@ -51,7 +55,7 @@ export default {
             return compare == g(new Date()) || compare == g(tomorrow);
         },
         getActual(){
-            return this.homeworks.filter((e)=>{
+            return this.getFiltered().filter((e)=>{
                 return !this.isExpired(e) && !this.isTomorrow(e);
             }).sort((a,b)=>{
                 let g = x => new Date(x.homework.Hatarido);
@@ -59,7 +63,7 @@ export default {
             }).sort(this.sortByDone)
         },
         getTomorrow(){
-            return this.homeworks.filter((e)=>{
+            return this.getFiltered().filter((e)=>{
                 return this.isTomorrow(e);
             }).sort((a,b)=>{
                 let g = x => new Date(x.homework.Hatarido);
@@ -67,7 +71,8 @@ export default {
             }).sort(this.sortByDone)
         },
         getExpired(){
-            return this.homeworks.filter((e)=>{
+            
+            return this.getFiltered().filter((e)=>{
                 return this.isExpired(e);
             }).sort((a,b)=>{
                 let g = x => new Date(x.homework.Hatarido);
@@ -75,7 +80,24 @@ export default {
             }).sort(this.sortByDone)
         },
         getFiltered(){
-            return this.homeworks;
+            let keywords = this.query.split(" ").filter(e=>e);
+            if (keywords.length == 0){
+                keywords.push("");
+            }
+            
+            function norm(s){
+                return s.toLowerCase();
+            }
+
+            return this.homeworks.filter(e=>{
+                for (let key of keywords){
+                    if (norm(e.homework.Tantargy).indexOf(norm(key)) != -1){
+                        return true;
+                    }
+                    
+                }
+                return false;
+            });
         },
     },
     components:{
@@ -87,6 +109,49 @@ export default {
 <style scoped>
     .head {
         padding: 20px;
-        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: row;
+    }
+    .head .searchbox {
+        flex: 1;
+        margin-right: 20px;
+        overflow: hidden;
+    }
+    .head .search, .head .searchbox {
+        border-radius: 22px;
+        height: 44px;
+        box-sizing: border-box;
+        background-color: var(--element-color);
+        box-shadow: var(--elem-shadow);
+    }
+    .head .searchbox input {
+        width: 100%;
+        height: 100%;
+        box-sizing: border-box;
+        border: none;
+        outline: none;
+        font-size: 18px;
+        padding: 5px 20px;
+        background: none;
+    }
+    .head .search {
+        
+        flex:none;
+        width: 44px;
+        
+        padding: 0;
+        display: flex;
+        border: none;
+        justify-content: center;
+        align-items: center;
+        
+        outline: none;
+    }
+    /deep/ .head .search .icon svg {
+        width: 20px;
+        height: 20px;
+        opacity: 0.65;
     }
 </style>
