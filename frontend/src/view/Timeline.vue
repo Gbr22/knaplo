@@ -4,7 +4,7 @@
         <div class="container">
             <DynamicScroller
                 :items="getItemsList()"
-                :min-item-size="30"
+                :min-item-size="70"
                 key-field="key"
                 class="scroller"
                 :buffer="500"
