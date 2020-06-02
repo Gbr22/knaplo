@@ -31,7 +31,8 @@ export function genericKretaRequest(endpoint,dataKey,errorMessage){
         refreshUser().then(()=>{
             function showErr(err){
                 if (errorMessage){
-                    pushError(errorMessage)
+                    pushError(errorMessage);
+                    console.error(errorMessage,err);
                 }
                 reject(err);
             }
