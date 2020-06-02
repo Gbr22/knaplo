@@ -5,7 +5,20 @@ class Storage {
         return localStorage.getItem(i);
     }
     setItem(i,v){
-        localStorage.setItem(i,v);
+        let tries = 0;
+        while(tries < 15){
+            try {
+                localStorage.setItem(i,v);
+                return;
+            } catch(err){
+                let largest = Object.entries(localStorage).sort(([_, v1],[__,v2])=>v2.length-v1.length)[0];
+                console.log("stoage full err",err,"largest",largest,"setting",i);
+                this.removeItem(largest[0]);
+            }
+            tries++;
+        }
+        
+        
     }
     removeItem(i){
         localStorage.removeItem(i);
