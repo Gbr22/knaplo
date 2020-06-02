@@ -18,7 +18,7 @@ import GlobalState from '../globalState'
 
 import HomeworkList from '../components/HomeworkList.vue';
 import { getHWCompObjFArr } from '../dataHandler';
-import { getDateCompareNumber } from '../util';
+import { getDateCompareNumber, formatURLsHTML, htmlToText } from '../util';
 import { isHomeworkDone } from '../api';
 
 
@@ -81,22 +81,42 @@ export default {
         },
         getFiltered(){
             let keywords = this.query.split(" ").filter(e=>e);
+            
             if (keywords.length == 0){
                 keywords.push("");
             }
+            
             
             function norm(s){
                 return s.toLowerCase();
             }
 
-            return this.homeworks.filter(e=>{
+            return this.homeworks.filter(hw=>{
+                let map = new Map();
+                keywords.forEach(e => {
+                    map.set(e,0);
+                });
                 for (let key of keywords){
-                    if (norm(e.homework.Tantargy).indexOf(norm(key)) != -1){
-                        return true;
+                    let check = [
+                        hw.homework.Tantargy,
+                        hw.homework.Rogzito,
+                        htmlToText(formatURLsHTML(hw.homework.Szoveg))
+                    ]
+                    for (let c of check){
+                        if (norm(c).indexOf(norm(key)) != -1){
+                            map.set(key,map.get(key)+1);                        
+                        }
                     }
                     
+                    
                 }
-                return false;
+                
+                for (const e of map.values()) {
+                    if (e == 0){
+                        return false;
+                    }
+                }
+                return true;
             });
         },
     },
