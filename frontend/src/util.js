@@ -159,7 +159,19 @@ export function getDayOfWeek(date){
     return days[date.getDay()];
 }
 window.addEmbedPlayer = addEmbedPlayer;
+
+let _fURLHTMLCache = new Map();
+window._fURLHTMLCache = _fURLHTMLCache;
 export function formatURLsHTML(html){
+    if (_fURLHTMLCache.has(html)){
+        return _fURLHTMLCache.get(html);
+    } else {
+        let calc = _formatURLsHTML(html);
+        _fURLHTMLCache.set(html,calc);
+        return calc;
+    }
+}
+export function _formatURLsHTML(html){
     
     let hasHTML = code => /<\/?[a-z][\s\S]*>/i.test(code);
     let isText = !hasHTML(html);
