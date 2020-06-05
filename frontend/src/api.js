@@ -173,6 +173,13 @@ export function toggleHomeworkDone(id){
 
 window.isHomeworkDone = isHomeworkDone;
 export function setHomeworkDone(id,state){
+    let args = arguments;
+    
+    return refreshUser().then(()=>{
+        return setHomeworkDoneRaw(...args);
+    })
+}
+export function setHomeworkDoneRaw(id,state){
     return new Promise(function(resolve,reject){
         
         let kretaState = state ? "True" : "False";
