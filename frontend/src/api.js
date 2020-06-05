@@ -170,16 +170,18 @@ export function isHomeworkDone(id){
 export function toggleHomeworkDone(id){
     return setHomeworkDone(id,!isHomeworkDone(id));
 }
+
 window.isHomeworkDone = isHomeworkDone;
 export function setHomeworkDone(id,state){
     return new Promise(function(resolve,reject){
         
-        
+        let kretaState = state ? "True" : "False";
         let data = {
             "TanarHaziFeladatId":id.toString(),
-            "isMegoldva":state ? "True" : "False"
+            "isMegoldva":kretaState
         }
         function fail(){
+            pushError("Nem sikerült a házi állapotát megváltoztatni");
             reject("Nem sikerült a házi állapotát megváltoztatni");
         }
         req({
@@ -196,7 +198,7 @@ export function setHomeworkDone(id,state){
                 let hw = storage.getJSON(key);
                 hw.IsMegoldva = state;
                 storage.setJSON(key,hw);
-                resolve();
+                resolve(state);
             } else {
                 fail();
             }

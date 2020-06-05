@@ -61,8 +61,16 @@ export default {
         htmlToText,
         getHomeworkCompleted,
         toggleHomeworkCompleted(hw){
-            hw.IsMegoldva = !hw.IsMegoldva;
-            toggleHomeworkDone(hw.Id);
+            let inital = hw.IsMegoldva;
+            /* hw.IsMegoldva = hw.IsMegoldva == "True" ? "False" : "True"; */
+
+            toggleHomeworkDone(hw.Id).then(v=>{
+                hw.IsMegoldva = v;
+                console.log(hw);
+            })
+            .catch(e=>{
+                /* hw.IsMegoldva = inital; */
+            })
         }
     }
 }

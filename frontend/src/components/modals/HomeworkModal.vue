@@ -50,8 +50,10 @@ let HomeworkModal = {
     },
     methods:{
         setHomeworkCompleted(hw,val){
-            hw.IsMegoldva = val;
-            setHomeworkDone(hw.Id,val);
+            
+            setHomeworkDone(hw.Id,val).then(v=>{
+                hw.IsMegoldva = v;
+            }).catch(()=>{});
         },
         isCompleted(hw){
             return hw.IsMegoldva;
