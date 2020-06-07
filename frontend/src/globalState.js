@@ -28,6 +28,7 @@ let GlobalState = {
         homeworks:[],
         homeworksCompleted:storage.getJSON("homeworksCompleted") || [],
     },
+    subjectRoundings:storage.getJSON("roundings") || {},
     options:options.getAllOptions(),
     cordovaIsDebug:false,
     user:null,

@@ -9,6 +9,7 @@ import SubjectModal from './components/modals/SubjectModal';
 import { getData, getHomework, getFromCache, fetchInst, pushHomeworkCompleted, refreshUser, getTimetable, getWeekStorageId, fetchedHW } from './api';
 import { getWeekIndex, formatURLsHTML } from './util';
 import { updateTT } from './view/Timetable';
+import storage from './storage';
 
 export function openSubject(subject){
     openModal(subject.name,SubjectModal,subject,{
@@ -308,9 +309,36 @@ function updateArray(arr,n){
     arr.splice(0,arr.length);
     arr.push(...n);
 }
-export function roundSubject(subject){
-    return Math.round(subject.average); //TODO 
+
+export function getSubjectRounding(subject){
+    let roundings = GlobalState.subjectRoundings || {};
+    return (roundings[subject] || 50);
 }
+export function clearSubjectRoundings(){
+    GlobalState.subjectRoundings = {};
+
+    storage.removeItem("roundings");
+}
+window.clearSubjectRoundings = clearSubjectRoundings;
+export function setSubjectRounding(subject, v){
+    let d = GlobalState.subjectRoundings || {};
+    d[subject] = v;
+    GlobalState.subjectRoundings = Object.assign({},d);
+    storage.setJSON("roundings", d);
+}
+window.setSubjectRounding = setSubjectRounding;
+
+export function roundSubject(subject){
+    let r = getSubjectRounding(subject.name)/100;
+    let avg = subject.average;
+    let roundAt = Math.floor(avg)+r;
+    if (avg >= roundAt){
+        return Math.ceil(avg);
+    } else {
+        return Math.floor(avg);
+    } 
+}
+window.roundSubject = roundSubject;
 export function calcAvg(subject, avgCalc = {}){
     let sum = 0;
     let count = subject.grades.length;
