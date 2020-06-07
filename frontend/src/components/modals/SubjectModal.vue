@@ -1,24 +1,37 @@
 <template>
 <div>
-    <div id="avg_calc" v-if="!isNaN(obj.average)">
-        <div class="avg">
-            <div class="type"><span class="avgtitle">Jelenlegi átlag</span><span class="num">{{ obj.average.toFixed(2) }}</span></div>
-            <div class="type"><span class="avgtitle">Átszámított átlag</span><span class="num">{{ calcNewAvg().toFixed(2) }}</span></div>
-        </div>
-        <div v-for="(count,index) in avgCalc" v-bind:key="index" class="avg_calc_grade">
-            <div class="gradename">{{ getGradeName(index) }}</div>
-            
+    <TabMenu :titles="['Átlag','Kerekítés','Grafikon']">
+        <template>
+            <div id="avg_calc" v-if="!isNaN(obj.average)">
+                <div class="avg">
+                    <div class="type"><span class="avgtitle">Jelenlegi átlag</span><span class="num">{{ obj.average.toFixed(2) }}</span></div>
+                    <div class="type"><span class="avgtitle">Átszámított átlag</span><span class="num">{{ calcNewAvg().toFixed(2) }}</span></div>
+                </div>
+                <div v-for="(count,index) in avgCalc" v-bind:key="index" class="avg_calc_grade">
+                    <div class="gradename">{{ getGradeName(index) }}</div>
+                    
 
-            <button v-on:click="minus(index)">
-                <Icon src="fi/minus" />
-            </button>
-            <div class="gradecount">{{ count }}</div>
-            <button @click="plus(index)">
-                <Icon src="fi/plus" />
-            </button>
-            
-        </div>
-    </div>
+                    <button v-on:click="minus(index)">
+                        <Icon src="fi/minus" />
+                    </button>
+                    <div class="gradecount">{{ count }}</div>
+                    <button @click="plus(index)">
+                        <Icon src="fi/plus" />
+                    </button>
+                    
+                </div>
+            </div>
+            <div>
+                1
+            </div>
+            <div>
+                2
+            </div>
+        </template>
+    
+    </TabMenu>
+
+    
 
       <h2>Jegyek</h2>
       <div>
@@ -28,8 +41,11 @@
 </template>
 
 <script>
+
+
 import TimelineItem from '../TimelineItem';
 import { calcAvg } from '../../dataHandler';
+import TabMenu from '../TabMenu.vue';
 
 export default {
     name:"SubjectModal",
@@ -73,7 +89,8 @@ export default {
         },
     },
     components:{
-        TimelineItem
+        TimelineItem,
+        TabMenu
     }
 }
 </script>
