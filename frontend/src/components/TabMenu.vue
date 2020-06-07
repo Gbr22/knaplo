@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div>
+        <div id="titleButtons">
             <button v-for="(t, index) in titles" :key="t" class="titleButton" v-bind:class="{active: index == tabIndex }" @click="gotoTab(index)">
                 {{ t }}
             </button>
@@ -71,6 +71,29 @@ export default {
 </script>
 
 <style scoped>
-    
-
+    #titleButtons {
+        display: flex;
+        width: 100%;
+        max-width: 80%;
+        margin: 0 auto;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        box-shadow: var(--elem-shadow);
+        border-radius: 8px;
+        overflow: hidden;
+        background: var(--element-color);
+    }
+    #titleButtons button.active {
+        color: var(--theme-color);
+        background-color: rgba(28, 170, 83, 0.10);
+    }
+    #titleButtons button {
+        height: 30px;
+        flex: 1;
+        font-weight: bold;
+        background-color: transparent;
+        border:none;
+        outline: none;
+        transition: all 0.2s;
+    }
 </style>
