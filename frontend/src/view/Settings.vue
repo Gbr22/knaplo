@@ -174,7 +174,7 @@ section .item {
 }
 
 #profile_circle_container {
-    margin: 60px 0;
+    padding: 60px 0;
     text-align: center;
 }
 #profile_circle svg {

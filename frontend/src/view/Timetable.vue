@@ -14,7 +14,12 @@
             </h2>
             
         </div>
-        
+        <div v-if="selectedWeek && selectedWeek.days.length == 0" id="emptyWeek">
+            <h2>
+                Ezen a héten nincsenek óráid
+            </h2>
+            <Icon src="fi/smile" />
+        </div>
         <TabMenu v-if="selectedWeek" :titles="selectedWeek.days.map(day=>getDayShortName(day.day))">
             <template>
                 <div v-for="day in selectedWeek.days" :key="day.day" class="day">
@@ -177,6 +182,33 @@ export default {
 </script>
 
 <style scoped>
+    
+    #emptyWeek {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        /* right: 0;
+        bottom: 0; */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        /* backdrop-filter: blur(10px); */
+        padding-top: 50px;
+        box-sizing: border-box;
+        z-index: -1;
+    }
+    #emptyWeek h2 {
+        max-width: 250px;
+        text-align: center;
+    }
+    #emptyWeek /deep/ svg {
+        margin: 5px;
+        width: 35px;
+        height: 35px;
+    }
     .header {
         padding: 20px;
         text-align: center;

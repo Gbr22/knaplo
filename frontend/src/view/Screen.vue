@@ -46,6 +46,15 @@ export default {
 }
 </script>
 
-<style>
-    
+<style scoped>
+    .screen_container {
+        min-height: 100%;
+        height: 100%;
+        position: relative;
+    }
+    .comp {
+        min-height: 100%;
+        height: 100%;
+        position: relative;
+    }
 </style>
