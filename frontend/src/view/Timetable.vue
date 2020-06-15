@@ -14,11 +14,13 @@
             </h2>
             
         </div>
-        <div v-if="selectedWeek && selectedWeek.days.length == 0" id="emptyWeek">
-            <h2>
-                Ezen a héten nincsenek óráid
-            </h2>
-            <Icon src="fi/smile" />
+        <div id="emptyCont" v-if="selectedWeek && selectedWeek.days.length == 0">
+            <div id="emptyWeek">
+                <h2>
+                    Ezen a héten nincsenek óráid
+                </h2>
+                <Icon src="fi/smile" />
+            </div>
         </div>
         <TabMenu v-if="selectedWeek" :titles="selectedWeek.days.map(day=>getDayShortName(day.day))">
             <template>
@@ -183,7 +185,16 @@ export default {
 
 <style scoped>
     
-    #emptyWeek {
+    #emptyCont {
+        background-image: url(
+            https://images.unsplash.com/photo-1573995012741-eb49887f8732?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1301&q=80
+        );
+        content: '';
+        background-size: cover;
+        background-position: center;
+        z-index: -1;
+    }
+    #emptyWeek, #emptyCont {
         width: 100%;
         height: 100%;
         position: absolute;
@@ -191,11 +202,15 @@ export default {
         left: 0;
         /* right: 0;
         bottom: 0; */
+    }
+    #emptyWeek {
+        
         display: flex;
         justify-content: center;
         align-items: center;
         flex-direction: column;
         /* backdrop-filter: blur(10px); */
+        background-color: rgba(0, 0, 0, 0.6);
         padding-top: 50px;
         box-sizing: border-box;
         z-index: -1;
