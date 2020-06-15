@@ -43,7 +43,7 @@
                 </div>
             </div>
             <div class="tab">
-                2
+                <LineChart :chart-data="getChartData()" :options="chartOptions" class="chart"/>
             </div>
         </template>
     
@@ -60,11 +60,11 @@
 
 <script>
 
-
 import TimelineItem from '../TimelineItem';
 import { calcAvg, setSubjectRounding, getSubjectRounding, roundSubject } from '../../dataHandler';
 import TabMenu from '../TabMenu.vue';
-
+import LineChart from '../charts/LineChart.vue';
+import { getCSSVariable } from '../../util';
 
 export default {
     name:"SubjectModal",
@@ -82,10 +82,80 @@ export default {
         return {
             grades,
             avgCalc,
-            round:getSubjectRounding(this.obj.name)
+            round:getSubjectRounding(this.obj.name),
+            chartOptions:{
+                responsive: true,
+                maintainAspectRatio:false,
+                legend: {
+                    labels:{
+                        fontColor: getCSSVariable("--text-color")
+                    }
+                },
+                layout: {
+                    padding: {
+                        left: 10,
+                        right: 15,
+                        top: 0,
+                        bottom: 10
+                    }
+                },
+                scales: {
+                    xAxes: [{
+                        display:false
+                    }],
+                    yAxes: [{
+                        gridLines: {
+                            color: getCSSVariable("--text-smol"),
+                        },
+                        ticks:{
+                            fontColor: getCSSVariable("--text-color"),
+                            suggestedMax: 5,
+                            stepSize:0.5
+                        }
+                    }]
+                }
+            }
         }
     },
+    mounted () {
+    },
     methods:{
+        getChartData () {
+            let grades = this.obj.grades.map(e=>e.value).filter(e=>!isNaN(e));
+            let averages = [];
+            let sum = 0;
+            
+            for (let i =0; i< grades.length; i++){
+                let g = grades[i];
+                let count = i+1;
+                sum += g;
+                averages.push(
+                    sum/count
+                )
+            }
+            console.log(grades);
+            let gradeColor = /* getCSSVariable("--theme-5") */"#0074D9";
+            return {
+                labels: grades.map(e=>`(${e}) értékelés`),
+                datasets: [
+                    {
+                        label: 'Átlag',
+                        borderColor: getCSSVariable("--theme-color"),
+                        pointBackgroundColor: getCSSVariable("--theme-color"),
+                        data: averages,
+                        fill:false
+                    },
+                    {
+                        label: 'Jegy',
+                        borderColor: gradeColor,
+                        pointBackgroundColor: gradeColor,
+                        data: grades,
+                        fill:false,
+                        showLine:false,
+                    }
+                ]
+            }
+        },
         roundSubject,
         format(num){
             return parseFloat(num.toFixed(2));
@@ -127,7 +197,8 @@ export default {
     },
     components:{
         TimelineItem,
-        TabMenu
+        TabMenu,
+        LineChart
     }
 }
 </script>
@@ -199,6 +270,10 @@ export default {
         height: 100%;
     }
     /deep/ .swiper-slide .tab {
+        height: 100%;
+    }
+    .chart {
+        width: 100%;
         height: 100%;
     }
 </style>

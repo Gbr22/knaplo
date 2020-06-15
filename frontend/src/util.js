@@ -320,3 +320,6 @@ export function getCookieFromString(cname,string) {
     return "";
 }
 window.getCookieFromString = getCookieFromString;
+export function getCSSVariable(prop){
+    return getComputedStyle(document.documentElement).getPropertyValue(prop);
+}
