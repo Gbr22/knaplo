@@ -21,8 +21,14 @@
                     
                 </div>
             </div>
-            <div>
-                1
+            <div id="rounding">
+                <h2>Kerekítés ennyitől</h2>
+                <div class="cont">
+                    <div id="num">
+                        <span>{{ Math.floor(obj.average) }}.</span>
+                        <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2" @input="setRound($event.target.value)" v-model="round">
+                    </div>
+                </div>
             </div>
             <div>
                 2
@@ -44,7 +50,7 @@
 
 
 import TimelineItem from '../TimelineItem';
-import { calcAvg } from '../../dataHandler';
+import { calcAvg, setSubjectRounding, getSubjectRounding } from '../../dataHandler';
 import TabMenu from '../TabMenu.vue';
 
 export default {
@@ -62,10 +68,21 @@ export default {
         delete avgCalc["0"];
         return {
             grades,
-            avgCalc
+            avgCalc,
+            round:getSubjectRounding(this.obj.name)
         }
     },
     methods:{
+        setRound(v){
+            let val = v.padEnd(2,"0");
+            val = parseInt(val);
+            if (isNaN(val)){
+                return;
+            }
+            console.log("set",{val});
+            setSubjectRounding(this.obj.name, val);
+        },
+        getSubjectRounding,
         calcNewAvg(){
             return calcAvg(this.obj, this.avgCalc);
         },
@@ -99,5 +116,36 @@ export default {
     h2 {
         text-align: center;
         padding: 10px 20px;
+    }
+    #rounding .cont {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 150px;
+    }
+    #rounding #num {
+        flex: 1;
+        text-align: center;
+    }
+    #rounding input {
+        border: none;
+        /* background: var(--element-color); */
+        background: none;
+        outline: none;
+        text-align: left;
+        width: 2ch;
+    }
+    #rounding input::before {
+        position: absolute;
+        content: '00';
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+    }
+    #rounding #num > * {
+        font-size: 30px;
     }
 </style>
