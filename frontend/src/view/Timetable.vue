@@ -226,6 +226,7 @@ export default {
     }
     .header {
         padding: 20px;
+        padding-bottom: 0;
         text-align: center;
     }
     .header h2 {
