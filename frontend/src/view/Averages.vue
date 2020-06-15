@@ -41,7 +41,7 @@
         <li v-for="(subject) in GlobalState.processedData.subjects" class="subject lItem" v-on:click="openSubject(subject)" v-bind:key="subject.name" @click="openSubject(subject)">
             <div class="subject_header">
                 <span class="left">{{ subject.name }}</span>
-                <span class="right" v-if="!isNaN(subject.average)">
+                <span class="right roundPrev" v-if="!isNaN(subject.average)">
                     <span>{{ format(subject.average) || "#" }}</span>
                     <Icon src="fi/chevrons-right" v-bind:class="{ up: isRoundedUp(subject) }"/>
                     <!-- <i class="material-icons" v-bind:class="{ up: isRoundedUp(subject) }">
@@ -414,7 +414,6 @@ export default {
 #avg_graph, #avg_calc {
     width: 80%;
     display: inline-block;
-    margin-left: 10%;
     scroll-snap-align: center;
     vertical-align: middle;
 }
@@ -490,7 +489,11 @@ export default {
     height: 22px;
 }
 
-.subject_header .right .icon.up svg {
+.roundPrev svg {
+    stroke: rgb(218, 134, 95);    
+}
+
+.roundPrev .up svg {
     stroke: #1CAA53;    
 }
 </style>

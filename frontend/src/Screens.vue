@@ -350,9 +350,6 @@ export default {
 .subject_header .right * {
     vertical-align: middle;
 }
-.subject_header .right svg {
-    stroke: rgb(218, 134, 95);    
-}
 
 
 
