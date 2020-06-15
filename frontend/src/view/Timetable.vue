@@ -209,7 +209,7 @@ export default {
         justify-content: center;
         align-items: center;
         flex-direction: column;
-        /* backdrop-filter: blur(10px); */
+        backdrop-filter: blur(5px);
         background-color: var(--glass-bg);
         padding-top: 50px;
         box-sizing: border-box;
