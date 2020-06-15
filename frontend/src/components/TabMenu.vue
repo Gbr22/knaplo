@@ -1,9 +1,11 @@
 <template>
     <div>
-        <div id="titleButtons">
-            <button v-for="(t, index) in titles" :key="t" class="titleButton" v-bind:class="{active: index == tabIndex }" @click="gotoTab(index)">
-                {{ t }}
-            </button>
+        <div class="titleCont">
+            <div id="titleButtons">
+                <button v-for="(t, index) in titles" :key="t" class="titleButton" v-bind:class="{active: index == tabIndex }" @click="gotoTab(index)">
+                    {{ t }}
+                </button>
+            </div>
         </div>
         <swiper
             ref="mySwiper"
@@ -71,10 +73,16 @@ export default {
 </script>
 
 <style scoped>
+    .titleCont {
+        width: 100%;
+        padding: 0 20px;
+        box-sizing: border-box;
+    }
     #titleButtons {
         display: flex;
         width: 100%;
-        max-width: 80%;
+        max-width: 500px;
+        width: 100%;
         margin: 0 auto;
         margin-top: 20px;
         margin-bottom: 20px;

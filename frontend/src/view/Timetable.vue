@@ -12,55 +12,47 @@
                     <Icon src="fi/chevron-right" />
                 </button>
             </h2>
-            <div id="dayButtons" v-if="selectedWeek">
-                <button v-for="(day, index) in selectedWeek.days" :key="day.day" class="dayButton" v-bind:class="{active: index == dayIndex }" @click="gotoDay(index)">
-                    {{ getDayShortName(day.day) }}
-                </button>
-            </div>
             
         </div>
-        <swiper
-            ref="mySwiper"
-            :options="{}"
-            v-if="selectedWeek"
-        >
-            <swiper-slide v-for="day in selectedWeek.days" :key="day.day" class="day">
-                <h2>{{ getDayName(day.day) }}</h2>
-                <div v-for="lesson in day.lessons" :key="lesson.LessonId" class="lesson" @click="openLesson(lesson)">
-                    <span class="timeIndex">
-                        
-                        <div class="index">
-                            {{ lesson.Count != -1 ? lesson.Count : "-" }}
-                        </div>
-                        <div class="time">
-                            {{ formatTime(lesson.StartTime) }}
-                            <br>
-                            {{ formatTime(lesson.EndTime) }}
-                        </div>
-                    </span>
-                    <span class="vr"></span>
-                    <span class="mainContent">
-                        <span class="subject">{{ lesson.Subject }}</span>
-                        <span class="theme">
-                            <span class="short">{{ shortenText(lesson.Theme,30) }}</span>
-                            <span class="long">{{ lesson.Theme }}</span>
+        
+        <TabMenu v-if="selectedWeek" :titles="selectedWeek.days.map(day=>getDayShortName(day.day))">
+            <template>
+                <div v-for="day in selectedWeek.days" :key="day.day" class="day">
+                    <h2>{{ getDayName(day.day) }}</h2>
+                    <div v-for="lesson in day.lessons" :key="lesson.LessonId" class="lesson" @click="openLesson(lesson)">
+                        <span class="timeIndex">
+                            
+                            <div class="index">
+                                {{ lesson.Count != -1 ? lesson.Count : "-" }}
+                            </div>
+                            <div class="time">
+                                {{ formatTime(lesson.StartTime) }}
+                                <br>
+                                {{ formatTime(lesson.EndTime) }}
+                            </div>
                         </span>
-                    </span>
-                    <span class="moreInfo">
-                        <span class="classRoom">{{ lesson.ClassRoom }}</span>
-                        <span class="teacher">
-                            <span class="short">{{ shortName(lesson.Teacher) }}</span>
-                            <span class="long">{{ lesson.Teacher }}</span>
-                            <Icon src="fi/edit-3" v-if="lesson.TeacherHomeworkId"/>
+                        <span class="vr"></span>
+                        <span class="mainContent">
+                            <span class="subject">{{ lesson.Subject }}</span>
+                            <span class="theme">
+                                <span class="short">{{ shortenText(lesson.Theme,30) }}</span>
+                                <span class="long">{{ lesson.Theme }}</span>
+                            </span>
                         </span>
-                    </span>
-                </div>
+                        <span class="moreInfo">
+                            <span class="classRoom">{{ lesson.ClassRoom }}</span>
+                            <span class="teacher">
+                                <span class="short">{{ shortName(lesson.Teacher) }}</span>
+                                <span class="long">{{ lesson.Teacher }}</span>
+                                <Icon src="fi/edit-3" v-if="lesson.TeacherHomeworkId"/>
+                            </span>
+                        </span>
+                    </div>
 
-            </swiper-slide>
-        </swiper>
-        <div v-if="selectedWeek" id="tableWrap" @scroll="tableScroll" class="pc-no-scroll">
-            
-        </div>
+                </div>
+            </template>
+        </TabMenu>
+        
     </div>
 </template>
 
@@ -72,6 +64,8 @@ import { getHomework } from '../api';
 import { getWeekReactive } from '../dataHandler';
 import { Swiper, SwiperSlide, directive } from 'vue-awesome-swiper'
 import 'swiper/css/swiper.css'
+import TabMenu from '../components/TabMenu.vue';
+
 
 export let updateTT = ()=>{};
 
@@ -79,7 +73,8 @@ export default {
     name:"Timetable",
     components: {
         Swiper,
-        SwiperSlide
+        SwiperSlide,
+        TabMenu,
     },
     directives: {
         swiper: directive
