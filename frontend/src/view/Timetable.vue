@@ -210,7 +210,7 @@ export default {
         align-items: center;
         flex-direction: column;
         /* backdrop-filter: blur(10px); */
-        background-color: rgba(0, 0, 0, 0.6);
+        background-color: var(--glass-bg);
         padding-top: 50px;
         box-sizing: border-box;
         z-index: -1;

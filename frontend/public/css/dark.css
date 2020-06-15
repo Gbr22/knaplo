@@ -15,6 +15,7 @@
     --link-color: #00cc99;
     --theme-color: #1CAA53;
     --button-color: #ffffff0d;
+    --glass-bg: rgba(0, 0, 0, 0.6);
 }
 #credits img {
     filter: brightness(90%);
