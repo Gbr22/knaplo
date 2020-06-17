@@ -28,7 +28,7 @@
                     <h2>Kerekítés ennyitől</h2>
                     <div class="cont">
                         <div id="num">
-                            <span>{{ Math.floor(obj.average) }}.</span>
+                            <span>{{ obj.average == 5 ? 4 : Math.floor(obj.average) }}.</span>
                             <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2" @input="setRound($event.target.value)" v-model="round">
                         </div>
                     </div>
