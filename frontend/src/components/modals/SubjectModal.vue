@@ -121,7 +121,7 @@ export default {
     },
     methods:{
         getChartData () {
-            let grades = this.obj.grades.map(e=>e.value).filter(e=>!isNaN(e));
+            let grades = this.obj.grades.map(e=>e.value).filter(e=>!isNaN(e)).reverse();
             let averages = [];
             let sum = 0;
             
