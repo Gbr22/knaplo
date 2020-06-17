@@ -1,6 +1,6 @@
 <template>
 <div>
-    <TabMenu :titles="['Átlag','Kerekítés','Grafikon']">
+    <TabMenu :titles="['Átlag','Kerekítés','Grafikon']" v-if="!isNaN(obj.average)">
         <template>
             <div class="tab">
                 <div id="avg_calc" v-if="!isNaN(obj.average)">
@@ -84,6 +84,18 @@ export default {
             avgCalc,
             round:getSubjectRounding(this.obj.name),
             chartOptions:{
+                tooltips:{
+                    callbacks:{
+                        label(el){
+                            return parseFloat(parseFloat(el.value).toFixed(2)).toString();
+                        }
+                    }
+                },
+                elements: {
+                    line: {
+                        tension: 0
+                    }
+                },
                 responsive: true,
                 maintainAspectRatio:false,
                 legend: {
