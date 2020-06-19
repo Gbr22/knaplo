@@ -346,18 +346,25 @@ export function refreshUser(){
     })
 }
 window.refreshUser = refreshUser;
-export function refreshToken(){
+export function refreshToken() {
     let user = GlobalState.user;
-    return new Promise(function(resolve,reject){
-        let data = {
-            refresh_token:user.refresh_token,
-            grant_type:'refresh_token',
-            client_id:CLIENT_ID,
-        }
+    return new Promise(function (resolve, reject) {
+        
+        var postData = {
+            refresh_token: user.refresh_token,
+            institute_code: user.inst,
+            grant_type: "refresh_token",
+            client_id: "kreta-ellenorzo-mobile",
+        };
+      
         req({
-            method:"POST",
-            url:`https://${user.inst}.e-kreta.hu/idp/api/v1/Token`,
-            body:data,
+            url: "https://idp.e-kreta.hu/connect/token",
+            headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            },
+    
+            method: "POST",
+            body: postData,
         }).then((r)=>{
             if (r.statusCode == 200){
                 let o = r.bodyJSON;
@@ -380,7 +387,9 @@ export function refreshToken(){
             console.error("login failed",err);
             reject("Sikertelen bejelentkezés");
         })
-    })
-}
+      
+    });
+};
+
 window.refreshToken = refreshToken;
 window.login = login;
