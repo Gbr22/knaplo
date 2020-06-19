@@ -137,6 +137,11 @@ export function pushHomeworkCompleted(arr){
 window.pushHomeworkCompleted = pushHomeworkCompleted;
 export var fetchedHW = new Map();
 window.fetchedHW = fetchedHW;
+
+export async function getAllHomework(){
+    return genericKretaRequest(`ellenorzo/V3/Sajat/HaziFeladatok?datumTol=2020-01-01`,"homeworks/");
+}
+window.getAllHomework = getAllHomework;
 export async function getHomework(id,forceNetwork = false){
     let s = getFromCache("homework/"+id);
     if (s && !forceNetwork){
@@ -216,8 +221,8 @@ export function setHomeworkDoneRaw(id,state){
     })
 }
 window.setHomeworkDone = setHomeworkDone;
-export function login(form){
-    return new Promise(function(resolve,reject){
+export function login(form) {
+    return new Promise(function (resolve, reject) {
         let props = ["inst","username","password"];
         let missing = {
             inst:"Intézményt",
@@ -230,17 +235,20 @@ export function login(form){
                 return;
             }
         }
-        let data = {
-            institute_code:form.inst,
-            userName:form.username,
-            password:form.password,
-            grant_type:'password',
-            client_id:CLIENT_ID,
-        }
+        var postData = {
+            userName: form.username,
+            password: form.password,
+            institute_code: form.inst,
+            grant_type: "password",
+            client_id: "kreta-ellenorzo-mobile",
+        };
         req({
-            method:"POST",
-            url:`https://${form.inst}.e-kreta.hu/idp/api/v1/Token`,
-            body:data,
+            method: "POST",
+            body: postData,
+            url: "https://idp.e-kreta.hu/connect/token",
+            headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            },
         }).then((r)=>{
             if (r.statusCode == 200){
                 let o = r.bodyJSON;
@@ -269,7 +277,7 @@ export function login(form){
             reject("Sikertelen bejelentkezés");
         })
     })
-}
+};
 export function refreshLogin(){
     return new Promise((resolve,reject)=>{
         let user = GlobalState.user;
