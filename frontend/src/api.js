@@ -9,13 +9,15 @@ let loginInfo;
 
 let API_KEY = "7856d350-1fda-45f5-822d-e1a2f3f1acf0";
 let CLIENT_ID = "919e0c1c-76a2-4646-a2fb-7085bbbf3c56";
+let USER_AGENT_V2 = "Kreta.Ellenorzo/2.9.11.2020033003 (Linux; U; Android 8.0.0)";
+let USER_AGENT = USER_AGENT_V2;
 
 function req(options){
     if (options.headers == undefined){
         options.headers = {};
     }
     options.headers = Object.assign({
-        "User-Agent":"Kreta.Ellenorzo/2.9.11.2020033003 (Linux; U; Android 8.0.0)",
+        "User-Agent":USER_AGENT,
         "apiKey":API_KEY,
         'Content-Type': 'application/x-www-form-urlencoded',
     },options.headers);
@@ -83,6 +85,21 @@ export function getTimetable(weeksAfter = 0){
     return genericKretaRequest(`mapi/api/v1/LessonAmi?fromDate=${format(first)}&toDate=${format(last)}`,id,"Órarend lekérése sikertelen");
 }
 export function fetchInst(){
+    return fetchInstRaw().then((d)=>{
+        let inst = [];
+        for (let e of d){
+            inst.push({
+                Name:e.name,
+                InstituteCode:e.instituteCode,
+                City:e.city,
+            });
+        }
+        return inst;
+    }).catch((err)=>{
+        return err;
+    })
+}
+export function fetchInstRaw(){
     return new Promise(function(resolve,reject){
         let errorMessage = "Intézmények lekérése sikertelen";
         function showErr(err){
@@ -92,7 +109,11 @@ export function fetchInst(){
             reject(err);
         }
         httpRequest({
-            url:`${ApiEndpoint}institute`,
+            url: "https://kretaglobalmobileapi2.ekreta.hu/api/v3/Institute",
+            headers: {
+              "User-Agent": USER_AGENT,
+              apiKey: API_KEY,
+            }
         }).then((res)=>{
             if (res.statusCode == 200){
                 storage.setJSON("data/inst", res.bodyJSON);

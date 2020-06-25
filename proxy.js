@@ -94,6 +94,6 @@ const proxy = http.createServer((pReq, pRes) => {
 });
 // Now that proxy is running
 let port = 1337;
-proxy.listen(port, '127.0.0.1', () => {
+proxy.listen(port, '0.0.0.0', () => {
     console.log("Proxy started on",port);
 });
