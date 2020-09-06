@@ -99,6 +99,7 @@ export function fetchInst(){
         return err;
     })
 }
+window.fetchInst = fetchInst;
 export function fetchInstRaw(){
     return new Promise(function(resolve,reject){
         let errorMessage = "Intézmények lekérése sikertelen";
@@ -126,6 +127,7 @@ export function fetchInstRaw(){
         });
     });
 }
+window.fetchInstRaw = fetchInstRaw;
 export function pushHomeworkCompleted(arr){
     return new Promise(function(resolve,reject){
         refreshUser().then(()=>{

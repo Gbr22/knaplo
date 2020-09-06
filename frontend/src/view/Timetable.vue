@@ -287,6 +287,7 @@ export default {
         align-items: center;
         margin: 8px 0;
         padding: 6px 0;
+        overflow: hidden;
     }
     
     .index {
@@ -297,17 +298,27 @@ export default {
         margin: 0 auto;
     }
     .mainContent {
-        flex-grow: 2;
+        flex-grow: 1;
+        /* flex-grow: 2;
         flex-shrink: 2;
-        
+         */
     }
-    .teacher {
-        
-    }
-    .mainContent, .moreInfo, .timeIndex, .vr {
+    
+    .mainContent, .timeIndex, .vr {
         display: flex;
         justify-content: center;
         flex-direction: column;
+    }
+    
+    .moreInfo {
+        flex: none;
+        flex-shrink: 1;
+        display: block;
+        text-align: right;
+        padding-right: 8px;
+    }
+    .mi span {
+        font-weight: bold;
     }
     .vr {
         margin: 0 5px;
@@ -331,13 +342,7 @@ export default {
         padding: 0 7px;
         padding-left: 9px;
     }
-    .moreInfo {
-        align-items: flex-end;
-        padding: 0 10px;
-        flex: 1 1;
-        width: max(40%, 250px);
-        text-align: right;
-    }
+    
     /deep/ .moreInfo svg {
         width: 18px;
         height: 18px;
@@ -347,12 +352,13 @@ export default {
     }
     .subject, .classRoom {
         font-weight: bold;
-    
     }
+    
     .teacher {
         display: flex;
         align-items: center;
-        justify-content: flex-start;
+        justify-content: flex-end;
+        font-weight: bold;
     }
     .teacher, .theme, .time {
         color: var(--text-smol);
