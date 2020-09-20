@@ -8,6 +8,7 @@
     "cookie-parser": "^1.4.4",
     "esm": "^3.2.25",
     "express": "^4.17.1",
+    "express-http-proxy": "^1.6.2",
     "follow-redirects": "^1.11.0",
     "jaaulde-cookies": "^3.0.6",
     "needle": "^2.3.3",

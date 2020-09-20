@@ -1,0 +1,1 @@
+docker build -t gbr22/knaplo . && docker run -t -i -p 49160:3000 gbr22/knaplo
