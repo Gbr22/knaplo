@@ -1,14 +1,8 @@
 <template>
   <div>
       <div class="noteContent" v-html="html"></div>
-      <div class="user">
-          <Icon src="fi/user" class="icon" />
-          <div class="content">
-              <div class="name">{{ obj.teacher }}</div>
-              <div class="desc">{{ obj.noteType }}</div>
-          </div>
-          <div class="date tinyDate"><b>{{ getDayOfWeek(new Date(obj.date)) }}</b><br><i>{{ formatDate(new Date(obj.date)) }}</i></div>
-      </div>
+      
+      <Author :date="new Date(obj.createDate)" :author="obj.teacher" :desc="obj.noteType" />
       
   </div>
 </template>
@@ -17,7 +11,8 @@
 import GlobalState from '../../globalState';
 import { formatURLsHTML, formatDate, getDayOfWeek } from '../../util';
 import { openModal } from '../Modal';
-import Icon from '../Icon.vue';
+import Icon from '../Icon';
+import Author from '../Author';
 
 
 let NoteModal = {
@@ -38,7 +33,8 @@ let NoteModal = {
         getDayOfWeek,
     },
     components:{
-        Icon
+        Icon,
+        Author
     }
 }
 export default NoteModal;
@@ -63,29 +59,5 @@ window.openNote = openNote;
     .noteContent :first-child {
         padding-top: 0 !important;
         margin-top: 0 !important;
-    }
-    .user {
-        margin: 20px;
-        margin-top: 0;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: flex-start;
-    }
-    .user .content {
-        flex: 1;
-    }
-    .desc {
-        color: var(--text-smol);
-        font-style: italic;
-    }
-    /deep/ .user .icon {
-        background-color: var(--element2-color);
-        padding: 8px;
-        border-radius: 50%;
-        margin-right: 8px;
-    }
-    .date {
-        text-align: right;
     }
 </style>

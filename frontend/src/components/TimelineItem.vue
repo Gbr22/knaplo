@@ -3,7 +3,7 @@
     <div class="gradeLike recent" :data-item-type="item.type" :data-state="item.displayState" v-on:click="item.onclick()">
         
         <span class="left">
-            <Icon :src="item.icon" />
+            <Icon :src="item.icon" size="28" />
         </span>
         <span class="right">
             <div class="header">

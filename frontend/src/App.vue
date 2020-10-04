@@ -126,8 +126,7 @@ body, .list, #recent, .fullpage_modal {
 }
 
 .feather {
-    width: 24px;
-    height: 24px;
+    
     stroke: var(--text-color);
     stroke-width: 2;
     stroke-linecap: round;

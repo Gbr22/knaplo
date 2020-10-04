@@ -10,6 +10,7 @@ import { getData, getHomework, getFromCache, fetchInst, pushHomeworkCompleted, r
 import { getWeekIndex, formatURLsHTML } from './util';
 import { updateTT } from './view/Timetable';
 import storage from './storage';
+import {openGrade} from './components/modals/GradeModal';
 
 export function openSubject(subject){
     openModal(subject.name,SubjectModal,subject,{
@@ -168,10 +169,21 @@ export class Grade extends NormalisedItem {
 
     type="grade";
     value;
+    textValue;
     teacher;
     theme;
     mode;
     normal=true;
+    weight=null;
+    gradeType;
+    gradeTypeName;
+    form;
+    formName;
+    
+
+    onclick(){
+        openGrade(this);
+    }
 
     constructor(o) {
         super(o);
@@ -179,8 +191,13 @@ export class Grade extends NormalisedItem {
             value:"NumberValue",
             teacher:"Teacher",
             subject:"Subject",
+            form:"Form",
+            formName:"FormName",
             theme:"Theme",
             mode:"Mode",
+            textValue:"Value",
+            gradeType:"Type",
+            gradeTypeName:"TypeName"
         });
         if (o.Form == "Diligence" || o.Form == "Deportment"){
             this.normal = false;
@@ -199,6 +216,8 @@ export class Grade extends NormalisedItem {
         } else {
             this.icon = "text/"+this.value;
         }
+        this.weight = parseInt(o.Weight.replace("%","")) || 0;
+        
 
         this.header = this.subject;
         this.desc = this.theme || this.mode || this.value;
