@@ -535,10 +535,11 @@ export function getWeekDaysTT(lessons){
     let daysMap = {};
     for (let e of lessons){
         
-        let day = (new Date(e.Date)).toDateString();
+        let day = (new Date(e.Datum)).toDateString();
         if (!daysMap[day]){
             daysMap[day] = {
                 day,
+                date:e.Datum,
                 lessons:[]
             };
         }
@@ -548,10 +549,12 @@ export function getWeekDaysTT(lessons){
     let days = Object.values(daysMap);
     for (let day of days){
         day.lessons.sort((a,b)=>{
-            return new Date(a.StartTime) - new Date(b.StartTime);
+            return new Date(a.KezdetIdopont) - new Date(b.KezdetIdopont);
         })
     }
-    return Object.values(daysMap);
+    return Object.values(daysMap).sort((a,b)=>{
+        return new Date(a.date) - new Date(b.date);
+    });
 }
 window.getWeekDaysTT = getWeekDaysTT;
 function processTimetable(result){

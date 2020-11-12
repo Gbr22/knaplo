@@ -24,35 +24,48 @@
         </div>
         <TabMenu v-if="selectedWeek" :titles="selectedWeek.days.map(day=>getDayShortName(day.day))">
             <template>
-                <div v-for="day in selectedWeek.days" :key="day.day" class="day">
-                    <h2>{{ getDayName(day.day) }}</h2>
-                    <div v-for="lesson in day.lessons" :key="lesson.LessonId" class="lesson" @click="openLesson(lesson)">
-                        <span class="timeIndex">
-                            
-                            <div class="index">
-                                {{ lesson.Count != -1 ? lesson.Count : "-" }}
-                            </div>
-                            <div class="time">
-                                {{ formatTime(lesson.StartTime) }}
-                                <br>
-                                {{ formatTime(lesson.EndTime) }}
-                            </div>
-                        </span>
-                        <span class="vr"></span>
-                        <span class="mainContent">
-                            <span class="subject">{{ lesson.Subject }}</span>
-                            <span class="theme">
-                                <span class="short">{{ shortenText(lesson.Theme,30) }}</span>
-                                <span class="long">{{ lesson.Theme }}</span>
-                            </span>
-                        </span>
-                        <span class="moreInfo">
-                            <span class="classRoom">{{ lesson.ClassRoom }}</span>
-                            <span class="teacher">
-                                <span class="short">{{ shortName(lesson.Teacher) }}</span>
-                                <span class="long">{{ lesson.Teacher }}</span>
-                                <Icon src="fi/edit-3" v-if="lesson.TeacherHomeworkId"/>
-                            </span>
+                <div v-for="day in selectedWeek.days" :key="day.day" class="day" :class="{ event:isEventOnDay(day) }">
+                    <template v-if="!isEventOnDay(day)">
+                        <h2>{{ getDayName(day.day) }}</h2>
+                        <div v-for="lesson in day.lessons" :key="lesson.Uid" class="lesson" @click="openLesson(lesson)">
+                            <template v-if="!isEvent(lesson)">
+                                <span class="timeIndex">
+                                    
+                                    <div class="index">
+                                        {{ lesson.Oraszam != null ? lesson.Oraszam : "-" }}
+                                    </div>
+                                    <div class="time">
+                                        {{ formatTime(lesson.KezdetIdopont) }}
+                                        <br>
+                                        {{ formatTime(lesson.VegIdopont) }}
+                                    </div>
+                                </span>
+                                <span class="vr"></span>
+                                <span class="mainContent">
+                                    <span class="subject">{{ lesson.Tantargy.Nev }}</span>
+                                    <span class="theme">
+                                        <span class="short">{{ shortenText(lesson.Tema || "",30) }}</span>
+                                        <span class="long">{{ lesson.Tema }}</span>
+                                    </span>
+                                </span>
+                                <span class="moreInfo">
+                                    <span class="classRoom">{{ lesson.TeremNeve }}</span>
+                                    <span class="teacher">
+                                        <span class="short">{{ shortName(lesson.TanarNeve || "") }}</span>
+                                        <span class="long">{{ lesson.TanarNeve }}</span>
+                                        <Icon src="fi/edit-3" v-if="lesson.HaziFeladatUid"/>
+                                    </span>
+                                </span>
+                            </template>
+                            <template v-if="isEvent(lesson)">
+                                {{ (lesson.Nev || "").trim() }}
+                            </template>
+
+                        </div>
+                    </template>
+                    <div v-if="isEventOnDay(day)">
+                        <span class="text">
+                            {{ (EventOnDay(day).Nev || "").trim() }}
                         </span>
                     </div>
 
@@ -117,6 +130,15 @@ export default {
         this.swiper.slideTo(0, 0, false);
     },
     methods:{
+        isEventOnDay(day){
+            return this.EventOnDay(day) != null;
+        },
+        EventOnDay(day){
+            return day.lessons.filter(e=>this.isEvent(e))[0] || null;
+        },
+        isEvent(lesson){
+            return lesson.Tipus.Nev == 'TanevRendjeEsemeny';
+        },
         openLesson(lesson){
             let id = lesson.TeacherHomeworkId;
             
@@ -184,7 +206,17 @@ export default {
 </script>
 
 <style scoped>
-    
+    .day.event {
+        height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+    .day.event .text {
+        font-size: 20px;
+        
+    }
     #emptyCont {
         background-image: url(
             https://images.unsplash.com/photo-1573995012741-eb49887f8732?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1301&q=80

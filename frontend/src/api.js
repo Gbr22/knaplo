@@ -131,8 +131,8 @@ export function getTimetable(weeksAfter = 0){
         let pad = (n) => (n+"").padStart(2,"0");
         return `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())}`;
     }
-
-    return genericKretaRequest(`mapi/api/v1/LessonAmi?fromDate=${format(first)}&toDate=${format(last)}`,id,"Órarend lekérése sikertelen");
+    
+    return kretaRequest(`OrarendElemek?datumTol=${format(first)}&datumIg=${format(last)}`,id,"Órarend lekérése sikertelen");
 }
 export function fetchInst(){
     return fetchInstRaw().then((d)=>{
