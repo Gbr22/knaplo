@@ -5,7 +5,7 @@
             <span id="profile_circle">
                 <Icon src="fi/user" />
             </span>
-            <h1 id="fullname">{{ GlobalState.data ? GlobalState.data.Name : "#### ####" }}</h1>
+            <h1 id="fullname">{{ GlobalState.studentInfo ? GlobalState.studentInfo.Nev : "#### ####" }}</h1>
         </div>
 
         <section id="more" class="grid">

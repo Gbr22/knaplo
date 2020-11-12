@@ -83,7 +83,7 @@ export default {
         getAbsenceCount(justified){
             let sum = 0;
             for (let e of this.GlobalState.processedData.absences){
-                if (e.justified == justified){
+                if (e.justified == justified && !e.isDelay()){
                     sum++;
                 }
             }
@@ -91,8 +91,10 @@ export default {
         },
         getDelayMinutes(){
             let sum = 0;
-            for (let e of this.GlobalState.processedData.delays){
-                sum += e.delayMinutes;
+            for (let e of this.GlobalState.processedData.absences){
+                if (e.isDelay()){
+                    sum += e.delayMinutes;
+                }
             }
             return sum;
         },
@@ -126,8 +128,7 @@ export default {
             let map = {
                 grades:this.GlobalState.processedData.grades,
                 notes:this.GlobalState.processedData.notes,
-                absences:[this.GlobalState.processedData.absentDays,
-                this.GlobalState.processedData.delays]
+                absences:this.GlobalState.processedData.absences,
             };
 
             let arrays = [];

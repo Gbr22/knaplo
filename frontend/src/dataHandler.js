@@ -6,7 +6,7 @@ import { pushError } from './components/MessageDisplay';
 
 import AbsenceModal from './components/modals/AbsenceModal';
 import SubjectModal from './components/modals/SubjectModal';
-import { getData, getHomework, getFromCache, fetchInst, pushHomeworkCompleted, refreshUser, getTimetable, getWeekStorageId, fetchedHW } from './api';
+import { getData, getHomework, getFromCache, fetchInst, pushHomeworkCompleted, refreshUser, getTimetable, getWeekStorageId, fetchedHW, getGrades, getNotes, getAbsences } from './api';
 import { getWeekIndex, formatURLsHTML } from './util';
 import { updateTT } from './view/Timetable';
 import storage from './storage';
@@ -156,12 +156,12 @@ export class NormalisedItem {
 
     constructor(o) {
         this.obj = o;
-        this.createDate = o.CreatingTime;
-        this.date = o.Date;
+        this.createDate = o.KeszitesDatuma;
+        this.date = o.Datum || o.RogzitesDatuma;
 
 
 
-        this.key = this.type+this.obj.EvaluationId+this.obj.Jelleg?.Id+this.obj.NoteId+this.obj.AbsenceId;
+        this.key = this.type+this.obj.Uid;
     }
 }
 
@@ -188,27 +188,25 @@ export class Grade extends NormalisedItem {
     constructor(o) {
         super(o);
         this.map({
-            value:"NumberValue",
-            teacher:"Teacher",
-            subject:"Subject",
-            form:"Form",
+            value:"SzamErtek",
+            teacher:"ErtekeloTanarNeve",
+            form:"Jelleg",
             formName:"FormName",
-            theme:"Theme",
-            mode:"Mode",
-            textValue:"Value",
+            theme:"Tema",
+            textValue:"SzovegesErtek",
             gradeType:"Type",
-            gradeTypeName:"TypeName"
+            gradeTypeName:"TypeName",
+            weight:"SulySzazalekErteke",
         });
-        if (o.Form == "Diligence" || o.Form == "Deportment"){
+        this.formName = o.ErtekFajta?.Leiras;
+        this.mode = o.Mod?.Leiras;
+        this.subject = o.Tantargy.Nev;
+        if (this.form == "Magatartas" || this.form == "Szorgalom"){
             this.normal = false;
-            this.map({
-                value:"Value",
-                subject:"JellegNev"
-            });
             if (this.subject == "Magatartas"){
                 this.subject = "Magatartás";
             }
-            if (o.Value == "Jó" || o.Value == "Példás"){
+            if (this.textValue == "Jó" || this.textValue == "Példás"){
                 this.icon = "fi/smile";
             } else {
                 this.icon = "fi/frown";
@@ -216,11 +214,11 @@ export class Grade extends NormalisedItem {
         } else {
             this.icon = "text/"+this.value;
         }
-        this.weight = parseInt(o.Weight.replace("%","")) || 0;
-        
-
+        if (!this.icon){
+            this.icon = "#";
+        }
         this.header = this.subject;
-        this.desc = this.theme || this.mode || this.value;
+        this.desc = this.theme || this.mode || this.textValue;
         this.displayState = this.value;
     }
 }
@@ -228,27 +226,38 @@ export class Grade extends NormalisedItem {
 export class Absence extends NormalisedItem {
 
     type="absence";
-    absenceType;
+    absenceTypeName;
     subject;
     lesson;
     delayMinutes;
     justified;
+    justificationTypeName;
+
+    isDelay(){
+        return this.absenceType == "keses";
+    }
 
     constructor(o) {
         super(o);
         this.map({
-            absenceType:"Type",
+            /* absenceType:"Type",
             subject:"Subject",
             lesson:"NumberOfLessons",
-            delayMinutes:"DelayTimeMinutes",
+            delayMinutes:"DelayTimeMinutes", */
+            delayMinutes:"KesesPercben",
+            teacher:"RogzitoTanarNeve"
         });
-        this.date = o.LessonStartTime;
-        this.justified = o.JustificationState == "Justified";
+        this.absenceType = o.Tipus?.Nev;
+        this.absenceTypeName = o.Tipus?.Leiras;
+        this.subject = o.Tantargy?.Nev;
+        this.lesson = o.Ora?.Oraszam;
+        this.justificationTypeName = o.IgazolasTipusa?.Leiras;
+        this.justified = o.IgazolasAllapota == "Igazolt";
         
         
-
-        this.header = `${o.TypeName} - ${this.justified ? `Igazolt (${o.JustificationTypeName})` : 'Igazolatlan'}`;
-        this.desc = `${this.lesson}. Óra - ${this.subject}${this.absenceType == "Delay" ? `, ${this.delayMinutes} perc`:''}`;
+    
+        this.header = `${this.absenceTypeName} - ${this.justified ? `Igazolt (${this.justificationTypeName})` : 'Igazolatlan'}`;
+        this.desc = `${this.lesson ? `${this.lesson || "#"}. Óra - `:''}${this.subject}${this.isDelay() ? `, ${this.delayMinutes} perc`:''}`;
         this.icon = "fi/clock";
         this.displayState = this.justified;
     }
@@ -301,11 +310,11 @@ export class Note extends NormalisedItem {
     constructor(o) {
         super(o);
         this.map({
-            title:"Title",
-            content:"Content",
-            teacher:"Teacher",
-            noteType:"Type",
+            title:"Cim",
+            content:"Tartalom",
+            teacher:"KeszitoTanarNeve",
         });
+        this.noteType = o.Tipus?.Leiras;
 
         function shorten(text){
             let limit = 70;
@@ -598,6 +607,7 @@ function processTimetable(result){
         updateArray(GlobalState.processedData.timetable.weeks, weeks);
     }
 }
+
 function processData(result){
     if(result){
         let data = GlobalState.data = result;
@@ -685,7 +695,9 @@ function processData(result){
         
     }
 }
-
+function processGenericList(list, _class) {
+    return list.map(e=>new _class(e));
+}
 function afterLogin(){
     let online = navigator.onLine;
     setImmediate(()=>{
@@ -698,7 +710,47 @@ function afterLogin(){
         setImmediate(()=>{
             refreshUser().then(()=>{
                 console.log("[afterlogin] refreshed user");
-                function afterData(){
+
+                if (storage.has("data/studentinfo")){
+                    GlobalState.studentInfo = storage.getJSON("data/studentinfo");
+                }
+                getStudentInfo().then(d=>{
+                    GlobalState.studentInfo = d;
+                })
+                
+                var lists = [
+                    {
+                        get:getGrades,
+                        id:"grades",
+                        class:Grade
+                    },
+                    {
+                        get:getNotes,
+                        id:"notes",
+                        class:Note
+                    },
+                    {
+                        get:getAbsences,
+                        id:"absences",
+                        class:Absence
+                    },
+                ];
+                
+                for (let i = 0; i < lists.length; i++) {
+                    const e = lists[i];
+
+                    function process(d){
+                        GlobalState.rawData[e.id] = d;
+                        GlobalState.processedData[e.id] = processGenericList(d, e.class);
+                    }
+                    if (storage.has("data/"+e.id)){
+                        process(storage.getJSON("data/"+e.id));
+                    }
+                    e.get().then(d=>{
+                        process(d);
+                    })
+                }
+                /* function afterData(){
                     
                 }
                 getData().then((result)=>{
@@ -707,7 +759,7 @@ function afterLogin(){
                 }).catch(()=>{
                     afterData();
                 })
-                getHomeworks();
+                getHomeworks(); */
             })
         })
         

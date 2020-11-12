@@ -14,14 +14,16 @@ let GlobalState = {
     loaded:false,
     loggedIn:false,
     data:null,
+    studentInfo:null,
+    rawData:{
+        grades:[]
+    },
     lessonsList:[],
     processedData:{
         subjects:[],
         grades:[],
         notes:[],
-        absentDays:[],
         absences:[],
-        delays:[],
         timetable:{
             weeks:[]
         },

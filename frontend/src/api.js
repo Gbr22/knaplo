@@ -6,11 +6,11 @@ import { getWeek, getDateCompareNumber, getWeekIndex } from './util';
 
 
 let loginInfo;
-
-let API_KEY = "7856d350-1fda-45f5-822d-e1a2f3f1acf0";
-let CLIENT_ID = "919e0c1c-76a2-4646-a2fb-7085bbbf3c56";
+var API_KEY = "7856d350-1fda-45f5-822d-e1a2f3f1acf0";
+let CLIENT_ID = "kreta-ellenorzo-mobile";
 let USER_AGENT_V2 = "Kreta.Ellenorzo/2.9.11.2020033003 (Linux; U; Android 8.0.0)";
-let USER_AGENT = USER_AGENT_V2;
+let USER_AGENT_V3 = "hu.ekreta.student/1.0.5/Android/0/0";
+let USER_AGENT = USER_AGENT_V3;
 
 function req(options){
     if (options.headers == undefined){
@@ -56,6 +56,56 @@ export function genericKretaRequest(endpoint,dataKey,errorMessage){
         })
     });
 }
+export function kretaRequest(endpoint,dataKey,errorMessage){
+    let info = GlobalState.user;
+    var inst = info.inst;
+    return new Promise(function(resolve,reject){
+        refreshUser().then(()=>{
+            function showErr(err){
+                if (errorMessage){
+                    pushError(errorMessage);
+                    console.error(errorMessage,err);
+                }
+                reject(err);
+            }
+            req({
+                url:`https://${inst}.e-kreta.hu/ellenorzo/V3/Sajat/${endpoint}`,
+                headers:{
+                    "Authorization":"Bearer "+info.access_token,
+                    "User-Agent":USER_AGENT,
+                },
+            }).then((res)=>{
+                if (res.statusCode == 200){
+                    storage.setJSON("data/"+dataKey, res.bodyJSON);
+                    resolve(res.bodyJSON);
+                } else {
+                    showErr(res);
+                }
+            }).catch((err)=>{
+                showErr(err);
+            });
+        })
+    });
+}
+export function getHomeworks(){
+    return kretaRequest("HaziFeladatok","homeworks","Házifeladatok lekérése sikertelen");
+}
+export function getGrades(){
+    return kretaRequest("Ertekelesek","grades","Jegyek lekérése sikertelen");
+}
+export function getAbsences(){
+    return kretaRequest("Mulasztasok","absences","Mulasztások lekérése sikertelen");
+}
+
+export function getNotes() {
+    return kretaRequest("Feljegyzesek","notes","Feljegyzések lekérése sikertelen");
+}
+export function getStudentInfo(){
+    return kretaRequest("TanuloAdatlap","studentinfo","Tanuló adatainak lekérése sikertelen");
+}
+window.getGrades = getGrades;
+window.getStudentInfo = getStudentInfo;
+window.getHomeworks = getHomeworks;
 export function getData(){
     return genericKretaRequest("mapi/api/v1/StudentAmi?fromDate=null&toDate=null","data","Tanuló adatok lekérése sikertelen")
 }
@@ -262,7 +312,7 @@ export function login(form){
         }
         req({
             method:"POST",
-            url:`https://${form.inst}.e-kreta.hu/idp/api/v1/Token`,
+            url:`https://idp.e-kreta.hu/connect/token`,
             body:data,
         }).then((r)=>{
             if (r.statusCode == 200){
@@ -371,7 +421,7 @@ export function refreshToken(){
         }
         req({
             method:"POST",
-            url:`https://${user.inst}.e-kreta.hu/idp/api/v1/Token`,
+            url:`https://idp.e-kreta.hu/connect/token`,
             body:data,
         }).then((r)=>{
             if (r.statusCode == 200){
