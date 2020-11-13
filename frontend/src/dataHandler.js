@@ -7,7 +7,7 @@ import { pushError } from './components/MessageDisplay';
 import AbsenceModal from './components/modals/AbsenceModal';
 import SubjectModal from './components/modals/SubjectModal';
 import { getData, getHomework, getFromCache, fetchInst, pushHomeworkCompleted, refreshUser, getTimetable, getWeekStorageId, fetchedHW, getGrades, getNotes, getAbsences } from './api';
-import { getWeekIndex, formatURLsHTML } from './util';
+import { getWeekIndex, formatURLsHTML, sortByText } from './util';
 import { updateTT } from './view/Timetable';
 import storage from './storage';
 import {openGrade} from './components/modals/GradeModal';
@@ -179,6 +179,8 @@ export class Grade extends NormalisedItem {
     gradeTypeName;
     form;
     formName;
+    subject;
+    subjectId;
     
 
     onclick(){
@@ -201,6 +203,7 @@ export class Grade extends NormalisedItem {
         this.formName = o.ErtekFajta?.Leiras;
         this.mode = o.Mod?.Leiras;
         this.subject = o.Tantargy.Nev;
+        this.subjectId = o.Tantargy.Uid;
         if (this.form == "Magatartas" || this.form == "Szorgalom"){
             this.normal = false;
             if (this.subject == "Magatartas"){
@@ -357,7 +360,7 @@ export function setSubjectRounding(subject, v){
 window.setSubjectRounding = setSubjectRounding;
 
 export function roundSubject(subject){
-    let r = getSubjectRounding(subject.name)/100;
+    let r = getSubjectRounding(subject.id)/100;
     let avg = subject.average;
     let roundAt = Math.floor(avg)+r;
     if (avg >= roundAt){
@@ -369,7 +372,7 @@ export function roundSubject(subject){
 window.roundSubject = roundSubject;
 export function calcAvg(subject, avgCalc = {}){
     let sum = 0;
-    let count = subject.grades.length;
+    let count = 0;
 
     for (let [grade, c] of Object.entries(avgCalc)){
         sum += c * parseInt(grade);
@@ -378,7 +381,11 @@ export function calcAvg(subject, avgCalc = {}){
     
 
     for (let grade of subject.grades){
-        sum += grade.value;
+        var w = grade.weight/100;
+        if (grade.value > 0){
+            sum += grade.value*w;
+            count += w;
+        }
     }
     return sum/count;
 }
@@ -627,29 +634,7 @@ function processData(result){
             return new Grade(e);
         });
 
-        let subjects = [];
-        let subject_keys = {};
-
-        for (let g of grades){
-            if (!subject_keys[g.subject]){
-                let obj = {
-                    name:g.subject,
-                    average:NaN,
-                    grades:[],
-                    normal:g.normal
-                };
-                subject_keys[g.subject] = obj;
-                subjects.push(obj)
-            }
-            subject_keys[g.subject].grades.push(g);
-            
-        }
-        subjects.sort(function(a,b){
-            return a.name.localeCompare(b.name);
-        });
-        subjects.sort(function(a,b){
-            return b.normal - a.normal;
-        })
+        
         for (let e of data.Evaluations){
             if (e.Type == "HalfYear" || e.Type == "EndYear"){
                 if (subject_keys[e.Subject]){
@@ -698,8 +683,37 @@ function processData(result){
         
     }
 }
-function processGenericList(list, _class) {
-    return list.map(e=>new _class(e));
+class Subject {
+    name;
+    average=NaN;
+    grades = [];
+    id;
+    constructor(id,name){
+        this.name = name;
+        this.id = id;
+    }
+}
+function processGenericList(list, id, _class) {
+    var proc = list.map(e=>new _class(e));
+    
+    GlobalState.rawData[id] = list;
+    GlobalState.processedData[id] = proc;
+
+    if (id == "grades"){
+        var subjects = {}
+        proc.forEach(e=>{
+            if(!subjects[e.subjectId]){
+                subjects[e.subjectId] = new Subject(e.subjectId,e.subject);
+            }
+            subjects[e.subjectId].grades.push(e);
+        });
+        var endlist = Object.values(subjects);
+        endlist.map(e=>e.average = calcAvg(e));
+        
+        GlobalState.processedData.subjects = endlist
+            .sort((a,b)=>sortByText(a.name,b.name))
+                .sort((a,b)=>isNaN(a.average)-isNaN(b.average));
+    }
 }
 function afterLogin(){
     let online = navigator.onLine;
@@ -743,8 +757,7 @@ function afterLogin(){
                     const e = lists[i];
 
                     function process(d){
-                        GlobalState.rawData[e.id] = d;
-                        GlobalState.processedData[e.id] = processGenericList(d, e.class);
+                        processGenericList(d,e.id,e.class);
                     }
                     if (storage.has("data/"+e.id)){
                         process(storage.getJSON("data/"+e.id));

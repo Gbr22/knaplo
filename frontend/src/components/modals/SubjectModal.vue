@@ -82,7 +82,7 @@ export default {
         return {
             grades,
             avgCalc,
-            round:getSubjectRounding(this.obj.name),
+            round:getSubjectRounding(this.obj.id),
             chartOptions:{
                 tooltips:{
                     callbacks:{
@@ -182,7 +182,7 @@ export default {
                 return;
             }
             console.log("set",{val});
-            setSubjectRounding(this.obj.name, val);
+            setSubjectRounding(this.obj.id, val);
         },
         getSubjectRounding,
         calcNewAvg(){

@@ -1,11 +1,11 @@
 <template>
 <div id="home" class="screen">
     <div id="avg_screen">
-        <div class="inner" v-show="GlobalState.data">
+        <div class="inner">
             <div id="circle_container">
                 <ProgressRing id="avg_circle_bg" stroke-color="#DCE0D9" :radius="120/2" :progress="100" :stroke="6"></ProgressRing>
                 <ProgressRing id="avg_circle" stroke-color="#DCE0D9" :radius="120/2" :progress="avgPercent()" :stroke="6"></ProgressRing>
-                <span id="total_avg"><span id="total_avg_text">{{ GlobalState.data ? nameAbbriv(GlobalState.data.Name) : "##" }}</span></span>
+                <span id="total_avg"><span id="total_avg_text">{{ GlobalState.studentInfo ? nameAbbriv(GlobalState.studentInfo.Nev) : "##" }}</span></span>
             </div>
             <div id="avg_detail_cont">
                 <span class="section avg">
@@ -44,15 +44,12 @@
                 <span class="right roundPrev" v-if="!isNaN(subject.average)">
                     <span>{{ format(subject.average) || "#" }}</span>
                     <Icon src="fi/chevrons-right" v-bind:class="{ up: isRoundedUp(subject) }"/>
-                    <!-- <i class="material-icons" v-bind:class="{ up: isRoundedUp(subject) }">
-                        arrow_right_alt
-                    </i> -->
                     <span>{{ roundSubject(subject) || "#" }}</span>
                 </span>
                 
             </div>
             <div class="subject_grades">
-                {{ subject.grades.map((e)=>e.value.toString()[0]).join(" ") }}
+                {{ subject.grades.map((e)=>(e.value || e.textValue).toString()).join(" ") }}
             </div>
         </li>
     </ul>

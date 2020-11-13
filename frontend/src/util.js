@@ -7,6 +7,11 @@ export function tryJSON(string){
         return null;
     }
 }
+export function sortByText(a,b){
+    if(a < b) { return -1; }
+    if(a > b) { return 1; }
+    return 0;
+}
 export function tryJSONStringify(o){
     try {
         return JSON.stringify(o);
