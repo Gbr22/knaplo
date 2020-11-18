@@ -48,6 +48,7 @@ export function kretaRequest(endpoint,dataKey,errorMessage){
                 },
             }).then((res)=>{
                 if (res.statusCode == 200){
+                    /* debugger; */
                     storage.setJSON("data/"+dataKey, res.bodyJSON);
                     resolve(res.bodyJSON);
                 } else {

@@ -38,7 +38,7 @@
         </div>
     </div>
     <ul id="subjects" class="list">
-        <li v-for="(subject) in GlobalState.processedData.subjects" class="subject lItem" v-on:click="openSubject(subject)" v-bind:key="subject.name" @click="openSubject(subject)">
+        <li v-for="(subject) in GlobalState.processedData.subjects" class="subject lItem" v-bind:key="subject.name" @click="openSubject(subject)">
             <div class="subject_header">
                 <span class="left">{{ subject.name }}</span>
                 <span class="right roundPrev" v-if="!isNaN(subject.average)">

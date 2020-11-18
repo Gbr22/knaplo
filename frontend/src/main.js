@@ -16,7 +16,7 @@ window.GlobalState = GlobalState;
 
 import VueVirtualScroller from 'vue-virtual-scroller'
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
-import { closeModal } from './components/Modal';
+import { closeModal, back } from './components/Modal';
 import Icon from './components/Icon';
 
 
@@ -59,13 +59,19 @@ function goUpPage(){
 window.goUpPage = goUpPage;
 
 function onBackAction(){
-  return closeModal() || goUpPage();
+  return back() || goUpPage();
 }
 window.onBackAction = onBackAction;
 
+if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_BACK_FORWARD) {
+  console.log("back button error fix active");
+  window.location = window.location; //reload page
+}
 
 
-history.pushState({},'');
+setImmediate(()=>{
+  history.pushState({},'');
+})
 window.onpopstate = function(){
   
   

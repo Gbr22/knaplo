@@ -15,6 +15,7 @@ let GlobalState = {
     loggedIn:false,
     data:null,
     studentInfo:null,
+    modalStack:[],
     rawData:{
     },
     lessonsList:[],

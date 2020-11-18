@@ -462,6 +462,7 @@ window.updateList = updateList;
 function afterLogin(){
     let online = navigator.onLine;
     
+    
     setImmediate(()=>{
         if (storage.has("data/studentinfo")){
             GlobalState.studentInfo = storage.getJSON("data/studentinfo");

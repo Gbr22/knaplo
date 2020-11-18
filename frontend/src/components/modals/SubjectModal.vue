@@ -52,7 +52,7 @@
     
 
       <h2>Jegyek</h2>
-      <div>
+      <div class="gradeList">
           <TimelineItem v-for="item in grades" :item="item" v-bind:key="item.key" />
       </div>
 </div>
@@ -70,12 +70,7 @@ export default {
     name:"SubjectModal",
     props:["obj"],
     data(){
-        let grades = JSON.parse(JSON.stringify(this.obj.grades));
-        grades.forEach((e)=>{
-            e.header = e.desc;
-            e.desc = "";
-            e.onclick = ()=>{};
-        });
+        let grades = this.obj.grades;
         
         let avgCalc = Object.assign({},[null, 0,0,0,0,0]);
         delete avgCalc["0"];
@@ -216,6 +211,10 @@ export default {
 </script>
 
 <style scoped>
+    .gradeList {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
     h2 {
         text-align: center;
         padding: 10px 20px;
