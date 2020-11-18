@@ -218,9 +218,7 @@ export default {
         
     }
     #emptyCont {
-        background-image: url(
-            https://images.unsplash.com/photo-1573995012741-eb49887f8732?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1301&q=80
-        );
+        
         content: '';
         background-size: cover;
         background-position: center;
