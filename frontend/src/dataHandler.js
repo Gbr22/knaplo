@@ -7,7 +7,7 @@ import { pushError } from './components/MessageDisplay';
 import AbsenceModal from './components/modals/AbsenceModal';
 import SubjectModal from './components/modals/SubjectModal';
 import { getData, getHomework, getFromCache, fetchInst, pushHomeworkCompleted, refreshUser, getTimetable, getWeekStorageId, fetchedHW, getGrades, getNotes, getAbsences } from './api';
-import { getWeekIndex, formatURLsHTML, sortByText } from './util';
+import { getWeekIndex, formatURLsHTML, sortByText, wait } from './util';
 import { updateTT } from './view/Timetable';
 import storage from './storage';
 import {openGrade} from './components/modals/GradeModal';
@@ -574,8 +574,12 @@ class Subject {
 function processGenericList(list, id, _class) {
     var proc = list.map(e=>new _class(e));
     
-    GlobalState.rawData[id] = list;
-    GlobalState.processedData[id] = proc;
+    if (GlobalState.rawData[id] === undefined){
+        GlobalState.rawData[id] = [];
+    }
+    updateArray(GlobalState.rawData[id],list);
+    updateArray(GlobalState.processedData[id],proc);
+    
 
     if (id == "grades"){
         var subjects = {}
@@ -588,9 +592,13 @@ function processGenericList(list, id, _class) {
         var endlist = Object.values(subjects);
         endlist.map(e=>e.average = calcAvg(e));
         
-        GlobalState.processedData.subjects = endlist
+
+        updateArray(
+            GlobalState.processedData.subjects,
+            endlist
             .sort((a,b)=>sortByText(a.name,b.name))
-                .sort((a,b)=>isNaN(a.average)-isNaN(b.average));
+                .sort((a,b)=>isNaN(a.average)-isNaN(b.average))    
+        )
     }
 }
 class Homework {
@@ -598,122 +606,156 @@ class Homework {
         Object.assign(this,json);
     }
 }
+var dataLists = [
+    {
+        get:getGrades,
+        id:"grades",
+        class:Grade
+    },
+    {
+        get:getNotes,
+        id:"notes",
+        class:Note
+    },
+    {
+        get:getAbsences,
+        id:"absences",
+        class:Absence
+    },
+    {
+        get:getHomeworks,
+        id:"homeworks",
+        class:Homework
+    }
+]
+function updateLists(fetch) {
+    return Promise.all(dataLists.map(l=>{
+        return updateList(l.id,fetch);
+    }));
+}
+
+function updateList(list, fetch){
+    var lists = dataLists;
+    
+    for (let i = 0; i < lists.length; i++) {
+        const e = lists[i];
+
+        if (e.id != list){
+            continue;
+        }
+
+        function process(d){
+            processGenericList(d,e.id,e.class);
+        }
+        
+        if (fetch){
+            return new Promise((rs,rj)=>{
+                e.get().then(d=>{
+                    process(d);
+                    rs();
+                }).catch(rj);
+            })
+            
+        } else {
+            if (storage.has("data/"+e.id)){
+                process(storage.getJSON("data/"+e.id));
+            }
+            return new Promise(r=>r());
+        }
+        
+    }
+    return new Promise((_,r)=>r("No such list"));
+}
+window.updateList = updateList;
 function afterLogin(){
     let online = navigator.onLine;
-    if (online){
-        setImmediate(()=>{
+    
+    setImmediate(()=>{
+        if (storage.has("data/studentinfo")){
+            GlobalState.studentInfo = storage.getJSON("data/studentinfo");
+        }
+        updateLists(false);
+        if (online){
             refreshUser().then(()=>{
                 console.log("[afterlogin] refreshed user");
 
-                if (storage.has("data/studentinfo")){
-                    GlobalState.studentInfo = storage.getJSON("data/studentinfo");
-                }
+                
                 getStudentInfo().then(d=>{
                     GlobalState.studentInfo = d;
                 })
                 
-                var lists = [
-                    {
-                        get:getGrades,
-                        id:"grades",
-                        class:Grade
-                    },
-                    {
-                        get:getNotes,
-                        id:"notes",
-                        class:Note
-                    },
-                    {
-                        get:getAbsences,
-                        id:"absences",
-                        class:Absence
-                    },
-                    {
-                        get:getHomeworks,
-                        id:"homeworks",
-                        class:Homework
-                    }
-                ];
-                
-                for (let i = 0; i < lists.length; i++) {
-                    const e = lists[i];
-
-                    function process(d){
-                        processGenericList(d,e.id,e.class);
-                    }
-                    if (storage.has("data/"+e.id)){
-                        process(storage.getJSON("data/"+e.id));
-                    }
-                    e.get().then(d=>{
-                        process(d);
-                    })
-                }
-                /* function afterData(){
-                    
-                }
-                getData().then((result)=>{
-                    processData(result);
-                    afterData();
-                }).catch(()=>{
-                    afterData();
+                updateLists(true).then(()=>{
+                    console.log("All data successfully fetched");
                 })
-                getHomeworks(); */
+                
             })
-        })
+        }
         
-    }
+    })
 }
+
 export function refreshPage(page){
     if (!navigator.onLine){
         console.log("offline, not refreshing");
+        pushError("Nincs internet");
         return new Promise(r=>r());
     }
     let actions = [
         {
-            pages:["avgs","timeline","more/halfyr"],
+            pages:["timeline"],
             action(){
-                return new Promise(function(resolve){
-                    getData().then((result)=>{
-                        processData(result);
-                        console.log("refreshed data");
-                        resolve();
-                    });
-                })
-                
+                return Promise.all([
+                    updateList("grades",true),
+                    updateList("notes",true),
+                    updateList("absences",true)
+                ]);
+            }
+        },
+        {
+            pages:["more"],
+            action(){
+                return getStudentInfo().then(d=>{
+                    GlobalState.studentInfo = d;
+                });
+            }
+        },
+        {
+            pages:["more/halfyr", "avgs"],
+            action(){
+                return updateList("grades",true);
             }
         },
         {
             pages:["timetable"],
             action(){
-                return new Promise(function(resolve){
-                    weekReactiveRequested = [];
-                    updateTT();
-                    setTimeout(()=>{
-                        resolve();
-                    },500)
-                })
+                return new Promise(r=>r()); // TODO timetable refresh
             }
         },
         {
             pages:["homework"],
             action(){
-                return new Promise(function(resolve){
-                    
-                    getHomeworks().then((result)=>{
-                        resolve();
-                        console.log("refreshed homework");
-                    });
-                })
+                return updateList("homeworks",true);
             }
         }
     ]
-    
+    var promises = [new Promise(r=>r())];
     for (let a of actions){
         if (a.pages.includes(page)){
-            return a.action();
+            promises.push(a.action());
         }
     }
-    return new Promise(r=>r());
+    var time = Date.now();
+    
+    return Promise.all([
+        new Promise((resolve,reject)=>{
+            Promise.all(promises).then(()=>{
+                var now = Date.now();
+                console.log("Refreshed page in",now-time);
+                resolve();
+            }).catch(resolve);
+        }),
+        wait(1000)
+    ]);
 }
 
 export function getInst(){

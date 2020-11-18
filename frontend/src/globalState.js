@@ -16,7 +16,6 @@ let GlobalState = {
     data:null,
     studentInfo:null,
     rawData:{
-        grades:[]
     },
     lessonsList:[],
     processedData:{
@@ -39,17 +38,6 @@ let GlobalState = {
 window.Cookies = Cookies;
 
 export let ApiEndpoint = "/api/";
-
-setTimeout(()=>{
-    if (!storage.getJSON("migrated/hwc1")){
-        homeworksCompleted().forEach(e=>{
-            if (e.value){
-                setHomeworkDone(e.id,e.value);
-            }
-        });
-        storage.setJSON("migrated/hwc1",true);
-    }
-},0)
 
 
 function loginWithCookie(c){
