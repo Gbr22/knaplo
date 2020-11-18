@@ -136,7 +136,29 @@ body, .list, #recent, .fullpage_modal {
 
 @media (hover: hover) and (pointer: fine) {
     #app {
-        flex-direction: column-reverse;
+        flex-direction: row-reverse;
+    }
+    nav#menu {
+        flex-direction: column;
+        justify-content: flex-start;
+        box-shadow: none;
+    }
+    button.navItem {
+        display: flex;
+        flex-direction: row;
+        width: unset !important;
+        align-items: center;
+        padding: 8px 20px !important;
+    }
+    button.navItem.active {
+        background-color: rgba(28, 170, 83, 0.1) !important;
+        border-radius: 20px;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+    button.navItem b {
+        margin-left: 10px;
+        font-size: 13px !important;
     }
     .pc-no-scroll {
         overflow: hidden !important;

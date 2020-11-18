@@ -1,5 +1,5 @@
 <template>
-  <button v-bind:class="{ active: GlobalState.currentMenu.indexOf(navTo)==0 }" v-on:click="navigate(navTo)">
+  <button v-bind:class="{ active: GlobalState.currentMenu.indexOf(navTo)==0 }" v-on:click="navigate(navTo)" class="navItem">
         <Icon :src="icon" />
         <b>{{ text }}</b>
     </button>
