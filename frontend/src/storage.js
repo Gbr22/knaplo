@@ -40,16 +40,14 @@ class Storage {
     constructor(){
 
     }
+    clear(){
+        localStorage.clear();
+    }
     migrate(){
-        let keys = Object.keys(localStorage);
-        for (let key of keys){
-            if (key.indexOf("data_") == 0 && key.indexOf("data_homework/") == 0){
-                this.setJSON(
-                    key.replace("data_","data/"),
-                    this.getJSON(key).data
-                )
-                this.removeItem(key);
-            }
+        var compatibilityVersion = "1";
+        if (this.getItem("storageVersion") != compatibilityVersion){
+            this.clear();
+            this.setItem("storageVersion",compatibilityVersion);
         }
     }
 }
