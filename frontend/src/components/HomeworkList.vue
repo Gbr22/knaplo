@@ -1,6 +1,6 @@
 <template>
     <div class="homeworkList" v-if="list.length > 0">
-        <h2 class="title">{{ title }} (<b>{{ getCompletedCount() }}</b>/{{ list.length }})</h2>
+        <h2 class="title">{{ title }} ({{ list.length }})</h2>
         <div class="list">
             <div class="homework lItem" v-for="elem in list" :key="elem.id" @click="openHomework(elem)">
                 <div class="header">
@@ -9,11 +9,11 @@
                 </div>
                 <div class="bottom">
                     <div class="desc">{{ getText(elem) }}</div>
-                    <button class="completed" :data-value="elem.IsMegoldva+''"
+                    <!-- <button class="completed" :data-value="elem.IsMegoldva+''"
                         @click.stop="()=>{}"
                     >
                         <Icon :src="(isCompleted(elem) ? 'fi/check' : 'fi/x')" class="icon" />
-                    </button>
+                    </button> -->
                 </div>
             </div>
         </div>

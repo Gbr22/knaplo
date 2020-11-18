@@ -114,12 +114,13 @@ export function shortenText(s,limit){
 window.shortenText = shortenText;
 export function htmlToText(s){
     var span = document.createElement('span');
-    span.innerHTML = s;
+    span.innerHTML = s.replace(/<\/p>/g,"</p>\n");
     return span.textContent || span.innerText;
 }
 export function toOneLine(s){
-    return s.replace(/\n/g,'').replace(/ +(?= )/g,'');
+    return s.replace(/\n/g,' ').replace(/ +(?= )/g,'');
 }
+window.toOneLine = toOneLine;
 window.htmlToText = htmlToText;
 export function decodeHtmlEntities(html) {
     var txt = document.createElement("textarea");

@@ -16,13 +16,14 @@
           <hr>
       </div> -->
       <div class="hwContent" v-html="html"></div>
-      <div class="completedSwitch" :data-value="obj.IsMegoldva+''">
+      <!-- <div class="completedSwitch" :data-value="obj.IsMegoldva+''">
           <p>Megoldott feladat?</p>
           <span>
                 <button class="true" @click="()=>{}">Igen</button>
                 <button class="false" @click="()=>{}">Nem</button>
           </span>
-      </div>
+      </div> -->
+      <Author :author="obj.RogzitoTanarNeve" :date="new Date(obj.RogzitesIdopontja)" />
   </div>
 </template>
 
@@ -32,11 +33,14 @@ import { formatURLsHTML, formatDate } from '../../util';
 import { openModal } from '../Modal';
 import { getHomeworkCompleted, setHomeworkCompleted, toggleHomeworkCompleted, getHWCompObjFArr } from '../../dataHandler';
 import { setHomeworkDone, getHomework } from '../../api';
-
+import Author from '../Author';
 
 let HomeworkModal = {
     name:"HomeworkModal",
     props:["obj"],
+    components:{
+        Author,
+    },
     data(){
         let html = this.obj.Szoveg;
         html = formatURLsHTML(html);
@@ -160,5 +164,9 @@ export function openHomework(elem){
     .hwContent :first-child {
         padding-top: 0 !important;
         margin-top: 0 !important;
+    }
+    .hwContent :last-child {
+        padding-bottom: 0 !important;
+        margin-bottom: 0 !important;
     }
 </style>
