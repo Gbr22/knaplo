@@ -80,7 +80,6 @@
 import GlobalState from '../globalState'
 import { formatDate, getDayName, getDayShortName, formatTime, shortenText } from '../util';
 import { openHomework } from '../components/modals/HomeworkModal.vue';
-import { getHomework } from '../api';
 import { getWeekReactive } from '../dataHandler';
 import { Swiper, SwiperSlide, directive } from 'vue-awesome-swiper'
 import 'swiper/css/swiper.css'
@@ -140,29 +139,14 @@ export default {
             return lesson.Tipus.Nev == 'TanevRendjeEsemeny';
         },
         openLesson(lesson){
-            let id = lesson.TeacherHomeworkId;
+            console.log("openlesson",lesson);
+            let id = lesson.HaziFeladatUid;
             
-            function afterHomework(homework){
-                if (homework){
-                    openHomework({lesson,homework,id});
-                }
+            var homework = GlobalState.processedData.homeworks.filter(e=>e.id == id)[0];
+            if (homework){
+                openHomework(homework);
             }
-            if (id == null){
-                afterHomework(null);
-            } else {
-                getHomework(id).then((result)=>{
-                    if (result){
-                        afterHomework(result);
-                    } else {
-                        afterHomework(null);    
-                    }
-                }).catch(()=>{
-                    
-                    afterHomework(null);
-
-                })
-            }
-            console.log(lesson);
+            
         },
         gotoDay(index){
             

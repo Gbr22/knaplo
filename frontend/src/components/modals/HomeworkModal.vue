@@ -31,8 +31,6 @@
 import GlobalState from '../../globalState';
 import { formatURLsHTML, formatDate } from '../../util';
 import { openModal } from '../Modal';
-import { getHomeworkCompleted, setHomeworkCompleted, toggleHomeworkCompleted, getHWCompObjFArr } from '../../dataHandler';
-import { setHomeworkDone, getHomework } from '../../api';
 import Author from '../Author';
 
 let HomeworkModal = {

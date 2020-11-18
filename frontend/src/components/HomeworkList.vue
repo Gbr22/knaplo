@@ -58,7 +58,6 @@ export default {
         openHomework,
         shortenText,
         htmlToText,
-        getHomeworkCompleted,
         toggleHomeworkCompleted(hw){
             let inital = hw.IsMegoldva;
             /* hw.IsMegoldva = hw.IsMegoldva == "True" ? "False" : "True"; */

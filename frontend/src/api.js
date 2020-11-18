@@ -27,35 +27,7 @@ export function getFromCache(dataKey){
     return storage.getJSON("data/"+dataKey);
 }
 window.getFromCache = getFromCache;
-export function genericKretaRequest(endpoint,dataKey,errorMessage){
-    let info = GlobalState.user;
-    return new Promise(function(resolve,reject){
-        refreshUser().then(()=>{
-            function showErr(err){
-                if (errorMessage){
-                    pushError(errorMessage);
-                    console.error(errorMessage,err);
-                }
-                reject(err);
-            }
-            req({
-                url:`https://${info.inst}.e-kreta.hu/${endpoint}`,
-                headers:{
-                    "Authorization":"Bearer "+info.access_token,
-                },
-            }).then((res)=>{
-                if (res.statusCode == 200){
-                    storage.setJSON("data/"+dataKey, res.bodyJSON);
-                    resolve(res.bodyJSON);
-                } else {
-                    showErr(res);
-                }
-            }).catch((err)=>{
-                showErr(err);
-            });
-        })
-    });
-}
+
 export function kretaRequest(endpoint,dataKey,errorMessage){
     let info = GlobalState.user;
     var inst = info.inst;
@@ -108,9 +80,6 @@ export function getStudentInfo(){
 window.getGrades = getGrades;
 window.getStudentInfo = getStudentInfo;
 window.getHomeworks = getHomeworks;
-export function getData(){
-    return genericKretaRequest("mapi/api/v1/StudentAmi?fromDate=null&toDate=null","data","Tanuló adatok lekérése sikertelen")
-}
 
 export function getWeekStorageId(weeksAfter = 0){
     let {first, last} = getWeekIndex(weeksAfter);
@@ -182,7 +151,7 @@ export function fetchInstRaw(){
 window.fetchInstRaw = fetchInstRaw;
 
 window.getTimetable = getTimetable;
-window.getData = getData;
+
 
 export function login(form){
     return new Promise(function(resolve,reject){

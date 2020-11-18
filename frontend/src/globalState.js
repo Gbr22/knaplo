@@ -2,7 +2,7 @@ import { getInst, homeworksCompleted } from "./dataHandler";
 
 import Cookies from 'js-cookie';
 
-import { afterLogin, getHomeworksCompletedMap } from './dataHandler';
+import { afterLogin } from './dataHandler';
 import { getCookieFromString } from "./util";
 import storage from './storage';
 import { httpRequest } from "./http";

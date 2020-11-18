@@ -6,7 +6,7 @@ import { pushError } from './components/MessageDisplay';
 
 import AbsenceModal from './components/modals/AbsenceModal';
 import SubjectModal from './components/modals/SubjectModal';
-import { getData, getHomework, getFromCache, fetchInst, pushHomeworkCompleted, refreshUser, getTimetable, getWeekStorageId, fetchedHW, getGrades, getNotes, getAbsences } from './api';
+import { getFromCache, fetchInst, refreshUser, getTimetable, getWeekStorageId, getGrades, getNotes, getAbsences } from './api';
 import { getWeekIndex, formatURLsHTML, sortByText, wait } from './util';
 import { updateTT } from './view/Timetable';
 import storage from './storage';
@@ -21,113 +21,6 @@ export function openSubject(subject){
 if (window.cordova){
     console.log("running in app");
 }
-
-export function homeworksCompleted(){
-    return GlobalState.processedData.homeworksCompleted;
-}
-
-window.homeworksCompleted = homeworksCompleted;
-
-export function getHWCompObjFArr(id,arr){
-    id = id.toString();
-    for (let p of arr){
-        if (p.id == id){
-            return p;
-        }
-    }
-    return null;
-}
-function getHWCompObj(id){
-    return getHWCompObjFArr(id,homeworksCompleted());
-}
-
-export function getHomeworkCompleted(id){
-    return getHWCompObj(id)?.value == true;
-}
-window.getHomeworkCompleted = getHomeworkCompleted;
-
-export function cleanHWC(arr = homeworksCompleted()){
-    let ids = new Map();
-    for (let i=0; i < arr.length; i++){
-        let e = arr[i];
-        if (!ids.has(e.id)){
-            ids.set(e.id,[]);
-        } else {
-            ids.get(e.id).push(e);
-        }
-    }
-    for (let [id,elems] of ids){
-        let max = elems[0];
-        for (let e in elems){
-            if (e.changed > max.changed){
-                max = e;
-            }
-        }
-        for (let e in elems){
-            if (e != max){
-                arr.splice(arr.indexOf(max),1);
-            }
-        }
-        
-    }
-}
-
-
-window.cleanHWC = cleanHWC;
-export function assignHomeworkCompletedState(id,assignState){
-    
-    id = id.toString();
-    let state = getHWCompObj(id);
-    let exists = true;
-    if (state == null){
-        exists = false;
-        state = {id:id};
-    }
-    Object.assign(state,assignState);
-
-    if (!exists){
-        let arr = homeworksCompleted();
-        arr.push(state);
-    }
-    cleanHWC();
-    saveHWC();
-    return state;
-}
-let scheduledSync = -1;
-let HWCpushList = [];
-export function beforePushHWC(change){
-    HWCpushList.push(change);
-    if (scheduledSync){
-        clearTimeout(scheduledSync);
-    }
-    scheduledSync = setTimeout(()=>{
-        if (navigator.onLine){
-            cleanHWC(HWCpushList)
-            syncHomeworkCompleted(HWCpushList);
-            HWCpushList = [];
-        }
-    }, 500);
-}
-export function setHomeworkCompleted(id,value, sync = true){
-    
-    let result = assignHomeworkCompletedState(id,{
-        changed: Date.now(),
-        value:value,
-    });
-
-    if (sync){
-        beforePushHWC(result);
-    }
-    
-}
-export function saveHWC(){
-    localStorage.setItem("homeworksCompleted", JSON.stringify(homeworksCompleted()));
-}
-export function toggleHomeworkCompleted(id){
-    console.log("toggling",id);
-    return setHomeworkCompleted(id, !getHomeworkCompleted(id));
-}
-window.setHomeworkCompleted = setHomeworkCompleted;
 
 export class NormalisedItem {
 
@@ -404,56 +297,6 @@ export function getAverage(){
 }
 window.getAverage = getAverage;
 
-export var homeworkMap = new Map();
-function processHomeworks(homeworks){
-    let promises = [];
-    let processed = [];
-    let index = 0;
-    let hadContent = !(GlobalState.processedData.homeworks.length == 0);
-    for (let e of homeworks){
-        index++;
-        promises.push(new Promise(function(resolve,reject){
-            
-            if (storage.has(`data/homework/${e.id}`)){
-                let hw = storage.getJSON(`data/homework/${e.id}`);
-                e.homework = hw;
-                if (!homeworkMap.has(e.id)){
-                    homeworkMap.set(e.id,e);
-                }
-                processed.push(e);
-                updateArray(GlobalState.processedData.homeworks,[...homeworkMap.values()]);
-
-                if (!hw.IsMegoldva && navigator.onLine){
-                    
-                    setTimeout(()=>{
-                        getHomework(e.id,true).then((result)=>{
-                            e.homework = result;
-                            homeworkMap.set(e.id,e);
-                            updateArray(GlobalState.processedData.homeworks,[...homeworkMap.values()]);
-                        })
-                    },100);       
-                }
-            } else if (navigator.onLine) {
-                getHomework(e.id).then((result)=>{
-                    e.homework = result;
-                    homeworkMap.set(e.id,e);
-                    processed.push(e);
-                    updateArray(GlobalState.processedData.homeworks,[...homeworkMap.values()]);
-                    resolve(e);
-                }).catch(()=>{
-                    console.log("Couldn't get homework!",e);
-                    resolve();
-                })
-            }
-        }));
-    }
-    Promise.all(promises).then((values)=>{
-        if (homeworks.length != processed.length){
-            pushError("Nem sikerült minden házit lekérni");
-        }
-        updateArray(GlobalState.processedData.homeworks,[...homeworkMap.values()]);
-    })
-}
 
 let weekReactiveRequested = [];
 export function getWeekReactive(i){
@@ -506,59 +349,6 @@ export function getWeekDaysTT(lessons){
     });
 }
 window.getWeekDaysTT = getWeekDaysTT;
-function processTimetable(result){
-    if (result){
-        let list = GlobalState.lessonsList = result;
-
-        
-        let days = getWeekDaysTT(list);
-        for (let day of days){
-            day.lessons.sort((a,b)=>{
-                return new Date(a.StartTime) - new Date(b.StartTime);
-            })
-        }
-
-        let weeksMap = {};
-        for (let e of days){
-            let date = new Date(e.day);
-            
-            let current = date.getDay() - 1;
-            if (current == -1){
-                current = 6;
-            }
-            let first = date.getDate() - current;
-            let last = first + 6;
-
-            first = new Date(date.setDate(first));
-            last = new Date(date.setDate(last));
-
-            
-
-            let week = first.toDateString();
-
-            let active = first < new Date() && new Date() < last;
-
-            if (!weeksMap[week]){
-                weeksMap[week] = {
-                    week,
-                    first,
-                    last,
-                    active,
-                    days:[]
-                }
-            }
-            weeksMap[week].days.push(e);
-        }
-        let weeks = Object.values(weeksMap);
-        for (let week of weeks){
-            week.days.sort((a,b)=>{
-                return new Date(a.day) - new Date(b.day);
-            })
-        }
-
-        updateArray(GlobalState.processedData.timetable.weeks, weeks);
-    }
-}
 
 
 class Subject {
@@ -602,7 +392,9 @@ function processGenericList(list, id, _class) {
     }
 }
 class Homework {
+    id;
     constructor(json){
+        this.id = json.Uid;
         Object.assign(this,json);
     }
 }
