@@ -28,7 +28,6 @@ let GlobalState = {
             weeks:[]
         },
         homeworks:[],
-        homeworksCompleted:storage.getJSON("homeworksCompleted") || [],
     },
     subjectRoundings:storage.getJSON("roundings") || {},
     options:options.getAllOptions(),

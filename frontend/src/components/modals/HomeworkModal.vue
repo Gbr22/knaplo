@@ -3,24 +3,24 @@
       <div class="dates">
           <div>
               <span class="t">Feladva</span>
-              <span class="d">{{ formatDate(obj.homework.FeladasDatuma) }}</span>
+              <span class="d">{{ formatDate(obj.FeladasDatuma) }}</span>
           </div>
           <div>
               <span class="t">Határidő</span>
-              <span class="d">{{ formatDate(obj.homework.Hatarido) }}</span>
+              <span class="d">{{ formatDate(obj.HataridoDatuma) }}</span>
           </div>
       </div>
       <hr>
-      <div v-if="obj.lesson.Theme">
+      <!-- <div v-if="obj.lesson.Theme">
           <h3 class="theme">{{ obj.lesson.Theme }}</h3>
           <hr>
-      </div>
+      </div> -->
       <div class="hwContent" v-html="html"></div>
-      <div class="completedSwitch" :data-value="isCompleted(obj.homework)+''">
+      <div class="completedSwitch" :data-value="obj.IsMegoldva+''">
           <p>Megoldott feladat?</p>
           <span>
-                <button class="true" @click="setHomeworkCompleted(obj.homework,true)">Igen</button>
-                <button class="false" @click="setHomeworkCompleted(obj.homework,false)">Nem</button>
+                <button class="true" @click="()=>{}">Igen</button>
+                <button class="false" @click="()=>{}">Nem</button>
           </span>
       </div>
   </div>
@@ -38,7 +38,7 @@ let HomeworkModal = {
     name:"HomeworkModal",
     props:["obj"],
     data(){
-        let html = this.obj.homework.Szoveg;
+        let html = this.obj.Szoveg;
         html = formatURLsHTML(html);
 
 
@@ -68,11 +68,8 @@ export function openHomework(elem){
 
     let obj = elem;
     console.log("homework",elem);
-    getHomework(elem.id,true).then((data)=>{
-        Object.assign(elem.homework,data);
-        console.log("updated homework",elem,data);
-    });
-    openModal(elem.homework.Tantargy,HomeworkModal,obj);
+    
+    openModal(elem.Tantargy.Nev,HomeworkModal,obj);
 }
 
 

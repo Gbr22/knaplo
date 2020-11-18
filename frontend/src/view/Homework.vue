@@ -29,7 +29,6 @@ export default {
             query:"",
             GlobalState,
             homeworks:GlobalState.processedData.homeworks,
-            homeworksCompleted:GlobalState.processedData.homeworksCompleted,
         }
     },
     methods:{
@@ -38,11 +37,11 @@ export default {
             /* return getHWCompObjFArr(hw.Id, this.homeworksCompleted)?.value == true; */
         },
         sortByDone(a,b){
-            return this.isCompleted(a.homework) - this.isCompleted(b.homework);
+            return this.isCompleted(a.IsMegoldva) - this.isCompleted(b.IsMegoldva);
         },
         isExpired(e){
             let g = getDateCompareNumber;
-            return g(new Date(e.homework.Hatarido)) < g(new Date());
+            return g(new Date(e.HataridoDatuma)) < g(new Date());
         },
         isTomorrow(e){
             if (!GlobalState.options["homeworks.separateTomorrow"]){
@@ -51,14 +50,14 @@ export default {
             let g = getDateCompareNumber;
             let tomorrow = new Date();
             tomorrow.setDate(tomorrow.getDate()+1);
-            let compare = g(new Date(e.homework.Hatarido));
+            let compare = g(new Date(e.HataridoDatuma));
             return compare == g(new Date()) || compare == g(tomorrow);
         },
         getActual(){
             return this.getFiltered().filter((e)=>{
                 return !this.isExpired(e) && !this.isTomorrow(e);
             }).sort((a,b)=>{
-                let g = x => new Date(x.homework.Hatarido);
+                let g = x => new Date(x.HataridoDatuma);
                 return g(a)-g(b);
             }).sort(this.sortByDone)
         },
@@ -66,7 +65,7 @@ export default {
             return this.getFiltered().filter((e)=>{
                 return this.isTomorrow(e);
             }).sort((a,b)=>{
-                let g = x => new Date(x.homework.Hatarido);
+                let g = x => new Date(x.HataridoDatuma);
                 return g(a)-g(b);
             }).sort(this.sortByDone)
         },
@@ -75,7 +74,7 @@ export default {
             return this.getFiltered().filter((e)=>{
                 return this.isExpired(e);
             }).sort((a,b)=>{
-                let g = x => new Date(x.homework.Hatarido);
+                let g = x => new Date(x.HataridoDatuma);
                 return g(b)-g(a);
             }).sort(this.sortByDone)
         },
@@ -98,9 +97,9 @@ export default {
                 });
                 for (let key of keywords){
                     let check = [
-                        hw.homework.Tantargy,
-                        hw.homework.Rogzito,
-                        htmlToText(formatURLsHTML(hw.homework.Szoveg))
+                        hw.TantargyNeve,
+                        hw.RogzitoTanarNeve,
+                        htmlToText(formatURLsHTML(hw.Szoveg))
                     ]
                     for (let c of check){
                         if (norm(c).indexOf(norm(key)) != -1){

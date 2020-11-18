@@ -4,15 +4,15 @@
         <div class="list">
             <div class="homework lItem" v-for="elem in list" :key="elem.id" @click="openHomework(elem)">
                 <div class="header">
-                    <span class="subject">{{ elem.lesson.Subject }}</span>
-                    <span class="until"><i>{{ formatDate(elem.homework.FeladasDatuma) }}</i> - {{ formatDate(elem.homework.Hatarido) }}</span>
+                    <span class="subject">{{ elem.Tantargy.Nev }}</span>
+                    <span class="until"><i>{{ formatDate(elem.FeladasDatuma) }}</i> - {{ formatDate(elem.HataridoDatuma) }}</span>
                 </div>
                 <div class="bottom">
                     <div class="desc">{{ getText(elem) }}</div>
-                    <button class="completed" :data-value="isCompleted(elem.homework)+''"
-                        @click.stop="toggleHomeworkCompleted(elem.homework)"
+                    <button class="completed" :data-value="elem.IsMegoldva+''"
+                        @click.stop="()=>{}"
                     >
-                        <Icon :src="(isCompleted(elem.homework) ? 'fi/check' : 'fi/x')" class="icon" />
+                        <Icon :src="(isCompleted(elem) ? 'fi/check' : 'fi/x')" class="icon" />
                     </button>
                 </div>
             </div>
@@ -23,10 +23,10 @@
 <script>
 import { shortenText, htmlToText, formatURLsHTML, formatDate, toOneLine } from '../util'
 import { openHomework } from '../components/modals/HomeworkModal.vue';
-import { getHomeworkCompleted, setHomeworkCompleted, toggleHomeworkCompleted, getHWCompObjFArr } from '../dataHandler';
+import {  } from '../dataHandler';
 import GlobalState from '../globalState';
 import Icon from './Icon';
-import { isHomeworkDone, toggleHomeworkDone } from '../api';
+import {  } from '../api';
 
 
 
@@ -34,10 +34,9 @@ export default {
     name:"HomeworkList",
     props:["list","title"],
     data(){
-        let hwc = GlobalState.processedData.homeworksCompleted;
         return {
             GlobalState,
-            homeworksCompleted:hwc
+            
         }
     },
     components:{
@@ -46,14 +45,14 @@ export default {
     methods:{
         formatDate,
         getCompletedCount(){
-            return this.list.filter(e=>this.isCompleted(e.homework)).length;
+            return this.list.filter(e=>this.isCompleted(e)).length;
         },
         isCompleted(hw){
             return hw.IsMegoldva;
             /* return getHWCompObjFArr(hw.Id, this.homeworksCompleted)?.value == true; */
         },
         getText(elem){
-            let text = htmlToText(formatURLsHTML(elem.homework.Szoveg));
+            let text = htmlToText(formatURLsHTML(elem.Szoveg));
             return shortenText(toOneLine(text), 50);
         },
         openHomework,

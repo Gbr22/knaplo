@@ -202,8 +202,8 @@ export class Grade extends NormalisedItem {
         });
         this.formName = o.ErtekFajta?.Leiras;
         this.mode = o.Mod?.Leiras;
-        this.subject = o.Tantargy.Nev;
-        this.subjectId = o.Tantargy.Uid;
+        this.subject = o.Tantargy?.Nev;
+        this.subjectId = o.Tantargy?.Uid;
         if (this.form == "Magatartas" || this.form == "Szorgalom"){
             this.normal = false;
             if (this.subject == "Magatartas"){
@@ -480,64 +480,6 @@ export function getWeekReactive(i){
 }
 window.getWeekReactive = getWeekReactive;
 
-
-export async function getHomeworks(){
-    fetchedHW.clear();
-    let weeks = [0,-1,1]; //important weeks
-    await getSomeHomeworks(weeks);
-    await getSomeHomeworks([-2]);
-}
-export function getSomeHomeworks(weeks){
-    
-    return new Promise((resolve,reject)=>{
-        let list = new Map();
-        
-        let finished = 0;
-        
-        function done(){
-            finished++;
-            if (finished == weeks.length){
-                resolve();
-            }
-        }
-        function process(){
-            let arr = [...(list).values()].flat();
-            let homeworks = arr.filter((e)=>e.TeacherHomeworkId != null);
-            homeworks = homeworks.map((e)=>({lesson:e,id:e.TeacherHomeworkId}));
-            processHomeworks(homeworks);
-            /* console.log(...arguments, list); */
-        }
-        function get(i){
-            let s = getFromCache(getWeekStorageId(i));
-            if (s){
-                list.set(i,s);
-                process(i,"cache");
-            }
-
-
-
-            if (navigator.onLine){
-                getTimetable(i).then((result)=>{
-                    if (result){
-                        list.set(i,result);
-                        process(i,"network");
-                    }
-                    done();
-                }).catch(()=>{
-                    done();
-                })
-            } else {
-                done();
-            }
-            
-        }
-        
-        for (let i of weeks){
-                get(i);
-            }
-        
-    }) 
-}
 export function getWeekDaysTT(lessons){
     let daysMap = {};
     for (let e of lessons){
@@ -618,71 +560,7 @@ function processTimetable(result){
     }
 }
 
-function processData(result){
-    if(result){
-        let data = GlobalState.data = result;
-        let pd = GlobalState.processedData;
 
-        
-
-        let grades = data.Evaluations.filter((e)=>{
-            return e.Type == "MidYear" && (
-                e.Form == "Mark" ||
-                e.Form == "Diligence" || e.Form == "Deportment"
-            );
-        }).map((e)=>{
-            return new Grade(e);
-        });
-
-        
-        for (let e of data.Evaluations){
-            if (e.Type == "HalfYear" || e.Type == "EndYear"){
-                if (subject_keys[e.Subject]){
-                    subject_keys[e.Subject][e.Type] = new Grade(e);
-                }
-                
-            }
-        }
-        
-
-        updateArray(pd.grades,grades);
-
-        for (let subject of subjects){
-            subject.average = calcAvg(subject);
-        }
-
-        updateArray(pd.subjects,subjects);
-        updateArray(pd.notes, data.Notes.map((n)=>new Note(n)));
-
-        {
-            let delays = [];
-            let map = {};
-            for (let e of data.Absences){
-                if (e.Type == "Delay"){
-                    delays.push(new Absence(e));
-                } else {
-                    let id = e.JustificationType + e.Type + e.LessonStartTime;
-                    let day = map[id];
-                    if (day){
-                        day;
-                    } else {
-                        day = map[id] = new AbsentDay(e);
-                    }
-                    day.push(new Absence(e));
-                }
-            }
-            let absentDays = Object.values(map);
-            updateArray(pd.absentDays, absentDays);
-            updateArray(pd.delays, delays);
-        }
-        updateArray(pd.absences, data.Absences.filter((e)=>{
-            return e.Type != "Delay";
-        }).map((e)=>new Absence(e)));
-
-        
-        
-    }
-}
 class Subject {
     name;
     average=NaN;
@@ -715,14 +593,13 @@ function processGenericList(list, id, _class) {
                 .sort((a,b)=>isNaN(a.average)-isNaN(b.average));
     }
 }
+class Homework {
+    constructor(json){
+        Object.assign(this,json);
+    }
+}
 function afterLogin(){
     let online = navigator.onLine;
-    setImmediate(()=>{
-        processData(getFromCache("data"));
-        if (!online){
-            getHomeworks();
-        }
-    });
     if (online){
         setImmediate(()=>{
             refreshUser().then(()=>{
@@ -751,6 +628,11 @@ function afterLogin(){
                         id:"absences",
                         class:Absence
                     },
+                    {
+                        get:getHomeworks,
+                        id:"homeworks",
+                        class:Homework
+                    }
                 ];
                 
                 for (let i = 0; i < lists.length; i++) {

@@ -88,7 +88,9 @@ export function kretaRequest(endpoint,dataKey,errorMessage){
     });
 }
 export function getHomeworks(){
-    return kretaRequest("HaziFeladatok","homeworks","Házifeladatok lekérése sikertelen");
+    var dateString = "1996-01-01";
+    
+    return kretaRequest(`HaziFeladatok?datumTol=${dateString}`,"homeworks","Házifeladatok lekérése sikertelen");
 }
 export function getGrades(){
     return kretaRequest("Ertekelesek","grades","Jegyek lekérése sikertelen");
@@ -178,117 +180,10 @@ export function fetchInstRaw(){
     });
 }
 window.fetchInstRaw = fetchInstRaw;
-export function pushHomeworkCompleted(arr){
-    return new Promise(function(resolve,reject){
-        refreshUser().then(()=>{
-            let errorMessage = "Kész házik szinkronizálása sikertelen";
-            function showErr(err){
-                if (errorMessage){
-                    pushError(errorMessage)
-                }
-                reject(err);
-            }
-            httpRequest({
-                url:`${ApiEndpoint}pushHomeworkDone`,
-                body:arr,
-                headers:{
-                    "x-login-info":JSON.stringify(GlobalState.user)
-                },
-                method:"POST"
-            }).then((res)=>{
-                if (res.statusCode == 200){
-                    resolve(res.bodyJSON);
-                } else {
-                    showErr(res);
-                }
-            }).catch((err)=>{
-                showErr(err);
-            });
-        })
-    });
-}
-window.pushHomeworkCompleted = pushHomeworkCompleted;
-export var fetchedHW = new Map();
-window.fetchedHW = fetchedHW;
-export async function getHomework(id,forceNetwork = false){
-    let s = getFromCache("homework/"+id);
-    if (s && !forceNetwork){
-        return s;
-    } else {
-        if (fetchedHW.has(id)){
-            return await fetchedHW.get(id);
-        } else {
-            let prom = genericKretaRequest(`mapi/api/v1/HaziFeladat/TanarHaziFeladat/${id}`,"homework/"+id)
-            fetchedHW.set(id,prom);
-            let hw = await prom;
-            return hw;
-        }
-        
-    }
-}
 
 window.getTimetable = getTimetable;
 window.getData = getData;
 
-
-export function isHomeworkDone(id){
-    let s = storage.getJSON(`data/homework/${id}`);
-    if (s){
-        return s.IsMegoldva == true
-    } else {
-        console.log("hw",id,"not found is storage");
-    }
-    
-}
-export function toggleHomeworkDone(id){
-    return setHomeworkDone(id,!isHomeworkDone(id));
-}
-
-window.isHomeworkDone = isHomeworkDone;
-export function setHomeworkDone(id,state){
-    let args = arguments;
-    
-    return refreshUser().then(()=>{
-        return setHomeworkDoneRaw(...args);
-    })
-}
-export function setHomeworkDoneRaw(id,state){
-    return new Promise(function(resolve,reject){
-        
-        let kretaState = state ? "True" : "False";
-        let data = {
-            "TanarHaziFeladatId":id.toString(),
-            "isMegoldva":kretaState
-        }
-        function fail(){
-            pushError("Nem sikerült a házi állapotát megváltoztatni");
-            reject("Nem sikerült a házi állapotát megváltoztatni");
-        }
-        req({
-            method:"POST",
-            url:`https://${GlobalState.user.inst}.e-kreta.hu/mapi/api/v1/HaziFeladat/Megoldva`,
-            body:data,
-            headers:{
-                "Authorization":"Bearer "+GlobalState.user.access_token,
-                "Content-Type":"application/json"
-            },
-        }).then((r)=>{
-            if (r.statusCode == 200 || r.statusCode == 204){
-                let key = `data/homework/${id}`;
-                let hw = storage.getJSON(key);
-                hw.IsMegoldva = state;
-                storage.setJSON(key,hw);
-                resolve(state);
-            } else {
-                fail();
-            }
-        }).catch(err=>{
-            console.error("login failed",err);
-            fail();
-        })
-    })
-}
-window.setHomeworkDone = setHomeworkDone;
 export function login(form){
     return new Promise(function(resolve,reject){
         let props = ["inst","username","password"];
