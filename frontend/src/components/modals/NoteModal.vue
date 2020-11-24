@@ -1,6 +1,6 @@
 <template>
   <div>
-      <div class="noteContent" v-html="html"></div>
+      <div class="noteContent selectable" v-html="html"></div>
       
       <Author :date="new Date(obj.createDate)" :author="obj.teacher" :desc="obj.noteType" />
       

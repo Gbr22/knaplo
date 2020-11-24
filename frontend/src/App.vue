@@ -100,7 +100,7 @@ h1, h2, h3, h4, h5, h6 {
     -webkit-tap-highlight-color: transparent;
     user-select: none;
 }
-.hwContent *, .hwContent, h3.theme {
+.selectable, .selectable * {
     -webkit-tap-highlight-color: initial;
     user-select: text !important;
 }

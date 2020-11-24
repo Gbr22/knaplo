@@ -15,7 +15,7 @@
           <h3 class="theme">{{ obj.lesson.Theme }}</h3>
           <hr>
       </div> -->
-      <div class="hwContent" v-html="html"></div>
+      <div class="hwContent selectable" v-html="html"></div>
       <!-- <div class="completedSwitch" :data-value="obj.IsMegoldva+''">
           <p>Megoldott feladat?</p>
           <span>
