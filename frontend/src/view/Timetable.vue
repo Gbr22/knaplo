@@ -50,9 +50,10 @@
                                 </span>
                                 <span class="moreInfo">
                                     <span class="classRoom">{{ lesson.TeremNeve }}</span>
-                                    <span class="teacher">
-                                        <span class="short">{{ shortName(lesson.TanarNeve || "") }}</span>
-                                        <span class="long">{{ lesson.TanarNeve }}</span>
+                                    <span class="teacher" :class="{ substitute:lesson.HelyettesTanarNeve != null }">
+                                        <span v-if="lesson.HelyettesTanarNeve" class="isSubstitute">*</span>
+                                        <span class="short">{{ shortName(lesson.HelyettesTanarNeve || lesson.TanarNeve || "") }}</span>
+                                        <span class="long">{{ lesson.HelyettesTanarNeve || lesson.TanarNeve }}</span>
                                         <Icon src="fi/edit-3" v-if="lesson.HaziFeladatUid"/>
                                     </span>
                                 </span>
@@ -379,6 +380,12 @@ export default {
     }
     .short {
         display: none;
+    }
+    .substitute {
+        color: var(--theme-color);
+    }
+    .isSubstitute {
+        color: var(--text-smol);
     }
     @media screen and (max-width: 680px) {
         
