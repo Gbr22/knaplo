@@ -9,6 +9,7 @@
                 </div>
                 <div class="bottom">
                     <div class="desc">{{ getText(elem) }}</div>
+                    <div class="descLong" v-html="getLongText(elem)"></div>
                     <!-- <button class="completed" :data-value="elem.IsMegoldva+''"
                         @click.stop="()=>{}"
                     >
@@ -51,6 +52,10 @@ export default {
             return hw.IsMegoldva;
             /* return getHWCompObjFArr(hw.Id, this.homeworksCompleted)?.value == true; */
         },
+        getLongText(elem){
+            let text = htmlToText(formatURLsHTML(elem.Szoveg)).replace(/\n/,"<br/>");
+            return text;
+        },
         getText(elem){
             let text = htmlToText(formatURLsHTML(elem.Szoveg));
             return shortenText(toOneLine(text), 50);
@@ -84,13 +89,28 @@ export default {
         margin: 8px 0;
         width: 100%;
     }
-    @media screen and (min-width: 1000px) {
-        /* .homework {
+    @media screen and (min-width: 700px) {
+        .desc {
+            display: none;
+        }
+        .descLong {
+            display: block !important;
+            max-height: 53px;
+            overflow: hidden;
+        }
+        .list {
+            display: block;
+        }
+        .homework {
+            width: 250px;
+            height: unset;
+            display: inline-block;
+            margin: 8px;
             padding: 20px;
-            width: unset;
-            flex: 1;
-            min-width: 350px;
-        } */
+            vertical-align: top;
+        }
+    }
+    /* @media screen and (min-width: 1000px) {
         .list {
             display: grid;
             grid-template-columns: auto auto auto auto;
@@ -100,7 +120,7 @@ export default {
             margin: 0;
             padding: 20px;
         }
-    }
+    } */
     .homeworkList {
         padding: 0 10px;
         box-sizing: border-box;
@@ -140,6 +160,12 @@ export default {
         color: var(--text-smol);
         word-break: break-word;
     }
+    .descLong {
+        flex: 1;
+        color: var(--text-smol);
+        display: none;
+    }
+    
 </style>
 <style>
     .completed {
