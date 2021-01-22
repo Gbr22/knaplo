@@ -89,14 +89,14 @@ export class Grade extends NormalisedItem {
             formName:"FormName",
             theme:"Tema",
             textValue:"SzovegesErtek",
-            gradeType:"Type",
-            gradeTypeName:"TypeName",
             weight:"SulySzazalekErteke",
         });
         this.formName = o.ErtekFajta?.Leiras;
         this.mode = o.Mod?.Leiras;
         this.subject = o.Tantargy?.Nev;
         this.subjectId = o.Tantargy?.Uid;
+        this.gradeType = o.Tipus?.Uid;
+        this.gradeTypeName = o.Tipus?.Leiras;
         if (this.form == "Magatartas" || this.form == "Szorgalom"){
             this.normal = false;
             if (this.subject == "Magatartas"){
@@ -115,6 +115,9 @@ export class Grade extends NormalisedItem {
         }
         this.header = this.subject;
         this.desc = this.theme || this.mode || this.textValue;
+        if (this.gradeType.indexOf("evkozi_jegy_ertekeles") == -1){
+            this.desc = this.gradeTypeName;
+        }
         this.displayState = this.value;
     }
 }

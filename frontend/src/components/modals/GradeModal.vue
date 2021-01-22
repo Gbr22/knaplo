@@ -42,8 +42,9 @@ let GradeModal = {
         getList(){
             var list = [
                 ["Tantárgy",this.obj.subject],
-                ["Típus",this.obj.mode],
+                ["Mód",this.obj.mode],
                 ["Téma",this.obj.theme],
+                ["Típus",this.obj.gradeTypeName],
                 null,
                 ["Értékelés formája",this.obj.formName],
                 null,

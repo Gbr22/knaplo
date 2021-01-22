@@ -3,18 +3,18 @@
         <h1>
             <span class="left">
                 <h2>Félév</h2>
-                <p>{{ getAvgHalfyrF("HalfYear") }}</p>
+                <p>{{ getAvgHalfyrF("felevi_jegy_ertekeles") }}</p>
             </span>
             <span class="right">
                 <h2>Év vége</h2>
-                <p>{{ getAvgHalfyrF("EndYear") }}</p>
+                <p>{{ getAvgHalfyrF("evvegi_jegy_ertekeles") }}</p>
             </span>
         </h1>
         <ul class="list">
             <li v-for="(subject) in subjects" class="lItem halfyr_item" :key="subject.name">
-                <HalfYrGrade class="left" :obj="subject.HalfYear" />
+                <HalfYrGrade class="left" :obj="getHalfYr(subject,'felevi_jegy_ertekeles')" />
                 <div class="mid">{{ subject.name }}</div>
-                <HalfYrGrade class="right" :obj="subject.EndYear" />
+                <HalfYrGrade class="right" :obj="getHalfYr(subject, 'evvegi_jegy_ertekeles')" />
             </li>
         </ul>
     </div>
@@ -37,14 +37,18 @@ export default {
         HalfYrGrade
     },
     methods:{
+        getHalfYr(subject,id){
+            return subject.grades.filter(e=>e.gradeType.indexOf(id) != -1)[0];
+        },
         getAvgHalfyrF(type){
             type;
             let subjects = this.subjects;
             let sum = 0;
             let count = 0;
             for (let subj of subjects){
-                if (subj[type] != null){
-                    sum+=subj[type].value;
+                let g = this.getHalfYr(subj,type);
+                if (g != null){
+                    sum+=g.value;
                     count++;
                 }
             }
