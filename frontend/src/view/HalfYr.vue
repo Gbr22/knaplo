@@ -47,7 +47,7 @@ export default {
             let count = 0;
             for (let subj of subjects){
                 let g = this.getHalfYr(subj,type);
-                if (g != null){
+                if (g != null && g.value != null){
                     sum+=g.value;
                     count++;
                 }
@@ -86,6 +86,7 @@ export default {
     font-size: 13px;
     vertical-align: top;
     position: absolute;
+    right: -3px;
 }
 .halfyr_item .grade {
 

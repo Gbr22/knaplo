@@ -1,7 +1,7 @@
 <template>
     <span>
         <div v-if="obj != null" :data-grade="obj.value">
-            <a class="grade">{{ obj.value }}</a><a v-if="obj.theme=='Dicséret'" class="D">D</a>
+            <Icon class="grade" :src="obj.icon" size="28" /><a v-if="obj.theme=='Dicséret' && obj.value" class="D">D</a>
         </div>
         <div v-if="obj == null" data-grade="#">
             <a class="grade">#</a>
@@ -28,5 +28,5 @@ export default {
 </script>
 
 <style>
-
+    
 </style>
