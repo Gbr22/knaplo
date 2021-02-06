@@ -94,7 +94,7 @@ h1, h2, h3, h4, h5, h6 {
 
 ::selection {
   background-color: var(--theme-5);
-  color: var(--text-color);
+  color: var(--text-selection-color);
 }
 * {
     -webkit-tap-highlight-color: transparent;
