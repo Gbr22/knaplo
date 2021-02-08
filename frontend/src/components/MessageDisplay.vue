@@ -61,7 +61,7 @@ export default {
 <style scoped>
     #msg {
         position: fixed;
-        bottom:30px;
+        bottom:70px;
         width:100%;
         text-align: center;
         animation-name: up;
@@ -69,23 +69,29 @@ export default {
         z-index: 9999;
     }
     .error .inner {
-        background-color: lightcoral;
-        box-shadow: var(--menu-shadow);
+        background-color: rgba(216, 0, 0, 0.322);
+        box-shadow: none;
+        
     }
     .inner {
         display: inline-block;
-        background-color: gainsboro;
-        padding: 5px 15px;
+        background-color: rgba(220, 220, 220, 0.164);
+        padding: 10px 15px;
         border-radius: 15px;
+        backdrop-filter: blur(8px);
+        box-shadow: 0 0 0 1px #00000025;
+        margin: 0 40px;
     }
     @keyframes up {
         from {
             transform: translateY(50%);
             opacity: 0;
+            backdrop-filter: blur(0px);
         }
         to {
             transform: translateY(0);
             opacity: 1;
+            backdrop-filter: blur(8px);
         }
     }
 </style>
