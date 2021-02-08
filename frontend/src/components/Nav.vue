@@ -22,7 +22,6 @@ export default {
                 {text:"Idővonal", navTo:"timeline", icon:"fi/clock"},
                 {text:"Órarend",navTo:"timetable", icon:'fi/calendar'},
                 {text:"Házik",navTo:"homework", icon:'fi/edit-3'},
-                /* {text:"Lezárások", navTo:"halfyr", icon:"fi/list"}, */
                 {text:"Menü", navTo:"more", icon:"fi/menu"},
             ]
         }

@@ -7,7 +7,7 @@
 
 <script>
 import Settings from './view/Settings';
-import HalfYr from './view/HalfYr';
+import Finals from './view/Finals';
 import Timeline from './view/Timeline';
 import Averages from './view/Averages';
 import Timetable from './view/Timetable.vue';
@@ -22,7 +22,7 @@ export default {
         Timetable,
         Homework,
         Settings,
-        HalfYr,
+        Finals,
         Timeline,
         Averages,
         Screen,
@@ -36,7 +36,7 @@ export default {
                 [Timetable,"timetable"],
                 [Homework,"homework"],
                 [Settings,"more"],
-                [HalfYr,"more/halfyr"],
+                [Finals,"more/finals"],
             ]
         }
     },

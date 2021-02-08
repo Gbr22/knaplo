@@ -1,20 +1,20 @@
 <template>
-    <div id="halfyr">
+    <div id="finals">
         <h1>
             <span class="left">
                 <h2>Félév</h2>
-                <p>{{ getAvgHalfyrF("felevi_jegy_ertekeles") }}</p>
+                <p>{{ getAvgSemester("halfYear") }}</p>
             </span>
             <span class="right">
                 <h2>Év vége</h2>
-                <p>{{ getAvgHalfyrF("evvegi_jegy_ertekeles") }}</p>
+                <p>{{ getAvgSemester("endYear") }}</p>
             </span>
         </h1>
         <ul class="list">
-            <li v-for="(subject) in subjects" class="lItem halfyr_item" :key="subject.name">
-                <HalfYrGrade class="left" :obj="getHalfYr(subject,'felevi_jegy_ertekeles')" />
+            <li v-for="(subject) in subjects" class="lItem finals_item" :key="subject.name">
+                <FinalGrade class="left" :obj="getSemester(subject,'halfYear')" />
                 <div class="mid">{{ subject.name }}</div>
-                <HalfYrGrade class="right" :obj="getHalfYr(subject, 'evvegi_jegy_ertekeles')" />
+                <FinalGrade class="right" :obj="getSemester(subject, 'endYear')" />
             </li>
         </ul>
     </div>
@@ -23,10 +23,10 @@
 <script>
 import GlobalState from '../globalState';
 
-import HalfYrGrade from '../components/HalfYrGrade';
+import FinalGrade from '../components/FinalGrade';
 
 export default {
-    name: 'HalfYr',
+    name: 'Finals',
     data:()=>{
         return {
             GlobalState,
@@ -34,19 +34,19 @@ export default {
         }
     },
     components:{
-        HalfYrGrade
+        FinalGrade
     },
     methods:{
-        getHalfYr(subject,id){
-            return subject.grades.filter(e=>e.gradeType.indexOf(id) != -1)[0];
+        getSemester(subject,id){
+            return subject.grades.filter(e=>e.isType(id))[0];
         },
-        getAvgHalfyrF(type){
+        getAvgSemester(type){
             type;
             let subjects = this.subjects;
             let sum = 0;
             let count = 0;
             for (let subj of subjects){
-                let g = this.getHalfYr(subj,type);
+                let g = this.getSemester(subj,type);
                 if (g != null && g.value != null){
                     sum+=g.value;
                     count++;
@@ -62,16 +62,16 @@ export default {
 
 <style>
     
-.halfyr_item {
+.finals_item {
     position: relative;
     font-size: 18px !important;
     padding: 15px 0px !important;
 }
-.halfyr_item .mid {
+.finals_item .mid {
     margin: 0 45px;
     text-align: center;
 }
-.halfyr_item .left, .halfyr_item .right {
+.finals_item .left, .finals_item .right {
     font-weight: bold;
     font-size: 28px;
     position: absolute;
@@ -82,33 +82,33 @@ export default {
     display: inline-block;
     vertical-align: middle;
 }
-.halfyr_item .D {
+.finals_item .D {
     font-size: 13px;
     vertical-align: top;
     position: absolute;
     right: -3px;
 }
-.halfyr_item .grade {
+.finals_item .grade {
 
 }
-.halfyr_item .left {
+.finals_item .left {
     left: 0;
 }
-.halfyr_item .right {
+.finals_item .right {
     right: 0;
 }
-#halfyr h1 h2 {
+#finals h1 h2 {
     font-size: 25px;
 }
-#halfyr h1 h2, #halfyr h1 p {
+#finals h1 h2, #finals h1 p {
     margin: 0;
     padding: 0;
 }
-#halfyr h1 p {
+#finals h1 p {
     font-size: 18px;
     color: var(--text-smol);
 }
-#halfyr h1 span {
+#finals h1 span {
     display: inline-block;
     width: 50%;
     vertical-align: middle;
@@ -117,7 +117,7 @@ export default {
     padding-bottom: 0;
     text-align: center;
 }
-#halfyr h1 .right {
+#finals h1 .right {
     position: absolute;
 }
 

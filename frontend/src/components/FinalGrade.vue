@@ -14,7 +14,7 @@
 <script>
 
 export default {
-    name:"HalfYrGrade",
+    name:"FinalGrade",
     props: {
       obj: {
           type: Object,

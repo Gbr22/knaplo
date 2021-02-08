@@ -74,6 +74,18 @@ export class Grade extends NormalisedItem {
     formName;
     subject;
     subjectId;
+    types={
+        "midYear":"evkozi_jegy_ertekeles",
+        "firstQ":"I_ne_jegy_ertekeles",
+        "secondQ":"II_ne_jegy_ertekeles",
+        "halfYear":"felevi_jegy_ertekeles",
+        "thirdQ":"III_ne_jegy_ertekeles",
+        "fourthQ":"IV_ne_jegy_ertekeles",
+        "endYear":"evvegi_jegy_ertekeles",
+    };
+    isType(type){
+        return this.gradeType.split(",")[1] == this.types[type];
+    }
     
 
     onclick(){
@@ -516,7 +528,7 @@ export function refreshPage(page){
             }
         },
         {
-            pages:["more/halfyr", "avgs"],
+            pages:["more/finals", "avgs"],
             action(){
                 return updateList("grades",true);
             }

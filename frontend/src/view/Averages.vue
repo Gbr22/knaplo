@@ -48,8 +48,7 @@
                 </span>
                 
             </div>
-            <div class="subject_grades">
-                {{ subject.grades.map((e)=>(e.value || e.textValue).toString()).join(" ") }}
+            <div class="subject_grades" v-html="getGradesHTML(subject)">
             </div>
         </li>
     </ul>
@@ -108,6 +107,16 @@ export default {
     },
     methods:{
         openSubject,
+        getGradesHTML(subject){
+            return subject.grades.map((e)=>{
+                let val = (e.value || e.textValue).toString()[0];
+                if (e.isType("midYear")) {
+                    return val;
+                } else {
+                    return `<b>${val}</b>`;
+                }
+            }).join(" ");
+        },
         nameAbbriv(name){
             return name.split(" ").map((e)=>e[0]).join("");
         },

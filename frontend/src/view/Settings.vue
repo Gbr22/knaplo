@@ -11,7 +11,7 @@
         <section id="more" class="grid">
             <div class="header">Továbbiak</div>
             <div class="content">
-                <div class="item btn" @click="navigate('more/halfyr')">
+                <div class="item btn" @click="navigate('more/finals')">
                     <span class="icon">
                         <Icon src="fi/list" />
                     </span>
