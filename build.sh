@@ -1,1 +1,1 @@
-apt-get install tor && npm i && cd frontend && npm i && npm run build
+npm i && cd frontend && npm i && npm run build

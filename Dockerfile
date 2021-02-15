@@ -10,6 +10,7 @@ COPY package*.json ./
 
 COPY build.sh ./
 COPY frontend/ ./frontend/
+RUN apt-get update && apt-get install -y tor
 RUN ["bash","build.sh"]
 
 # If you are building your code for production
