@@ -4,3 +4,7 @@ secret
 *.cache
 *.db
 node_modules
+
+# github actions
+.secrets
+.sshkey
