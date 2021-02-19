@@ -4,5 +4,8 @@ module.exports = {
 
     pluginOptions: {
       cordovaPath: 'src-cordova'
+    },
+    devServer:{
+      disableHostCheck: true
     }
 }

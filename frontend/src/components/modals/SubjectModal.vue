@@ -79,6 +79,8 @@ export default {
             avgCalc,
             round:getSubjectRounding(this.obj.id),
             chartOptions:{
+                pointRadius: 5,
+                pointHoverRadius: 5,
                 tooltips:{
                     callbacks:{
                         label(el){
@@ -89,6 +91,10 @@ export default {
                 elements: {
                     line: {
                         tension: 0
+                    },
+                    point:{
+                        radius: 4,
+                        hoverRadius: 5,
                     }
                 },
                 responsive: true,
@@ -128,22 +134,31 @@ export default {
     },
     methods:{
         getChartData () {
-            let grades = this.obj.grades.map(e=>e.value).filter(e=>!isNaN(e)).reverse();
+            let grades = this.obj.grades.filter(e=>!isNaN(e.value)).reverse();
             let averages = [];
             let sum = 0;
-            
+            let count = 0;
+
             for (let i =0; i< grades.length; i++){
                 let g = grades[i];
-                let count = i+1;
-                sum += g;
-                averages.push(
-                    sum/count
-                )
+
+                if (g.weight){
+                    let w = (g.weight || 0)/100;
+                    count += w;
+                    sum += g.value*w;
+                    console.log(count,sum,g.weight,g);
+                    averages.push(
+                        sum/count,
+                    )
+                } else {
+                    averages.push(sum/count || null); //push previous average, or leave a gap
+                }
+                
             }
             console.log(grades);
             let gradeColor = /* getCSSVariable("--theme-5") */"#0074D9";
             return {
-                labels: grades.map(e=>`(${e}) értékelés`),
+                labels: grades.map(e=>`(${e.value}) ${e.desc}`),
                 datasets: [
                     {
                         label: 'Átlag',
@@ -156,11 +171,12 @@ export default {
                         label: 'Jegy',
                         borderColor: gradeColor,
                         pointBackgroundColor: gradeColor,
-                        data: grades,
+                        data: grades.map(e=>e.value),
                         fill:false,
                         showLine:false,
                     }
-                ]
+                ],
+                
             }
         },
         roundSubject,

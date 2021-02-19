@@ -4,7 +4,7 @@
         <div class="header">
             <!-- <Icon :src="obj.icon" :size="40" /> -->
             <p class="value">{{ obj.textValue }}</p>
-            <p class="weight">{{ obj.weight ? obj.weight+"%" : "" }}</p>
+            <p class="weight">{{ obj.weight != null ? obj.weight+"%" : "0%*" }}</p>
         </div>
         <div class="details">
             <div v-for="i in getList()" :key="i ? i[0] : null" class="li">
