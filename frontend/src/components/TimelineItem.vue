@@ -3,7 +3,7 @@
     <div class="gradeLike recent" :data-item-type="item.type" :data-state="item.displayState" v-on:click="item.onclick()">
         
         <span class="left">
-            <Icon :src="item.icon" size="28" />
+            <Icon :src="item.icon" size="28" :color="getItemColor(item)"/>
         </span>
         <span class="right">
             <div class="header">
@@ -20,12 +20,18 @@
 
 import Icon from './Icon.vue';
 import { getDayOfWeek } from '../util';
+import { getGradeColor, Grade } from '../dataHandler';
 
 
 export default {
     name:"TimelineItem",
     props:["item"],
     methods:{
+        getItemColor(item){
+            if (item instanceof Grade){
+                return getGradeColor(item);
+            }
+        },
         getDayOfWeek,
         formatDate(date){
             let p = (n) => n.toString().padStart(2,0);

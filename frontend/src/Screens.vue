@@ -66,7 +66,7 @@ export default {
     text-decoration: none;
 }
 
-[data-state="5"] .left, [data-grade="5"] {
+/* [data-state="5"] .left, [data-grade="5"] {
     color: #00cc66;
 }
 [data-state="4"] .left, [data-grade="4"] {
@@ -83,7 +83,7 @@ export default {
 }
 [data-state="#"] .left, [data-grade="#"] {
     color: #669999;
-}
+} */
 
 #recent h1 .left, #recent h1 .right {
     display: inline-block;

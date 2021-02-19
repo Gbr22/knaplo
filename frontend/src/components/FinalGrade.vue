@@ -1,10 +1,10 @@
 <template>
-    <span>
-        <div v-if="obj != null" :data-grade="obj.value">
-            <Icon class="grade" :src="obj.icon" size="28" /><a v-if="obj.theme=='Dicséret' && obj.value" class="D">D</a>
+    <span @click="obj ? openGrade(obj) : null">
+        <div v-if="obj != null">
+            <Icon class="grade" :src="obj.icon" size="28" :color="getGradeColor(obj)" /><a v-if="obj.theme=='Dicséret' && obj.value" class="D" :style="{color: getGradeColor(obj)}">D</a>
         </div>
-        <div v-if="obj == null" data-grade="#">
-            <a class="grade">#</a>
+        <div v-if="obj == null">
+            <a class="grade" :style="{color: getGradeColor(null)}">#</a>
         </div>
     </span>
 </template>
@@ -12,6 +12,9 @@
 
 
 <script>
+import { getGradeColor } from '../dataHandler';
+import { openGrade } from './modals/GradeModal.vue';
+
 
 export default {
     name:"FinalGrade",
@@ -20,6 +23,10 @@ export default {
           type: Object,
           required: false,
       }
+    },
+    methods: {
+        openGrade,
+        getGradeColor,
     },
     data(){
         return {};

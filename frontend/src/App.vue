@@ -127,7 +127,6 @@ body, .list, #recent, .fullpage_modal {
 
 .feather {
     
-    stroke: var(--text-color);
     stroke-width: 2;
     stroke-linecap: round;
     stroke-linejoin: round;

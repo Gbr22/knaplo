@@ -57,6 +57,38 @@ export class NormalisedItem {
         this.key = this.type+this.obj.Uid;
     }
 }
+export function getGradeColor(grade){
+    
+    let unknown = "#669999";
+    if (!grade){
+        return unknown;   
+    }
+    let g = grade.value;
+    if (!grade.value && grade.textValue){
+        let map = {
+            "Példás":5,
+            "Jó":4,
+            "Változó":3,
+            "Rossz":2,
+            "Hanyag":2,
+        }
+        g = map[grade.textValue] || null;
+    } else if (!grade.value) {
+        return unknown;
+    }
+    
+    function getColor(num) {
+        let map = {
+            "5":"#00cc66",
+            "4":"#009999",
+            "3":"#ffcc00",
+            "2":"#ff6600",
+            "1":"#b32400"
+        }
+        return map[num.toString()];
+    }
+    return getColor(g);
+}
 
 export class Grade extends NormalisedItem {
 

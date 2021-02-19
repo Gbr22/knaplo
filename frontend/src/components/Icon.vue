@@ -1,5 +1,5 @@
 <template>
-    <span v-html="getIcon(src, size)" class="icon" :style="{'--size': size+'px'}">
+    <span v-html="getIcon(src, size, color)" class="icon" :style="{'--size': size+'px'}">
 
     </span>
 </template>
@@ -10,7 +10,7 @@ import feather from 'feather-icons';
 export default {
     props:["src","size","color"],
     methods:{
-        getIcon(icon, size=24){
+        getIcon(icon, size=24, color=null){
             let parts = icon.split("/");
             let type = parts[0];
             let value = parts[1];
@@ -19,11 +19,11 @@ export default {
                 fi(value){
                     let i = feather.icons[value];
                     if (i){
-                        return i.toSvg({width: size, height: size});
+                        return i.toSvg({width: size, height: size, stroke: color || "var(--text-color)"});
                     }
                 },
                 text(value){
-                    return /*html*/`<span class="text" style="font-size: ${size}px">${value}</span>`;
+                    return /*html*/`<span class="text" style="font-size: ${size}px; color: ${color};">${value}</span>`;
                 }
             }
             if (types[type]){

@@ -3,7 +3,7 @@
     <div class="cont">
         <div class="header">
             <!-- <Icon :src="obj.icon" :size="40" /> -->
-            <p class="value">{{ obj.textValue }}</p>
+            <p class="value" :style="{color: getGradeColor(obj)}">{{ obj.textValue }}</p>
             <p class="weight">{{ obj.weight != null ? obj.weight+"%" : "0%*" }}</p>
         </div>
         <div class="details">
@@ -25,6 +25,7 @@ import { formatURLsHTML, formatDate, getDayOfWeek, formatTime } from '../../util
 import { openModal } from '../Modal';
 import Icon from '../Icon';
 import Author from '../Author';
+import { getGradeColor } from '../../dataHandler';
 
 
 
@@ -37,6 +38,7 @@ let GradeModal = {
         }
     },
     methods:{
+        getGradeColor,
         formatDate,
         getDayOfWeek,
         getList(){
@@ -103,6 +105,7 @@ export function openGrade(elem){
     }
     .value {
         font-size: 25px;
+        font-weight: bold;
     }
     .weight {
         color: var(--text-smol)
