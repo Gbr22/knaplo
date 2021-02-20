@@ -1,4 +1,5 @@
 import { closeModal } from './components/Modal.vue';
+import sanitizeHtml from 'sanitize-html';
 
 export function tryJSON(string){
     try {
@@ -175,6 +176,7 @@ window.addEmbedPlayer = addEmbedPlayer;
 
 let _fURLHTMLCache = new Map();
 window._fURLHTMLCache = _fURLHTMLCache;
+
 export function formatURLsHTML(html){
     if (_fURLHTMLCache.has(html)){
         return _fURLHTMLCache.get(html);
@@ -185,7 +187,13 @@ export function formatURLsHTML(html){
     }
 }
 export function _formatURLsHTML(html){
-    
+    html = sanitizeHtml(html,{
+        allowedTags: sanitizeHtml.defaults.allowedTags.concat([ 'img' ]),
+        allowedAttributes: Object.assign(Object.assign({},sanitizeHtml.defaults.allowedAttributes),{
+            img: [ 'src', 'alt', 'srcset', 'sizes' ],
+        }),
+        enforceHtmlBoundary: false,
+    });
     let hasHTML = code => /<\/?[a-z][\s\S]*>/i.test(code);
     let isText = !hasHTML(html);
 
