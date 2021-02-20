@@ -65,7 +65,7 @@
         <div id="credits">
             <div><img src="icons/icon_vector.svg" /></div>
             <h2>K napló</h2>
-            <p>{{ BRANCH }}/{{ VERSION }}</p>
+            <p>{{ branch }}/{{ version }}</p>
             <p><a class="link" href="https://github.com/Gbr22/knaplo"  target="_blank">Forráskód</a></p>
         </div>
         <div class="pagePadding"></div>
@@ -96,9 +96,9 @@ export default {
             ThemeHandler,
             cacheCount:0,
             options,
-            VERSION,
-            BRANCH
-        }
+            version:VERSION,
+            branch:BRANCH,
+        };
     },
     methods:{
         openConfirm,
