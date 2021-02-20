@@ -60,6 +60,7 @@ export function openEvent(elem){
     .divider {
         background-color: var(--text-light-color);
         display: inline-block;
+        vertical-align: middle;
         width: 15px;
         height: 1px;
         border: none;

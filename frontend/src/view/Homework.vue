@@ -174,7 +174,7 @@ export default {
         
         outline: none;
     }
-    /deep/ .head .search .icon svg {
+    .head .search .icon /deep/ svg {
         width: 20px;
         height: 20px;
         opacity: 0.65;

@@ -39,7 +39,7 @@ export default {
         box-shadow: 0 0 0 3px rgba(28, 170, 83, 0.699);
         color: #1CAA53;
     }
-    /deep/ .current svg {
+    .current /deep/ svg {
         stroke: #1CAA53;
     }
     .pad {

@@ -358,7 +358,7 @@ export default {
         padding-left: 9px;
     }
     
-    /deep/ .moreInfo svg {
+    .moreInfo /deep/ svg {
         width: 18px;
         height: 18px;
         display: block;

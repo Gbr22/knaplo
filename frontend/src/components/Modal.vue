@@ -112,6 +112,7 @@ export default {
         max-height: min(100%, 550px);
         position: relative;
         transition: height 0.5s;
+        transform: translateY(0);
     }
     [data-mode="wide"] .modal{
         min-width: min(370px, 100%);

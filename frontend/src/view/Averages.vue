@@ -161,28 +161,66 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+.subject_header {
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+}
+.subject_header .left, .subject_header .right {
+    
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0;
+    padding: 0;
+}
+.subject_header .left {
+    flex: 1;
+    white-space: initial;
+    font-weight: bold;
+}
+.subject_header .right {
+    flex-shrink: 0;
+    width: 60px;
+    text-align: right;
+    vertical-align: top;
+}
+.subject_header .right * {
+    vertical-align: middle;
+}
+.subject_grades {
+    color: var(--text-light-color);
+}
 #subjects {
     border-radius: 15px;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
 }
-.divider {
-    width: 0;
-    height: 30px;
-    display: inline-block;
-    border: 0.5px solid var(--divider-color);
-    content: '';
-    vertical-align: middle;
-    margin: 0 10px;
-}
-
 #avg_detail_cont .section {
     
     vertical-align: middle;
     display: inline-block;
     width: 40%;
 
+}
+.section.avg /deep/ svg {
+    stroke: var(--theme-color);
+}
+.section.rank /deep/ svg {
+    stroke: #ffcc00;
+}
+.section.rank i {
+    color: #F2DC5D;
+}
+.section.avg {
+    text-align: right;
+}
+.section.rank {
+    text-align: left;
+}
+.section.rank a {
+    color: inherit;
+    text-decoration: none;
 }
 #avg_detail_cont .left {
     padding-top: 3px;
@@ -207,9 +245,16 @@ export default {
     font-size: 13px;
     color: var(--text-light-color);
 }
-
-
-#circle_container circle {
+#avg_detail_cont {
+    vertical-align: middle;
+}
+#avg_detail_cont .icon {
+    vertical-align: middle;
+}
+#avg_detail_cont i {
+    vertical-align: bottom;
+}
+#circle_container /deep/ circle {
     transition: stroke-dashoffset 0.35s, stroke 0.35s;
     transform: rotate(-90deg);
     transform-origin: 50% 50%;
@@ -218,7 +263,7 @@ export default {
     opacity: 0.70;
     border-radius: 50%;
 }
-#avg_circle_bg circle {
+#avg_circle_bg /deep/ circle {
     stroke: var(--text-light-color);
     opacity: 0.1;
 }
@@ -252,56 +297,43 @@ export default {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     font-weight: bold;
 }
+#avg_screen {
+    padding: 30px 0;
 
-#ranks_container, #roundView_cont {
-    position: fixed;
-    top: 0;
-    left: 0;
     width: 100%;
-    height: 100%;
-    margin: auto;
-    vertical-align: middle;
-    text-align: center;
-    display: flex;
-    align-items: center;
-}
-#roundView h2 {
-    text-align: center;
-}
-#roundView input[type="number"] {
-    font-size: inherit;
-    margin: 0;
-    border: none;
-    padding: 3px;
-    padding-bottom: 0;
-    outline: none;
-    background-color: transparent;
-    border-bottom: 1px solid var(--text-color);
-}
-#roundView input[type="number"]:invalid {
-    color: rgb(190, 0, 0);
-}
-#roundView .example {
-    font-size: 30px;
-    text-align: center;
-}
-
-#roundView {
-    width: 100%;
+    height: 220px;
     box-sizing: border-box;
-    margin: 30px;
-    padding: 20px;
-    height: max-content;
-    text-align: left;
-    display: inline-block;
-    border-radius: 15px;
-    background-color: var(--modal-color);
-    box-shadow: var(--modal-shadow);
-    position: relative;
-}
-#ranks .rank {
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /*background-color: rgba(232, 238, 243, 0.418);*/
+    background: transparent;
+    text-align: center;
+
+    color: whitesmoke;
 
 }
+#avg_screen .inner {
+    display: block;
+    width: 100%;
+}
+#subject_grades {
+    text-align: initial;
+}
+
+.divider {
+    width: 0;
+    height: 30px;
+    display: inline-block;
+    border: 0.5px solid var(--divider-color);
+    content: '';
+    vertical-align: middle;
+    margin: 0 10px;
+}
+</style>
+<style>
+
 #ranks .left {
     border-right: 1px solid var(--divider-color);
 }
@@ -334,172 +366,11 @@ export default {
     padding: 10px;
 }
 
-#home {
-    /*background-color: var(--color-dark);*/
-    /* background: var(--theme-gradient); */
-}
-
-
-#avg_screen {
-    padding: 30px 0;
-
-    width: 100%;
-    height: 220px;
-    box-sizing: border-box;
-    
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    /*background-color: rgba(232, 238, 243, 0.418);*/
-    background: transparent;
-    text-align: center;
-
-    color: whitesmoke;
-
-}
-#avg_screen .inner {
-    display: block;
-    width: 100%;
-}
-#avg_detail_cont {
-    vertical-align: middle;
-}
-#avg_detail_cont .icon {
-    vertical-align: middle;
-}
-#avg_detail_cont i {
-    vertical-align: bottom;
-}
-.section.avg svg {
-    stroke: var(--theme-color);
-}
-.section.rank svg {
-    stroke: #ffcc00;
-}
-.section.rank i {
-    color: #F2DC5D;
-}
-.section.avg {
-    text-align: right;
-}
-.section.rank {
-    text-align: left;
-}
-.section.rank a {
-    color: inherit;
-    text-decoration: none;
-}
-
-#subject_grades {
-    text-align: initial;
-}
-
-#subject_details h1 {
-    margin-top: 80px;
-    
-}
-#subj_detail_section {
-    width: 100%;
-    white-space: nowrap;
-    display: block;
-    overflow-x: scroll;
-    overflow-y: hidden;
-    scroll-snap-type: x mandatory;
-    padding: 10px 0;
-}
-#avg_graph .chart-container {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    
-}
-#avg_graph .chart-container canvas {
-    display: inline-block;
-    vertical-align: middle;
-}
-#avg_graph, #avg_calc {
-    width: 80%;
-    display: inline-block;
-    scroll-snap-align: center;
-    vertical-align: middle;
-}
-#avg_graph {
-    margin-right: 10%;
-    height: 200px;
-}
-#avg_calc .type {
-    display: flex;
-}
-#avg_calc .type .avgtitle {
-    vertical-align: middle;
-    display: inline-block;
-    width: 60%;
-    text-align: left;
-    flex: 1;
-}
-#avg_calc .type .num {
-    display: inline-block;
-    width: 40px;
-    text-align: left;
-    flex-shrink: 0;
-}
-
-#avg_calc .avg {
-    font-size: 19px;
-    margin-bottom: 25px;
-}
-
-.avg_calc_grade {
-    padding: 3px;
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
-}
-
-.avg_calc_grade .gradename {
-    display: inline-block;
-    text-align: left;
-    width: 50%;
-    font-size: 19px;
-    flex: 1;
-}
-.avg_calc_grade .gradename, .avg_calc_grade .gradecount {
-    vertical-align: middle;
-}
-.avg_calc_grade .gradecount {
-    width: 40px;
-    text-align: center;
-    display: inline-block;
-    font-size: 19px;
-}
-.avg_calc_grade button {
-    width: 30px;
-    height: 30px;
-    border: none;
-    border-radius: 50%;
-    outline: none;
-    background-color: var(--element-color);
-    
-    position: relative;
-    vertical-align: middle;
-}
-.avg_calc_grade button svg {
-    stroke: rgb(184, 189, 181);
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    margin: auto;
-    width: 22px;
-    height: 22px;
-}
-
-.roundPrev svg {
+.roundPrev /deep/ svg {
     stroke: rgb(218, 134, 95);    
 }
 
-.roundPrev .up svg {
+.roundPrev .up /deep/ svg {
     stroke: #1CAA53;    
 }
 </style>

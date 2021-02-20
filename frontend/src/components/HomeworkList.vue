@@ -167,31 +167,3 @@ export default {
     }
     
 </style>
-<style>
-    .completed {
-        flex: none;
-        border: none;
-        background: none;
-        padding: 0;
-        outline: none;
-        cursor: pointer;
-    }
-    .completed svg {
-        transition: all 0.3s;
-        margin-left: 5px;
-        border-radius: 8px;
-    }
-    .completed[data-value="false"] svg {
-        stroke: var(--text-light-color);
-        border: 2px solid var(--text-light-color);
-        background-color: var(--divider-color);
-        opacity: 0.5;
-        
-    }
-    .completed[data-value="true"] svg {
-        stroke: #4ec275;
-        border: 2px solid #4ec27598;
-        background-color: #4ec27549;
-        
-    }
-</style>

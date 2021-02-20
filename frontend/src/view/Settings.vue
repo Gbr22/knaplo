@@ -121,15 +121,8 @@ export default {
 }
 </script>
 
-<style>
-.pagePadding {
-    height: 20px;
-    width: 100%;
-}
-#info_page {
-    box-sizing: border-box;
-}
-section {
+<style scoped>
+    section {
     margin-bottom: 20px;
 }
 section .header {
@@ -183,11 +176,20 @@ section .item {
     vertical-align: middle;
 }
 
+.pagePadding {
+    height: 20px;
+    width: 100%;
+}
+#info_page {
+    box-sizing: border-box;
+}
+
+
 #profile_circle_container {
     padding: 60px 0;
     text-align: center;
 }
-#profile_circle svg {
+#profile_circle .icon /deep/ svg {
     width: 30px;
     height: 30px;
     position: absolute;

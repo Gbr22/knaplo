@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="modalroot">
     <TabMenu :titles="['Átlag','Kerekítés','Grafikon']" v-if="!isNaN(obj.average)">
         <template>
             <div class="tab">
@@ -279,7 +279,7 @@ export default {
         justify-content: center;
         font-size: 25px;
     }
-    /deep/ .preview svg {
+    .preview /deep/ svg {
         width: 28px;
         height: 28px;
     }
@@ -288,19 +288,88 @@ export default {
         justify-content: center;
         align-items: center;
     }
-    /deep/ .swiper-slide {
+    .modalroot /deep/ .swiper-slide {
         justify-content: center;
         align-items: center;
         height: 250px;
     }
-    /deep/ .swiper-slide > div {
+    .modalroot /deep/ .swiper-slide > div {
         height: 100%;
     }
-    /deep/ .swiper-slide .tab {
+    .modalroot /deep/ .swiper-slide .tab {
         height: 100%;
     }
     .chart {
         width: 100%;
         height: 100%;
+    }
+    .avg_calc_grade {
+        padding: 3px;
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+    }
+
+    .avg_calc_grade .gradename {
+        display: inline-block;
+        text-align: left;
+        width: 50%;
+        font-size: 19px;
+        flex: 1;
+    }
+    .avg_calc_grade .gradename, .avg_calc_grade .gradecount {
+        vertical-align: middle;
+    }
+    .avg_calc_grade .gradecount {
+        width: 40px;
+        text-align: center;
+        display: inline-block;
+        font-size: 19px;
+    }
+    .avg_calc_grade button {
+        width: 30px;
+        height: 30px;
+        border: none;
+        border-radius: 50%;
+        outline: none;
+        background-color: var(--element-color);
+        
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .avg_calc_grade button /deep/ svg {
+        stroke: rgb(184, 189, 181);
+        width: 22px;
+        height: 22px;
+    }
+    #avg_calc {
+        width: 80%;
+        display: inline-block;
+        scroll-snap-align: center;
+        vertical-align: middle;
+    }
+
+    #avg_calc .type {
+        display: flex;
+    }
+    #avg_calc .type .avgtitle {
+        vertical-align: middle;
+        display: inline-block;
+        width: 60%;
+        text-align: left;
+        flex: 1;
+    }
+    #avg_calc .type .num {
+        display: inline-block;
+        width: 40px;
+        text-align: left;
+        flex-shrink: 0;
+    }
+
+    #avg_calc .avg {
+        font-size: 19px;
+        margin-bottom: 25px;
     }
 </style>

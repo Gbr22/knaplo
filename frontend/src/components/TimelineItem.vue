@@ -1,6 +1,6 @@
 <template>
 <div class="itemWrap">
-    <div class="gradeLike recent" :data-item-type="item.type" :data-state="item.displayState" v-on:click="item.onclick()">
+    <div class="item recent" :data-item-type="item.type" :data-state="item.displayState" v-on:click="item.onclick()">
         
         <span class="left">
             <Icon :src="item.icon" size="28" :color="getItemColor(item)"/>
@@ -46,10 +46,68 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+.item .left, .item .right{
+    display: inline-block;
+    vertical-align: middle;
+    white-space: initial;
+}
+.item .right {
+    width: 80%;
+    width: calc(calc(100% - 43px) - 80px);
+}
+.item .left {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px 10px;
+    font-size: 28px;
+    font-weight: bold;
+
+}
+
+.item .header {
+    font-weight: bold;
+    margin-bottom: 3px;
+}
+.item .date {
+    position: absolute;
+    right: 10px;
+    width: 80px;
+    top: 0;
+    bottom: 0;
+    height: min-content;
+    vertical-align: middle;
+    margin: auto;
+    text-align: right;
+    
+}
+
+
+
+.item .date .relative {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.item .right .bottom, .absence p {
+    color: var(--text-light-color);
+}
+
 .itemWrap {
     padding: 0 10px;
     padding-bottom: 8px;
     box-sizing: border-box;
+}
+</style>
+
+<style>
+.item .date b, .tinyDate b {
+    font-weight: normal;
+}
+.item .date i, .tinyDate i {
+    font-style: normal;
+    font-size: 15px;
 }
 </style>

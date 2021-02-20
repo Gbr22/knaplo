@@ -66,25 +66,6 @@ export default {
     text-decoration: none;
 }
 
-/* [data-state="5"] .left, [data-grade="5"] {
-    color: #00cc66;
-}
-[data-state="4"] .left, [data-grade="4"] {
-    color: #009999;
-}
-[data-state="3"] .left, [data-grade="3"] {
-    color: #ffcc00;
-}
-[data-state="2"] .left, [data-grade="2"] {
-    color: #ff6600;
-}
-[data-state="1"] .left, [data-grade="1"] {
-    color: #b32400;
-}
-[data-state="#"] .left, [data-grade="#"] {
-    color: #669999;
-} */
-
 #recent h1 .left, #recent h1 .right {
     display: inline-block;
     vertical-align: middle;
@@ -121,62 +102,11 @@ export default {
     box-sizing: border-box;
 }
 
-.gradeLike .left, .gradeLike .right{
-    display: inline-block;
-    vertical-align: middle;
-    white-space: initial;
-}
-.gradeLike .right {
-    width: 80%;
-    width: calc(calc(100% - 43px) - 80px);
-}
-.gradeLike .left {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    padding: 5px 10px;
-    font-size: 28px;
-    font-weight: bold;
 
-}
-
-
-.gradeLike .header {
-    font-weight: bold;
-    margin-bottom: 3px;
-}
-.gradeLike .date {
-    position: absolute;
-    right: 10px;
-    width: 80px;
-    top: 0;
-    bottom: 0;
-    height: min-content;
-    vertical-align: middle;
-    margin: auto;
-    text-align: right;
-    
-}
 .recent .date, .tinyDate {
     color: var(--text-light-color);
 }
-.gradeLike .date b, .tinyDate b {
-    font-weight: normal;
-}
-.gradeLike .date i, .tinyDate i {
-    font-style: normal;
-    font-size: 15px;
-}
 
-.gradeLike .date .relative {
-    position: relative;
-    display: inline-block;
-    width: 100%;
-}
-
-.gradeLike .right .bottom, .absence p {
-    color: var(--text-light-color);
-}
 
 .link.teams {
     color: #464775;
@@ -324,36 +254,5 @@ export default {
 .lItem:hover, .hover .recent, .lesson:hover {
     background-color: var(--elem-active);
 }
-.subject_header {
-    white-space: nowrap;
-    display: flex;
-    align-items: center;
-}
-.subject_header .left, .subject_header .right {
-    
-    display: inline-block;
-    vertical-align: middle;
-    margin: 0;
-    padding: 0;
-}
-.subject_header .left {
-    flex: 1;
-    white-space: initial;
-    font-weight: bold;
-}
-.subject_header .right {
-    flex-shrink: 0;
-    width: 60px;
-    text-align: right;
-    vertical-align: top;
-}
-.subject_header .right * {
-    vertical-align: middle;
-}
 
-
-
-.subject_grades {
-    color: var(--text-light-color);
-}
 </style>

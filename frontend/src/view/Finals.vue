@@ -60,8 +60,34 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
     
+#finals h1 h2 {
+    font-size: 25px;
+}
+#finals h1 h2, #finals h1 p {
+    margin: 0;
+    padding: 0;
+}
+#finals h1 p {
+    font-size: 18px;
+    color: var(--text-light-color);
+}
+#finals h1 span {
+    display: inline-block;
+    width: 50%;
+    vertical-align: middle;
+    box-sizing: border-box;
+    padding: 20px 20px;
+    padding-bottom: 0;
+    text-align: center;
+}
+#finals h1 .right {
+    position: absolute;
+}
+
+</style>
+<style>
 .finals_item {
     position: relative;
     font-size: 18px !important;
@@ -88,37 +114,10 @@ export default {
     position: absolute;
     right: -3px;
 }
-.finals_item .grade {
-
-}
 .finals_item .left {
     left: 0;
 }
 .finals_item .right {
     right: 0;
 }
-#finals h1 h2 {
-    font-size: 25px;
-}
-#finals h1 h2, #finals h1 p {
-    margin: 0;
-    padding: 0;
-}
-#finals h1 p {
-    font-size: 18px;
-    color: var(--text-light-color);
-}
-#finals h1 span {
-    display: inline-block;
-    width: 50%;
-    vertical-align: middle;
-    box-sizing: border-box;
-    padding: 20px 20px;
-    padding-bottom: 0;
-    text-align: center;
-}
-#finals h1 .right {
-    position: absolute;
-}
-
 </style>

@@ -37,7 +37,27 @@ export default {
 }
 </script>
 
+<style scoped>
+#pageviewer {
+    flex: 1;
+    overflow-y: auto;
+    position: relative;
+}
+#app {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    overflow-y: hidden;
+}
+</style>
 <style>
+#pageview_inner {
+  overflow-y: auto;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
 .notransition * { 
   -webkit-transition: none !important; 
   -moz-transition: none !important; 
@@ -77,17 +97,7 @@ html, body, #app {
     opacity: 0.7;
     transform: scale(0.97);
 }
-#pageviewer {
-    flex: 1;
-    overflow-y: auto;
-    position: relative;
-}
-#app {
-    display: flex;
-    flex-direction: column;
-    box-sizing: border-box;
-    overflow-y: hidden;
-}
+
 h1, h2, h3, h4, h5, h6 {
     margin: 0;
 }
@@ -135,7 +145,7 @@ body, .list, #recent, .fullpage_modal {
 
 @media (hover: hover) and (pointer: fine) {
     #app {
-        flex-direction: column-reverse;
+        flex-direction: column-reverse !important;
     }
     .pc-no-scroll {
         overflow: hidden !important;
@@ -164,14 +174,4 @@ body, .list, #recent, .fullpage_modal {
     }
 }
 
-
-#pageviewer {
-  position: relative;
-}
-#pageview_inner {
-  overflow-y: auto;
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
 </style>
