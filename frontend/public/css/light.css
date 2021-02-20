@@ -6,8 +6,8 @@
     --text-color: #0B0C0C;
     --text-smol: #4d4d4d;
     --divider-color: #dddddd;
-    --modal-color: whitesmoke;
-    --modal-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+    --modal-color: rgb(250, 250, 250);
+    --modal-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
     --elem-shadow: 0 1px 3px rgba(0, 0, 0, 0.10);
     --menu-shadow: 0 0 5px rgba(0,0,0,.25);
     --theme-gradient: linear-gradient(to top left, #34e89e, #0f3443);

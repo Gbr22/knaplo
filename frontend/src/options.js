@@ -3,7 +3,7 @@ import storage from './storage';
 class Options {
     options = {
         "homeworks.separateTomorrow":{
-            text:"Holnapi nap külön választása",
+            text:"Holnapi házik külön választása",
             icon:"edit-3",
             default:false,
         }

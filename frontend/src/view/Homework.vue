@@ -10,6 +10,8 @@
         <HomeworkList :list="getTomorrow()" title="Holnapra" />
         <HomeworkList :list="getActual()" title="Aktuális" />
         <HomeworkList :list="getExpired()" title="Lejárt határidejű" />
+        <div class="pagePadding">
+        </div>
     </div>
 </template>
 
@@ -126,6 +128,10 @@ export default {
 </script>
 
 <style scoped>
+    .pagePadding {
+        height: 10px;
+        width: 100%;
+    }
     .head {
         padding: 20px;
         display: flex;

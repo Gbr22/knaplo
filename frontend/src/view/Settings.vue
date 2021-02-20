@@ -65,9 +65,10 @@
         <div id="credits">
             <div><img src="icons/icon_vector.svg" /></div>
             <h2>K napló</h2>
-            <p>Webappot készítette <a class="link" href="https://www.instagram.com/gaborkrisko/" target="_blank">Kriskó Gábor</a></p>
-            <p>Forráskód <a class="link" href="https://github.com/Gbr22/knaplo"  target="_blank">itt</a> található</p>
+            <p>{{ BRANCH }}/{{ VERSION }}</p>
+            <p><a class="link" href="https://github.com/Gbr22/knaplo"  target="_blank">Forráskód</a></p>
         </div>
+        <div class="pagePadding"></div>
     </div>
 </template>
 
@@ -94,7 +95,9 @@ export default {
             GlobalState,
             ThemeHandler,
             cacheCount:0,
-            options
+            options,
+            VERSION,
+            BRANCH
         }
     },
     methods:{
@@ -119,6 +122,13 @@ export default {
 </script>
 
 <style>
+.pagePadding {
+    height: 20px;
+    width: 100%;
+}
+#info_page {
+    box-sizing: border-box;
+}
 section {
     margin-bottom: 20px;
 }
@@ -274,7 +284,6 @@ border-radius: 50%;
     margin-top: 60px;
     padding: 20px;
     border-radius: 15px;
-    margin-bottom: 20px;
     text-align: center;
 }
 #credits h2 {

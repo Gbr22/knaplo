@@ -19,6 +19,7 @@ import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 import { closeModal, back } from './components/Modal';
 import Icon from './components/Icon';
 
+console.log("app",VERSION,COMMITHASH,BRANCH);
 
 Vue.use(VueVirtualScroller)
 Vue.component("Icon",Icon);
