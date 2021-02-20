@@ -20,7 +20,9 @@
 
 import Icon from './Icon.vue';
 import { getDayOfWeek } from '../util';
-import { getGradeColor, Grade } from '../dataHandler';
+import { getGradeColor } from '../dataHandler';
+import { Grade } from '../data/Grade';
+
 
 
 export default {

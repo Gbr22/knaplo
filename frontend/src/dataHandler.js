@@ -4,13 +4,18 @@ import { openModal } from './components/Modal';
 
 import { pushError } from './components/MessageDisplay';
 
-import AbsenceModal from './components/modals/AbsenceModal';
 import SubjectModal from './components/modals/SubjectModal';
 import { getFromCache, fetchInst, refreshUser, getTimetable, getWeekStorageId, getGrades, getNotes, getAbsences } from './api';
 import { getWeekIndex, formatURLsHTML, sortByText, wait } from './util';
 import { updateTT } from './view/Timetable';
 import storage from './storage';
-import {openGrade} from './components/modals/GradeModal';
+import { Grade } from './data/Grade';
+import { Absence } from './data/Absence';
+import { Note } from './data/Note';
+import { Homework } from './data/Homework';
+import { Subject } from './data/Subject';
+import { Test } from './data/Test';
+import { NormalisedItem } from './data/NormalisedItem';
 
 export function openSubject(subject){
     openModal(subject.name,SubjectModal,subject,{
@@ -22,41 +27,7 @@ if (window.cordova){
     console.log("running in app");
 }
 
-export class NormalisedItem {
 
-    obj=null;
-
-    createDate;
-    date;
-    
-    type="normal";
-    
-    key;
-
-    header;
-    icon;
-    desc;
-
-    displayState;
-
-    onclick(){}
-
-    map(map){
-        for (let p in map){
-            this[p] = this.obj[map[p]];
-        }        
-    }
-
-    constructor(o) {
-        this.obj = o;
-        this.createDate = o.KeszitesDatuma;
-        this.date = o.Datum || o.RogzitesDatuma;
-
-
-
-        this.key = this.type+this.obj.Uid;
-    }
-}
 export function getGradeColor(grade){
     
     let unknown = "#669999";
@@ -90,191 +61,6 @@ export function getGradeColor(grade){
     return getColor(g);
 }
 
-export class Grade extends NormalisedItem {
-
-    type="grade";
-    value;
-    textValue;
-    teacher;
-    theme;
-    mode;
-    normal=true;
-    weight=null;
-    gradeType;
-    gradeTypeName;
-    form;
-    formName;
-    subject;
-    subjectId;
-    types={
-        "midYear":"evkozi_jegy_ertekeles",
-        "firstQ":"I_ne_jegy_ertekeles",
-        "secondQ":"II_ne_jegy_ertekeles",
-        "halfYear":"felevi_jegy_ertekeles",
-        "thirdQ":"III_ne_jegy_ertekeles",
-        "fourthQ":"IV_ne_jegy_ertekeles",
-        "endYear":"evvegi_jegy_ertekeles",
-    };
-    isType(type){
-        return this.gradeType.split(",")[1] == this.types[type];
-    }
-    
-
-    onclick(){
-        openGrade(this);
-    }
-
-    constructor(o) {
-        super(o);
-        this.map({
-            value:"SzamErtek",
-            teacher:"ErtekeloTanarNeve",
-            form:"Jelleg",
-            formName:"FormName",
-            theme:"Tema",
-            textValue:"SzovegesErtek",
-            weight:"SulySzazalekErteke",
-        });
-        this.formName = o.ErtekFajta?.Leiras;
-        this.mode = o.Mod?.Leiras;
-        this.subject = o.Tantargy?.Nev;
-        this.subjectId = o.Tantargy?.Uid;
-        this.gradeType = o.Tipus?.Uid;
-        this.gradeTypeName = o.Tipus?.Leiras;
-        if (this.form == "Magatartas" || this.form == "Szorgalom"){
-            this.normal = false;
-            if (this.subject == "Magatartas"){
-                this.subject = "Magatartás";
-            }
-            if (this.textValue == "Jó" || this.textValue == "Példás"){
-                this.icon = "fi/smile";
-            } else {
-                this.icon = "fi/frown";
-            }
-        } else {
-            this.icon = "text/"+this.value;
-        }
-        if (!this.icon){
-            this.icon = "#";
-        }
-        this.header = this.subject;
-        this.desc = this.theme || this.mode || this.textValue;
-        if (this.gradeType.indexOf("evkozi_jegy_ertekeles") == -1){
-            this.desc = this.gradeTypeName;
-        }
-        this.displayState = this.value;
-    }
-}
-
-export class Absence extends NormalisedItem {
-
-    type="absence";
-    absenceTypeName;
-    subject;
-    lesson;
-    delayMinutes;
-    justified;
-    justificationTypeName;
-
-    isDelay(){
-        return this.absenceType == "keses";
-    }
-
-    constructor(o) {
-        super(o);
-        this.map({
-            /* absenceType:"Type",
-            subject:"Subject",
-            lesson:"NumberOfLessons",
-            delayMinutes:"DelayTimeMinutes", */
-            delayMinutes:"KesesPercben",
-            teacher:"RogzitoTanarNeve"
-        });
-        this.absenceType = o.Tipus?.Nev;
-        this.absenceTypeName = o.Tipus?.Leiras;
-        this.subject = o.Tantargy?.Nev;
-        this.lesson = o.Ora?.Oraszam;
-        this.justificationTypeName = o.IgazolasTipusa?.Leiras;
-        this.justified = o.IgazolasAllapota == "Igazolt";
-        
-        
-    
-        this.header = `${this.absenceTypeName} - ${this.justified ? `Igazolt (${this.justificationTypeName})` : 'Igazolatlan'}`;
-        this.desc = `${this.lesson ? `${this.lesson || "#"}. Óra - `:''}${this.subject}${this.isDelay() ? `, ${this.delayMinutes} perc`:''}`;
-        this.icon = "fi/clock";
-        this.displayState = this.justified;
-    }
-}
-export class AbsentDay extends Absence {
-
-    absences = [];
-
-    push(lesson){
-        this.absences.push(lesson);
-        this.absences.sort((a,b)=>{
-            return a.lesson-b.lesson;
-        })
-        let lessons = this.absences.map((e)=>e.lesson);
-        
-        this.desc = `Érintett órák: ${lessons.join(", ")}`;
-    }
-
-    onclick(){
-        openModal(`Hiányzások`,AbsenceModal,this);
-    }
-
-    constructor(o) {
-        super(o);
-        
-
-        this.header = `${o.TypeName} - ${this.justified ? `Igazolt (${o.JustificationTypeName})` : 'Igazolatlan'}`;
-        this.desc="";
-
-        this.icon = "fi/clock";
-        this.displayState = this.justified;
-    }
-
-
-}
-import { openNote } from './components/modals/NoteModal';
-export class Note extends NormalisedItem {
-    type="note";
-    
-    title;
-    content;
-    teacher;
-    noteType;
-
-    onclick(){
-        openNote(this);
-        /* openModal(this.title,formatURLsHTML(this.content)); */
-    }
-
-    constructor(o) {
-        super(o);
-        this.map({
-            title:"Cim",
-            content:"Tartalom",
-            teacher:"KeszitoTanarNeve",
-        });
-        this.noteType = o.Tipus?.Leiras;
-
-        function shorten(text){
-            let limit = 70;
-            if (text.length > limit){
-                let textarr = text.slice(0,limit).split(" ");
-                textarr.pop();
-                return textarr.join(" ")+"...";
-            } else {
-                return text;
-            }
-        }
-
-        this.header = this.title;
-        this.desc = shorten(this.content);
-        this.icon = "fi/message-square";
-    }
-}
 
 function updateArray(arr,n){
     arr.splice(0,arr.length);
@@ -398,16 +184,6 @@ export function getWeekDaysTT(lessons){
 window.getWeekDaysTT = getWeekDaysTT;
 
 
-class Subject {
-    name;
-    average=NaN;
-    grades = [];
-    id;
-    constructor(id,name){
-        this.name = name;
-        this.id = id;
-    }
-}
 function processGenericList(list, id, _class) {
     var proc = list.map(e=>new _class(e));
     
@@ -438,13 +214,6 @@ function processGenericList(list, id, _class) {
         )
     }
 }
-class Homework {
-    id;
-    constructor(json){
-        this.id = json.Uid;
-        Object.assign(this,json);
-    }
-}
 var dataLists = [
     {
         get:getGrades,
@@ -465,8 +234,13 @@ var dataLists = [
         get:getHomeworks,
         id:"homeworks",
         class:Homework
-    }
-]
+    },
+    {
+        get:getTests,
+        id:"tests",
+        class:Test
+    },
+];
 function updateLists(fetch) {
     return Promise.all(dataLists.map(l=>{
         return updateList(l.id,fetch);
@@ -547,7 +321,8 @@ export function refreshPage(page){
                 return Promise.all([
                     updateList("grades",true),
                     updateList("notes",true),
-                    updateList("absences",true)
+                    updateList("absences",true),
+                    updateList("tests",true)
                 ]);
             }
         },

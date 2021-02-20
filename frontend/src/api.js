@@ -78,9 +78,13 @@ export function getNotes() {
 export function getStudentInfo(){
     return kretaRequest("TanuloAdatlap","studentinfo","Tanuló adatainak lekérése sikertelen");
 }
+export function getTests(){
+    return kretaRequest("BejelentettSzamonkeresek","tests","Számonkérések lekérése sikertelen")
+}
 window.getGrades = getGrades;
 window.getStudentInfo = getStudentInfo;
 window.getHomeworks = getHomeworks;
+window.getTests = getTests;
 
 export function getWeekStorageId(weeksAfter = 0){
     let {first, last} = getWeekIndex(weeksAfter);

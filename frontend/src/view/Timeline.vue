@@ -129,6 +129,7 @@ export default {
                 grades:this.GlobalState.processedData.grades,
                 notes:this.GlobalState.processedData.notes,
                 absences:this.GlobalState.processedData.absences,
+                tests:this.GlobalState.processedData.tests,
             };
 
             let arrays = [];

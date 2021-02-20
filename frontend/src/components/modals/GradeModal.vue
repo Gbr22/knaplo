@@ -6,12 +6,7 @@
             <p class="value" :style="{color: getGradeColor(obj)}">{{ obj.textValue }}</p>
             <p class="weight">{{ obj.weight != null ? obj.weight+"%" : "0%*" }}</p>
         </div>
-        <div class="details">
-            <div v-for="i in getList()" :key="i ? i[0] : null" class="li">
-                <span  v-if="i"><span class="title">{{ i[0] }}:</span> {{ i[1] || "N/A"}}</span>
-                <span class="space" v-if="!i"></span>
-            </div>
-        </div>
+        <DetailsList :list="getList()" />
         
       </div>
       
@@ -26,6 +21,7 @@ import { openModal } from '../Modal';
 import Icon from '../Icon';
 import Author from '../Author';
 import { getGradeColor } from '../../dataHandler';
+import DetailsList from '../DetailsList.vue';
 
 
 
@@ -59,7 +55,8 @@ let GradeModal = {
     },
     components:{
         Icon,
-        Author
+        Author,
+        DetailsList,
     }
 }
 export default GradeModal;
@@ -81,27 +78,9 @@ export function openGrade(elem){
     .cont {
         padding: 20px 0px;
     }
-    .details {
-        padding: 0 20px;
-        padding-top: 10px;
-    }
-    .details .title {
-        font-weight: bold;
-    }
-    p {
-        margin: 0;
-    }
-    .space {
-        display: block;
-        background-color: var(--divider-color);
-        height: 1px;
-        margin: 8px 0;
-    }
-    .li {
-        margin: 1px 0;
-    }
     .header {
         text-align: center;
+        padding-bottom: 10px;
     }
     .value {
         font-size: 25px;
@@ -109,5 +88,8 @@ export function openGrade(elem){
     }
     .weight {
         color: var(--text-smol)
+    }
+    p {
+        margin: 0;
     }
 </style>

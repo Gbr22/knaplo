@@ -23,6 +23,7 @@ let GlobalState = {
         subjects:[],
         grades:[],
         notes:[],
+        tests:[],
         absences:[],
         timetable:{
             weeks:[]
