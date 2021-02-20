@@ -259,7 +259,7 @@ export default {
         outline: none;
     }
     .header h2 svg {
-        stroke: var(--text-smol);
+        stroke: var(--text-light-color);
     }
     
     #dayButtons {
@@ -376,7 +376,7 @@ export default {
         font-weight: bold;
     }
     .teacher, .theme, .time {
-        color: var(--text-smol);
+        color: var(--text-light-color);
     }
     .short {
         display: none;
@@ -385,7 +385,7 @@ export default {
         color: var(--theme-color);
     }
     .isSubstitute {
-        color: var(--text-smol);
+        color: var(--text-light-color);
     }
     @media screen and (max-width: 680px) {
         

@@ -205,7 +205,7 @@ export default {
 }
 #avg_detail_cont .small {
     font-size: 13px;
-    color: var(--text-smol);
+    color: var(--text-light-color);
 }
 
 
@@ -219,7 +219,7 @@ export default {
     border-radius: 50%;
 }
 #avg_circle_bg circle {
-    stroke: var(--text-smol);
+    stroke: var(--text-light-color);
     opacity: 0.1;
 }
 #circle_container {

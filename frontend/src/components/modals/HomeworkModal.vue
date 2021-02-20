@@ -100,7 +100,7 @@ export function openHomework(elem){
         padding: 5px 10px;
         outline: none;
         background-color: transparent;
-        color: var(--text-smol);
+        color: var(--text-light-color);
         
     }
     .completedSwitch .true {

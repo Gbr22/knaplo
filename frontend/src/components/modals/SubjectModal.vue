@@ -118,7 +118,7 @@ export default {
                     }],
                     yAxes: [{
                         gridLines: {
-                            color: getCSSVariable("--text-smol"),
+                            color: getCSSVariable("--text-light-color"),
                         },
                         ticks:{
                             fontColor: getCSSVariable("--text-color"),

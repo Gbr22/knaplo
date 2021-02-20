@@ -87,7 +87,7 @@ export function openGrade(elem){
         font-weight: bold;
     }
     .weight {
-        color: var(--text-smol)
+        color: var(--text-light-color)
     }
     p {
         margin: 0;

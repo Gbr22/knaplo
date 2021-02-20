@@ -153,16 +153,16 @@ export default {
     
     .until i {
         font-style: normal;
-        color: var(--text-smol);
+        color: var(--text-light-color);
     }
     .desc {
         flex: 1;
-        color: var(--text-smol);
+        color: var(--text-light-color);
         word-break: break-word;
     }
     .descLong {
         flex: 1;
-        color: var(--text-smol);
+        color: var(--text-light-color);
         display: none;
     }
     
@@ -182,8 +182,8 @@ export default {
         border-radius: 8px;
     }
     .completed[data-value="false"] svg {
-        stroke: var(--text-smol);
-        border: 2px solid var(--text-smol);
+        stroke: var(--text-light-color);
+        border: 2px solid var(--text-light-color);
         background-color: var(--divider-color);
         opacity: 0.5;
         

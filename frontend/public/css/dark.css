@@ -4,7 +4,7 @@
     --elem-active: rgba(255, 255, 255, 0.11);
     --element2-color: rgb(68, 68, 68);
     --text-color: rgb(216, 216, 216);
-    --text-smol: #969696;
+    --text-light-color: #969696;
     --divider-color: #3a3a3a;
     --modal-color: #2c2c2c;
     --modal-shadow: 0 0 15px rgba(0, 0, 0, 0.25);
@@ -17,6 +17,12 @@
     --button-color: #ffffff0d;
     --glass-bg: rgba(0, 0, 0, 0.6);
     --text-selection-color:  #121212;
+
+    --grade-5: #2ECC40;
+    --grade-4: #0083f5;
+    --grade-3: #c38169;
+    --grade-2: #ff9036;
+    --grade-1: #FF4136;
 }
 #credits img {
     filter: brightness(90%);

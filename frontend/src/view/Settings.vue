@@ -197,7 +197,7 @@ section .item {
     bottom: 0;
     margin: auto;
     display: inline-block;
-    stroke: var(--text-smol);
+    stroke: var(--text-light-color);
 }
 #profile_circle {
     display: inline-block;
@@ -212,7 +212,7 @@ section .item {
     background: transparent;
 }
 #info_action .simplebtn svg {
-    stroke: var(--text-smol);
+    stroke: var(--text-light-color);
     
 }
 

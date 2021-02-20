@@ -38,7 +38,7 @@ export default {
         flex: 1;
     }
     .desc {
-        color: var(--text-smol);
+        color: var(--text-light-color);
         font-style: italic;
     }
     .user .icon /deep/ {

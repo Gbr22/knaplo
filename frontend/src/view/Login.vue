@@ -71,7 +71,7 @@ export default {
 <style scoped>
 
 #selectInst {
-    color: var(--text-smol);
+    color: var(--text-light-color);
 }
 
 .logo {

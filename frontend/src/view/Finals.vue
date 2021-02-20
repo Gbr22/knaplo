@@ -106,7 +106,7 @@ export default {
 }
 #finals h1 p {
     font-size: 18px;
-    color: var(--text-smol);
+    color: var(--text-light-color);
 }
 #finals h1 span {
     display: inline-block;

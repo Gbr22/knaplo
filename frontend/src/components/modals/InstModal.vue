@@ -117,7 +117,7 @@ export default {
     outline: none;
 }
 #school_section input[type="text"]::placeholder {
-    color: var(--text-smol);
+    color: var(--text-light-color);
 }
 #schools {
     width: 100%;
@@ -134,7 +134,7 @@ export default {
     text-align: left;
 }
 .school i {
-    color: var(--text-smol);
+    color: var(--text-light-color);
     font-style: normal;
 }
 .school input {

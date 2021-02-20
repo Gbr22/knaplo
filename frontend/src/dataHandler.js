@@ -6,7 +6,7 @@ import { pushError } from './components/MessageDisplay';
 
 import SubjectModal from './components/modals/SubjectModal';
 import { getFromCache, fetchInst, refreshUser, getTimetable, getWeekStorageId, getGrades, getNotes, getAbsences, getEvents } from './api';
-import { getWeekIndex, formatURLsHTML, sortByText, wait } from './util';
+import { getWeekIndex, formatURLsHTML, sortByText, wait, getCSSVariable } from './util';
 import { updateTT } from './view/Timetable';
 import storage from './storage';
 import { Grade } from './data/Grade';
@@ -31,7 +31,7 @@ if (window.cordova){
 
 export function getGradeColor(grade){
     
-    let unknown = "#669999";
+    let unknown = "#607d8b";
     if (!grade){
         return unknown;   
     }
@@ -48,15 +48,12 @@ export function getGradeColor(grade){
     } else if (!grade.value) {
         return unknown;
     }
+
+    /* GlobalState. */
     
     function getColor(num) {
-        let map = {
-            "5":"#00cc66",
-            "4":"#009999",
-            "3":"#ffcc00",
-            "2":"#ff6600",
-            "1":"#b32400"
-        }
+        let map = GlobalState.gradeColors;
+
         return map[num.toString()];
     }
     return getColor(g);

@@ -1,3 +1,5 @@
+import GlobalState from "./globalState";
+
 class ThemeHandlerClass {
     isDark(){
         return this.currentTheme() == "dark";
@@ -19,6 +21,25 @@ class ThemeHandlerClass {
         document.body.offsetHeight;
         document.body.classList.remove("notransition");
         localStorage.setItem("theme", theme);
+
+        let gradeColors = {
+            light:{
+                "5":"#43a047",
+                "4":"#0074D9",
+                "3":"#795548",
+                "2":"#FF4136",
+                "1":"#c62828",
+            },
+            dark: {
+                "5":"#2ECC40",
+                "4":"#0083f5",
+                "3":"#c38169",
+                "2":"#ff9036",
+                "1":"#FF4136",
+            }
+        }
+        GlobalState.theme = theme;
+        Object.assign(GlobalState.gradeColors, gradeColors[theme]);
     }
     toggleDarkMode(){
         if (this.isDark()){

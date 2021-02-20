@@ -11,6 +11,10 @@ import options from './options';
 import { setHomeworkDone } from "./api";
 
 let GlobalState = {
+    theme:null,
+    gradeColors:{
+
+    },
     loaded:false,
     loggedIn:false,
     data:null,

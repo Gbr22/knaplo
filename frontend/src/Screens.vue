@@ -158,7 +158,7 @@ export default {
     
 }
 .recent .date, .tinyDate {
-    color: var(--text-smol);
+    color: var(--text-light-color);
 }
 .gradeLike .date b, .tinyDate b {
     font-weight: normal;
@@ -175,7 +175,7 @@ export default {
 }
 
 .gradeLike .right .bottom, .absence p {
-    color: var(--text-smol);
+    color: var(--text-light-color);
 }
 
 .link.teams {
@@ -354,6 +354,6 @@ export default {
 
 
 .subject_grades {
-    color: var(--text-smol);
+    color: var(--text-light-color);
 }
 </style>

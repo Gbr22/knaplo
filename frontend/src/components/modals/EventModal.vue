@@ -55,10 +55,10 @@ export function openEvent(elem){
     .dates {
         margin-top: 15px;
         text-align: right;
-        color: var(--text-smol);
+        color: var(--text-light-color);
     }
     .divider {
-        background-color: var(--text-smol);
+        background-color: var(--text-light-color);
         display: inline-block;
         width: 15px;
         height: 1px;
