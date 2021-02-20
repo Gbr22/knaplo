@@ -59,7 +59,8 @@ let modes = {
     all:["Minden", "fi/box"],
     grades:["Jegyek", "fi/book"],
     notes:["Feljegyzések", "fi/clipboard"],
-    absences:["Mulasztások","fi/watch"]
+    absences:["Mulasztások","fi/watch"],
+    tests:["Számonkérések","fi/file"]
 };
 
 export default {
@@ -130,6 +131,7 @@ export default {
                 notes:this.GlobalState.processedData.notes,
                 absences:this.GlobalState.processedData.absences,
                 tests:this.GlobalState.processedData.tests,
+                events:this.GlobalState.processedData.events,
             };
 
             let arrays = [];
@@ -137,7 +139,12 @@ export default {
             if (this.show == "all"){
                 arrays = Object.values(map);
             } else {
-                arrays = map[this.show] || [];
+                if (this.show == "notes") {
+                    arrays = [map.notes,map.events];
+                } else {
+                    arrays = map[this.show] || [];
+                }
+                
             }
             
             let arr = arrays.flat().flat();

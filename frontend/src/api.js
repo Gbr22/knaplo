@@ -79,7 +79,10 @@ export function getStudentInfo(){
     return kretaRequest("TanuloAdatlap","studentinfo","Tanuló adatainak lekérése sikertelen");
 }
 export function getTests(){
-    return kretaRequest("BejelentettSzamonkeresek","tests","Számonkérések lekérése sikertelen")
+    return kretaRequest("BejelentettSzamonkeresek","tests","Számonkérések lekérése sikertelen");
+}
+export function getEvents(){
+    return kretaRequest("FaliujsagElemek","events","Faliújság lekérése sikertelen");
 }
 window.getGrades = getGrades;
 window.getStudentInfo = getStudentInfo;

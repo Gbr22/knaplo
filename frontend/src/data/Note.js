@@ -1,4 +1,5 @@
 import { openNote } from '../components/modals/NoteModal';
+import { htmlToText, shortenText, toOneLine } from '../util';
 import { NormalisedItem } from './NormalisedItem';
 
 export class Note extends NormalisedItem {
@@ -23,19 +24,9 @@ export class Note extends NormalisedItem {
         });
         this.noteType = o.Tipus?.Leiras;
 
-        function shorten(text) {
-            let limit = 70;
-            if (text.length > limit) {
-                let textarr = text.slice(0, limit).split(" ");
-                textarr.pop();
-                return textarr.join(" ") + "...";
-            } else {
-                return text;
-            }
-        }
 
         this.header = this.title;
-        this.desc = shorten(this.content);
+        this.desc = shortenText(toOneLine(htmlToText(this.content)),70);
         this.icon = "fi/message-square";
     }
 }

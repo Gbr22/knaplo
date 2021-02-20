@@ -9,7 +9,7 @@
             <div class="header">
                 {{ item.header }}
             </div>
-            <span class="bottom">{{ item.desc }}</span>
+            <span class="bottom" v-if="item.desc != null">{{ item.desc }}</span>
         </span>
         <span class="date"><b>{{ getDayOfWeek(new Date(item.date)) }}</b><br><i>{{ formatDate(new Date(item.date)) }}</i></span>
     </div>

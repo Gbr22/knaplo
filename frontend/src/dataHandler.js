@@ -5,7 +5,7 @@ import { openModal } from './components/Modal';
 import { pushError } from './components/MessageDisplay';
 
 import SubjectModal from './components/modals/SubjectModal';
-import { getFromCache, fetchInst, refreshUser, getTimetable, getWeekStorageId, getGrades, getNotes, getAbsences } from './api';
+import { getFromCache, fetchInst, refreshUser, getTimetable, getWeekStorageId, getGrades, getNotes, getAbsences, getEvents } from './api';
 import { getWeekIndex, formatURLsHTML, sortByText, wait } from './util';
 import { updateTT } from './view/Timetable';
 import storage from './storage';
@@ -16,6 +16,7 @@ import { Homework } from './data/Homework';
 import { Subject } from './data/Subject';
 import { Test } from './data/Test';
 import { NormalisedItem } from './data/NormalisedItem';
+import { Event } from './data/Event';
 
 export function openSubject(subject){
     openModal(subject.name,SubjectModal,subject,{
@@ -240,6 +241,11 @@ var dataLists = [
         id:"tests",
         class:Test
     },
+    {
+        get:getEvents,
+        id:"events",
+        class:Event
+    },
 ];
 function updateLists(fetch) {
     return Promise.all(dataLists.map(l=>{
@@ -322,7 +328,8 @@ export function refreshPage(page){
                     updateList("grades",true),
                     updateList("notes",true),
                     updateList("absences",true),
-                    updateList("tests",true)
+                    updateList("tests",true),
+                    updateList("events",true),
                 ]);
             }
         },

@@ -27,6 +27,6 @@ export class Test extends NormalisedItem {
         })
         this.mode = new KretaType(o.Modja);
         this.header = `${this.mode.description} (${this.subjectName})`;
-        this.desc = `${this.theme}`;
+        this.desc = this.theme;
     }
 }
