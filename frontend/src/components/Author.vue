@@ -1,6 +1,6 @@
 <template>
     <div class="user">
-        <Icon src="fi/user" class="icon" />
+        <ProfileCircle :name="author" class="profileCircle" />
         <div class="content">
             <div class="name">{{ author }}</div>
             <div class="desc">{{ desc }}</div>
@@ -10,13 +10,17 @@
 </template>
 
 <script>
+
 import Icon from './Icon.vue';
 import { formatDate, getDayOfWeek } from '../util';
+import ProfileCircle from './ProfileCircle.vue';
+
 export default {
     name:"Author",
     props:["author","desc","date"],
     components:{
-        Icon
+        Icon,
+        ProfileCircle
     },
     methods:{
         formatDate,
@@ -41,11 +45,9 @@ export default {
         color: var(--text-light-color);
         font-style: italic;
     }
-    .user .icon /deep/ {
-        background-color: var(--element2-color);
-        padding: 8px;
-        border-radius: 50%;
-        margin-right: 8px;
+    .profileCircle {
+        width: 40px;
+        height: 40px;
     }
     .date {
         margin-left: 5px;

@@ -1,5 +1,6 @@
 import { closeModal } from './components/Modal.vue';
 import sanitizeHtml from 'sanitize-html';
+import seedrandom from 'seedrandom';
 
 export function tryJSON(string){
     try {
@@ -340,6 +341,10 @@ export function getCookieFromString(cname,string) {
     }
     return "";
 }
+export function randomInt(min, max, fn = Math.random) {
+    return Math.floor(fn() * (max - min) ) + min;
+}
+
 window.getCookieFromString = getCookieFromString;
 export function getCSSVariable(prop){
     return getComputedStyle(document.documentElement).getPropertyValue(prop);
