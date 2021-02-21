@@ -8,65 +8,75 @@
             <h1 id="fullname">{{ GlobalState.studentInfo ? GlobalState.studentInfo.Nev : "#### ####" }}</h1>
         </div>
 
-        <section id="more" class="grid">
-            <div class="header">Továbbiak</div>
-            <div class="content">
-                <div class="item btn" @click="navigate('more/finals')">
-                    <span class="icon">
-                        <Icon src="fi/list" />
-                    </span>
-                    <p>
-                        Lezárások
-                    </p>
+        <div class="settingsArea">
+            <section id="more" class="grid">
+                <div class="header">Továbbiak</div>
+                <div class="content">
+                    <div class="item btn" @click="navigate('more/finals')">
+                        <span class="icon">
+                            <Icon src="fi/list" />
+                        </span>
+                        <p>
+                            Lezárások
+                        </p>
+                    </div>
+                    <div class="item btn" @click="openDKT()">
+                        <span class="icon">
+                            <Icon src="fi/external-link" />
+                        </span>
+                        <p>
+                            DKT
+                        </p>
+                    </div>
+                    <div class="item btn" @click="openConfirm('Biztosan Kilép?',logout)">
+                        <span class="icon">
+                            <Icon src="fi/log-out" />
+                        </span>
+                        <p>
+                            Kijelentkezés
+                        </p>
+                    </div>
                 </div>
-                <div class="item btn" @click="openConfirm('Biztosan Kilép?',logout)">
-                    <span class="icon">
-                        <Icon src="fi/log-out" />
-                    </span>
-                    <p>
-                        Kijelentkezés
-                    </p>
+            </section>
+            <section id="settings">
+                <div class="header">Beállítások</div>
+                <div class="content">
+                    <div class="item">
+                        <span class="icon">
+                            <Icon src="fi/moon" />
+                        </span>
+                        <p>
+                            Sötét téma
+                        </p>
+                        <span class="action">
+                            <label class="switch">
+                                <input type="checkbox" :checked="ThemeHandler.isDark()" @click="ThemeHandler.toggleDarkMode()">
+                                <span class="slider"></span>
+                            </label>
+                        </span>
+                    </div>
+                    <div class="item" v-for="[key, e] in Object.entries(options.options)" :key="key">
+                        <span class="icon">
+                            <Icon :src="'fi/'+e.icon" />
+                        </span>
+                        <p>
+                            {{ e.text }}
+                        </p>
+                        <span class="action">
+                            <label class="switch">
+                                <input type="checkbox" :checked="GlobalState.options[key]" @click="options.set(key,!GlobalState.options[key])">
+                                <span class="slider"></span>
+                            </label>
+                        </span>
+                    </div>
                 </div>
+            </section>
+            <div id="credits">
+                <div><img src="icons/icon_vector.svg" /></div>
+                <h2>K napló</h2>
+                <p>{{ branch }}/{{ version }}</p>
+                <p><a class="link" href="https://github.com/Gbr22/knaplo"  target="_blank">Forráskód</a></p>
             </div>
-        </section>
-        <section id="settings">
-            <div class="header">Beállítások</div>
-            <div class="content">
-                <div class="item">
-                    <span class="icon">
-                        <Icon src="fi/moon" />
-                    </span>
-                    <p>
-                        Sötét téma
-                    </p>
-                    <span class="action">
-                        <label class="switch">
-                            <input type="checkbox" :checked="ThemeHandler.isDark()" @click="ThemeHandler.toggleDarkMode()">
-                            <span class="slider"></span>
-                        </label>
-                    </span>
-                </div>
-                <div class="item" v-for="[key, e] in Object.entries(options.options)" :key="key">
-                    <span class="icon">
-                        <Icon :src="'fi/'+e.icon" />
-                    </span>
-                    <p>
-                        {{ e.text }}
-                    </p>
-                    <span class="action">
-                        <label class="switch">
-                            <input type="checkbox" :checked="GlobalState.options[key]" @click="options.set(key,!GlobalState.options[key])">
-                            <span class="slider"></span>
-                        </label>
-                    </span>
-                </div>
-            </div>
-        </section>
-        <div id="credits">
-            <div><img src="icons/icon_vector.svg" /></div>
-            <h2>K napló</h2>
-            <p>{{ branch }}/{{ version }}</p>
-            <p><a class="link" href="https://github.com/Gbr22/knaplo"  target="_blank">Forráskód</a></p>
         </div>
         <div class="pagePadding"></div>
     </div>
@@ -103,6 +113,11 @@ export default {
     methods:{
         openConfirm,
         navigate,
+        openDKT(){
+            let url = `https://dkttanulo.e-kreta.hu/sso?accessToken=${GlobalState.user.access_token}`;
+            var win = window.open(url, '_blank');
+            win.focus();
+        },
         logout(){
             GlobalState.loggedIn = false;
             GlobalState.user = null;
@@ -122,7 +137,14 @@ export default {
 </script>
 
 <style scoped>
-    section {
+#settings .header {
+    margin-bottom: 5px;
+}
+.settingsArea {
+    max-width: max(500px, 60%);
+    margin: 0 auto;
+}
+section {
     margin-bottom: 20px;
 }
 section .header {
@@ -134,18 +156,22 @@ section .header {
 section .content {
     margin: 0 20px;
 }
+
 section.grid .content {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     margin: 0 15px;
+    
 }
 section.grid .item {
-    flex: 1;
+    flex: 1 1 0;
+    min-width: 100px;
     height: 60px;
     flex-direction: column;
     justify-content: center;
     background-color: var(--element-color);
-    margin: 0 5px;
+    margin: 5px 5px;
 }
 section.grid .item p {
     flex: 0;
