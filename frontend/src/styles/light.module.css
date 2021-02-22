@@ -1,5 +1,4 @@
-:root {
-    --bg-color: rgb(250, 250, 250);
+:root[data-theme="light"] {
     --element-color: white;
     --elem-active: rgba(0, 0, 0, 0.055);
     --element2-color: rgb(231, 231, 231);

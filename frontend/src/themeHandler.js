@@ -10,18 +10,9 @@ class ThemeHandlerClass {
     }
     switchTo(theme){
         document.body.classList.add("notransition");
-        let to = document.querySelector(`[data-theme-style][title="${theme}"]`);
-        if (!to){return}
-        to.disabled = false;
-
-        let styles = document.querySelectorAll(`[data-theme-style]:not([title="${theme}"])`);
-        for (let s of styles){
-            s.disabled = true;
-        }
-        document.body.offsetHeight;
-        document.body.classList.remove("notransition");
-        localStorage.setItem("theme", theme);
-
+        setDocumentBackgroundColor(theme);
+        document.documentElement.dataset.theme = theme;
+        GlobalState.theme = theme;
         let gradeColors = {
             light:{
                 "5":"#43a047",
@@ -38,8 +29,13 @@ class ThemeHandlerClass {
                 "1":"#FF4136",
             }
         }
-        GlobalState.theme = theme;
         Object.assign(GlobalState.gradeColors, gradeColors[theme]);
+        document.body.offsetHeight;
+        document.body.classList.remove("notransition");
+        localStorage.setItem("theme", theme);
+
+        
+        
     }
     toggleDarkMode(){
         if (this.isDark()){

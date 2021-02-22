@@ -11,6 +11,7 @@
 </template>
 
 <script>
+
 import Login from './view/Login';
 import GlobalState from './globalState';
 import MessageDisplay from './components/MessageDisplay';
@@ -50,7 +51,11 @@ export default {
     overflow-y: hidden;
 }
 </style>
+
 <style>
+@import './styles/dark.module.css';
+@import './styles/light.module.css';
+
 #pageview_inner {
   overflow-y: auto;
   position: relative;

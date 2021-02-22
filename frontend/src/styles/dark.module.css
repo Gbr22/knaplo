@@ -1,5 +1,4 @@
-:root {
-    --bg-color: #121212;
+:root[data-theme="dark"] {
     --element-color: #1d1d1d;
     --elem-active: rgba(255, 255, 255, 0.11);
     --element2-color: rgb(68, 68, 68);
@@ -28,6 +27,6 @@
     --lesson-dismissed-color: #ff4136c4;
     --substitute-teacher-color: #c46e24;
 }
-#credits img {
+[data-theme="dark"] #credits img {
     filter: brightness(90%);
 }
