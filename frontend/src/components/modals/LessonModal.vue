@@ -4,7 +4,7 @@
           <div class="lessonNumber">{{ obj.lessonNumber }}</div>
           <div>
               <div class="time">{{formatTime(this.obj.startDate)}} - {{formatTime(this.obj.endDate)}}</div>
-              <div class="classRoom">{{ obj.classRoomName }}</div>
+              <div class="classRoom">{{ obj.classRoom }}</div>
           </div>
       </div>
       <DetailsList :list="getList()" />

@@ -172,6 +172,9 @@ body, .list, #recent, .fullpage_modal {
         background: none;
         border: none;
     }
+    ::-webkit-scrollbar-corner {
+        background: transparent;
+    }
 }
 
 </style>

@@ -7,6 +7,7 @@
     --text-light-color: #969696;
     --divider-color: #3a3a3a;
     --modal-color: #2c2c2c;
+    --card-color: #2c2c2c;
     --modal-shadow: 0 0 15px rgba(0, 0, 0, 0.25);
     --elem-shadow: 0 1px 3px rgba(0, 0, 0, 0.20);
     --menu-shadow: 0 0 5px rgba(0,0,0,.35);
@@ -23,6 +24,9 @@
     --grade-3: #c38169;
     --grade-2: #ff9036;
     --grade-1: #FF4136;
+
+    --lesson-dismissed-color: #ff4136c4;
+    --substitute-teacher-color: #c46e24;
 }
 #credits img {
     filter: brightness(90%);

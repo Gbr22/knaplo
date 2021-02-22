@@ -161,7 +161,7 @@ export default {
     }
     .header h1 {
         flex: 1;
-
+        font-size: 28px;
     }
     
 </style>

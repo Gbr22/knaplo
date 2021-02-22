@@ -31,7 +31,7 @@ export class Lesson {
     subject;
     studentPresence;
     theme;
-    classRoomName;
+    classRoom;
     type;
     id;
     endDate;
@@ -60,7 +60,7 @@ export class Lesson {
             subject: null, //TODO Tantargy
             studentPresence: new KretaType(o.TanuloJelenlet),
             theme: o.Tema,
-            classRoomName: o.TeremNeve,
+            classRoom: o.TeremNeve,
             type: new KretaType(o.Tipus),
             id: o.Uid,
             endDate: new Date(o.VegIdopont),

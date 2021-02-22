@@ -289,7 +289,7 @@ input:checked + .slider {
 }
 
 input:focus + .slider {
-    box-shadow: 0 0 1px #2196F3;
+    /* box-shadow: 0 0 1px #2196F3; */
 }
 
 input:checked + .slider:before {
@@ -306,8 +306,8 @@ border-radius: 50%;
 }
 
 #credits {
-    background-color: var(--modal-color);
-    box-shadow: var(--modal-shadow);
+    background-color: var(--card-color);
+    box-shadow: var(--elem-shadow);
     margin: 0 20px;
     margin-top: 60px;
     padding: 20px;
@@ -320,7 +320,7 @@ border-radius: 50%;
 #credits img {
     height: 45px;
     border-radius: 50%;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.10);
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.25);
 }
 
 #credits h2 img, #credits h2 span {

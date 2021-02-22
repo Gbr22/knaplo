@@ -3,16 +3,17 @@
     --element-color: white;
     --elem-active: rgba(0, 0, 0, 0.055);
     --element2-color: rgb(231, 231, 231);
-    --text-color: #0B0C0C;
+    --text-color: #222222;
     --text-light-color: #676767;
     --divider-color: #dddddd;
     --modal-color: rgb(250, 250, 250);
+    --card-color: white;
     --modal-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
     --elem-shadow: 0 0px 4px rgba(0, 0, 0, 0.07), 0 3px 5px rgba(0, 0, 0, 0.04);
     --menu-shadow: 0 0 5px rgba(0,0,0,.25);
     --theme-gradient: linear-gradient(to top left, #34e89e, #0f3443);
     --error-color: rgb(255, 212, 195);
-    --link-color: #00aa80;
+    --link-color: #009c75;
     --theme-color: #1CAA53;
     --button-color: #00000006;
     --glass-bg: rgba(255, 255, 255, 0.6);
@@ -23,4 +24,7 @@
     --grade-3: #795548;
     --grade-2: #FF4136;
     --grade-1: #c62828;
+
+    --lesson-dismissed-color: #ce0c02;
+    --substitute-teacher-color: #c46e24;
 }
