@@ -4,6 +4,7 @@ export class Lesson {
 
     states = {
         logged:"1,Naplozott",
+        notLogged:"2,Nem_naplozott",
         dismissed:"3,Elmaradt",
         event:"4,TanevRendjeEsemeny",
     }

@@ -52,8 +52,8 @@
                                 <span class="mainContent">
                                     <span class="subject">{{ lesson.subjectName }}</span>
                                     <span class="theme">
-                                        <span class="short">{{ lesson.state.id == lesson.states.dismissed ? "Elmarad": shortenText(lesson.theme || "",30) }}</span>
-                                        <span class="long">{{ lesson.state.id == lesson.states.dismissed ? "Elmarad" : lesson.theme }}</span>
+                                        <span class="short">{{ lesson.state.id == lesson.states.dismissed ? "Elmaradt": shortenText(lesson.theme || "",30) }}</span>
+                                        <span class="long">{{ lesson.state.id == lesson.states.dismissed ? "Elmaradt" : lesson.theme }}</span>
                                     </span>
                                 </span>
                                 <span class="moreInfo">
@@ -93,6 +93,7 @@ import { getWeekReactive } from '../dataHandler';
 import { Swiper, SwiperSlide, directive } from 'vue-awesome-swiper'
 import 'swiper/css/swiper.css'
 import TabMenu from '../components/TabMenu.vue';
+import { openLesson } from '../components/modals/LessonModal.vue';
 
 
 export let updateTT = ()=>{};
@@ -150,12 +151,14 @@ export default {
         },
         openLesson(lesson){
             console.log("openlesson",lesson);
+            openLesson(lesson);
+            /* 
             let id = lesson.HaziFeladatUid;
             
             var homework = GlobalState.processedData.homeworks.filter(e=>e.id == id)[0];
             if (homework){
                 openHomework(homework);
-            }
+            } */
             
         },
         gotoDay(index){
@@ -309,7 +312,7 @@ export default {
     .lesson {
         display: flex;
         align-items: center;
-        margin: 8px 0;
+        margin: 8px auto;
         padding: 6px 0;
         overflow: hidden;
     }
@@ -358,7 +361,7 @@ export default {
         align-items: center;
         justify-content: flex-start;
         
-        width: 67px;
+        min-width: 67px;
         flex: none;
         flex-direction: row;
     }

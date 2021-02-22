@@ -2,7 +2,7 @@
     <div class="details">
         <div v-for="i in list" :key="i ? i[0] : null" class="li">
             <span  v-if="i"><span class="title">{{ i[0] }}:</span> {{ i[1] || "N/A"}}</span>
-            <span class="space" v-if="!i"></span>
+            <span class="space" v-if="i === null"></span>
         </div>
     </div>
 </template>

@@ -2,21 +2,7 @@
     <div class="homeworkList" v-if="list.length > 0">
         <h2 class="title">{{ title }} ({{ list.length }})</h2>
         <div class="list">
-            <div class="homework lItem" v-for="elem in list" :key="elem.id" @click="openHomework(elem)">
-                <div class="header">
-                    <span class="subject">{{ elem.Tantargy.Nev }}</span>
-                    <span class="until"><i>{{ formatDate(elem.FeladasDatuma) }}</i> - {{ formatDate(elem.HataridoDatuma) }}</span>
-                </div>
-                <div class="bottom">
-                    <div class="desc">{{ getText(elem) }}</div>
-                    <div class="descLong" v-html="getLongText(elem)"></div>
-                    <!-- <button class="completed" :data-value="elem.IsMegoldva+''"
-                        @click.stop="()=>{}"
-                    >
-                        <Icon :src="(isCompleted(elem) ? 'fi/check' : 'fi/x')" class="icon" />
-                    </button> -->
-                </div>
-            </div>
+            <HomeworkListItem :homework="elem" v-for="elem in list" :key="elem.id" />
         </div>
     </div>
 </template>
@@ -28,6 +14,7 @@ import {  } from '../dataHandler';
 import GlobalState from '../globalState';
 import Icon from './Icon';
 import {  } from '../api';
+import HomeworkListItem from './HomeworkListItem.vue';
 
 
 
@@ -41,7 +28,8 @@ export default {
         }
     },
     components:{
-        Icon
+        Icon,
+        HomeworkListItem
     },
     methods:{
         formatDate,
@@ -52,14 +40,8 @@ export default {
             return hw.IsMegoldva;
             /* return getHWCompObjFArr(hw.Id, this.homeworksCompleted)?.value == true; */
         },
-        getLongText(elem){
-            let text = htmlToText(formatURLsHTML(elem.Szoveg)).replace(/\n/,"<br/>");
-            return text;
-        },
-        getText(elem){
-            let text = htmlToText(formatURLsHTML(elem.Szoveg));
-            return shortenText(toOneLine(text), 50);
-        },
+        
+        
         openHomework,
         shortenText,
         htmlToText,
@@ -84,31 +66,13 @@ export default {
         text-align: center;
         margin-top: 20px;
     }
-    .homework {
-        padding: 10px;
-        margin: 8px 0;
-        width: 100%;
-    }
+    
     @media screen and (min-width: 700px) {
-        .desc {
-            display: none;
-        }
-        .descLong {
-            display: block !important;
-            max-height: 53px;
-            overflow: hidden;
-        }
+        
         .list {
             display: block;
         }
-        .homework {
-            width: 250px;
-            height: unset;
-            display: inline-block;
-            margin: 8px;
-            padding: 20px;
-            vertical-align: top;
-        }
+        
     }
     /* @media screen and (min-width: 1000px) {
         .list {
@@ -134,36 +98,10 @@ export default {
         padding: 0;
         justify-content:space-between;
     }
-    .homework .header {
-        font-weight: bold;
-        display: flex;
-        margin-bottom: 3px;
-    }
-    .header .subject {
-        flex: 1;
-    }
-    .bottom {
-        display: flex;
-    }
+    
+   
     
     
-    .title b {
-        color: #4ec275;
-    }
     
-    .until i {
-        font-style: normal;
-        color: var(--text-light-color);
-    }
-    .desc {
-        flex: 1;
-        color: var(--text-light-color);
-        word-break: break-word;
-    }
-    .descLong {
-        flex: 1;
-        color: var(--text-light-color);
-        display: none;
-    }
     
 </style>
