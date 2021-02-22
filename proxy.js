@@ -30,7 +30,7 @@ module.exports = (req,res)=>{
         }
     }
     
-    if (url.indexOf("idp.e-kreta.hu") != -1){
+    if (true/* url.indexOf("idp.e-kreta.hu") != -1 */){
         let options = {
             url,
             headers,
