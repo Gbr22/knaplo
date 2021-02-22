@@ -27,46 +27,54 @@
                 <div v-for="day in selectedWeek.days" :key="day.day" class="day" :class="{ event:isEventOnDay(day) }">
                     <template v-if="!isEventOnDay(day)">
                         <h2>{{ getDayName(day.day) }}</h2>
-                        <div v-for="lesson in day.lessons" :key="lesson.Uid" class="lesson" @click="openLesson(lesson)">
+                        <div
+                            v-for="lesson in day.lessons"
+                            :key="lesson.id" class="lesson"
+                            @click="openLesson(lesson)"
+                            :class="{
+                                substitute:lesson.substituteTeacherName != null,
+                                dismissed:lesson.state.id == lesson.states.dismissed,
+                            }"
+                        >
                             <template v-if="!isEvent(lesson)">
                                 <span class="timeIndex">
                                     
                                     <div class="index">
-                                        {{ lesson.Oraszam != null ? lesson.Oraszam : "-" }}
+                                        {{ lesson.lessonNumber != null ? lesson.lessonNumber : "-" }}
                                     </div>
                                     <div class="time">
-                                        {{ formatTime(lesson.KezdetIdopont) }}
+                                        {{ formatTime(lesson.startDate) }}
                                         <br>
-                                        {{ formatTime(lesson.VegIdopont) }}
+                                        {{ formatTime(lesson.endDate) }}
                                     </div>
                                 </span>
                                 <span class="vr"></span>
                                 <span class="mainContent">
-                                    <span class="subject">{{ lesson.Tantargy.Nev }}</span>
+                                    <span class="subject">{{ lesson.subjectName }}</span>
                                     <span class="theme">
-                                        <span class="short">{{ shortenText(lesson.Tema || "",30) }}</span>
-                                        <span class="long">{{ lesson.Tema }}</span>
+                                        <span class="short">{{ lesson.state.id == lesson.states.dismissed ? "Elmarad": shortenText(lesson.theme || "",30) }}</span>
+                                        <span class="long">{{ lesson.state.id == lesson.states.dismissed ? "Elmarad" : lesson.theme }}</span>
                                     </span>
                                 </span>
                                 <span class="moreInfo">
-                                    <span class="classRoom">{{ lesson.TeremNeve }}</span>
-                                    <span class="teacher" :class="{ substitute:lesson.HelyettesTanarNeve != null }">
-                                        <span v-if="lesson.HelyettesTanarNeve" class="isSubstitute">*</span>
-                                        <span class="short">{{ shortName(lesson.HelyettesTanarNeve || lesson.TanarNeve || "") }}</span>
-                                        <span class="long">{{ lesson.HelyettesTanarNeve || lesson.TanarNeve }}</span>
-                                        <Icon src="fi/edit-3" v-if="lesson.HaziFeladatUid"/>
+                                    <span class="classRoom">{{ lesson.classRoomName }}</span>
+                                    <span class="teacher">
+                                        <span v-if="lesson.substituteTeacherName" class="isSubstitute">*</span>
+                                        <span class="short">{{ shortName(lesson.substituteTeacherName || lesson.teacherName || "") }}</span>
+                                        <span class="long">{{ lesson.substituteTeacherName || lesson.teacherName }}</span>
+                                        <Icon src="fi/edit-3" v-if="lesson.homeworkId"/>
                                     </span>
                                 </span>
                             </template>
                             <template v-if="isEvent(lesson)">
-                                {{ (lesson.Nev || "").trim() }}
+                                {{ (lesson.subjectName || "").trim() }}
                             </template>
 
                         </div>
                     </template>
                     <div v-if="isEventOnDay(day)">
                         <span class="text">
-                            {{ (EventOnDay(day).Nev || "").trim() }}
+                            {{ (EventOnDay(day).subjectName || "").trim() }}
                         </span>
                     </div>
 
@@ -130,6 +138,7 @@ export default {
         this.swiper.slideTo(0, 0, false);
     },
     methods:{
+        
         isEventOnDay(day){
             return this.EventOnDay(day) != null;
         },
@@ -137,7 +146,7 @@ export default {
             return day.lessons.filter(e=>this.isEvent(e))[0] || null;
         },
         isEvent(lesson){
-            return lesson.Tipus.Nev == 'TanevRendjeEsemeny';
+            return lesson.type.id == lesson.types.event;
         },
         openLesson(lesson){
             console.log("openlesson",lesson);
@@ -381,8 +390,16 @@ export default {
     .short {
         display: none;
     }
-    .substitute {
+    .substitute .index, .substitute .teacher {
         color: var(--theme-color);
+        /* color: #FF851B; */
+    }
+    .dismissed .index, .dismissed .theme {
+        color: #FF4136;
+        
+    }
+    .dismissed {
+        opacity: 0.7;
     }
     .isSubstitute {
         color: var(--text-light-color);

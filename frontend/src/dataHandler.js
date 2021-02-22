@@ -15,6 +15,7 @@ import { Note } from './data/Note';
 import { Homework } from './data/Homework';
 import { Subject } from './data/Subject';
 import { Test } from './data/Test';
+import { Lesson } from './data/Lesson';
 import { NormalisedItem } from './data/NormalisedItem';
 import { Event } from './data/Event';
 
@@ -155,10 +156,11 @@ export function getWeekReactive(i){
 window.getWeekReactive = getWeekReactive;
 
 export function getWeekDaysTT(lessons){
+    lessons = lessons.map(e=>new Lesson(e));
     let daysMap = {};
     for (let e of lessons){
         
-        let day = (new Date(e.Datum)).toDateString();
+        let day = (e.date).toDateString();
         if (!daysMap[day]){
             daysMap[day] = {
                 day,
@@ -172,11 +174,11 @@ export function getWeekDaysTT(lessons){
     let days = Object.values(daysMap);
     for (let day of days){
         day.lessons.sort((a,b)=>{
-            return new Date(a.KezdetIdopont) - new Date(b.KezdetIdopont);
+            return a.startDate - b.startDate;
         })
     }
     return Object.values(daysMap).sort((a,b)=>{
-        return new Date(a.date) - new Date(b.date);
+        return (a.date) - (b.date);
     });
 }
 window.getWeekDaysTT = getWeekDaysTT;
