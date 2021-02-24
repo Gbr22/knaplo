@@ -61,14 +61,7 @@ export default {
         swiper: directive
     },
     computed: {
-      swiper() {
-        let s = this.$refs.mySwiper.$swiper;
-        
-        s.on('slideChange', (i)=>{
-            this.dayIndex = s.activeIndex;
-        });
-        return s;
-      }
+      
     },
     data(){
         let timetable = GlobalState.processedData.timetable;    
@@ -88,7 +81,7 @@ export default {
         return o;
     },
     mounted(){
-        this.swiper.slideTo(0, 0, false);
+        
     },
     methods:{
         isDesktopView(){

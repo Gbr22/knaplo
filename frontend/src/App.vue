@@ -1,9 +1,10 @@
 <template>
   <div id="app">
     <div id="pageviewer">
-      <Login v-if="!loggedIn && loaded" v-bind:class="{ modalBg:isModalOpen() }" />
-      <Screens v-if="loggedIn" v-bind:class="{ modalBg:isModalOpen() }" />
-      <Modal />
+        <Login v-if="!loggedIn && loaded" v-bind:class="{ modalBg:isModalOpen() }" />
+        <Screens v-if="loggedIn" v-bind:class="{ modalBg:isModalOpen() }" />
+        <Modal />
+        <SyncStatus />
     </div>
     <Nav v-if="loggedIn" />
     <MessageDisplay />
@@ -18,6 +19,7 @@ import MessageDisplay from './components/MessageDisplay';
 import Modal from './components/Modal';
 import ThemeHandler from './themeHandler';
 import { isModalOpen } from './components/Modal.vue';
+import SyncStatus from './components/SyncStatus.vue';
 ThemeHandler;
 
 export default {
@@ -27,6 +29,7 @@ export default {
     Nav:()=>import('./components/Nav'),
     Modal,
     Login,
+    SyncStatus,
     Screens:()=>import("./Screens"),
   },
   data:()=>{
@@ -151,6 +154,9 @@ body, .list, #recent, .fullpage_modal {
 @media (hover: hover) and (pointer: fine) {
     #app {
         flex-direction: column-reverse !important;
+    }
+    #syncing {
+        --top: 65px !important;
     }
     .pc-no-scroll {
         overflow: hidden !important;

@@ -13,6 +13,7 @@ import Averages from './view/Averages';
 import Timetable from './view/Timetable.vue';
 import Homework from './view/Homework.vue';
 import Screen from './view/Screen.vue';
+import GlobalState from './globalState';
 
 
 
@@ -26,6 +27,9 @@ export default {
         Timeline,
         Averages,
         Screen,
+    },
+    methods: {
+        
     },
     data:()=>{
         return {

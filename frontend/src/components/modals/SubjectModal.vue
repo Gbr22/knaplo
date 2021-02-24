@@ -146,7 +146,7 @@ export default {
                     let w = (g.weight || 0)/100;
                     count += w;
                     sum += g.value*w;
-                    console.log(count,sum,g.weight,g);
+                    
                     averages.push(
                         sum/count,
                     )
@@ -155,7 +155,7 @@ export default {
                 }
                 
             }
-            console.log(grades);
+            
             let gradeColor = /* getCSSVariable("--theme-5") */"#0074D9";
             return {
                 labels: grades.map(e=>`(${e.value}) ${e.desc}`),
@@ -192,7 +192,7 @@ export default {
             if (isNaN(val)){
                 return;
             }
-            console.log("set",{val});
+            
             setSubjectRounding(this.obj.id, val);
         },
         getSubjectRounding,

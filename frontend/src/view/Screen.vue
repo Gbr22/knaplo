@@ -39,7 +39,9 @@ export default {
             animates: ptrAnimatesMaterial,
             scrollable,
             refresh:()=>{
-                return refreshPage(this.menu);
+                /* return refreshPage(this.menu); */
+                refreshPage(this.menu);
+                return Promise.resolve();
             }
         })
     }

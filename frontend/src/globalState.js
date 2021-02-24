@@ -10,10 +10,41 @@ import Vue from 'vue';
 import options from './options';
 import { setHomeworkDone } from "./api";
 
+
+export function pushSync(obj){
+    let {id,promise} = obj;
+
+
+    let done = ()=>{
+        let arr = GlobalState.syncing;
+        let i =  arr.indexOf(obj);
+        if (i != -1){
+            arr.splice(i,1);
+        }
+        if (GlobalState.syncing.length == 0){
+            setTimeout(()=>{
+                GlobalState.syncCount = 0;
+            },1000);
+        }
+    }
+    promise.then(r=>{
+        done();
+    }).catch(err=>{
+        done();
+    })
+    GlobalState.syncCount++;
+    GlobalState.syncing.push(obj);
+}
+export function dismissSync(){
+    GlobalState.syncCount = 0;
+    GlobalState.syncing.splice(0,GlobalState.syncing.length);
+}
 let GlobalState = {
     window:{
         width:window.innerWidth
     },
+    syncCount:0,
+    syncing:[],
     theme:null,
     gradeColors:{
 

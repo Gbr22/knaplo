@@ -1,11 +1,11 @@
-import GlobalState, { ApiEndpoint } from './globalState';
+import GlobalState, { ApiEndpoint, pushSync } from './globalState';
 
 import { openModal } from './components/Modal';
 
 import { pushError } from './components/MessageDisplay';
 
 import SubjectModal from './components/modals/SubjectModal';
-import { getFromCache, fetchInst, refreshUser, getTimetable, getWeekStorageId, getGrades, getNotes, getAbsences, getEvents } from './api';
+import { getFromCache, fetchInst, refreshUser, getTimetable, getWeekStorageId, getGrades, getNotes, getAbsences, getEvents, getStudentInfo } from './api';
 import { getWeekIndex, formatURLsHTML, sortByText, wait, getCSSVariable } from './util';
 import { updateTT } from './view/Timetable';
 import storage from './storage';
@@ -267,13 +267,14 @@ function updateList(list, fetch){
         }
         
         if (fetch){
-            return new Promise((rs,rj)=>{
+            let p = new Promise((rs,rj)=>{
                 e.get().then(d=>{
                     process(d);
                     rs();
                 }).catch(rj);
             })
-            
+            pushSync({id:e.id,promise:p});
+            return p;
         } else {
             if (storage.has("data/"+e.id)){
                 process(storage.getJSON("data/"+e.id));
@@ -285,31 +286,41 @@ function updateList(list, fetch){
     return new Promise((_,r)=>r("No such list"));
 }
 window.updateList = updateList;
-function afterLogin(){
+function syncOffile() {
+    if (storage.has("data/studentinfo")){
+        GlobalState.studentInfo = storage.getJSON("data/studentinfo");
+    }
+    updateLists(false);
+}
+function syncStudentInfo() {
+    let promise = getStudentInfo();
+    promise.then(d=>{
+        GlobalState.studentInfo = d;
+    })
+    pushSync({id:"studentInfo",promise});
+    return promise;
+}
+function syncAll(){
     let online = navigator.onLine;
     
-    
-    setImmediate(()=>{
-        if (storage.has("data/studentinfo")){
-            GlobalState.studentInfo = storage.getJSON("data/studentinfo");
-        }
-        updateLists(false);
-        if (online){
-            refreshUser().then(()=>{
-                console.log("[afterlogin] refreshed user");
+    if (online){
+        refreshUser().then(()=>{
+            console.log("[afterlogin] refreshed user");
 
-                
-                getStudentInfo().then(d=>{
-                    GlobalState.studentInfo = d;
-                })
-                
-                updateLists(true).then(()=>{
-                    console.log("All data successfully fetched");
-                })
-                
+            
+            syncStudentInfo();
+            
+            updateLists(true).then(()=>{
+                console.log("All data successfully fetched");
             })
-        }
-        
+            
+        })
+    }
+}
+function afterLogin(){
+    setImmediate(()=>{
+        syncOffile();
+        syncAll();
     })
 }
 
@@ -335,9 +346,7 @@ export function refreshPage(page){
         {
             pages:["more"],
             action(){
-                return getStudentInfo().then(d=>{
-                    GlobalState.studentInfo = d;
-                });
+                return syncStudentInfo();
             }
         },
         {
