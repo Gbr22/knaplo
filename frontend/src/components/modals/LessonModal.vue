@@ -1,18 +1,25 @@
 <template>
-  <div class="root">
-      <div class="header">
-          <div class="lessonNumber">{{ obj.lessonNumber }}</div>
-          <div>
-              <div class="time">{{formatTime(this.obj.startDate)}} - {{formatTime(this.obj.endDate)}}</div>
-              <div class="classRoom">{{ obj.classRoom }}</div>
-          </div>
-      </div>
-      <DetailsList :list="getList()" />
-      <div class="hw" v-if="obj.homeworkId" @click="openHomework()">
-          <Icon src="fi/home" color="var(--link-color)" />
-          <span>{{ getHomeworkText() }}</span>
-      </div>
-  </div>
+    <div class="root">
+        <div class="header">
+            <div class="lessonNumber">{{ obj.lessonNumber != null ? obj.lessonNumber : "-" }}</div>
+            <div>
+                <div class="time">{{formatTime(this.obj.startDate)}} - {{formatTime(this.obj.endDate)}}</div>
+                <div class="classRoom">{{ obj.classRoom }}</div>
+            </div>
+        </div>
+        <DetailsList :list="getList()" />
+        <div class="hw" v-if="obj.homeworkId" @click="openHomework()">
+            <Icon src="fi/home" color="var(--link-color)" />
+            <span>{{ getHomeworkText() }}</span>
+        </div>
+        <div class="test" v-if="getTest()" @click="openTest()">
+            <Icon src="fi/file-text" color="var(--link-color)" />
+            <div class="details">
+                <div class="type">{{ getTest().mode.description }}</div>
+                <div class="desc">{{ getTest().theme }}</div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -21,10 +28,11 @@ import { formatURLsHTML, formatDate, getDayOfWeek, formatTime, shortenText, toOn
 import { openModal } from '../Modal';
 import Icon from '../Icon';
 import Author from '../Author';
-import { getGradeColor } from '../../dataHandler';
+import { getGradeColor, getTestForLesson } from '../../dataHandler';
 import DetailsList from '../DetailsList.vue';
 import HomeworkListItem from '../HomeworkListItem.vue';
 import { openHomework } from './HomeworkModal.vue';
+import { openTest } from './TestModal.vue';
 
 
 
@@ -41,12 +49,19 @@ let LessonModal = {
         formatDate,
         formatTime,
         getDayOfWeek,
+        getTest(){
+            return getTestForLesson(this.obj);
+        },
         openHomework(){
             openHomework(this.getHomework());
+        },
+        openTest(){
+            openTest(this.getTest());
         },
         getHomeworkText(){
             return shortenText(toOneLine(htmlToText(this.getHomework().Szoveg)),70);
         },
+        
         getHomework(){
             
             let hw = GlobalState.processedData.homeworks.filter(e=>e.id == this.obj.homeworkId)[0];
@@ -106,23 +121,35 @@ export function openLesson(elem){
     .root {
         padding-bottom: 20px;
     }
-    .hw .icon {
+    .hw .icon, .test .icon {
         margin-right: 10px;
         flex: 0;
     }
     .hw {
         flex: 1;
     }
-    .hw:hover {
+    .hw:hover, .test:hover {
         opacity: 0.65;
     }
-    .hw {
+    .hw, .test {
         padding: 20px;
+        padding-top: 15px;
         padding-bottom: 0;
         color: var(--link-color);
         display: flex;
-        justify-content: center;
+        
         align-items: center;
         transition: 0.25s opacity;
+    }
+    .test .details {
+        display: block;
+    }
+    .test .type {
+        
+    }
+    .test .desc {
+        /* color: var(--text-light-color); */
+        font-style: italic;
+        opacity: 0.8;
     }
 </style>

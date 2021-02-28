@@ -39,6 +39,7 @@
                             <span class="short">{{ shortName(lesson.substituteTeacherName || lesson.teacherName || "") }}</span>
                             <span class="long">{{ lesson.substituteTeacherName || lesson.teacherName }}</span>
                             <Icon src="fi/edit-3" v-if="lesson.homeworkId"/>
+                            <Icon src="fi/file-text" v-if="getTestForLesson(lesson)"/>
                         </span>
                     </span>
                 </template>
@@ -58,6 +59,8 @@
 </template>
 
 <script>
+import { getTestForLesson } from '../dataHandler';
+import GlobalState from '../globalState';
 import { formatTime, getDayName, getDayShortName, shortenText } from '../util';
 import { openLesson } from './modals/LessonModal.vue';
 
@@ -81,6 +84,7 @@ export default {
         isEvent(lesson){
             return lesson.type.id == lesson.types.event;
         },
+        getTestForLesson,
         openLesson(lesson){
             console.log("openlesson",lesson);
             openLesson(lesson);
