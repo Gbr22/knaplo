@@ -39,6 +39,7 @@ import GlobalState from '../globalState';
 import { DetailedMessage } from '../data/DetailedMessage';
 import { formatDate, getDayName } from '../util';
 import Icon from '../components/Icon.vue';
+import { openMessage } from '../components/modals/MessageModal.vue';
 
 
 export default {
@@ -74,6 +75,7 @@ export default {
             getMessage(m.id).then(msg=>{
                 msg = new DetailedMessage(msg);
                 console.log(msg);
+                openMessage(msg);
             });
         },
         getMessages(type){
