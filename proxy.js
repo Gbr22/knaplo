@@ -13,8 +13,9 @@ const tor = spawn("tor", ["-f",torConfPath]);
 
 const fetch = require('node-fetch');
 const fs = require("fs");
+var SocksProxyAgent = require('socks-proxy-agent');
  
-
+var agent = new SocksProxyAgent("socks://localhost:9050");
 
 module.exports = (req,res)=>{
     
@@ -35,7 +36,8 @@ module.exports = (req,res)=>{
     
     let options = {
         headers,
-        method:req.method
+        method:req.method,
+        agent,
     }
     if (req.method == "POST"){
         options.body = req.body;

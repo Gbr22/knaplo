@@ -15,6 +15,7 @@
     "node-fetch": "^2.6.1",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.7",
+    "socks-proxy-agent": "^4.0.2",
     "socks5-node-fetch": "^0.0.4",
     "swiper": "^5.4.1",
     "tor-request": "^3.1.0",
