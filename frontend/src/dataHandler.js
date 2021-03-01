@@ -5,7 +5,7 @@ import { openModal } from './components/Modal';
 import { pushError } from './components/MessageDisplay';
 
 import SubjectModal from './components/modals/SubjectModal';
-import { getFromCache, fetchInst, refreshUser, getTimetable, getWeekStorageId, getGrades, getNotes, getAbsences, getEvents, getStudentInfo } from './api';
+import { getFromCache, fetchInst, refreshUser, getTimetable, getWeekStorageId, getGrades, getNotes, getAbsences, getEvents, getStudentInfo, getMessages } from './api';
 import { getWeekIndex, formatURLsHTML, sortByText, wait, getCSSVariable } from './util';
 import { updateTT } from './view/Timetable';
 import storage from './storage';
@@ -18,6 +18,7 @@ import { Test } from './data/Test';
 import { Lesson } from './data/Lesson';
 import { NormalisedItem } from './data/NormalisedItem';
 import { Event } from './data/Event';
+import { Message } from './data/Message';
 
 export function openSubject(subject){
     openModal(subject.name,SubjectModal,subject,{
@@ -258,6 +259,27 @@ var dataLists = [
         id:"events",
         class:Event
     },
+    {
+        get:()=>{
+            return getMessages(messageTypes.received);
+        },
+        id:"messages_received",
+        class: Message,
+    },
+    {
+        get:()=>{
+            return getMessages(messageTypes.sent);
+        },
+        id:"messages_sent",
+        class: Message,
+    },
+    {
+        get:()=>{
+            return getMessages(messageTypes.removed);
+        },
+        id:"messages_removed",
+        class: Message,
+    },
 ];
 function updateLists(fetch) {
     return Promise.all(dataLists.map(l=>{
@@ -333,7 +355,7 @@ function syncAll(){
 function afterLogin(){
     setImmediate(()=>{
         syncOffile();
-        syncAll();
+        /* syncAll(); */
     })
 }
 

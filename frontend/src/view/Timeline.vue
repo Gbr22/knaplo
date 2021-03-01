@@ -54,6 +54,7 @@ import TimelineItem from '../components/TimelineItem';
 import { openModal } from '../components/Modal';
 import SelectModal from '../components/modals/SelectModal';
 import Icon from '../components/Icon.vue';
+import { getTimelineProps } from '../data/util';
 
 let modes = {
     all:["Minden", "fi/box"],
@@ -132,6 +133,7 @@ export default {
                 absences:this.GlobalState.processedData.absences,
                 tests:this.GlobalState.processedData.tests,
                 events:this.GlobalState.processedData.events,
+                "messages_received":this.GlobalState.processedData["messages_received"],
             };
 
             let arrays = [];
@@ -148,6 +150,7 @@ export default {
             }
             
             let arr = arrays.flat().flat();
+            arr = arr.map(e=>getTimelineProps(e));
             arr.sort((a,b)=>{
                 return new Date(b.createDate) - new Date(a.createDate);
             });

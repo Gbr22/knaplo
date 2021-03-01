@@ -14,6 +14,7 @@ import Timetable from './view/Timetable.vue';
 import Homework from './view/Homework.vue';
 import Screen from './view/Screen.vue';
 import GlobalState from './globalState';
+import Messages from './view/Messages.vue';
 
 
 
@@ -41,6 +42,7 @@ export default {
                 [Homework,"homework"],
                 [Settings,"more"],
                 [Finals,"more/finals"],
+                [Messages,"more/messages"]
             ]
         }
     },

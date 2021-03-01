@@ -64,6 +64,9 @@ let GlobalState = {
         tests:[],
         events:[],
         absences:[],
+        messages_received:[],
+        messages_sent:[],
+        messages_removed:[],
         timetable:{
             weeks:[]
         },

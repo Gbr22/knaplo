@@ -52,7 +52,9 @@ export function replaceIndex(arr,i,item){
 export function formatDate(date){
     date = toDate(date);
     let pad = (n) => (n+"").padStart(2,"0");
-    return `${pad(date.getMonth()+1)}/${pad(date.getDate())}`;
+    let now = new Date();
+    let longdate = now.getFullYear() != date.getFullYear() ? date.getFullYear()+'/' : "";
+    return `${longdate}${pad(date.getMonth()+1)}/${pad(date.getDate())}`;
 }
 export function formatTime(date){
     date = toDate(date);

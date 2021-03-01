@@ -28,6 +28,14 @@
                             DKT
                         </p>
                     </div>
+                    <div class="item btn" @click="navigate('more/messages')">
+                        <span class="icon">
+                            <Icon src="fi/mail" />
+                        </span>
+                        <p>
+                            Üzenetek
+                        </p>
+                    </div>
                     <div class="item btn" @click="openConfirm('Biztosan Kilép?',logout)">
                         <span class="icon">
                             <Icon src="fi/log-out" />

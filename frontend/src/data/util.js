@@ -1,3 +1,5 @@
+import { Message } from "./Message";
+
 export class KretaType {
     id;
     description;
@@ -12,3 +14,20 @@ export class KretaType {
         }
     }
 }
+
+export function getTimelineProps(obj){
+    if (obj instanceof Message){
+        return {
+            onclick(){
+                
+            },
+            icon:"fi/mail",
+            desc:obj.senderName,
+            header:obj.subject,
+            date:obj.date,
+            createDate:obj.date,
+            key:"msg-"+obj.messageId,
+        }
+    }
+    return obj;
+};

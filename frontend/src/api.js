@@ -12,6 +12,10 @@ let USER_AGENT_V2 = "Kreta.Ellenorzo/2.9.11.2020033003 (Linux; U; Android 8.0.0)
 let USER_AGENT_V3 = "hu.ekreta.student/1.0.5/Android/0/0";
 let USER_AGENT = USER_AGENT_V3;
 
+let KretaEndpoints = {
+    admin:"https://eugyintezes.e-kreta.hu",
+}
+
 function req(options){
     if (options.headers == undefined){
         options.headers = {};
@@ -84,10 +88,89 @@ export function getTests(){
 export function getEvents(){
     return kretaRequest("FaliujsagElemek","events","Faliújság lekérése sikertelen");
 }
-window.getGrades = getGrades;
-window.getStudentInfo = getStudentInfo;
-window.getHomeworks = getHomeworks;
-window.getTests = getTests;
+export let messageTypes = {
+    "received":"beerkezett",
+    "sent":"elkuldott",
+    "removed":"torolt",
+};
+
+export function getMessages(type){
+    let info = GlobalState.user;
+    var inst = info.inst;
+    let dataKey = "messages_"+Object.entries(messageTypes).find(e=>e[1] == type)[0];
+    let errorMessage = "Üzenetek lekérése sikertelen";
+    return new Promise(function(resolve,reject){
+        refreshUser().then(()=>{
+            function showErr(err){
+                if (errorMessage){
+                    pushError(errorMessage);
+                    console.error(errorMessage,err);
+                }
+                reject(err);
+            }
+            req({
+                url:`${KretaEndpoints.admin}/api/v1/kommunikacio/postaladaelemek/${type}`,
+                headers:{
+                    "Authorization":"Bearer "+info.access_token,
+                    "User-Agent":USER_AGENT,
+                },
+            }).then((res)=>{
+                if (res.statusCode == 200){
+                    /* debugger; */
+                    storage.setJSON("data/"+dataKey, res.bodyJSON);
+                    resolve(res.bodyJSON);
+                } else {
+                    showErr(res);
+                }
+            }).catch((err)=>{
+                showErr(err);
+            });
+        })
+    });
+}
+export function getMessage(id){
+    let info = GlobalState.user;
+    var inst = info.inst;
+    let dataKey = "messages/"+id;
+    let errorMessage = "Üzenet lekérése sikertelen";
+    return new Promise(function(resolve,reject){
+        refreshUser().then(()=>{
+            function showErr(err){
+                if (errorMessage){
+                    pushError(errorMessage);
+                    console.error(errorMessage,err);
+                }
+                reject(err);
+            }
+            req({
+                url:`${KretaEndpoints.admin}/api/v1/kommunikacio/postaladaelemek/${id}`,
+                headers:{
+                    "Authorization":"Bearer "+info.access_token,
+                    "User-Agent":USER_AGENT,
+                },
+            }).then((res)=>{
+                if (res.statusCode == 200){
+                    /* debugger; */
+                    storage.setJSON("data/"+dataKey, res.bodyJSON);
+                    resolve(res.bodyJSON);
+                } else {
+                    showErr(res);
+                }
+            }).catch((err)=>{
+                showErr(err);
+            });
+        })
+    });
+}
+Object.assign(window,{
+    getGrades,
+    getStudentInfo,
+    getHomeworks,
+    getTests,
+    getMessages,
+    messageTypes,
+    getMessage
+})
 
 export function getWeekStorageId(weeksAfter = 0){
     let {first, last} = getWeekIndex(weeksAfter);
