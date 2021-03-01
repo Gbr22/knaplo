@@ -97,6 +97,18 @@ export function getDayShortName(date){
     let names = ["V","H","K","Sz","Cs","P","Sz"];
     return names[day];
 }
+export var saveBlob = (function () {
+    var a = document.createElement("a");
+    document.body.appendChild(a);
+    a.style = "display: none";
+    return function (blob, fileName) {
+        var url = window.URL.createObjectURL(blob);
+        a.href = url;
+        a.download = fileName;
+        a.click();
+        window.URL.revokeObjectURL(url);
+    };
+}());
 export function shortenText(s,limit){
     let words = s.split(" ");
     let result = null;

@@ -355,7 +355,7 @@ function syncAll(){
 function afterLogin(){
     setImmediate(()=>{
         syncOffile();
-        /* syncAll(); */
+        syncAll();
     })
 }
 

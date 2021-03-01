@@ -128,6 +128,81 @@ export function getMessages(type){
         })
     });
 }
+export function sendMessage(){
+    let info = GlobalState.user;
+    
+    let recipients = [];
+    let attachments = [];
+    let message = {
+        "cimzettLista": recipients,
+        "csatolmanyok": attachments,
+        "targy": "teszt",
+        "szoveg": "teszt",
+    };
+    
+    let errorMessage = "Üzenet elküldése sikertelen";
+    return new Promise(function(resolve,reject){
+        refreshUser().then(()=>{
+            function showErr(err){
+                if (errorMessage){
+                    pushError(errorMessage);
+                    console.error(errorMessage,err);
+                }
+                reject(err);
+            }
+            req({
+                url:`${KretaEndpoints.admin}/api/v1/kommunikacio/uzenetek`,
+                body:message,
+                method:"POST",
+                headers:{
+                    "Authorization":"Bearer "+info.access_token,
+                    "User-Agent":USER_AGENT,
+                    "Content-Type":"application/json"
+                },
+            }).then((res)=>{
+                if (res.statusCode == 200){
+                    resolve(res.bodyJSON);
+                } else {
+                    showErr(res);
+                }
+            }).catch((err)=>{
+                showErr(err);
+            });
+        })
+    });
+}
+export function downloadAttachment(id){
+    let info = GlobalState.user;
+    
+    let errorMessage = "Csatolmány lekérése sikertelen";
+    return new Promise(function(resolve,reject){
+        refreshUser().then(()=>{
+            function showErr(err){
+                if (errorMessage){
+                    pushError(errorMessage);
+                    console.error(errorMessage,err);
+                }
+                reject(err);
+            }
+            req({
+                url:`${KretaEndpoints.admin}/api/v1/dokumentumok/uzenetek/${id}`,
+                headers:{
+                    "Authorization":"Bearer "+info.access_token,
+                    "User-Agent":USER_AGENT,
+                },
+            }).then((res)=>{
+                if (res.statusCode == 200){
+                    resolve(res.blob);
+                } else {
+                    showErr(res);
+                }
+            }).catch((err)=>{
+                showErr(err);
+            });
+        })
+    });
+}
+
 export function getMessage(id){
     let info = GlobalState.user;
     var inst = info.inst;
@@ -169,7 +244,9 @@ Object.assign(window,{
     getTests,
     getMessages,
     messageTypes,
-    getMessage
+    getMessage,
+    downloadAttachment,
+    sendMessage,
 })
 
 export function getWeekStorageId(weeksAfter = 0){

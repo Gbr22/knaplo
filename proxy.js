@@ -11,8 +11,10 @@ let torConfPath = Path.join(__dirname,"torrc");
 console.log("tor conf path",torConfPath);
 const tor = spawn("tor", ["-f",torConfPath]);
 
-var tr = require('tor-request');
 const fetch = require('node-fetch');
+const fs = require("fs");
+ 
+
 
 module.exports = (req,res)=>{
     
@@ -30,45 +32,26 @@ module.exports = (req,res)=>{
         }
     }
     
-    if (true/* url.indexOf("idp.e-kreta.hu") != -1 */){
-        let options = {
-            url,
-            headers,
-            method:req.method
-        };
-        if (req.method == "POST"){
-            options.body = req.body;
-        }
-        tr.request(options, function (err, torRes, body) {
-            if (!err) {
     
-                res.status(torRes.statusCode);
-                res.set(torRes.headers);
-                res.send(body);
-            } else {
-                console.log(err);
-                res.status(500);
-                res.send();
-            }
-        });
-    } else {
-        let options = {
-            headers,
-            method:req.method
-        }
-        if (req.method == "POST"){
-            options.body = req.body;
-        }
-        fetch(url,options).then(async r=>{
-            res.status(r.status);
-            res.set({...r.headers});
-            res.send(await r.text());
-        }).catch(err=>{
-            console.log(err);
-            res.status(500);
-            res.send();
-        })
+    let options = {
+        headers,
+        method:req.method
     }
+    if (req.method == "POST"){
+        options.body = req.body;
+    }
+    console.log("start request", url);
+    fetch(url,options).then(async r=>{
+        console.log(url,r.status);
+        res.status(r.status);
+        res.set({...r.headers});
+        r.body.pipe(res);
+    }).catch(err=>{
+        console.log(err);
+        res.status(500);
+        res.send();
+    })
+    
     
     
 }

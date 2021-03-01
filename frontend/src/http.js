@@ -108,29 +108,22 @@ export function httpRequest(options){
                 method:options.method.toLowerCase()
             },respond,respond);
         } else {
-            var xhttp = new XMLHttpRequest();
-            
-            xhttp.onreadystatechange = function() {
-                if (this.readyState == 4) {
-                    
-                    let res = {
-                        statusCode:this.status,
-                        statusText:this.statusText,
-                        req:options,
-                        body:this.response,
-                        headers:processRawHeaders(xhttp.getAllResponseHeaders()),
-                    };
-                    /* console.log(res); */
-                    resolveResponse(res);
-                }
-            };
-            xhttp.open(options.method, options.url, true);
-
-            for (let header in options.headers){
-                /* console.log(header, options.headers[header]); */
-                xhttp.setRequestHeader(header, options.headers[header]);
-            }
-            xhttp.send(bodyText);
+            fetch(options.url, {
+                method:options.method,
+                headers:options.headers,
+                body:bodyText
+            }).then(async r=>{
+                let blob = await r.blob();
+                let res = {
+                    statusCode:r.status,
+                    statusText:r.statusText,
+                    req:options,
+                    blob,
+                    body:await blob.text(),
+                    headers:{...r.headers},
+                };
+                resolveResponse(res);
+            }).catch(reject);
         }
     })
 }

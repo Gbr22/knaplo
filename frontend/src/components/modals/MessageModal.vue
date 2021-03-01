@@ -24,9 +24,12 @@
         <div class="htmlContent selectable" v-html="html"></div>
         <div class="attachments">
             <div class="attachment" v-for="a in obj.message.attachments" :key="a.id">
+                <div class="perview">
+                    <img :src="createURL(attachmentPerview[a.id])" v-if="attachmentPerview[a.id] != null"/>
+                </div>
                 <div class="details">
                     <div class="filename">{{ a.filename }}</div>
-                    <div class="download">
+                    <div class="download" @click="download(a)">
                         <Icon src="fi/download" />
                     </div>
                 </div>
@@ -37,10 +40,11 @@
 </template>
 
 <script>
-import { formatURLsHTML, formatDate, getDayOfWeek } from '../../util';
+import { formatURLsHTML, formatDate, getDayOfWeek, saveBlob } from '../../util';
 import { openModal } from '../Modal';
 import Icon from '../Icon';
 import Author from '../Author';
+import { downloadAttachment } from '../../api';
 
 
 let MessageModal = {
@@ -50,18 +54,50 @@ let MessageModal = {
         let html = this.obj.message.content;
         html = formatURLsHTML(html);
 
-
+        let attachmentPerview = {};
+        this.obj.message.attachments.forEach(a=>{
+            attachmentPerview[a.id] = null;
+        })
         return {
             html,
             recipientsOpen:false,
+            attachmentPerview,
         }
     },
     methods:{
+        createURL(blob){
+            return window.URL.createObjectURL(blob);
+        },
         formatDate,
         getDayOfWeek,
         toggleRecipients(){
             this.recipientsOpen = !this.recipientsOpen;
+        },
+        download(a){
+            function save(b){
+                saveBlob(b,a.filename);
+            }
+            if (this.attachmentPerview[a.id]){
+                save(this.attachmentPerview[a.id]);
+            } else {
+                downloadAttachment(a.id).then(b=>{
+                    save(b);
+                })
+            }
+            
         }
+    },
+    mounted() {
+        let map = this.attachmentPerview;
+        this.obj.message.attachments.forEach(a=>{
+            let ext = a.filename.split(".")[1];
+            let isImage = ["jpg","jpeg","png","webp","svg"].includes(ext);
+            if (isImage){
+                downloadAttachment(a.id).then(b=>{
+                    map[a.id] = b;
+                })
+            }
+        })
     },
     components:{
         Author,
@@ -111,11 +147,17 @@ export function openMessage(elem){
         padding-bottom: 0 !important;
         margin-bottom: 0 !important;
     }
+    .attachments {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
     .attachment {
+        max-width: 300px;
+        
         border-radius: 12px;
         background-color: var(--element-color);
         box-shadow: var(--elem-shadow);
-        padding: 10px 20px;
         margin: 0 20px;
         margin-bottom: 8px;
     }
@@ -129,7 +171,19 @@ export function openMessage(elem){
         display: flex;
         justify-content: center;
         align-items: center;
-
+        padding: 10px 20px;
+    }
+    .attachment .perview {
+        width: 100%;
+        min-width: 300px;
+        height: 150px;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+    .attachment img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
     }
     .recipients .title {
         margin-bottom: 5px;
@@ -168,7 +222,9 @@ export function openMessage(elem){
         transition: transform 0.3s ease;
         transform: rotate(0);
     }
+    
     .recipients .toggle.up {
         transform: rotate(-180deg);
     }
+    
 </style>
