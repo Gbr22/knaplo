@@ -1,4 +1,5 @@
 import { tryJSON } from './util';
+import parseCookieString, { splitCookiesString } from 'set-cookie-parser';
 
 export function httpRequest(options){
     return new Promise(function(resolve,reject){
@@ -27,6 +28,8 @@ export function httpRequest(options){
             headers:{},
             body: undefined,
             url: undefined,
+            redirect: undefined,
+            cookies:{},
         },options);
 
         let isCors = false;
@@ -47,7 +50,14 @@ export function httpRequest(options){
                 bodyText = objToURL(bodyText);
             }
         }
-        
+        function stringifyCookies(c){
+            return Object.entries(c).map(e=>{
+                return `${e[0]}=${escape(e[1])}`;
+            }).join("; ");
+        }
+        if ([...Object.entries(options.cookies)].length){
+            options.headers["cookie"] = stringifyCookies(options.cookies);
+        }
 
         var r = new RegExp('^(?:[a-z]+:)?//', 'i');
         let urlObj;
@@ -71,7 +81,7 @@ export function httpRequest(options){
             options.url = urlObj.toString();
         }
         
-
+        
 
     
         function processRawHeaders(string){
@@ -87,6 +97,7 @@ export function httpRequest(options){
             });
             return headerMap;
         }
+        
 
         if (window.cordova){
             cordova.plugin.http.setDataSerializer(type);
@@ -108,19 +119,38 @@ export function httpRequest(options){
                 method:options.method.toLowerCase()
             },respond,respond);
         } else {
+            if (options.redirect){
+                options.headers["x-proxy-redirect"] = options.redirect;
+            }
             fetch(options.url, {
                 method:options.method,
                 headers:options.headers,
-                body:bodyText
+                body:bodyText,
+                redirect:options.redirect,
             }).then(async r=>{
                 let blob = await r.blob();
+                let h = {};
+                [...r.headers.keys()].forEach(key=>{
+                    h[key] = r.headers.get(key);
+                });
+                let status = r.status;
+                if (status == 299){
+                    status = parseInt(h["x-proxy-status"]);
+                }
+                let cookies = {};
+                if (h["x-proxy-header-set-cookie"]){
+                    cookies = parseCookieString(splitCookiesString(h["x-proxy-header-set-cookie"]), {
+                        map:true,
+                    });
+                }
                 let res = {
-                    statusCode:r.status,
+                    statusCode:status,
                     statusText:r.statusText,
                     req:options,
                     blob,
                     body:await blob.text(),
-                    headers:{...r.headers},
+                    headers:h,
+                    cookies,
                 };
                 resolveResponse(res);
             }).catch(reject);

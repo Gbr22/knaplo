@@ -21,6 +21,7 @@ module.exports = (req,res)=>{
     
     
     let url = req.headers["x-proxy-url"];
+    let redirect = req.headers["x-proxy-redirect"];
     let headers = {};
     for (p in req.headers){
         if (p.indexOf("x-proxy-header-") != -1){
@@ -38,15 +39,31 @@ module.exports = (req,res)=>{
         headers,
         method:req.method,
         agent,
+        redirect:redirect
     }
     if (req.method == "POST"){
         options.body = req.body;
     }
-    console.log("start request", url);
+    
     fetch(url,options).then(async r=>{
-        console.log(url,r.status);
-        res.status(r.status);
-        res.set({...r.headers});
+        let status = r.status;
+        if (status >= 300 && status < 400){
+            status = 299;
+        }
+        let h = {};
+        [...r.headers.keys()].forEach(key=>{
+            if (key == "set-cookie"){
+                h["x-proxy-header-"+key] = r.headers.get(key);
+            } else {
+                h[key] = r.headers.get(key);
+            }
+        });
+        h["x-proxy-status"] = r.status;
+        
+        res.status(status);
+        
+
+        res.set(h);
         r.body.pipe(res);
     }).catch(err=>{
         console.log(err);

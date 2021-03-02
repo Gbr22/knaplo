@@ -76,6 +76,7 @@ let GlobalState = {
     options:options.getAllOptions(),
     cordovaIsDebug:false,
     user:null,
+    dktLogin:{},
     currentMenu:localStorage.getItem("currentMenu") || "timeline"
 };
 window.onresize = ()=>{

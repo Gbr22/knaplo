@@ -10,6 +10,7 @@ var API_KEY = "7856d350-1fda-45f5-822d-e1a2f3f1acf0";
 let CLIENT_ID = "kreta-ellenorzo-mobile";
 let USER_AGENT_V2 = "Kreta.Ellenorzo/2.9.11.2020033003 (Linux; U; Android 8.0.0)";
 let USER_AGENT_V3 = "hu.ekreta.student/1.0.5/Android/0/0";
+let USER_AGENT_WEB = navigator.userAgent;
 let USER_AGENT = USER_AGENT_V3;
 
 let KretaEndpoints = {
@@ -443,6 +444,68 @@ export function refreshUser(){
     })
 }
 window.refreshUser = refreshUser;
+
+export function getDktToken(){
+    let accessToken = GlobalState.user.access_token;
+    let data = {
+        response_type:"id_token token",
+        client_id:"kreta-dkttanulo-js-web",
+        redirect_uri:"https://dkttanulo.e-kreta.hu",
+        scope: "kreta-core-webapi.public openid kreta-core-webapi-dkt.public kreta-global-tananyagtar-webapi.public",
+        accessToken:accessToken,
+        nonce:"_", //important
+    }
+    let serialize = function(obj) {
+        var str = [];
+        for (var p in obj)
+            if (obj.hasOwnProperty(p)) {
+            str.push(escape(p) + "=" + escape(obj[p]));
+            }
+        return str.join("&");
+    }
+    return req({
+        method:"GET",
+        url:`https://idp.e-kreta.hu/connect/authorize?${serialize(data)}`,
+        redirect: 'manual',
+    }).then((r)=>{
+        if (r.statusCode >= 300 && r.statusCode < 400){
+            let loc = r.headers.location;
+            return req({
+                method:"GET",
+                url:loc,
+                redirect:"manual",
+            }).then(r=>{
+                let cookies = {};
+                for(let p in r.cookies){
+                    cookies[p] = r.cookies[p].value;
+                }
+                return req({
+                    url:r.headers.location,
+                    cookies,
+                    redirect:"manual",
+                }).then(r=>{
+                    let url = new URL(r.headers.location);
+                    let search = new URLSearchParams(url.hash.replace("#",""));
+                    let dkt = {}
+                    let keys = [...search.keys()];
+                    keys.forEach(key=>{
+                        dkt[key] = search.get(key);
+                    });
+                    Object.assign(GlobalState.dktLogin, dkt);
+                    return dkt;
+                })
+            })
+        }
+        else {
+            throw new Error();
+        }
+    }).catch(err=>{
+        console.warn(err);
+        return new Error("DKT belépés sikertelen");
+    })
+}
+window.getDktToken = getDktToken;
+
 export function refreshToken(){
     let user = GlobalState.user;
     return new Promise(function(resolve,reject){
