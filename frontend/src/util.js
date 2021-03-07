@@ -1,6 +1,8 @@
 import { closeModal } from './components/Modal.vue';
 import sanitizeHtml from 'sanitize-html';
 import seedrandom from 'seedrandom';
+import GlobalState from './globalState';
+import { rgbToHsl } from './colors';
 
 export function tryJSON(string){
     try {
@@ -193,19 +195,86 @@ let _fURLHTMLCache = new Map();
 window._fURLHTMLCache = _fURLHTMLCache;
 
 export function formatURLsHTML(html){
+    
+    function process(html) {
+        return GlobalState.theme == "dark" ? lightenColors(html) : html;
+    }
+
     if (_fURLHTMLCache.has(html)){
-        return _fURLHTMLCache.get(html);
+        return process(_fURLHTMLCache.get(html));
     } else {
         let calc = _formatURLsHTML(html);
         _fURLHTMLCache.set(html,calc);
-        return calc;
+        return process(calc);
     }
 }
+var colorToRGBA;
+{
+    let memoize = function(factory, ctx) {
+        var cache = {};
+        return function(key) {
+            if (!(key in cache)) {
+                cache[key] = factory.call(ctx, key);
+            }
+            return cache[key];
+        };
+    };
+    var canvas = document.createElement('canvas');
+    canvas.width = canvas.height = 1;
+    var ctx = canvas.getContext('2d');
+    
+    colorToRGBA = (function() {
+        return memoize(function(col) {
+            ctx.clearRect(0, 0, 1, 1);
+            // In order to detect invalid values,
+            // we can't rely on col being in the same format as what fillStyle is computed as,
+            // but we can ask it to implicitly compute a normalized value twice and compare.
+            ctx.fillStyle = '#000';
+            ctx.fillStyle = col;
+            var computed = ctx.fillStyle;
+            ctx.fillStyle = '#fff';
+            ctx.fillStyle = col;
+            if (computed !== ctx.fillStyle) {
+                return; // invalid color
+            }
+            ctx.fillRect(0, 0, 1, 1);
+            return [ ... ctx.getImageData(0, 0, 1, 1).data ];
+        });
+    })();
+}
+export var colorToRGBA;
+
+export function lightenColors(html) {
+    let root = document.createElement("div");
+    root.innerHTML = html;
+    let all = root.querySelectorAll("*");
+    let props = ["color","background-color"];
+    all.forEach(el=>{
+        
+        props.forEach(prop=>{
+            
+            let val = el.style.getPropertyValue(prop);
+            
+            if (val){
+                let color = [...colorToRGBA(val)];
+                color[3] /= 255;
+                let hsl = rgbToHsl(...color);
+                hsl[2] = 1-hsl[2];
+                hsl[2] *= 1.2;
+
+                el.style.setProperty(prop,`hsla(${hsl[0]*360}deg, ${hsl[1]*100}%, ${hsl[2]*100}%, ${hsl[3]})`);
+            }
+        })
+    })
+    return root.innerHTML;
+}
+
 export function _formatURLsHTML(html){
     html = sanitizeHtml(html,{
         allowedTags: sanitizeHtml.defaults.allowedTags.concat([ 'img' ]),
         allowedAttributes: Object.assign(Object.assign({},sanitizeHtml.defaults.allowedAttributes),{
             img: [ 'src', 'alt', 'srcset', 'sizes' ],
+            '*': [ 'style' ],
         }),
         enforceHtmlBoundary: false,
     });
@@ -214,8 +283,6 @@ export function _formatURLsHTML(html){
 
     let tag = document.createElement("span");
     tag.innerHTML = html;
-
-    
     
     let inital = tag.innerText;
 

@@ -8,7 +8,7 @@
             </div>
         </div>
         <DetailsList :list="getList()" />
-        <div class="hw" v-if="obj.homeworkId" @click="openHomework()">
+        <div class="hw" v-if="obj.homeworkId && getHomework()" @click="openHomework()">
             <Icon src="fi/home" color="var(--link-color)" />
             <span>{{ getHomeworkText() }}</span>
         </div>
