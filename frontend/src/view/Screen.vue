@@ -33,7 +33,7 @@ export default {
         }
     },
     mounted(){
-        let scrollable = this.$refs.comp.$el.querySelector(".vue-recycle-scroller") || document.getElementById("pageview_inner");
+        let scrollable = this.$refs.comp?.$el?.querySelector(".vue-recycle-scroller") || document.getElementById("pageview_inner");
         const destroyCb = pullToRefresh({
             container: this.$refs.screens,
             animates: ptrAnimatesMaterial,

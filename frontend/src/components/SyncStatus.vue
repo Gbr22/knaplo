@@ -30,6 +30,9 @@ export default {
                 "tests":"Számonkérések",
                 "events":"Események",
                 "studentInfo":"Tanuló adatok",
+                "messages_received":"Üzenetek",
+                "messages_sent":"Üzenetek",
+                "messages_removed":"Üzenetek",
             }[GlobalState.syncing[0]?.id] || GlobalState.syncing[0]?.id);
             if (name){
                 this.syncName = name;

@@ -20,13 +20,15 @@ import Modal from './components/Modal';
 import ThemeHandler from './themeHandler';
 import { isModalOpen } from './components/Modal.vue';
 import SyncStatus from './components/SyncStatus.vue';
+import Nav from './components/Nav.vue';
+
 ThemeHandler;
 
 export default {
   name: 'App',
   components: {
     MessageDisplay,
-    Nav:()=>import('./components/Nav'),
+    Nav,
     Modal,
     Login,
     SyncStatus,

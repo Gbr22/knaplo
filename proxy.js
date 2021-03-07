@@ -16,6 +16,8 @@ const fs = require("fs");
 var SocksProxyAgent = require('socks-proxy-agent');
  
 var agent = new SocksProxyAgent("socks://localhost:9050");
+var args = process.argv.slice(2);
+let dev = args.includes("--dev");
 
 module.exports = (req,res)=>{
     
@@ -38,7 +40,7 @@ module.exports = (req,res)=>{
     let options = {
         headers,
         method:req.method,
-        agent,
+        agent:dev ? null : agent,
         redirect:redirect
     }
     if (req.method == "POST"){
@@ -66,7 +68,9 @@ module.exports = (req,res)=>{
         res.set(h);
         r.body.pipe(res);
     }).catch(err=>{
-        console.log(err);
+        if(dev){
+            console.log(err);
+        }
         res.status(500);
         res.send();
     })
