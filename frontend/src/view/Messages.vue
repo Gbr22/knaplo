@@ -71,13 +71,7 @@ export default {
     methods:{
         formatDate,
         getDayName,
-        openMessage(m){
-            getMessage(m.id).then(msg=>{
-                msg = new DetailedMessage(msg);
-                console.log(msg);
-                openMessage(msg);
-            });
-        },
+        openMessage,
         getMessages(type){
             return [...GlobalState.processedData["messages_"+type]].sort((a,b)=>{
                 return b.date - a.date;

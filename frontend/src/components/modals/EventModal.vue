@@ -1,6 +1,6 @@
 <template>
   <div class="modalroot">
-        <div class="htmlContent selectable" v-html="html"></div>
+        <HtmlRenderer :html="html"/>
         <div class="dates">
             {{ formatDate(obj.startDate) }}
             <span class="divider"></span>
@@ -14,6 +14,7 @@ import { formatURLsHTML, formatDate, getDayOfWeek } from '../../util';
 import { openModal } from '../Modal';
 import Icon from '../Icon';
 import Author from '../Author';
+import HtmlRenderer from '../HtmlRenderer.vue';
 
 
 let EventModal = {
@@ -21,7 +22,6 @@ let EventModal = {
     props:["obj"],
     data(){
         let html = this.obj.content;
-        html = formatURLsHTML(html);
 
 
         return {
@@ -33,7 +33,7 @@ let EventModal = {
         getDayOfWeek,
     },
     components:{
-        
+        HtmlRenderer,
     }
 }
 export default EventModal;
@@ -65,18 +65,5 @@ export function openEvent(elem){
         height: 1px;
         border: none;
         margin: 0;
-    }
-    .htmlContent {
-        
-        
-        box-sizing: border-box;
-    }
-    .htmlContent :first-child {
-        padding-top: 0 !important;
-        margin-top: 0 !important;
-    }
-    .htmlContent :last-child {
-        padding-bottom: 0 !important;
-        margin-bottom: 0 !important;
     }
 </style>

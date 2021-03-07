@@ -1,10 +1,8 @@
 <template>
-  <div>
-      <div class="noteContent selectable" v-html="html"></div>
-      
-      <Author :date="new Date(obj.createDate)" :author="obj.teacher" :desc="obj.noteType" />
-      
-  </div>
+    <div class="root">
+        <HtmlRenderer class="noteContent" :html="html" />
+        <Author :date="new Date(obj.createDate)" :author="obj.teacher" :desc="obj.noteType" />
+    </div>
 </template>
 
 <script>
@@ -13,6 +11,7 @@ import { formatURLsHTML, formatDate, getDayOfWeek } from '../../util';
 import { openModal } from '../Modal';
 import Icon from '../Icon';
 import Author from '../Author';
+import HtmlRenderer from '../HtmlRenderer.vue';
 
 
 let NoteModal = {
@@ -34,7 +33,8 @@ let NoteModal = {
     },
     components:{
         Icon,
-        Author
+        Author,
+        HtmlRenderer
     }
 }
 export default NoteModal;
@@ -52,12 +52,11 @@ window.openNote = openNote;
 </script>
 
 <style scoped>
+    .root {
+        margin-top: 0;
+    }
     .noteContent {
         padding: 20px;
         box-sizing: border-box;
-    }
-    .noteContent :first-child {
-        padding-top: 0 !important;
-        margin-top: 0 !important;
     }
 </style>

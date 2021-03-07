@@ -11,18 +11,8 @@
           </div>
       </div>
       <hr>
-      <!-- <div v-if="obj.lesson.Theme">
-          <h3 class="theme">{{ obj.lesson.Theme }}</h3>
-          <hr>
-      </div> -->
-      <div class="hwContent selectable" v-html="html"></div>
-      <!-- <div class="completedSwitch" :data-value="obj.IsMegoldva+''">
-          <p>Megoldott feladat?</p>
-          <span>
-                <button class="true" @click="()=>{}">Igen</button>
-                <button class="false" @click="()=>{}">Nem</button>
-          </span>
-      </div> -->
+      
+      <HtmlRenderer :html="html" class="hwContent"/>
       <Author :author="obj.RogzitoTanarNeve" :date="new Date(obj.RogzitesIdopontja)" />
   </div>
 </template>
@@ -32,21 +22,20 @@ import GlobalState from '../../globalState';
 import { formatURLsHTML, formatDate } from '../../util';
 import { openModal } from '../Modal';
 import Author from '../Author';
+import HtmlRenderer from '../HtmlRenderer.vue';
+
 
 let HomeworkModal = {
     name:"HomeworkModal",
     props:["obj"],
     components:{
         Author,
+        HtmlRenderer
     },
     data(){
-        let html = this.obj.Szoveg;
-        html = formatURLsHTML(html);
-
-
         return {
             GlobalState,
-            html,
+            html:this.obj.Szoveg,
             homeworksCompleted:GlobalState.processedData.homeworksCompleted
         }
     },
@@ -158,13 +147,5 @@ export function openHomework(elem){
     .hwContent {
         padding: 20px;
         box-sizing: border-box;
-    }
-    .hwContent :first-child {
-        padding-top: 0 !important;
-        margin-top: 0 !important;
-    }
-    .hwContent :last-child {
-        padding-bottom: 0 !important;
-        margin-bottom: 0 !important;
     }
 </style>

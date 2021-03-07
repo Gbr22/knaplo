@@ -12,8 +12,6 @@
                         <Icon :src="'fi/chevron-down'" :size="18" color="var(--text-light-color)"/>
                     </div>    
                 </template>
-                
-                
             </span>
             <div v-if="recipientsOpen" class="l">
                 <div class="recipient" v-for="r in obj.message.recipientList" :key="r.id">
@@ -21,7 +19,7 @@
                 </div>
             </div>
         </div>
-        <div class="htmlContent selectable" v-html="html"></div>
+        <HtmlRenderer :html="html" class="htmlContent"/>
         <div class="attachments">
             <div class="attachment" v-for="a in obj.message.attachments" :key="a.id">
                 <div class="perview">
@@ -44,7 +42,9 @@ import { formatURLsHTML, formatDate, getDayOfWeek, saveBlob } from '../../util';
 import { openModal } from '../Modal';
 import Icon from '../Icon';
 import Author from '../Author';
-import { downloadAttachment } from '../../api';
+import { downloadAttachment, getMessage } from '../../api';
+import HtmlRenderer from '../HtmlRenderer.vue';
+import { DetailedMessage } from '../../data/DetailedMessage';
 
 
 let MessageModal = {
@@ -52,7 +52,6 @@ let MessageModal = {
     props:["obj"],
     data(){
         let html = this.obj.message.content;
-        html = formatURLsHTML(html);
 
         let attachmentPerview = {};
         this.obj.message.attachments.forEach(a=>{
@@ -102,12 +101,20 @@ let MessageModal = {
     components:{
         Author,
         Icon,
+        HtmlRenderer,
     }
 }
 export default MessageModal;
 
 
-export function openMessage(elem){
+export function openMessage(m){
+    getMessage(m.id).then(msg=>{
+        msg = new DetailedMessage(msg);
+        console.log(msg);
+        openDetailedMessage(msg);
+    });
+}
+export function openDetailedMessage(elem){
     openModal(elem.message.subject,MessageModal,elem);
 }
 
@@ -139,14 +146,7 @@ export function openMessage(elem){
         
         box-sizing: border-box;
     }
-    .htmlContent :first-child {
-        padding-top: 0 !important;
-        margin-top: 0 !important;
-    }
-    .htmlContent :last-child {
-        padding-bottom: 0 !important;
-        margin-bottom: 0 !important;
-    }
+    
     .attachments {
         display: flex;
         justify-content: center;

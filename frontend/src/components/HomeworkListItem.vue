@@ -54,7 +54,9 @@ export default {
     .title b {
         color: #4ec275;
     }
-    
+    .until {
+        text-align: right;
+    }
     .until i {
         font-style: normal;
         color: var(--text-light-color);

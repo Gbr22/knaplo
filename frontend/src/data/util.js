@@ -1,5 +1,5 @@
 import { Message } from "./Message";
-
+import { openMessage } from '../components/modals/MessageModal';
 export class KretaType {
     id;
     description;
@@ -19,7 +19,7 @@ export function getTimelineProps(obj){
     if (obj instanceof Message){
         return {
             onclick(){
-                
+                openMessage(obj);
             },
             icon:"fi/mail",
             desc:obj.senderName,
