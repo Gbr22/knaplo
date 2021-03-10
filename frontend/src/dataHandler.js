@@ -13,7 +13,7 @@ import { Grade } from './data/Grade';
 import { Absence } from './data/Absence';
 import { Note } from './data/Note';
 import { Homework } from './data/Homework';
-import { Subject } from './data/Subject';
+import { Subject, SubjectInfo } from './data/Subject';
 import { Test } from './data/Test';
 import { Lesson } from './data/Lesson';
 import { NormalisedItem } from './data/NormalisedItem';
@@ -21,7 +21,7 @@ import { Event } from './data/Event';
 import { Message } from './data/Message';
 
 export function openSubject(subject){
-    openModal(subject.name,SubjectModal,subject,{
+    openModal(subject.info.name,SubjectModal,subject,{
         mode:"wide"
     });
 }
@@ -37,8 +37,8 @@ export function getGradeColor(grade){
     if (!grade){
         return unknown;   
     }
-    let g = grade.value;
-    if (!grade.value && grade.textValue){
+    let g = grade.numberValue;
+    if (!grade.numberValue && grade.textValue){
         let map = {
             "Példás":5,
             "Jó":4,
@@ -47,7 +47,7 @@ export function getGradeColor(grade){
             "Hanyag":2,
         }
         g = map[grade.textValue] || null;
-    } else if (!grade.value) {
+    } else if (!grade.numberValue) {
         return unknown;
     }
 
@@ -108,8 +108,8 @@ export function calcAvg(subject, avgCalc = {}){
 
     for (let grade of subject.grades){
         var w = grade.weight/100;
-        if (grade.value > 0){
-            sum += grade.value*w;
+        if (grade.numberValue > 0){
+            sum += grade.numberValue*w;
             count += w;
         }
     }
@@ -206,7 +206,6 @@ function processGenericList(list, id, _class) {
     }
 
     if (id == "grades"){
-        console.log("sort");
         proc = proc.sort((a,b)=>{
             return new Date(b.createDate) - new Date(a.createDate);
         });
@@ -219,10 +218,10 @@ function processGenericList(list, id, _class) {
     if (id == "grades"){
         var subjects = {}
         proc.forEach(e=>{
-            if(!subjects[e.subjectId]){
-                subjects[e.subjectId] = new Subject(e.subjectId,e.subject);
+            if(!subjects[e.subject.id]){
+                subjects[e.subject.id] = new SubjectInfo(e.subject);
             }
-            subjects[e.subjectId].grades.push(e);
+            subjects[e.subject.id].grades.push(e);
         });
         var endlist = Object.values(subjects);
         endlist.map(e=>e.average = calcAvg(e));
@@ -231,11 +230,12 @@ function processGenericList(list, id, _class) {
         updateArray(
             GlobalState.processedData.subjects,
             endlist
-            .sort((a,b)=>sortByText(a.name,b.name))
+            .sort((a,b)=>sortByText(a.info.name,b.info.name))
                 .sort((a,b)=>isNaN(a.average)-isNaN(b.average))    
         )
     }
 }
+
 var dataLists = [
     {
         get:getGrades,

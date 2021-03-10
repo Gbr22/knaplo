@@ -53,7 +53,7 @@
 
       <h2>Jegyek</h2>
       <div class="gradeList">
-          <TimelineItem v-for="item in grades" :item="item" v-bind:key="item.key" />
+          <TimelineItem v-for="item in grades" :item="getTimelineProps(item)" v-bind:key="item.id" />
       </div>
 </div>
 </template>
@@ -65,6 +65,7 @@ import { calcAvg, setSubjectRounding, getSubjectRounding, roundSubject } from '.
 import TabMenu from '../TabMenu.vue';
 import LineChart from '../charts/LineChart.vue';
 import { getCSSVariable } from '../../util';
+import { getTimelineProps } from '../../data/util';
 
 export default {
     name:"SubjectModal",
@@ -75,6 +76,7 @@ export default {
         let avgCalc = Object.assign({},[null, 0,0,0,0,0]);
         delete avgCalc["0"];
         return {
+            getTimelineProps,
             grades,
             avgCalc,
             round:getSubjectRounding(this.obj.id),
@@ -134,7 +136,7 @@ export default {
     },
     methods:{
         getChartData () {
-            let grades = this.obj.grades.filter(e=>!isNaN(e.value)).reverse();
+            let grades = this.obj.grades.filter(e=>!isNaN(e.numberValue)).reverse();
             let averages = [];
             let sum = 0;
             let count = 0;
@@ -145,7 +147,7 @@ export default {
                 if (g.weight){
                     let w = (g.weight || 0)/100;
                     count += w;
-                    sum += g.value*w;
+                    sum += g.numberValue*w;
                     
                     averages.push(
                         sum/count,
@@ -158,7 +160,7 @@ export default {
             
             let gradeColor = /* getCSSVariable("--theme-5") */"#0074D9";
             return {
-                labels: grades.map(e=>`(${e.value}) ${e.desc}`),
+                labels: grades.map(e=>`(${e.numberValue}) ${getTimelineProps(e).desc}`),
                 datasets: [
                     {
                         label: 'Átlag',
@@ -171,7 +173,7 @@ export default {
                         label: 'Jegy',
                         borderColor: gradeColor,
                         pointBackgroundColor: gradeColor,
-                        data: grades.map(e=>e.value),
+                        data: grades.map(e=>e.numberValue),
                         fill:false,
                         showLine:false,
                     }

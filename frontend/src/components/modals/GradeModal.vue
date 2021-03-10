@@ -10,7 +10,7 @@
         
       </div>
       
-      <Author :date="new Date(obj.createDate)" :author="obj.teacher" desc="Értékelés" />    
+      <Author :date="new Date(obj.createDate)" :author="obj.teacherName" desc="Értékelés" />    
   </div>
 </template>
 
@@ -39,12 +39,12 @@ let GradeModal = {
         getDayOfWeek,
         getList(){
             var list = [
-                ["Tantárgy",this.obj.subject],
-                ["Mód",this.obj.mode],
-                ["Téma",this.obj.theme],
-                ["Típus",this.obj.gradeTypeName],
+                ["Tantárgy",this.obj.subject?.name],
+                ["Mód",this.obj.mode?.description],
+                ["Téma",this.obj.theme?.description],
+                ["Típus",this.obj.type?.description],
                 null,
-                ["Értékelés formája",this.obj.formName],
+                ["Értékelés formája",this.obj.form.description],
                 null,
                 ["Írás ideje",formatDate(this.obj.date)],
                 ["Rögzítés ideje",formatDate(this.obj.createDate)+" "+formatTime(this.obj.createDate)],

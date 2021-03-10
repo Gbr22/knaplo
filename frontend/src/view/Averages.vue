@@ -38,9 +38,9 @@
         </div>
     </div>
     <ul id="subjects" class="list">
-        <li v-for="(subject) in GlobalState.processedData.subjects" class="subject lItem" v-bind:key="subject.name" @click="openSubject(subject)">
+        <li v-for="(subject) in GlobalState.processedData.subjects" class="subject lItem" v-bind:key="subject.info.name" @click="openSubject(subject)">
             <div class="subject_header">
-                <span class="left">{{ subject.name }}</span>
+                <span class="left">{{ subject.info.name }}</span>
                 <span class="right roundPrev" v-if="!isNaN(subject.average)">
                     <span>{{ format(subject.average) || "#" }}</span>
                     <Icon src="fi/chevrons-right" v-bind:class="{ up: isRoundedUp(subject) }"/>
@@ -66,6 +66,7 @@ import { roundSubject, getAverage, openSubject } from '../dataHandler';
 
 
 import ProgressRing from '../components/ProgressRing';
+import { Grade } from '../data/Grade';
 
 var ranks = [
     {
@@ -109,8 +110,8 @@ export default {
         openSubject,
         getGradesHTML(subject){
             return subject.grades.map((e)=>{
-                let val = (e.value || e.textValue).toString()[0];
-                if (e.isType("midYear")) {
+                let val = (e.numberValue || e.textValue).toString()[0];
+                if (e.isType(Grade.types.midYear)) {
                     return val;
                 } else {
                     return `<b>${val}</b>`;

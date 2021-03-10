@@ -1,7 +1,7 @@
 <template>
     <span @click="obj ? openGrade(obj) : null">
         <div v-if="obj != null">
-            <Icon class="grade" :src="obj.icon" size="28" :color="getGradeColor(obj)" /><a v-if="obj.theme=='Dicséret' && obj.value" class="D" :style="{color: getGradeColor(obj)}">D</a>
+            <Icon class="grade" :src="info.icon" size="28" :color="getGradeColor(obj)" /><a v-if="obj.theme=='Dicséret' && obj.numberValue" class="D" :style="{color: getGradeColor(obj)}">D</a>
         </div>
         <div v-if="obj == null">
             <a class="grade" :style="{color: getGradeColor(null)}">#</a>
@@ -12,6 +12,7 @@
 
 
 <script>
+import { getTimelineProps } from '../data/util';
 import { getGradeColor } from '../dataHandler';
 import { openGrade } from './modals/GradeModal.vue';
 
@@ -29,7 +30,9 @@ export default {
         getGradeColor,
     },
     data(){
-        return {};
+        return {
+            info: getTimelineProps(this.obj),
+        };
     }
 }
 </script>

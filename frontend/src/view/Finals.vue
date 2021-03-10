@@ -11,9 +11,9 @@
             </span>
         </h1>
         <ul class="list">
-            <li v-for="(subject) in subjects" class="lItem finals_item" :key="subject.name">
+            <li v-for="(subject) in subjects" class="lItem finals_item" :key="subject.id">
                 <FinalGrade class="left" :obj="getSemester(subject,'halfYear')" />
-                <div class="mid">{{ subject.name }}</div>
+                <div class="mid">{{ subject.info.name }}</div>
                 <FinalGrade class="right" :obj="getSemester(subject, 'endYear')" />
             </li>
         </ul>
@@ -24,6 +24,7 @@
 import GlobalState from '../globalState';
 
 import FinalGrade from '../components/FinalGrade';
+import { Grade } from '../data/Grade';
 
 export default {
     name: 'Finals',
@@ -38,7 +39,7 @@ export default {
     },
     methods:{
         getSemester(subject,id){
-            return subject.grades.filter(e=>e.isType(id))[0];
+            return subject.grades.filter(e=>e.isType(Grade.types[id]))[0];
         },
         getAvgSemester(type){
             type;
@@ -47,8 +48,8 @@ export default {
             let count = 0;
             for (let subj of subjects){
                 let g = this.getSemester(subj,type);
-                if (g != null && g.value != null){
-                    sum+=g.value;
+                if (g != null && g.numberValue != null){
+                    sum+=g.numberValue;
                     count++;
                 }
             }

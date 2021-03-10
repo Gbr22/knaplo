@@ -3,7 +3,7 @@
     <div class="item recent" :data-item-type="item.type" :data-state="item.displayState" v-on:click="item.onclick()">
         
         <span class="left">
-            <Icon :src="item.icon" size="28" :color="getItemColor(item)"/>
+            <Icon :src="item.icon" size="28" :color="item.color"/>
         </span>
         <span class="right">
             <div class="header">
@@ -30,11 +30,6 @@ export default {
     name:"TimelineItem",
     props:["item"],
     methods:{
-        getItemColor(item){
-            if (item instanceof Grade){
-                return getGradeColor(item);
-            }
-        },
         getDayOfWeek,
         formatDate,        
     },
