@@ -106,15 +106,15 @@ export default {
 
 #syncing {
     position: fixed;
-    --top: 10px;
-    top: var(--top);
+    --bottom: 65px;
+    bottom: var(--bottom);
     width: 100%;
 
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 8900;
-    transform: translateY(calc(calc(-1 * var(--top) - 70px)));
+    transform: translateY(calc(calc(70px)));
     opacity: 0;
     transition: transform 0.3s ease-out, opacity 0.4s ease-out;
 }

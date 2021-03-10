@@ -158,7 +158,7 @@ body, .list, #recent, .fullpage_modal {
         flex-direction: column-reverse !important;
     }
     #syncing {
-        --top: 65px !important;
+        --bottom: 10px !important;
     }
     .pc-no-scroll {
         overflow: hidden !important;
