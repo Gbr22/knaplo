@@ -204,6 +204,14 @@ function processGenericList(list, id, _class) {
     if (GlobalState.rawData[id] === undefined){
         GlobalState.rawData[id] = [];
     }
+
+    if (id == "grades"){
+        console.log("sort");
+        proc = proc.sort((a,b)=>{
+            return new Date(b.createDate) - new Date(a.createDate);
+        });
+    }
+
     updateArray(GlobalState.rawData[id],list);
     updateArray(GlobalState.processedData[id],proc);
     

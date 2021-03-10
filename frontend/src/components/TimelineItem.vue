@@ -19,9 +19,10 @@
 <script>
 
 import Icon from './Icon.vue';
-import { getDayOfWeek } from '../util';
+import { formatDate, getDayOfWeek } from '../util';
 import { getGradeColor } from '../dataHandler';
 import { Grade } from '../data/Grade';
+
 
 
 
@@ -35,10 +36,7 @@ export default {
             }
         },
         getDayOfWeek,
-        formatDate(date){
-            let p = (n) => n.toString().padStart(2,0);
-            return p(date.getMonth()+1)+"/"+p(date.getDate());
-        }
+        formatDate,        
     },
     components:{
         Icon
