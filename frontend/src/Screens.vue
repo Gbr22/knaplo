@@ -10,12 +10,12 @@ import Timeline from './view/Timeline';
 import Screen from './view/Screen.vue';
 import GlobalState from './globalState';
 
-let Settings = ()=>import(/* webpackPrefetch: true */ './view/Settings.vue');
-let Averages = ()=>import(/* webpackPrefetch: true */ './view/Averages.vue');
-let Timetable = ()=>import(/* webpackPrefetch: true */ './view/Timetable.vue');
-let Homework = ()=>import(/* webpackPrefetch: true */ './view/Homework.vue');
-let Finals = ()=>import(/* webpackPrefetch: true */ './view/Finals.vue');
-let Messages = ()=>import(/* webpackPrefetch: true */ './view/Messages.vue');
+import Settings from './view/Settings.vue';
+import Averages from './view/Averages.vue';
+import Timetable from './view/Timetable.vue';
+import Homework from './view/Homework.vue';
+import Finals from './view/Finals.vue';
+import Messages from './view/Messages.vue';
 
 export default {
     name:"Screens",

@@ -4,6 +4,7 @@ secret
 *.cache
 *.db
 node_modules
+proxylist.csv
 
 # github actions
 .secrets
