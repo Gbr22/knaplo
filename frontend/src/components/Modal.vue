@@ -4,7 +4,10 @@
             <div class="modal" v-if="currentModal().open">
                 <div class="inner">
                     <div class="header">
-                        <h1>{{ currentModal().title }}</h1>
+                        <h1>
+                            <img :src="currentModal().settings.icon" v-if="currentModal().settings.icon">
+                            <span>{{ currentModal().title }}</span>
+                        </h1>
                         <div class="pad"></div>
                         <Icon class="feather back actionBtn" src="fi/arrow-left" @click.native="back()" v-if="modalStack.length > 1"/>
                         <Icon class="feather close actionBtn" src="fi/x" @click.native="closeModal()"/>
@@ -145,6 +148,17 @@ export default {
         padding: 20px;
         padding-bottom: 0;
         word-break: break-word;
+        align-items: center;
+    }
+    .header img {
+        width: 45px;
+        height: 45px;
+        margin-right: 8px;
+        object-fit: contain;
+        vertical-align: middle;
+    }
+    .header h1 span {
+        vertical-align: middle;
     }
     .pad {
         width: 20px;
@@ -161,6 +175,8 @@ export default {
     }
     .header h1 {
         flex: 1;
+        display: flex;
+        align-items: center;
         font-size: 28px;
     }
     

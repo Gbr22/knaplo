@@ -229,6 +229,15 @@ export default {
 </script>
 
 <style scoped>
+    .image {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .image img {
+        width: 100px;
+        height: 100px;
+    }
     .gradeList {
         margin-top: 10px;
         margin-bottom: 10px;

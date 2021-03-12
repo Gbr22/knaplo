@@ -22,7 +22,8 @@ import { Message } from './data/Message';
 
 export function openSubject(subject){
     openModal(subject.info.name,SubjectModal,subject,{
-        mode:"wide"
+        mode:"wide",
+        icon:subject.getImage(),
     });
 }
 
