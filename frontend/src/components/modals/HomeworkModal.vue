@@ -13,7 +13,7 @@
       <hr>
       
       <HtmlRenderer :html="html" class="hwContent"/>
-      <Author :author="obj.RogzitoTanarNeve" :date="new Date(obj.RogzitesIdopontja)" />
+      <Author :author="obj.RogzitoTanarNeve" desc="Házi feladat" :date="new Date(obj.RogzitesIdopontja)" />
   </div>
 </template>
 

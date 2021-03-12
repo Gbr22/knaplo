@@ -332,6 +332,20 @@ export function _formatURLsHTML(html){
         }
     }
     
+    //wrap text node
+    const textNodes = getAllTextNodes(tag);
+
+    function getAllTextNodes(element) {
+        return Array.from(element.childNodes)
+            .filter(node => node.nodeType === 3 && node.textContent.trim().length > 1);
+    }
+    textNodes.forEach(node => {
+        const span = document.createElement('span');
+        node.after(span);
+        span.appendChild(node);
+        span.dataset.textNodeWrap=true;
+    });
+
 
     //link formatting
 
@@ -352,30 +366,7 @@ export function _formatURLsHTML(html){
     links.forEach((l)=>{
         let url = l.getAttribute("href");
         if (url == l.textContent){
-            let obj = new URL(url);
-            function normalLink(){
-                l.innerHTML = new URL(url).hostname;
-            }
-            if (obj.hostname == "teams.microsoft.com" && obj.pathname == "/_"){
-                try {
-                    let inner = new URL(obj.hash.replace("#","about:"));
-                    let path = decodeURIComponent(inner.searchParams.get("rootfolder"));
-                    path = path.split("Megosztott dokumentumok/")[1];
-                    if (!path){
-                        throw Error();
-                    }
-                    l.innerHTML = path.split("/").join("<i><wbr>/</i>");
-                    l.classList.add("teams");
-                } catch(err){
-                    normalLink();
-                }
-                
-
-
-            } else {
-                normalLink();
-            }
-            
+            l.innerHTML = new URL(url).hostname;
         }
         l.classList.add("link");
         l.setAttribute("target","_blank");
