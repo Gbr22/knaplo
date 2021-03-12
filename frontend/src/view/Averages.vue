@@ -367,11 +367,11 @@ export default {
     padding: 10px;
 }
 
-.roundPrev /deep/ svg {
+.roundPrev svg {
     stroke: rgb(218, 134, 95);    
 }
 
-.roundPrev .up /deep/ svg {
+.roundPrev .up svg {
     stroke: #1CAA53;    
 }
 </style>
