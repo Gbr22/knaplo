@@ -18,6 +18,8 @@
 
 <script>
 import { sendMessage } from "../../api";
+import { pushMessage } from "../MessageDisplay.vue";
+import { closeModal } from "../Modal.vue";
 
 
 
@@ -43,7 +45,10 @@ let SendMessageModal = {
           recipients: this.recipients,
           subject: this.subject,
           content: this.content,
-        });  
+        }).then(()=>{
+          closeModal();
+          pushMessage("Üzenet sikeresen elküldve");
+        })
       }
     },
     mounted() {
