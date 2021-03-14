@@ -407,6 +407,16 @@ export function refreshPage(page){
             }
         },
         {
+            pages:["more/messages"],
+            action(){
+                return Promise.all([
+                    updateList("messages_received",true),
+                    updateList("messages_sent",true),
+                    updateList("messages_removed",true),
+                ]);
+            }
+        },
+        {
             pages:["more"],
             action(){
                 return syncStudentInfo();
