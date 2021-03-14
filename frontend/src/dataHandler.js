@@ -5,7 +5,7 @@ import { openModal } from './components/Modal';
 import { pushError } from './components/MessageDisplay';
 
 import SubjectModal from './components/modals/SubjectModal';
-import { getFromCache, fetchInst, refreshUser, getTimetable, getWeekStorageId, getGrades, getNotes, getAbsences, getEvents, getStudentInfo, getMessages } from './api';
+import { getFromCache, fetchInst, refreshUser, getTimetable, getWeekStorageId, getGrades, getNotes, getAbsences, getEvents, getStudentInfo, getMessages, getMessage } from './api';
 import { getWeekIndex, formatURLsHTML, sortByText, wait, getCSSVariable } from './util';
 import { updateTT } from './view/Timetable';
 import storage from './storage';
@@ -366,6 +366,25 @@ function afterLogin(){
         syncOffile();
         syncAll();
     })
+}
+
+export function getMessageCache(id){
+    let dataKey = "data/messages/"+id;
+    if (storage.has(dataKey)){
+        return new Promise((r)=>{
+            r(storage.getJSON(dataKey));
+        });
+    } else {
+        return getMessage(id);
+    }
+}
+export function getMessageById(id){
+    let arr = [
+        GlobalState.processedData.messages_received,
+        GlobalState.processedData.messages_sent,
+        GlobalState.processedData.messages_removed
+    ].flat();
+    return arr.find(e=>e.messageId == id);
 }
 
 export function refreshPage(page){

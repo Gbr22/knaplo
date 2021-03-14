@@ -6,6 +6,7 @@ export function httpRequest(options){
 
         function resolveResponse(res){
             res.bodyJSON = tryJSON(res.body);
+            console.log("response",res);
             resolve(res);
         }
 

@@ -129,16 +129,16 @@ export function getMessages(type){
         })
     });
 }
-export function sendMessage(){
+export function sendMessage({recipients,subject,content}){
     let info = GlobalState.user;
     
-    let recipients = [];
+    recipients = recipients.map(e=>e.obj);
     let attachments = [];
     let message = {
         "cimzettLista": recipients,
         "csatolmanyok": attachments,
-        "targy": "teszt",
-        "szoveg": "teszt",
+        "targy": subject,
+        "szoveg": content,
     };
     
     let errorMessage = "Üzenet elküldése sikertelen";

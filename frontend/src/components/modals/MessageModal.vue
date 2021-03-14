@@ -3,7 +3,7 @@
         <div class="recipients">
             <span class="title">
                 <b>{{ obj.message.recipientList.length > 1 ? "Címzettek" : "Címzett" }}</b>:
-                <span class="name">{{ obj.message.recipientList[0].name }}</span>
+                <span class="name" @click="sendMessageTo(obj.message.recipientList[0])">{{ obj.message.recipientList[0].name }}</span>
                 <template v-if="obj.message.recipientList.length > 1">
                     <span class="plus">
                         +{{ obj.message.recipientList.length-1 }}
@@ -14,10 +14,14 @@
                 </template>
             </span>
             <div v-if="recipientsOpen" class="l">
-                <div class="recipient" v-for="r in obj.message.recipientList" :key="r.id">
+                <div class="recipient" v-for="r in obj.message.recipientList" :key="r.id" @click="sendMessageTo(r)">
                     {{ r.name }}
                 </div>
             </div>
+            <span class="replyTo" v-if="prevMessage">
+                <b>Válasz erre</b>: 
+                <span>{{ prevMessage.subject }}</span>
+            </span>
         </div>
         <HtmlRenderer :html="html" class="htmlContent"/>
         <div class="attachments">
@@ -45,6 +49,9 @@ import Author from '../Author';
 import { downloadAttachment, getMessage } from '../../api';
 import HtmlRenderer from '../HtmlRenderer.vue';
 import { DetailedMessage } from '../../data/DetailedMessage';
+import { getMessageById, getMessageCache } from '../../dataHandler';
+import { closeModal } from '../Modal.vue';
+import { openSendMessage } from './SendMessageModal.vue';
 
 
 let MessageModal = {
@@ -61,9 +68,21 @@ let MessageModal = {
             html,
             recipientsOpen:false,
             attachmentPerview,
+            prevMessage:this.getPrevMessage() || null,
         }
     },
     methods:{
+        sendMessageTo(r){
+            openSendMessage({
+                recipients:[r],
+            })
+        },
+        openPrevMessage(){
+            openMessage(this.prevMessage);
+        },
+        getPrevMessage(){
+            return getMessageById(this.obj?.message?.previousMessageId);
+        },
         createURL(blob){
             return window.URL.createObjectURL(blob);
         },
@@ -108,11 +127,15 @@ export default MessageModal;
 
 
 export function openMessage(m){
-    getMessage(m.id).then(msg=>{
-        msg = new DetailedMessage(msg);
-        console.log(msg);
-        openDetailedMessage(msg);
-    });
+    if (m){
+        console.log("open",m);
+        getMessageCache(m.id).then(msg=>{
+            msg = new DetailedMessage(msg);
+            console.log(msg);
+            console.log("prev",getMessageById(msg.message.previousMessageId));
+            openDetailedMessage(msg);
+        });
+    }
 }
 export function openDetailedMessage(elem){
     openModal(elem.message.subject,MessageModal,elem);

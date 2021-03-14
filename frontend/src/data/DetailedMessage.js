@@ -26,6 +26,8 @@ class Message {
     obj;
 
     id;
+    conversationId;
+    previousMessageId;
     date;
     senderName;
     senderTitle;
@@ -40,6 +42,8 @@ class Message {
             obj:o,
 
             id:o.azonosito,
+            conversationId:o.beszelgetesAzonosito,
+            previousMessageId:o.elozoUzenetAzonosito,
             date:new Date(o.kuldesDatum),
             senderName: o.feladoNev,
             senderTitle: o.feladoTitulus,
