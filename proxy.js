@@ -32,8 +32,13 @@ let agents = fs.readFileSync("proxylist.csv").toString()
         return new SocksProxyAgent(`${p}://${ip}:${port}`)
     });
 
-function getAgent(){
-    return agents[Math.floor(Math.random()*agents.length)];
+
+function wait(ms){
+    return new Promise((resolve,reject)=>{
+        setTimeout(()=>{
+            resolve();
+        },ms);
+    })
 }
 
 module.exports = (req,res)=>{
@@ -52,58 +57,64 @@ module.exports = (req,res)=>{
         }
     }
     
-    
-    let options = {
-        headers,
-        method:req.method,
-        agent:getAgent(),
-        redirect:redirect
-    }
-    if (req.method == "POST"){
-        options.body = req.body;
-    }
-    
-    let tries = 0;
-    var request = ()=>{
-        fetch(url,options).then(async r=>{
-            let status = r.status;
-            if (status >= 300 && status < 400){
-                status = 299;
-            }
-            let h = {};
-            [...r.headers.keys()].forEach(key=>{
-                if (key == "set-cookie"){
-                    h["x-proxy-header-"+key] = r.headers.get(key);
-                } else {
-                    h[key] = r.headers.get(key);
-                }
-            });
-            h["x-proxy-status"] = r.status;
-            
-            res.status(status);
-            
-    
-            res.set(h);
-            r.body.pipe(res);
-        }).catch(err=>{
+    let promises = [];
+    let controllers = [];
 
-            if(dev){
-                console.log(err.message);
-            }
+    for (let i = 0; i < agents.length; i++) {
+        const agent = agents[i];
 
-            tries++;
-            if (tries < 4){
-                options.agent = getAgent();
-                request();
-            } else {
-                res.status(500);
-                res.send();
-            }
-            
+        const controller = new AbortController();
+        const signal = controller.signal;
+        controllers.push(controller);
+
+        let options = {
+            headers,
+            method:req.method,
+            agent:agent,
+            redirect:redirect,
+            signal,
+        }
+        if (req.method == "POST"){
+            options.body = req.body;
+        }
+        
+        let promise = fetch(url,options);
+        promises.push(promise);
+    }
+    
+    wait(5000).then(()=>{
+        controllers.forEach(e=>{
+            e.abort();
         })
-    }
-    request();
-    
-    
+        res.status(500);
+        res.send();
+    })
+    Promise.any(promises).then(r=>{
+        let status = r.status;
+        if (status >= 300 && status < 400){
+            status = 299;
+        }
+        let h = {};
+        [...r.headers.keys()].forEach(key=>{
+            if (key == "set-cookie"){
+                h["x-proxy-header-"+key] = r.headers.get(key);
+            } else {
+                h[key] = r.headers.get(key);
+            }
+        });
+        h["x-proxy-status"] = r.status;
+        
+        res.status(status);
+        
+
+        res.set(h);
+        r.body.pipe(res);
+        controllers.forEach(e=>{
+            e.abort();
+        })
+    }).catch(err=>{
+        res.status(500);
+        res.send();
+    })
 }
 

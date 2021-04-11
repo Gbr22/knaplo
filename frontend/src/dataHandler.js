@@ -200,6 +200,9 @@ window.getWeekDaysTT = getWeekDaysTT;
 
 
 function processGenericList(list, id, _class) {
+    if (list == null){
+        return;
+    }
     var proc = list.map(e=>new _class(e));
     
     if (GlobalState.rawData[id] === undefined){
