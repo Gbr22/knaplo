@@ -68,6 +68,22 @@ export class Grade {
             id: o.Uid,
         })
     }
+
+    get forcedNumberValue(){
+        if (this.numberValue){
+            return this.numberValue;
+        } else {
+            let map = {
+                "Példás":5,
+                "Jó":4,
+                "Változó":3,
+                "Rossz":2,
+                "Hanyag":2,
+            }
+            let num = map[this.textValue] || null;
+            return num;
+        }
+    }
 }
 
 class Group {

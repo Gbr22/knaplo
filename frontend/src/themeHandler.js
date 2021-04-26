@@ -20,6 +20,7 @@ class ThemeHandlerClass {
                 "3":"#795548",
                 "2":"#FF4136",
                 "1":"#c62828",
+                "other":"#607d8b",
             },
             dark: {
                 "5":"#2ECC40",
@@ -27,6 +28,7 @@ class ThemeHandlerClass {
                 "3":"#c38169",
                 "2":"#ff9036",
                 "1":"#FF4136",
+                "other":"#607d8b",
             }
         }
         Object.assign(GlobalState.gradeColors, gradeColors[theme]);

@@ -30,38 +30,28 @@ export function openSubject(subject){
 if (window.cordova){
     console.log("running in app");
 }
-
-
 export function getGradeColor(grade){
     
-    let unknown = "#607d8b";
     if (!grade){
-        return unknown;   
+        return getColor();
     }
-    let g = grade.numberValue;
-    if (!grade.numberValue && grade.textValue){
-        let map = {
-            "Példás":5,
-            "Jó":4,
-            "Változó":3,
-            "Rossz":2,
-            "Hanyag":2,
-        }
-        g = map[grade.textValue] || null;
-    } else if (!grade.numberValue) {
-        return unknown;
-    }
-
-    /* GlobalState. */
-    
     function getColor(num) {
         let map = GlobalState.gradeColors;
-
-        return map[num.toString()];
+        return map[num?.toString() || "other"];
     }
-    return getColor(g);
+    
+    if (!grade.numberValue && grade.textValue && grade.forcedNumberValue){ //text value
+        return getColor(grade.forcedNumberValue);
+    } else if ( //number value
+        grade.numberValue &&
+        grade.form.id == Grade.forms.evaluation && 
+        grade.numberValue >= 1 &&
+        grade.numberValue <= 5
+    ) {
+        return getColor(grade.numberValue);
+    }
+    return getColor(); //no value
 }
-
 
 function updateArray(arr,n){
     arr.splice(0,arr.length);
@@ -367,7 +357,14 @@ function syncAll(){
 function afterLogin(){
     setImmediate(()=>{
         syncOffile();
-        syncAll();
+
+        let sync = true;
+        if ((new URLSearchParams(window.location.search)).get("sync") == "false"){
+            sync = false;
+        }
+        if (sync){
+            syncAll();
+        }
     })
 }
 
