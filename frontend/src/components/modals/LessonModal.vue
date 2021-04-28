@@ -70,7 +70,7 @@ let LessonModal = {
         },
         getList(){
             var list = [
-                ["Csoport", this.obj.obj.OsztalyCsoport.Nev],
+                ["Csoport", this.obj.obj?.OsztalyCsoport?.Nev],
                 this.obj.theme ? ["Óra témája", this.obj.theme] : undefined,
                 null,
                 ["Éves óraszám", this.obj.lessonYearlyCount],

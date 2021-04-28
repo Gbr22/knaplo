@@ -1,6 +1,6 @@
 <template>
-    <div class="day" :class="{ event:isEventOnDay(day) }">
-        <template v-if="!isEventOnDay(day)">
+    <div class="day">
+        <template>
             <h2>{{ getDayName(day.day) }}</h2>
             <div
                 v-for="lesson in day.lessons"
@@ -9,6 +9,7 @@
                 :class="{
                     substitute:lesson.substituteTeacherName != null,
                     dismissed:lesson.state.id == lesson.states.dismissed,
+                    event:isEvent(lesson)
                 }"
             >
                 <template v-if="!isEvent(lesson)">
@@ -44,16 +45,11 @@
                     </span>
                 </template>
                 <template v-if="isEvent(lesson)">
-                    {{ (lesson.subjectName || "").trim() }}
+                    {{lesson.subjectName}}
                 </template>
 
             </div>
         </template>
-        <div v-if="isEventOnDay(day)">
-            <span class="text">
-                {{ (EventOnDay(day).subjectName || "").trim() }}
-            </span>
-        </div>
 
     </div>
 </template>
@@ -74,12 +70,6 @@ export default {
         getDayShortName,
         shortName(name){
             return name.split(" ").map((e,i)=>i == 0 ? e : e[0]).join(" ");
-        },
-        isEventOnDay(day){
-            return this.EventOnDay(day) != null;
-        },
-        EventOnDay(day){
-            return day.lessons.filter(e=>this.isEvent(e))[0] || null;
         },
         isEvent(lesson){
             return lesson.type.id == lesson.types.event;
@@ -102,17 +92,7 @@ export default {
 </script>
 
 <style scoped>
-    .day.event {
-        height: 200px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-    }
-    .day.event .text {
-        font-size: 20px;
-        
-    }
+    
 
     .day {
         scroll-snap-align: center;
@@ -131,6 +111,14 @@ export default {
         margin: 8px auto;
         padding: 6px 0;
         overflow: hidden;
+    }
+    .lesson.event {
+        padding: 12px 6px;
+        text-align: center;
+        width: 100%;
+        box-sizing: border-box;
+        color: var(--link-color);
+        display: block;
     }
     .padding {
         width: 10px;
